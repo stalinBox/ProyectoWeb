@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-schema="public" match-name="menu" />
+	<table-filter match-schema="public" match-name="rol" />
+	<table-filter match-schema="public" match-name="rolmenu" />
+	<table-filter match-schema="public" match-name="usuario" />
+
+	<table-filter match-schema="public" match-name="modelos" />
+	<table-filter match-schema="public" match-name="troqueles" />
+	<table-filter match-schema="public" match-name="procesos" />
+	<table-filter match-schema="public" match-name="tallas" />
+	<table-filter match-schema="public" match-name="t_tallas" />
+	<table-filter match-schema="public" match-name="tipo_procesos" />
+	<table-filter match-schema="public" match-name="mod_trq_tal" /> 
+</hibernate-reverse-engineering>

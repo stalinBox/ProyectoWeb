@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+			<p:growl id="msgs" showDetail="true" />
+			<h:form id="formPrimero">
+				<h:panelGrid columns="5" cellpadding="5">
+
+					<p:outputLabel value="Troqueles: " />
+					<p:selectOneMenu id="troquell" value="#{ttallaBean.codTrq}"
+						style="width:150px">
+
+						<f:selectItem itemLabel="- Seleccione -" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{ttallaBean.selectItemsTroquel}"></f:selectItems>
+						<p:ajax update="tallal" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Tallas: " />
+
+					<p:selectCheckboxMenu id="tallal"
+						value="#{ttallaBean.selectedTalla}" label="Selección de Tallas"
+						filter="true" filterMatchMode="startsWith"
+						panelStyle="width:250px">
+						<f:selectItems value="#{ttallaBean.selectItemsExcludeByTalla}"></f:selectItems>
+					</p:selectCheckboxMenu>
+
+				</h:panelGrid>
+				<p:commandButton value="Guardar" id="btnSave"
+					actionListener="#{ttallaBean.btnCreateTtallas()}"
+					icon="ui-icon-disk" update="formDataTable, troquell, tallal" />
+			</h:form>
+			<p:separator />
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="ttalla" value="#{ttallaBean.ttallas}"
+					style="width:50%" emptyMessage="No Existen Datos">
+					<f:facet name="header">
+					TTALLAS
+					</f:facet>
+
+					<p:column style="width:16px">
+						<p:rowToggler />
+					</p:column>
+
+					<p:column headerText="Nombre Troquel">
+						<h:outputText value="#{ttalla.troquele.trqNombre}" />
+					</p:column>
+
+					<p:column headerText="Numero de Tallas">
+						<h:outputText value="#{ttalla.talla.talNumero}" />
+					</p:column>
+
+					<p:column headerText="Cantidad disponible">
+						<h:outputText value="#{ttalla.cantidad}" />
+					</p:column>
+
+					<p:rowExpansion>
+						<p:panelGrid columns="2" columnClasses="label,value"
+							style="width:300px">
+							<p:column headerText="Codigo Troquel">
+								<h:outputText value="#{ttalla.troquele.trqCodigo}" />
+							</p:column>
+
+							<p:column headerText="Nombre Troquel">
+								<h:outputText value="#{ttalla.troquele.trqNombre}" />
+							</p:column>
+
+							<p:column headerText="Codigo Tallas">
+								<h:outputText value="#{ttalla.talla.talCodigo}" />
+							</p:column>
+
+							<p:column headerText="Codigo Tallas">
+								<h:outputText value="#{ttalla.talla.talNumero}" />
+							</p:column>
+
+						</p:panelGrid>
+					</p:rowExpansion>
+
+					<p:column style="width:30%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogTTUpdate').show()" icon="ui-icon-pencil"
+							title="Modificar">
+							<f:setPropertyActionListener value="#{ttalla}"
+								target="#{ttallaBean.selectedTtalla}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogTTDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{ttalla}"
+								target="#{ttallaBean.selectedTtalla}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar TT" widgetVar="dialogTTUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgTTUpdate">
+
+					<h:inputHidden value="#{ttallaBean.selectedTtalla.id.talCodigo}" />
+					<h:inputHidden value="#{ttallaBean.selectedTtalla.id.trqCodigo}" />
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Cantidad:" />
+						<p:inputText value="#{ttallaBean.selectedTtalla.cantidad}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs, formPrimero"
+								oncomplete="PF('dialogTTUpdate').hide()" icon="fa fa-fw fa-save"
+								title="Guardar" value="Guardar"
+								actionListener="#{ttallaBean.btnUpdateTtallas(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogTTUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar TT de Calzado"
+					severity="alert" widgetVar="dialogTTDelete">
+
+					<h:inputHidden value="#{ttallaBean.selectedTtalla.id.talCodigo}" />
+					<h:inputHidden value="#{ttallaBean.selectedTtalla.id.trqCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs, formPrimero" icon="ui-icon-check"
+						oncomplete="PF('dialogTTDelete').hide()"
+						actionListener="#{ttallaBean.btnDeleteTtallas(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogTTDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

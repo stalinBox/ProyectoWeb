@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+<link href="#{appBean.baseUrl}css/masterPage.css" type="text/css" rel="Stylesheet"/>
+<title>Login</title>
+
+</h:head>
+<h:body>
+	<div class="conteinerLogin">
+		<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+		<h:form id="formLogin">
+			<p:panel header="Ingresar Usuario y Password">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel for="username" value="Usuario:" />
+					<p:inputText id="username" value="#{loginBean.usuario.userName}"
+						required="true" label="username" />
+
+					<h:outputLabel for="password" value="Password:" />
+					<p:password id="password" value="#{loginBean.usuario.userPasswd}"
+						required="true" label="password" />
+
+					<f:facet name="footer">
+						<p:commandButton id="loginButton" value="Login" update=":growl"
+							actionListener="#{loginBean.login(actionEvent)}"
+							oncomplete="handleLoginRequest(xhr, status, args)" icon="fa fa-user"/>
+					</f:facet>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</div>
+	
+	<script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
+        if(args.validationFailed || !args.loggedIn) {
+            jQuery("#formLogin").effect("shake", {times:3}, 100);
+        }
+        else {
+            location.href= args.ruta;
+        }
+    }
+</script>
+</h:body>
+</html>

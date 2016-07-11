@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"  >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+	<title><ui:insert name="title">CALTU</ui:insert></title>
+	<link rel="stylesheet" type="text/css"
+		href="#{request.contextPath}/css/masterPage.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{request.contextPath}/css/steps.css" />
+
+</h:head>
+
+<h:body>
+	<div id="conteiner">
+		<div id="top" class="ui-widget-header ui-corner-all">
+			<ui:insert name="top">CALZADO</ui:insert>
+		</div>
+
+		<div id="menu">
+			<h:form>
+				<p:growl id="messages" />
+
+				<p:menubar>
+					<p:submenu label="Seguridad" icon="ui-icon-document">
+						<p:menuitem value="Usuarios"
+							url="#{appBean.basePath}usuario/index.jsf" />
+						<p:separator />
+						<p:menuitem value="Quit" url="#" />
+					</p:submenu>
+
+					<p:submenu label="Editar" icon="ui-icon-pencil">
+						<p:menuitem value="Modelos"
+							url="#{appBean.calzadoPath()}modelos/modelos.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="Troqueles"
+							url="#{appBean.calzadoPath()}troqueles/troqueles.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="Procesos"
+							url="#{appBean.calzadoPath()}tipprocesos/tipprocesos.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="Tallas"
+							url="#{appBean.calzadoPath()}tallas/tallas.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="Proceso inicio"
+							url="#{appBean.calzadoPath()}mtt/mtt.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="TTALLAS"
+							url="#{appBean.calzadoPath()}ttallas/ttallas.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+					</p:submenu>
+
+					<p:submenu label="Help" icon="ui-icon-help">
+						<p:menuitem value="Temas"
+							url="#{appBean.themePath()}changeTheme.xhtml" />
+						<p:submenu label="Search" icon="ui-icon-search">
+							<p:submenu label="Text">
+								<p:menuitem value="Workspace" url="#" />
+							</p:submenu>
+							<p:menuitem value="File" url="#" />
+						</p:submenu>
+					</p:submenu>
+
+					<p:submenu label="Actions" icon="ui-icon-gear">
+						<p:submenu label="Ajax" icon="ui-icon-refresh">
+							<p:menuitem value="Save" actionListener="#{menuView.save}"
+								icon="ui-icon-disk" />
+							<p:menuitem value="Update" actionListener="#{menuView.update}"
+								icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+						<p:submenu label="Non-Ajax" icon="ui-icon-newwin">
+							<p:menuitem value="Delete" actionListener="#{menuView.delete}"
+								icon="ui-icon-close" ajax="false" />
+						</p:submenu>
+					</p:submenu>
+
+					<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"
+						oncomplete="handleLoginRequest(xhr, status, args)"
+						icon="ui-icon-close" />
+				</p:menubar>
+			</h:form>
+
+		</div>
+
+		<div id="content"
+			class="center_content ui-widget-content ui-corner-all">
+			<ui:insert name="content"></ui:insert>
+		</div>
+
+		<div id="bottom" class="ui-widget-header ui-corner-all">
+			<ui:insert name="bottom">&copy; Universidad Técnica de Ambato</ui:insert>
+		</div>
+	</div>
+	<script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
+        if(args.loggetOut) {
+            location.href= args.ruta;
+        }
+    }
+</script>
+</h:body>
+</html>

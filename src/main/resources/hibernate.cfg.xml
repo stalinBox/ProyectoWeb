@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory name="PostgreSQL">
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.password">masterkey</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/utacaltuBD</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+
+		<mapping class="com.project.entities.Menu" />
+		<mapping class="com.project.entities.Rol" />
+		<mapping class="com.project.entities.Rolmenu" />
+		<mapping class="com.project.entities.Usuario" />
+
+		<mapping class="com.project.entities.Modelo" />
+		<mapping class="com.project.entities.Talla" />
+		<mapping class="com.project.entities.Troquele" />
+		<mapping class="com.project.entities.Proceso" />
+		<mapping class="com.project.entities.TipoProceso" />
+		<mapping class="com.project.entities.ModTrqTal" />
+		<mapping class="com.project.entities.TTalla" />
+
+		<mapping class="com.project.entities.TTallaPK" />
+	</session-factory>
+</hibernate-configuration>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateTipoProceso" update=":formCreate"
+					oncomplete="PF('dialogTipoProcesoCreate').show()" title="Nuevo Tipo de Proceso"
+					icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="TipoProceso" paginatorPosition="bottom"
+					value="#{tipoProcesosBean.tipProceso}" rows="10" paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<f:facet name="header">
+					TIPO DE PROCESOS
+					</f:facet>
+
+					<p:column headerText="Id">
+						<h:outputText value="#{TipoProceso.tprCodigo}" />
+					</p:column>
+
+					<p:column headerText="Tipo Proceso" filterBy="#{TipoProceso.tprNombre}"
+						footerText="contains" filterMatchMode="contains">
+						<h:outputText value="#{TipoProceso.tprNombre}" />
+					</p:column>
+
+					<p:column style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogTipoProcesoUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar Tipo de Proceso">
+							<f:setPropertyActionListener value="#{TipoProceso}"
+								target="#{tipoProcesosBean.selectedTipProceso}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogTipoProcesoDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{TipoProceso}"
+								target="#{tipoProcesosBean.selectedTipProceso}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nuevo Tipo de Proceso"
+					widgetVar="dialogTipoProcesoCreate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgTipoProceso">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{tipoProcesosBean.selectedTipProceso.tprNombre}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogTipoProcesoCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{tipoProcesosBean.btnCreateTipoProceso(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogTipoProcesoCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Tipo de Proceso" widgetVar="dialogTipoProcesoUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgTipoProcesoUpdate">
+					<h:inputHidden value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputHidden>
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{tipoProcesosBean.selectedTipProceso.tprNombre}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogTipoProcesoUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{tipoProcesosBean.btnUpdateTipoProceso(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogTipoProcesoUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade"
+					header="Eliminar Tipo de Proceso" severity="alert"
+					widgetVar="dialogTipoProcesoDelete">
+					<h:inputSecret value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputSecret>
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogTipoProcesoDelete').hide()"
+						actionListener="#{tipoProcesosBean.btnDeleteTipoProceso(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogTipoProcesoDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

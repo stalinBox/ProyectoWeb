@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateTroquel" update=":formCreate"
+					oncomplete="PF('dialogTroquelCreate').show()" title="Nuevo Troquel"
+					icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="troquel" paginatorPosition="bottom"
+					value="#{troquelBean.torqueles}" rows="10" paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<f:facet name="header">
+					TROQUELES
+					</f:facet>
+
+					<p:column headerText="Id">
+						<h:outputText value="#{troquel.trqCodigo}" />
+					</p:column>
+
+					<p:column headerText="Troquel" filterBy="#{troquel.trqNombre}"
+						footerText="contains" filterMatchMode="contains">
+						<h:outputText value="#{troquel.trqNombre}" />
+					</p:column>
+
+					<p:column style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogTroquelUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar Troquel">
+							<f:setPropertyActionListener value="#{troquel}"
+								target="#{troquelBean.selectedTroquel}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogTroquelDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{troquel}"
+								target="#{troquelBean.selectedTroquel}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nuevo Modelo de Troquel"
+					widgetVar="dialogTroquelCreate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgTroquelCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{troquelBean.selectedTroquel.trqNombre}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogTroquelCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{troquelBean.btnCreateTroquel(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogTroquelCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Troquel" widgetVar="dialogTroquelUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgTroquelUpdate">
+					<h:inputHidden value="#{troquelBean.selectedTroquel.trqCodigo}"></h:inputHidden>
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{troquelBean.selectedTroquel.trqNombre}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogTroquelUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{troquelBean.btnUpdateTroquel(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogTroquelUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade"
+					header="Eliminar troquel" severity="alert"
+					widgetVar="dialogTroquelDelete">
+
+					<h:inputHidden value="#{troquelBean.selectedTroquel.trqCodigo}"></h:inputHidden>
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogTroquelDelete').hide()"
+						actionListener="#{troquelBean.btnDeleteModelo(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogTroquelDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+			<h:form id="general">
+				<center>
+					<h:panelGrid columns="5" cellpadding="5">
+						<p:outputLabel value="Modelos: " />
+						<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
+							style="width:150px" required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{mttBean.selectItemsModelo}" />
+							<p:ajax update="basicDT" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Troqueles: " />
+						<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
+							style="width:150px" required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{mttBean.selectItemsTroquel}"></f:selectItems>
+							<p:ajax update="basicDT" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+				</center>
+				<p:separator />
+				<center>
+					<p:dataTable id="basicDT" var="talla" value="#{mttBean.tallas}"
+						style="width:250px"
+						emptyMessage="Seleccione un MODELO Y UN TROQUEL"
+						rowKey="#{talla.talla.talCodigo}"
+						selection="#{mttBean.selectedMtt}">
+
+						<p:column headerText="Talla">
+							<h:outputText value="#{talla.talla.talNumero}" />
+						</p:column>
+
+						<p:column headerText="Disponibilidad" selectionMode="multiple"
+							style="width:100px;text-align:center" />
+
+					</p:dataTable>
+				</center>
+
+				<p:commandButton id="buton1" process="basicDT"
+					update="multiCarDetail" icon="ui-icon-search"
+					value="PROBAR CON ESTE BUTTON"
+					oncomplete="PF('multiCarDialog').show()"
+					actionListener="#{mttBean.btnSaveMtt()}" />
+
+				<p:commandButton id="saveAll" ajax="false" value="GUARDAR"
+					icon="ui-icon-disk" action="#{mttBean.btnSaveMtt()}" />
+
+				<p:dialog header="Selected Cars" widgetVar="multiCarDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false"
+					width="400">
+					<p:outputPanel id="multiCarDetail" style="text-align:center;">
+						<ui:repeat value="#{mttBean.selectedMtt}" var="car">
+							<h:outputText
+								value="Talla: #{car.talla.talNumero} - Modelo: #{mttBean.codMod} - Troquel: #{mttBean.codTrq}"
+								style="display:block" />
+						</ui:repeat>
+					</p:outputPanel>
+				</p:dialog>
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

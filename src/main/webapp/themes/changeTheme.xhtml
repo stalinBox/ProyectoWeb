@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<h:form>
+
+				<h:panelGrid columns="2" cellpadding="10">
+					<h:outputText value="Basic:"></h:outputText>
+					<p:themeSwitcher effectSpeed="normal" effect="fade"
+						style="width:165px" id="defaultSwitcher"
+						value="#{themeSwitcherBean.theme}">
+						<f:selectItem itemLabel="Choose Theme" itemValue="" />
+						<f:selectItems value="#{themeSwitcherBean.themes}" />
+						<p:ajax global="false" listener="#{themeSwitcherBean.saveTheme}" />
+					</p:themeSwitcher>
+				</h:panelGrid>
+
+				<p:separator />
+			</h:form>
+
+			<h3 style="margin-top: 0">Basic</h3>
+			<p:steps>
+				<p:menuitem value="Personal" />
+				<p:menuitem value="Seat Selection" />
+				<p:menuitem value="Payment" />
+				<p:menuitem value="Confirmation" />
+			</p:steps>
+
+			<h3>Interactive</h3>
+			<p:steps activeIndex="0" styleClass="custom" readonly="false">
+				<p:menuitem value="PASO 1" url="www.google.com" />
+				<p:menuitem value="PASO 2" url="www.yahoo.es" />
+				<p:menuitem value="PASO 3" url="www.hotmail.com" />
+			</p:steps>
+			<p:separator />
+			
+			<style type="text/css">
+.ui-steps .ui-steps-item {
+	width: 24%;
+}
+
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-bottom: 30px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 10px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+</style>
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

@@ -1,0 +1,115 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background: #ECF3FD;
+	background-color: #ffffff;
+	color: #000000;
+	margin: 10px;
+}
+
+a:link:hover, a:visited:hover {
+	color: #045491;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+h1 {
+	font-family: Arial, "Arial CE", "Lucida Grande CE", lucida,
+		"Helvetica CE", sans-serif;
+	border-bottom: 1px solid #AFAFAF;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	color: #D20005;
+}
+
+#top {
+	position: relative;
+	background-color: #036fab;
+	color: white;
+	padding: 5px;
+	margin: 0px 0px 1px 0px;
+	height: 50px;
+}
+
+#left {
+	float: left;
+	background-color: #ece3a5;
+	padding: 5px;
+	width: 150px;
+}
+
+#right {
+	float: right;
+	background-color: #ece3a5;
+	padding: 5px;
+	wisdth: 150px;
+}
+
+.header {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+}
+
+.bottom, #bottom {
+	text-align: center;
+	position: relative;
+	background-color: #c2dfef;
+	padding: 5px;
+	margin: 1px 0px, 0px 0px;
+	height: 40px;
+}
+
+#conteiner {
+	width: 1300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.conteinerLogin {
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10%;
+	background-color: #fff;
+	font-size: 85%
+}
+
+.center_content {
+	position: relative;
+	background-color: #fff;
+	padding: 5px;
+	margin-top: 1px;
+	min-height: 60px;
+}
+
+.left_content {
+	background-color: #dddddd;
+	padding: 5px;
+	margin-left: 170 px;
+}
+
+.right_content {
+	background-color: #dddddd;
+	padding: 5px;
+	margin-right: 170 px;
+}
+
+#top a:link, #top a:visited {
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#top a:link, #top a:visited:hover {
+	color: black;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.ui-state-default .icon-login {
+	
+}
