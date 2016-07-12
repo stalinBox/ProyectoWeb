@@ -92,6 +92,7 @@ public class TtallaBean implements Serializable {
 			ttpk.setTrqCodigo(Integer.parseInt(this.codTrq));
 			this.selectedTtalla.setId(ttpk);
 			this.selectedTtalla.setCantidad(0);
+			
 			if (ttallasDao.create(this.selectedTtalla)) {
 				msg = "Se ha añadido una ttalla";
 				FacesMessage message = new FacesMessage(

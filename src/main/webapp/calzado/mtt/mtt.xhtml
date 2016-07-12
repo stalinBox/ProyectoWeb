@@ -51,27 +51,10 @@
 					</p:dataTable>
 				</center>
 
-				<p:commandButton id="buton1" process="basicDT"
-					update="multiCarDetail" icon="ui-icon-search"
-					value="PROBAR CON ESTE BUTTON"
-					oncomplete="PF('multiCarDialog').show()"
-					actionListener="#{mttBean.btnSaveMtt()}" />
-
-				<p:commandButton id="saveAll" ajax="false" value="GUARDAR"
-					icon="ui-icon-disk" action="#{mttBean.btnSaveMtt()}" />
-
-				<p:dialog header="Selected Cars" widgetVar="multiCarDialog"
-					modal="true" showEffect="fade" hideEffect="fade" resizable="false"
-					width="400">
-					<p:outputPanel id="multiCarDetail" style="text-align:center;">
-						<ui:repeat value="#{mttBean.selectedMtt}" var="car">
-							<h:outputText
-								value="Talla: #{car.talla.talNumero} - Modelo: #{mttBean.codMod} - Troquel: #{mttBean.codTrq}"
-								style="display:block" />
-						</ui:repeat>
-					</p:outputPanel>
-				</p:dialog>
-
+				<center>
+					<p:commandButton id="saveAll" ajax="false" value="GUARDAR"
+						icon="ui-icon-disk" action="#{mttBean.btnSaveMtt()}" />
+				</center>
 			</h:form>
 		</ui:define>
 	</ui:composition>

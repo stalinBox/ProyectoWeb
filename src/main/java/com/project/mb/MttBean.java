@@ -16,6 +16,8 @@ import com.project.dao.MttDaoImpl;
 import com.project.entities.ModTrqTal;
 import com.project.entities.Modelo;
 import com.project.entities.TTalla;
+import com.project.entities.TTallaPK;
+import com.project.entities.Talla;
 import com.project.entities.Troquele;
 import com.project.utils.MyUtil;
 
@@ -28,13 +30,14 @@ public class MttBean implements Serializable {
 	private List<SelectItem> selectItemsModelo;
 	private List<TTalla> tallas;
 	private String codTrq;
+	private String codMod;
+
 	// pruebas
 	private Boolean SiNo;
 	private String btn;
 	private String[] mmtttt;
-	private String codMod;
 
-	private List<ModTrqTal> selectedMtt;
+	private List<TTalla> selectedMtt;
 	private ModTrqTal mtt;
 
 	// INICIALIZADORES
@@ -44,7 +47,7 @@ public class MttBean implements Serializable {
 	}
 
 	public MttBean() {
-		this.selectedMtt = new ArrayList<ModTrqTal>();
+		this.selectedMtt = new ArrayList<TTalla>();
 	}
 
 	// SETTERS AND GETTERS
@@ -113,11 +116,11 @@ public class MttBean implements Serializable {
 		return btn;
 	}
 
-	public List<ModTrqTal> getSelectedMtt() {
+	public List<TTalla> getSelectedMtt() {
 		return selectedMtt;
 	}
 
-	public void setSelectedMtt(List<ModTrqTal> selectedMtt) {
+	public void setSelectedMtt(List<TTalla> selectedMtt) {
 		this.selectedMtt = selectedMtt;
 	}
 
@@ -167,29 +170,33 @@ public class MttBean implements Serializable {
 	public void btnSaveMtt() {
 		String msg = "";
 		MttDao mttDao = new MttDaoImpl();
-		this.mtt.setDisponibilidad(true);
-//		this.mtt.setModelo(this.codMod);
-//		this.mtt.setTalla(talla);
-//		this.mtt.setTroquele(troquele);
+		Modelo m = new Modelo();
+		Troquele t = new Troquele();
+		Talla tl = new Talla();
 
-		if (mttDao.create(this.mtt)) {
-			msg = "Se ha añadido un nuevo mtt";
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					msg, null);
-			FacesContext.getCurrentInstance().addMessage(null, message);
-		} else {
-			msg = "Error al momento de añadir un mtt";
-			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, msg, null);
-			FacesContext.getCurrentInstance().addMessage(null, message);
-		}
+		for (TTalla i : this.selectedMtt) {
+			Integer pk = (Integer) i.getId().getTalCodigo();
+			t.setTrqCodigo(Integer.parseInt(this.codTrq));
+			m.setModCodigo(Integer.parseInt(this.codMod));
 
-		String a = this.codTrq.toString();
-		String b = this.codMod.toString();
-		System.out.println("Datos guardados TROQUEL..." + a);
-		System.out.println("Datos guardados MODELO..." + b);
-		for (Object i : this.selectedMtt) {
-			System.out.println("Tallas: " + i.toString());
+			tl.setTalCodigo(pk);
+
+			this.mtt.setTalla(tl);
+			this.mtt.setTroquele(t);
+			this.mtt.setModelo(m);
+			this.mtt.setDisponibilidad(true);
+			if (mttDao.create(this.mtt)) {
+				msg = "Se ha añadido un nuevo mtt";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				msg = "Error al momento de añadir un mtt";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+
 		}
 	}
 }

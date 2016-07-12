@@ -2,6 +2,7 @@ package com.project.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.project.entities.ModTrqTal;
@@ -77,11 +78,29 @@ public class MttDaoImpl implements MttDao {
 
 	@Override
 	public boolean create(ModTrqTal mtt) {
+		System.out.println("DISPONIBILIDAD: "
+				+ mtt.getDisponibilidad().toString());
+
+		System.out.println("MODELO: "
+				+ mtt.getModelo().getModCodigo().toString());
+		System.out
+				.println("TALLA: " + mtt.getTalla().getTalCodigo().toString());
+
+		System.out.println("TROQUEL: "
+				+ mtt.getTroquele().getTrqCodigo().toString());
+
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(mtt);
+			Query query = sesion
+					.createQuery("INSERT INTO ModTrqTal (:tal,:trq,:mod,:dis)");
+			query.setParameter("tal", mtt.getTalla().getTalCodigo());
+			query.setParameter("trq", mtt.getTroquele().getTrqCodigo());
+			query.setParameter("mod", mtt.getModelo().getModCodigo());
+			query.setParameter("dis", mtt.getDisponibilidad());
+			int result = query.executeUpdate();
+			// sesion.save(mtt);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
@@ -92,5 +111,4 @@ public class MttDaoImpl implements MttDao {
 		}
 		return flag;
 	}
-
 }
