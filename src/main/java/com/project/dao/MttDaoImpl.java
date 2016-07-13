@@ -92,15 +92,14 @@ public class MttDaoImpl implements MttDao {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
+
 			sesion.beginTransaction();
-			Query query = sesion
-					.createQuery("INSERT INTO ModTrqTal (:tal,:trq,:mod,:dis)");
-			query.setParameter("tal", mtt.getTalla().getTalCodigo());
-			query.setParameter("trq", mtt.getTroquele().getTrqCodigo());
-			query.setParameter("mod", mtt.getModelo().getModCodigo());
-			query.setParameter("dis", mtt.getDisponibilidad());
-			int result = query.executeUpdate();
-			// sesion.save(mtt);
+			String sql = String
+					.format("INSERT INTO mod_trq_tal (tal_codigo,trq_codigo,mod_codigo,disponibilidad) VALUES(%s,%s,%s,%s);",
+							mtt.getTalla().getTalCodigo(), mtt.getTroquele()
+									.getTrqCodigo(), mtt.getModelo()
+									.getModCodigo(), mtt.getDisponibilidad());
+			sesion.createSQLQuery(sql).executeUpdate();
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {

@@ -18,7 +18,7 @@ public class ModTrqTal implements Serializable {
 	@Column(name = "mtt_codigo")
 	private Integer mttCodigo;
 
-	private Boolean disponibilidad;
+	private String disponibilidad;
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
@@ -46,11 +46,11 @@ public class ModTrqTal implements Serializable {
 		this.mttCodigo = mttCodigo;
 	}
 
-	public Boolean getDisponibilidad() {
+	public String getDisponibilidad() {
 		return this.disponibilidad;
 	}
 
-	public void setDisponibilidad(Boolean disponibilidad) {
+	public void setDisponibilidad(String disponibilidad) {
 		this.disponibilidad = disponibilidad;
 	}
 

@@ -16,7 +16,6 @@ import com.project.dao.MttDaoImpl;
 import com.project.entities.ModTrqTal;
 import com.project.entities.Modelo;
 import com.project.entities.TTalla;
-import com.project.entities.TTallaPK;
 import com.project.entities.Talla;
 import com.project.entities.Troquele;
 import com.project.utils.MyUtil;
@@ -184,7 +183,7 @@ public class MttBean implements Serializable {
 			this.mtt.setTalla(tl);
 			this.mtt.setTroquele(t);
 			this.mtt.setModelo(m);
-			this.mtt.setDisponibilidad(true);
+			this.mtt.setDisponibilidad("1");
 			if (mttDao.create(this.mtt)) {
 				msg = "Se ha añadido un nuevo mtt";
 				FacesMessage message = new FacesMessage(

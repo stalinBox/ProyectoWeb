@@ -4,31 +4,30 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the tallas database table.
  * 
  */
 @Entity
-@Table(name="tallas")
-@NamedQuery(name="Talla.findAll", query="SELECT t FROM Talla t")
+@Table(name = "tallas")
+@NamedQuery(name = "Talla.findAll", query = "SELECT t FROM Talla t")
 public class Talla implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="tal_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "tal_codigo")
 	private Integer talCodigo;
 
-	@Column(name="tal_numero")
+	@Column(name = "tal_numero")
 	private Integer talNumero;
 
-	//bi-directional many-to-one association to ModTrqTal
-	@OneToMany(mappedBy="talla")
+	// bi-directional many-to-one association to ModTrqTal
+	@OneToMany(mappedBy = "talla")
 	private List<ModTrqTal> modTrqTals;
 
-	//bi-directional many-to-one association to TTalla
-	@OneToMany(mappedBy="talla")
+	// bi-directional many-to-one association to TTalla
+	@OneToMany(mappedBy = "talla")
 	private List<TTalla> TTallas;
 
 	public Talla() {

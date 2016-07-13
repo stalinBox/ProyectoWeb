@@ -5,45 +5,44 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 /**
  * The persistent class for the procesos database table.
  * 
  */
 @Entity
-@Table(name="procesos")
-@NamedQuery(name="Proceso.findAll", query="SELECT p FROM Proceso p")
+@Table(name = "procesos")
+@NamedQuery(name = "Proceso.findAll", query = "SELECT p FROM Proceso p")
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="pro_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "pro_codigo")
 	private Integer proCodigo;
 
-	@Column(name="pro_cap")
+	@Column(name = "pro_cap")
 	private Integer proCap;
 
-	@Column(name="pro_duracion")
+	@Column(name = "pro_duracion")
 	private BigDecimal proDuracion;
 
-	//bi-directional many-to-one association to Modelo
+	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name="mod_codigo")
+	@JoinColumn(name = "mod_codigo")
 	private Modelo modelo;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_padre")
+	@JoinColumn(name = "pro_padre")
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Proceso
-	@OneToMany(mappedBy="proceso")
+	// bi-directional many-to-one association to Proceso
+	@OneToMany(mappedBy = "proceso")
 	private List<Proceso> procesos;
 
-	//bi-directional many-to-one association to TipoProceso
+	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name="tpr_codigo")
+	@JoinColumn(name = "tpr_codigo")
 	private TipoProceso tipoProceso;
 
 	public Proceso() {

@@ -29,5 +29,6 @@
 		<mapping class="com.project.entities.TTalla" />
 
 		<mapping class="com.project.entities.TTallaPK" />
+
 	</session-factory>
 </hibernate-configuration>

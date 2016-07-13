@@ -59,7 +59,7 @@
 			<artifactId>start</artifactId>
 			<version>1.0.9</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>all-themes</artifactId>
@@ -81,6 +81,13 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>tck-utils-api</artifactId>
 			<version>0.9.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>2.2.4</version>
+			<scope>provided</scope> <!-- No required in JBoss but for test -->
 		</dependency>
 	</dependencies>
 
