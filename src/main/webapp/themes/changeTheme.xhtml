@@ -13,12 +13,11 @@
 
 				<h:panelGrid columns="2" cellpadding="10">
 					<h:outputText value="Basic:"></h:outputText>
-					<p:themeSwitcher effectSpeed="normal" effect="fade"
-						style="width:165px" id="defaultSwitcher"
-						value="#{themeSwitcherBean.theme}">
-						<f:selectItem itemLabel="Choose Theme" itemValue="" />
+					<p:themeSwitcher value="#{guestPreferences.theme}"
+						effectSpeed="normal" effect="fade" style="width:165px">
+						<f:selectItem itemLabel="Elegir Tema" itemValue="" />
 						<f:selectItems value="#{themeSwitcherBean.themes}" />
-						<p:ajax global="false" listener="#{themeSwitcherBean.saveTheme}" />
+						<p:ajax listener="#{themeSwitcherBean.saveTheme}" />
 					</p:themeSwitcher>
 				</h:panelGrid>
 
@@ -40,7 +39,7 @@
 				<p:menuitem value="PASO 3" url="www.hotmail.com" />
 			</p:steps>
 			<p:separator />
-			
+
 			<style type="text/css">
 .ui-steps .ui-steps-item {
 	width: 24%;

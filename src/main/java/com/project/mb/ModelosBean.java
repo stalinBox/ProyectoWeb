@@ -66,7 +66,7 @@ public class ModelosBean implements Serializable {
 	public void btnCreateModelo(ActionEvent actionEvent) {
 		String msg = "";
 		ModelosDao modeloDao = new ModelosDaoImpl();
-		
+
 		if (modeloDao.create(this.selectedModelo)) {
 			msg = "Se ha añadido un nuevo modelo";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,

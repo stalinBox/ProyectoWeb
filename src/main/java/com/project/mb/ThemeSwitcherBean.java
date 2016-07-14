@@ -1,40 +1,23 @@
 package com.project.mb;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.bean.SessionScoped;
 
-import org.primefaces.component.themeswitcher.ThemeSwitcher;
-
-@ManagedBean(name = "themeSwitcherBean")
+@ManagedBean
 @SessionScoped
 public class ThemeSwitcherBean implements Serializable {
-	/**
-*
-*/
-	private static final long serialVersionUID = 7448888248791054139L;
-	private Map<String, String> themes;
-	private String theme = "start";
 
-	public Map<String, String> getThemes() {
-		return themes;
-	}
+	private static final long serialVersionUID = 1L;
+	private TreeMap<String, String> themes;
+	private GuestPreferences gp = new GuestPreferences();
+	private String theme;
 
-	public String getTheme() {
-		return theme;
-	}
+	public ThemeSwitcherBean() {
+		theme = gp.getTheme();
 
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	@PostConstruct
-	public void init() {
 		themes = new TreeMap<String, String>();
 		themes.put("Aristo", "aristo");
 		themes.put("Black-Tie", "black-tie");
@@ -69,7 +52,31 @@ public class ThemeSwitcherBean implements Serializable {
 		themes.put("Vader", "vader");
 	}
 
-	public void saveTheme(AjaxBehaviorEvent ajax) {
-		setTheme((String) ((ThemeSwitcher) ajax.getSource()).getValue());
+	public TreeMap<String, String> getThemes() {
+		return themes;
+	}
+
+	public void setThemes(TreeMap<String, String> themes) {
+		this.themes = themes;
+	}
+
+	public GuestPreferences getGp() {
+		return gp;
+	}
+
+	public void setGp(GuestPreferences gp) {
+		this.gp = gp;
+	}
+
+	public String getTheme() {
+		return theme;
+	}
+
+	public void setTheme(String theme) {
+		this.theme = theme;
+	}
+
+	public void saveTheme() {
+		gp.setTheme(theme);
 	}
 }

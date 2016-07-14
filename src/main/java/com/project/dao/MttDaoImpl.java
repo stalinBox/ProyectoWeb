@@ -2,7 +2,6 @@ package com.project.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.project.entities.ModTrqTal;

@@ -39,7 +39,7 @@
 						<h:outputText value="#{modelo.modPiezas}" />
 					</p:column>
 
-					<p:column style="width:10%">
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
 						<p:commandButton id="btnUpdate" update=":formUpdate"
 							oncomplete="PF('dialogModeloUpdate').show()"
 							icon="ui-icon-pencil" title="Modificar">
@@ -66,10 +66,15 @@
 						style="margin:0 auto;">
 
 						<h:outputText value="Nombre:" />
-						<p:inputText value="#{modelosBean.selectedModelos.modNombre}" />
+						<p:inputText id="entrada"
+							value="#{modelosBean.selectedModelos.modNombre}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
 
 						<h:outputText value="Nº de piezas:" />
-						<p:inputText value="#{modelosBean.selectedModelos.modPiezas}" />
+						<p:inputText value="#{modelosBean.selectedModelos.modPiezas}">
+							<f:validateDoubleRange minimum="1" maximum="99" />
+						</p:inputText>
 
 						<f:facet name="footer">
 							<p:separator />
@@ -96,10 +101,14 @@
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 						<h:outputText value="Nombre:" />
-						<p:inputText value="#{modelosBean.selectedModelos.modNombre}" />
+						<p:inputText value="#{modelosBean.selectedModelos.modNombre}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
 
 						<h:outputText value="Nº de piezas:" />
-						<p:inputText value="#{modelosBean.selectedModelos.modPiezas}" />
+						<p:inputText value="#{modelosBean.selectedModelos.modPiezas}">
+							<f:validateDoubleRange minimum="1" maximum="99" />
+						</p:inputText>
 
 						<f:facet name="footer">
 							<p:separator />

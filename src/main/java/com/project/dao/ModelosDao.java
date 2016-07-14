@@ -5,7 +5,7 @@ import java.util.List;
 import com.project.entities.Modelo;
 
 public interface ModelosDao {
-	public Modelo findByModelo(Modelo modelo);
+	// public Modelo findByModelo(Modelo modelo);
 	public List<Modelo> findAll();
 	public boolean create(Modelo modelo);
 	public boolean update(Modelo modelo);
