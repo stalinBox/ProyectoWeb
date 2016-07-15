@@ -26,6 +26,7 @@ public class LoginBean implements Serializable {
 
 	private Usuario usuario;
 	private UsuarioDao usuarioDao;
+
 	public LoginBean() {
 		this.usuarioDao = new UsuarioDaoImpl();
 		if (this.usuario == null) {
@@ -50,16 +51,17 @@ public class LoginBean implements Serializable {
 		this.usuario = this.usuarioDao.login(this.usuario);
 		if (this.usuario != null) {
 			loggedIn = true;
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario",this.usuario.getUserName());
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().put("usuario", this.usuario.getUserName());
+			ruta = MyUtil.basepathlogin() + "inicio.xhtml";
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Bienvenido", this.usuario.getUserName());
-			ruta = MyUtil.basepathlogin() + "inicio.xhtml";
 		} else {
 			loggedIn = false;
 			message = new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Error de autentificación", "Usuario y/o Clave incorrectos");
-			
-			if(this.usuario == null){
+
+			if (this.usuario == null) {
 				this.usuario = new Usuario();
 			}
 		}
@@ -68,17 +70,18 @@ public class LoginBean implements Serializable {
 		context.addCallbackParam("loggedIn", loggedIn);
 		context.addCallbackParam("ruta", ruta);
 	}
-	
-	public void logout(){
-		String ruta = MyUtil.basepathlogin()+"login.xhtml";
+
+	public void logout() {
+		String ruta = MyUtil.basepathlogin() + "login.xhtml";
 		RequestContext context = RequestContext.getCurrentInstance();
 		FacesContext facesContext = FacesContext.getCurrentInstance();
-		
-		HttpSession sesion = (HttpSession) facesContext.getExternalContext().getSession(false);
+
+		HttpSession sesion = (HttpSession) facesContext.getExternalContext()
+				.getSession(false);
 		sesion.invalidate();
-		
+
 		context.addCallbackParam("loggetOut", true);
 		context.addCallbackParam("ruta", ruta);
 	}
-	
+
 }

@@ -27,4 +27,8 @@ public class MyUtil {
 	public static String messages() {
 		return "http://localhost:8080/ProyectoWeb/messages/";
 	}
+
+	public static String next() {
+		return "http://localhost:8080/ProyectoWeb/calzado/";
+	}
 }

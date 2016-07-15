@@ -8,8 +8,33 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+			<form>
+				<h:panelGrid id="p1" columns="5" cellpadding="5">
+
+					<f:facet name="header" align="center">INGRESO DE DATOS AL SISTEMA</f:facet>
 
 
+					<p:outputLabel value="PROCESO" />
+					<p:outputLabel value="DURACION" />
+					<p:outputLabel value="PREDECESORA" />
+					<p:outputLabel value="CAPACIDAD" />
+
+				</h:panelGrid>
+				<p:dataTable emptyMessage="No se han cargado datos">
+					<p:column headerText="PROCESO">
+
+					</p:column>
+					<p:column headerText="DURACION">
+
+					</p:column>
+					<p:column headerText="PREDECESORA">
+
+					</p:column>
+					<p:column headerText="CAPACIDAD">
+
+					</p:column>
+				</p:dataTable>
+			</form>
 		</ui:define>
 	</ui:composition>
 </body>

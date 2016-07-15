@@ -32,4 +32,8 @@ public class AppBean {
 	public String messagesPath() {
 		return MyUtil.messages();
 	}
+
+	public String nextPath() {
+		return MyUtil.next();
+	}
 }

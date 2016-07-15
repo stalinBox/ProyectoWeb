@@ -3,36 +3,42 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:customer="http://java.sun.com/jsf/composite/components/customer">
 
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+			<p:messages id="messages" />
 			<h:form id="general">
 				<center>
-					<h:panelGrid columns="5" cellpadding="5">
-						<p:outputLabel value="Modelos: " />
-						<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
-							style="width:150px" required="true">
+					<p:panel id="panel" style="margin-bottom:10px;">
+						<h:panelGrid id="p1" columns="5" cellpadding="5">
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{mttBean.selectItemsModelo}" />
-							<p:ajax update="basicDT" />
-						</p:selectOneMenu>
+							<p:outputLabel value="Modelos: " />
+							<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
+								style="width:150px" required="true">
 
-						<p:outputLabel value="Troqueles: " />
-						<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
-							style="width:150px" required="true">
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{mttBean.selectItemsModelo}" />
+								<p:ajax update="basicDT" />
+							</p:selectOneMenu>
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{mttBean.selectItemsTroquel}"></f:selectItems>
-							<p:ajax update="basicDT" />
-						</p:selectOneMenu>
+							<p:outputLabel value="Troqueles: " />
+							<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
+								style="width:150px" required="true">
 
-					</h:panelGrid>
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{mttBean.selectItemsTroquel}"></f:selectItems>
+								<p:ajax update="basicDT" />
+							</p:selectOneMenu>
+
+						</h:panelGrid>
+					</p:panel>
 				</center>
+
 				<p:separator />
 				<center>
 					<p:dataTable id="basicDT" var="talla" value="#{mttBean.tallas}"
@@ -47,15 +53,19 @@
 
 						<p:column headerText="Disponibilidad" selectionMode="multiple"
 							style="width:100px;text-align:center" />
-
 					</p:dataTable>
 				</center>
 
 				<center>
-					<p:commandButton id="saveAll" ajax="false" value="GUARDAR"
-						icon="ui-icon-disk" action="#{mttBean.btnSaveMtt()}" />
+					<h:button action="#{mttBean.login()}" value="GUARDAR"
+						icon="ui-icon-disk" />
+
+					<p:commandButton ajax="false" value="GUARDAR" icon="ui-icon-disk"
+						action="#{mttBean.login()}">
+					</p:commandButton>
 				</center>
 			</h:form>
+
 		</ui:define>
 	</ui:composition>
 </body>

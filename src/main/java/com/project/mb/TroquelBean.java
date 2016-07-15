@@ -21,7 +21,8 @@ public class TroquelBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Troquele> torqueles;
 	private Troquele selectedTroquel;
-	//private List<SelectItem> selectItemsTroquel;
+
+	// private List<SelectItem> selectItemsTroquel;
 
 	@PostConstruct
 	public void init() {
@@ -31,22 +32,6 @@ public class TroquelBean implements Serializable {
 	public TroquelBean() {
 		this.torqueles = new ArrayList<Troquele>();
 	}
-
-	/*public List<SelectItem> getSelectItemsTroquel() {
-		this.selectItemsTroquel = new ArrayList<SelectItem>();
-		TroqueleDao troDao = new TroquelDaoImpl();
-		List<Troquele> troquel = troDao.selectItems();
-		for (Troquele trq : troquel) {
-			SelectItem selectItem = new SelectItem(trq.getTrqCodigo(),
-					trq.getTrqNombre());
-			this.selectItemsTroquel.add(selectItem);
-		}
-		return selectItemsTroquel;
-	}
-
-	public void setSelectItemsTroquel(List<SelectItem> selectItemsTroquel) {
-		this.selectItemsTroquel = selectItemsTroquel;
-	}*/
 
 	public List<Troquele> getTorqueles() {
 		TroqueleDao troquelDao = new TroquelDaoImpl();

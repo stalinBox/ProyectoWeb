@@ -11,6 +11,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.context.RequestContext;
+
 import com.project.dao.MttDao;
 import com.project.dao.MttDaoImpl;
 import com.project.entities.ModTrqTal;
@@ -30,14 +32,12 @@ public class MttBean implements Serializable {
 	private List<TTalla> tallas;
 	private String codTrq;
 	private String codMod;
-
-	// pruebas
-	private Boolean SiNo;
-	private String btn;
-	private String[] mmtttt;
-
 	private List<TTalla> selectedMtt;
 	private ModTrqTal mtt;
+
+	// PRUEBA
+	private int value1;
+	private int value2;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -109,12 +109,6 @@ public class MttBean implements Serializable {
 		this.codTrq = codTrq;
 	}
 
-	// pruebas
-
-	public String getBtn() {
-		return btn;
-	}
-
 	public List<TTalla> getSelectedMtt() {
 		return selectedMtt;
 	}
@@ -131,26 +125,6 @@ public class MttBean implements Serializable {
 		this.mtt = mtt;
 	}
 
-	public Boolean getSiNo() {
-		return SiNo;
-	}
-
-	public void setSiNo(Boolean siNo) {
-		SiNo = siNo;
-	}
-
-	public void setBtn(String btn) {
-		this.btn = btn;
-	}
-
-	public String[] getMmtttt() {
-		return mmtttt;
-	}
-
-	public void setMmtttt(String[] mmtttt) {
-		this.mmtttt = mmtttt;
-	}
-
 	public String getCodMod() {
 		return codMod;
 	}
@@ -159,13 +133,9 @@ public class MttBean implements Serializable {
 		this.codMod = codMod;
 	}
 
-	// PRUEBA
-	public String messagesPath() {
-		return MyUtil.messages();
-	}
+	// PRUEBAS
 
 	// DMLS
-
 	public void btnSaveMtt() {
 		String msg = "";
 		MttDao mttDao = new MttDaoImpl();
@@ -195,7 +165,39 @@ public class MttBean implements Serializable {
 						FacesMessage.SEVERITY_ERROR, msg, null);
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
-
 		}
 	}
+
+	public int getValue1() {
+		return value1;
+	}
+
+	public void setValue1(int value1) {
+		this.value1 = value1;
+	}
+
+	public int getValue2() {
+		return value2;
+	}
+
+	public void setValue2(int value2) {
+		this.value2 = value2;
+	}
+
+	// FUNCIONES
+	public void login() {
+		try {
+			FacesContext contex = FacesContext.getCurrentInstance();
+			contex.getExternalContext().redirect(
+					MyUtil.next() + "proceso/proceso.xhtml");
+		} catch (Exception e) {
+			System.out
+					.println("Me voy al carajo, no funciona esta redireccion");
+		}
+		RequestContext context = RequestContext.getCurrentInstance();
+		String ruta;
+		ruta = MyUtil.next() + "proceso/proceso.xhtml";
+		context.addCallbackParam("ruta", ruta);
+	}
+
 }
