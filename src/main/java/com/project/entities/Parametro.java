@@ -1,7 +1,12 @@
 package com.project.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.util.List;
 
 
@@ -50,6 +55,7 @@ public class Parametro implements Serializable {
 
 	//bi-directional many-to-one association to Programdia
 	@OneToMany(mappedBy="parametro", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Programdia> programdias;
 
 	public Parametro() {

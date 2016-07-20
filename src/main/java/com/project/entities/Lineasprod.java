@@ -1,7 +1,12 @@
 package com.project.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.util.List;
 
 
@@ -23,24 +28,27 @@ public class Lineasprod implements Serializable {
 
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name="pro_codigo", nullable = false, insertable = false, updatable = false)
 	private Proceso proceso;
 
 	//bi-directional many-to-one association to Turno
 	@ManyToOne
-	@JoinColumn(name="turno_codigo")
+	@JoinColumn(name="turno_codigo", nullable = false, insertable = false, updatable = false)
 	private Turno turno;
 
 	//bi-directional many-to-one association to Parametro
 	@OneToMany(mappedBy="lineasprod", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Parametro> parametros;
 
 	//bi-directional many-to-one association to Programdia
 	@OneToMany(mappedBy="lineasprod", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Programdia> programdias;
 
 	//bi-directional many-to-one association to Programturno
 	@OneToMany(mappedBy="lineasprod", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Programturno> programturnos;
 
 	public Lineasprod() {

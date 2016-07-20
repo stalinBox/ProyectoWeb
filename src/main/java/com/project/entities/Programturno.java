@@ -5,63 +5,62 @@ import javax.persistence.*;
 import java.sql.Time;
 import java.util.Date;
 
-
 /**
  * The persistent class for the programturnos database table.
  * 
  */
 @Entity
-@Table(name="programturnos")
-@NamedQuery(name="Programturno.findAll", query="SELECT p FROM Programturno p")
+@Table(name = "programturnos")
+@NamedQuery(name = "Programturno.findAll", query = "SELECT p FROM Programturno p")
 public class Programturno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="program_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "program_codigo")
 	private Integer programCodigo;
 
-	@Column(name="cant_estim")
+	@Column(name = "cant_estim")
 	private Integer cantEstim;
 
-	@Column(name="cant_real")
+	@Column(name = "cant_real")
 	private Integer cantReal;
 
 	private String dia;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_final")
+	@Column(name = "f_final")
 	private Date fFinal;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_inicio")
+	@Column(name = "f_inicio")
 	private Date fInicio;
 
 	private Time hora;
 
-	//bi-directional many-to-one association to Lineasprod
+	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name="lineapro_codigo")
+	@JoinColumn(name = "lineapro_codigo", nullable = false, insertable = false, updatable = false)
 	private Lineasprod lineasprod;
 
-	//bi-directional many-to-one association to Modelo
+	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name="mod_codigo")
+	@JoinColumn(name = "mod_codigo", nullable = false, insertable = false, updatable = false)
 	private Modelo modelo;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name = "pro_codigo", nullable = false, insertable = false, updatable = false)
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Talla
+	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name="tal_codigo")
+	@JoinColumn(name = "tal_codigo", nullable = false, insertable = false, updatable = false)
 	private Talla talla;
 
-	//bi-directional many-to-one association to Turno
+	// bi-directional many-to-one association to Turno
 	@ManyToOne
-	@JoinColumn(name="turno_codigo")
+	@JoinColumn(name = "turno_codigo", nullable = false, insertable = false, updatable = false)
 	private Turno turno;
 
 	public Programturno() {

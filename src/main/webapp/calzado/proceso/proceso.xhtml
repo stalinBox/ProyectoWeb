@@ -8,33 +8,140 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<form>
-				<h:panelGrid id="p1" columns="5" cellpadding="5">
+			<p:growl id="msgs" showDetail="true" />
+
+			<form id="formDataTable">
+				<h:panelGrid id="p1" columns="5" cellpadding="4"
+					style="margin:0 auto;">
 
 					<f:facet name="header" align="center">INGRESO DE DATOS AL SISTEMA</f:facet>
+					<p:row>
+						<p:outputLabel for="Proceso" value="PROCESO: " />
+						<p:selectOneMenu id="Proceso" value="#{procesoBean.tprCod}"
+							style="width:150px">
 
+							<f:selectItem itemLabel="Seleccionar Proceso" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectItemsTipPro}" />
+						</p:selectOneMenu>
+					</p:row>
 
-					<p:outputLabel value="PROCESO" />
-					<p:outputLabel value="DURACION" />
-					<p:outputLabel value="PREDECESORA" />
-					<p:outputLabel value="CAPACIDAD" />
+					<p:row>
+						<p:outputLabel for="modID" value="MODELO" />
+						<p:selectOneMenu id="modID" value="" style="width:150px">
+							<f:selectItem itemLabel="Seleccione un Modelo" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectItemsModelo}" />
+						</p:selectOneMenu>
+					</p:row>
+
+					<p:row>
+						<h:outputLabel for="duracionid" value="DURACIÓN(min): " />
+						<p:spinner id="duracionid" value="#{procesoBean.proDur}"
+							stepFactor="0.1" min="0" max="100" />
+					</p:row>
+
+					<p:row>
+						<h:outputLabel for="predecesoraID" value="PROCESO ANTERIOR:" />
+						<p:selectCheckboxMenu id="predecesoraID"
+							value="#{procesoBean.itemsPredecesor}"
+							label="Selección de prodecesores" filter="true"
+							filterMatchMode="startsWith" panelStyle="width:250px">
+							<f:selectItems value="#{procesoBean.selectItemsPredecesor}"></f:selectItems>
+						</p:selectCheckboxMenu>
+					</p:row>
+
+					<p:row>
+						<p:outputLabel value="CAPACIDAD" />
+						<p:inputText value="#{procesoBean.proCap}"></p:inputText>
+					</p:row>
+
+					<p:row>
+
+					</p:row>
 
 				</h:panelGrid>
-				<p:dataTable emptyMessage="No se han cargado datos">
+
+				<p:dataTable id="idTableProceso"
+					emptyMessage="No se han cargado datos">
 					<p:column headerText="PROCESO">
-
+						<h:outputText value="" />
 					</p:column>
+
+					<p:column headerText="MODELO">
+						<h:outputText value="" />
+					</p:column>
+
 					<p:column headerText="DURACION">
-
+						<h:outputText value="" />
 					</p:column>
+
 					<p:column headerText="PREDECESORA">
-
+						<h:outputText value="" />
 					</p:column>
+
 					<p:column headerText="CAPACIDAD">
-
+						<h:outputText value="" />
 					</p:column>
+
+					<p:column headerText="Actualizar/Eliminar" style="width:30%">
+						<p:commandButton id="btnUpdate" icon="ui-icon-pencil"
+							title="Modificar">
+							<f:setPropertyActionListener value="" target="" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="" target="" />
+						</p:commandButton>
+					</p:column>
+
 				</p:dataTable>
 			</form>
+			<p:commandButton value="AGREGAR"
+				actionListener="#{procesoBean.btnCreateProceso()}"></p:commandButton>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Proceso" widgetVar="dialogProcesoUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgProcesoUpdate">
+
+					<h:inputHidden value="" />
+					<h:inputHidden value="" />
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Cantidad:" />
+						<p:inputText value="" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar" icon="fa fa-fw fa-save"
+								title="Guardar" value="Guardar" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogProcesoUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar el proceso"
+					severity="alert" widgetVar="dialogProcesoDelete">
+
+					<h:inputHidden value="" />
+					<h:inputHidden value="" />
+
+					<p:commandButton id="confirm" value="Si" icon="ui-icon-check" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogProcesoDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

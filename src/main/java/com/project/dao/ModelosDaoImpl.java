@@ -9,26 +9,6 @@ import com.project.utils.HibernateUtil;
 
 public class ModelosDaoImpl implements ModelosDao {
 
-//	@Override
-//	public Modelo findByModelo(Modelo modelo) {
-//		Modelo entities = null;
-//		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-//		String sql = "FROM Modelo WHERE mod_nombre='" + modelo.getModNombre()
-//				+ "'";
-//		System.out.println(sql);
-//
-//		try {
-//			sesion.beginTransaction();
-//			entities = (Modelo) sesion.createQuery(sql).uniqueResult();
-//			sesion.getTransaction().commit();
-//		} catch (Exception e) {
-//			sesion.getTransaction().rollback();
-//			System.out
-//					.println("ERRORRR FINDBYMODELOS CALZADO: " + e.toString());
-//		}
-//		return entities;
-//	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Modelo> findAll() {
@@ -43,6 +23,24 @@ public class ModelosDaoImpl implements ModelosDao {
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
 			System.out.println("ERRORRRRR FINDALLMODELOS: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Modelo> selectItems() {
+		List<Modelo> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Modelo";
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERROR IMPLEMENTS SELECTITEMS MODELO: "
+					+ e.toString());
 		}
 		return listado;
 	}
@@ -108,20 +106,4 @@ public class ModelosDaoImpl implements ModelosDao {
 		return flag;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Modelo> selectItems() {
-		List<Modelo> listado = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Modelo";
-		try {
-			sesion.beginTransaction();
-			listado = sesion.createQuery(sql).list();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERROR IMPLEMENTS SELECTITEMS MODELO: " + e.toString());
-		}
-		return listado;
-	}
 }

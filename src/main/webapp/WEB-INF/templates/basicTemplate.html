@@ -19,7 +19,10 @@
 <h:body>
 	<div id="conteiner">
 		<div id="top" class="ui-widget-header ui-corner-all">
-			<ui:insert name="top">CALZADO</ui:insert>
+			<ui:insert name="top">
+				CALZADO
+			</ui:insert>
+
 		</div>
 
 		<div id="menu">
@@ -31,10 +34,12 @@
 						<p:menuitem value="Usuarios"
 							url="#{appBean.basePath}usuario/index.jsf" />
 						<p:separator />
-						<p:menuitem value="Quit" url="#" />
+						<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"
+							oncomplete="handleLoginRequest(xhr, status, args)" />
 					</p:submenu>
 
-					<p:submenu label="Editar" icon="ui-icon-pencil">
+					<p:submenu label="
+							Editar" icon="ui-icon-pencil">
 						<p:menuitem value="Modelos"
 							url="#{appBean.calzadoPath()}modelos/modelos.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
@@ -49,6 +54,12 @@
 							icon="ui-icon-arrowreturnthick-1-e" />
 						<p:menuitem value="Configuración Tallas"
 							url="#{appBean.calzadoPath()}ttallas/ttallas.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="Procesos"
+							url="#{appBean.calzadoPath()}proceso/proceso.jsf"
+							icon="ui-icon-arrowreturnthick-1-e" />
+						<p:menuitem value="Configuración procesos"
+							url="#{appBean.calzadoPath()}tipprocesos/tipprocesos.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
 					</p:submenu>
 
@@ -86,10 +97,13 @@
 
 		<div id="content"
 			class="center_content ui-widget-content ui-corner-all">
-			<ui:insert name="content"></ui:insert>
+			<ui:insert name="content">
+
+			</ui:insert>
 		</div>
 
-		<div id="bottom" class="ui-widget-header ui-corner-all">
+		<div id="bottom" class="ui-widget-header ui-corner-all"
+			style="height: 15px;">
 			<ui:insert name="bottom">&copy; Universidad Técnica de Ambato</ui:insert>
 		</div>
 	</div>

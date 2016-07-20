@@ -4,69 +4,68 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
 /**
  * The persistent class for the detalleorden database table.
  * 
  */
 @Entity
-@NamedQuery(name="Detalleorden.findAll", query="SELECT d FROM Detalleorden d")
+@NamedQuery(name = "Detalleorden.findAll", query = "SELECT d FROM Detalleorden d")
 public class Detalleorden implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="detaorden_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "detaorden_codigo")
 	private Integer detaordenCodigo;
 
 	private Integer cantidad;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_actual")
+	@Column(name = "f_actual")
 	private Date fActual;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_estim")
+	@Column(name = "f_estim")
 	private Date fEstim;
 
-	//bi-directional many-to-one association to Lugare
+	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name="lugar_codigo_dest")
+	@JoinColumn(name = "lugar_codigo_dest", nullable = false, insertable = false, updatable = false)
 	private Lugare lugare1;
 
-	//bi-directional many-to-one association to Lugare
+	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name="lugar_codigo_orig")
+	@JoinColumn(name = "lugar_codigo_orig", nullable = false, insertable = false, updatable = false)
 	private Lugare lugare2;
 
-	//bi-directional many-to-one association to Modelo
+	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name="mod_codigo")
+	@JoinColumn(name = "mod_codigo", nullable = false, insertable = false, updatable = false)
 	private Modelo modelo;
 
-	//bi-directional many-to-one association to Ordenprod
+	// bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name="ordenprod_codigo")
+	@JoinColumn(name = "ordenprod_codigo", nullable = false, insertable = false, updatable = false)
 	private Ordenprod ordenprod;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name = "pro_codigo", nullable = false, insertable = false, updatable = false)
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Talla
+	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name="tal_codigo")
+	@JoinColumn(name = "tal_codigo", nullable = false, insertable = false, updatable = false)
 	private Talla talla;
 
-	//bi-directional many-to-one association to Turno
+	// bi-directional many-to-one association to Turno
 	@ManyToOne
-	@JoinColumn(name="turno_codigo")
+	@JoinColumn(name = "turno_codigo", nullable = false, insertable = false, updatable = false)
 	private Turno turno;
 
-	//bi-directional many-to-one association to Usuario
+	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name="user_id_resp")
+	@JoinColumn(name = "user_id_resp", nullable = false, insertable = false, updatable = false)
 	private Usuario usuario;
 
 	public Detalleorden() {

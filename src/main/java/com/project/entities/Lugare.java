@@ -1,7 +1,12 @@
 package com.project.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.util.List;
 
 
@@ -24,14 +29,17 @@ public class Lugare implements Serializable {
 
 	//bi-directional many-to-one association to Detalleorden
 	@OneToMany(mappedBy="lugare1", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Detalleorden> detalleordens1;
 
 	//bi-directional many-to-one association to Detalleorden
 	@OneToMany(mappedBy="lugare2", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Detalleorden> detalleordens2;
 
 	//bi-directional many-to-one association to Ordenprod
 	@OneToMany(mappedBy="lugare", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Ordenprod> ordenprods;
 
 	public Lugare() {

@@ -12,26 +12,28 @@
 			<p:growl id="msgs" showDetail="true" />
 			<h:form>
 				<p:commandButton id="btnCreateTipoProceso" update=":formCreate"
-					oncomplete="PF('dialogTipoProcesoCreate').show()" title="Nuevo Tipo de Proceso"
-					icon="fa fa-plus" value="Nuevo">
+					oncomplete="PF('dialogTipoProcesoCreate').show()"
+					title="Nuevo Tipo de Proceso" icon="fa fa-plus" value="Nuevo">
 				</p:commandButton>
 			</h:form>
 
 			<h:form id="formDataTable">
-				<p:dataTable id="basicDT" var="TipoProceso" paginatorPosition="bottom"
-					value="#{tipoProcesosBean.tipProceso}" rows="10" paginator="true"
+				<p:dataTable id="basicDT" var="TipoProceso"
+					paginatorPosition="bottom" value="#{tipoProcesosBean.tipProceso}"
+					rows="10" paginator="true"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
 					<f:facet name="header">
-					TIPO DE PROCESOS
+					CONFIGURACIÓN PROCESOS
 					</f:facet>
 
 					<p:column headerText="Id">
 						<h:outputText value="#{TipoProceso.tprCodigo}" />
 					</p:column>
 
-					<p:column headerText="Tipo Proceso" filterBy="#{TipoProceso.tprNombre}"
-						footerText="contains" filterMatchMode="contains">
+					<p:column headerText="Tipo Proceso"
+						filterBy="#{TipoProceso.tprNombre}" footerText="contains"
+						filterMatchMode="contains">
 						<h:outputText value="#{TipoProceso.tprNombre}" />
 					</p:column>
 
@@ -62,7 +64,8 @@
 						style="margin:0 auto;">
 
 						<h:outputText value="Nombre:" />
-						<p:inputText value="#{tipoProcesosBean.selectedTipProceso.tprNombre}" />
+						<p:inputText
+							value="#{tipoProcesosBean.selectedTipProceso.tprNombre}" />
 
 						<f:facet name="footer">
 							<p:separator />
@@ -82,14 +85,16 @@
 			</h:form>
 
 			<h:form id="formUpdate">
-				<p:dialog header="Modificar Tipo de Proceso" widgetVar="dialogTipoProcesoUpdate"
-					modal="true" showEffect="fade" hideEffect="explode"
-					resizable="false" id="dlgTipoProcesoUpdate">
-					<h:inputHidden value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputHidden>
+				<p:dialog header="Modificar Tipo de Proceso"
+					widgetVar="dialogTipoProcesoUpdate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgTipoProcesoUpdate">
+					<h:inputHidden
+						value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputHidden>
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 						<h:outputText value="Nombre:" />
-						<p:inputText value="#{tipoProcesosBean.selectedTipProceso.tprNombre}" />
+						<p:inputText
+							value="#{tipoProcesosBean.selectedTipProceso.tprNombre}" />
 
 						<f:facet name="footer">
 							<p:separator />
@@ -113,7 +118,8 @@
 					showEffect="fade" hideEffect="fade"
 					header="Eliminar Tipo de Proceso" severity="alert"
 					widgetVar="dialogTipoProcesoDelete">
-					<h:inputSecret value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputSecret>
+					<h:inputSecret
+						value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputSecret>
 					<p:commandButton id="confirm" value="Si"
 						update="formDataTable, msgs" icon="ui-icon-check"
 						oncomplete="PF('dialogTipoProcesoDelete').hide()"
