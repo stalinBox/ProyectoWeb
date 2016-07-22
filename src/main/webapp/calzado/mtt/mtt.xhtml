@@ -15,7 +15,7 @@
 					<p:panel id="panel" style="margin-bottom:10px;">
 						<h:panelGrid id="p1" columns="5" cellpadding="5">
 
-							<p:outputLabel value="Modelos: " />
+							<p:outputLabel value="Modelo: " />
 							<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
 								style="width:150px" required="true">
 
@@ -25,7 +25,7 @@
 								<p:ajax update="basicDT" />
 							</p:selectOneMenu>
 
-							<p:outputLabel value="Troqueles: " />
+							<p:outputLabel value="Troquel: " />
 							<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
 								style="width:150px" required="true">
 
@@ -57,8 +57,8 @@
 				</center>
 
 				<center>
-					<h:button action="#{mttBean.login()}" value="GUARDAR"
-						icon="ui-icon-disk" />
+					<!-- 					<h:button action="#{mttBean.login()}" value="GUARDAR" -->
+					<!-- 						icon="ui-icon-disk" /> -->
 
 					<p:commandButton ajax="false" value="GUARDAR" icon="ui-icon-disk"
 						action="#{mttBean.login()}">

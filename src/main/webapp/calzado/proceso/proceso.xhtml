@@ -14,7 +14,7 @@
 				<h:panelGrid id="p1" columns="5" cellpadding="4"
 					style="margin:0 auto;">
 
-					<f:facet name="header" align="center">INGRESO DE DATOS AL SISTEMA</f:facet>
+					<f:facet name="header" align="center">INGRESO DE DATOS AL PROCESO</f:facet>
 					<p:row>
 						<p:outputLabel for="Proceso" value="PROCESO: " />
 						<p:selectOneMenu id="Proceso" value="#{procesoBean.tprCod}"
@@ -57,7 +57,9 @@
 					</p:row>
 
 					<p:row>
-
+						<p:commandButton value="AGREGAR"
+							actionListener="#{procesoBean.btnCreateProceso()}"
+							icon="ui-icon-disk"></p:commandButton>
 					</p:row>
 
 				</h:panelGrid>
@@ -98,7 +100,7 @@
 
 				</p:dataTable>
 			</form>
-			<p:commandButton value="AGREGAR"
+			<p:commandButton value="SIGUIENTE"
 				actionListener="#{procesoBean.btnCreateProceso()}"></p:commandButton>
 
 			<h:form id="formUpdate">

@@ -7,8 +7,17 @@
 
 <h:head></h:head>
 <body>
-	<p:form>
-		<p:h1>SUCCESS COMPLETE...!!</p:h1>
-	</p:form>
+	<h:form>
+		<ui:repeat value="#{redireccionMB.values}" var="value">
+			<h:inputText value="#{value}" />
+			<br />
+		</ui:repeat>
+
+		<h:commandButton value="Extend">
+			<f:ajax listener="#{redireccionMB.extend()}" process="@form"
+				render="@form" />
+		</h:commandButton>
+		<h:commandButton action="#{redireccionMB.submit()}" value="Save" />
+	</h:form>
 </body>
 </html>

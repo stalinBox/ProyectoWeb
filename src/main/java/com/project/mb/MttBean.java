@@ -133,8 +133,6 @@ public class MttBean implements Serializable {
 		this.codMod = codMod;
 	}
 
-	// PRUEBAS
-
 	// DMLS
 	public void btnSaveMtt() {
 		String msg = "";

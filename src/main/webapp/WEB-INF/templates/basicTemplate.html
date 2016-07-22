@@ -38,8 +38,7 @@
 							oncomplete="handleLoginRequest(xhr, status, args)" />
 					</p:submenu>
 
-					<p:submenu label="
-							Editar" icon="ui-icon-pencil">
+					<p:submenu label="Parametrización" icon="ui-icon-pencil">
 						<p:menuitem value="Modelos"
 							url="#{appBean.calzadoPath()}modelos/modelos.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
@@ -52,7 +51,7 @@
 						<p:menuitem value="Proceso inicio"
 							url="#{appBean.calzadoPath()}mtt/mtt.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Configuración Tallas"
+						<p:menuitem value="Disp. Troqueles"
 							url="#{appBean.calzadoPath()}ttallas/ttallas.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
 						<p:menuitem value="Procesos"
@@ -63,14 +62,15 @@
 							icon="ui-icon-arrowreturnthick-1-e" />
 					</p:submenu>
 
-					<p:submenu label="Help" icon="ui-icon-help">
+					<p:submenu label="Ayuda" icon="ui-icon-help">
 						<p:menuitem value="Temas"
 							url="#{appBean.themePath()}changeTheme.xhtml" />
 						<p:submenu label="Search" icon="ui-icon-search">
 							<p:submenu label="Text">
 								<p:menuitem value="Workspace" url="#" />
 							</p:submenu>
-							<p:menuitem value="File" url="#" />
+							<p:menuitem value="File"
+								url="#{appBean.basePath}messages/failed.xhtml" />
 						</p:submenu>
 					</p:submenu>
 

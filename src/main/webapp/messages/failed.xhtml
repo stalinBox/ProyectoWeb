@@ -7,8 +7,26 @@
 
 <h:head></h:head>
 <body>
-	<p:form>
-		<p:h1>NO SE HA PODIDO CARGAR LA PAGINA</p:h1>
-	</p:form>
+	<h:form>
+		<h1>PÁGINA EN MANTENIEMIETO</h1>
+		<p:button value="aceptar"></p:button>
+		<p:spacer></p:spacer>
+		<p:commandLink value="Volver"
+			actionListener="#{redireccionMB.redirect()}"></p:commandLink>
+	</h:form>
+
+	<h:form>
+		<ui:repeat value="#{redireccionMB.values}" var="value">
+			<p:inputText id="uno" value="#{value}" />
+			<br />
+
+		</ui:repeat>
+
+		<h:commandButton value="Extend">
+			<f:ajax listener="#{redireccionMB.extend()}" process="@form"
+				render="@form" />
+		</h:commandButton>
+		<h:commandButton action="#{redireccionMB.submit()}" value="Save" />
+	</h:form>
 </body>
 </html>
