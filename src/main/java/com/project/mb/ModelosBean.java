@@ -20,6 +20,7 @@ import com.project.entities.Modelo;
 @RequestScoped
 public class ModelosBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+	// VARIABLES
 	private List<Modelo> modelos;
 	private Modelo selectedModelo;
 	private List<SelectItem> selectItemsModelo;
@@ -33,6 +34,7 @@ public class ModelosBean implements Serializable {
 		this.modelos = new ArrayList<Modelo>();
 	}
 
+	// SETTERS AND GETTERS
 	public List<SelectItem> getSelectItemsModelo() {
 		this.selectItemsModelo = new ArrayList<SelectItem>();
 		ModelosDao modDao = new ModelosDaoImpl();
@@ -63,6 +65,7 @@ public class ModelosBean implements Serializable {
 		this.selectedModelo = selectedModelos;
 	}
 
+	// METODOS
 	public void btnCreateModelo(ActionEvent actionEvent) {
 		String msg = "";
 		ModelosDao modeloDao = new ModelosDaoImpl();

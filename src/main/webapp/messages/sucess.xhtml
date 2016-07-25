@@ -5,19 +5,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head>
 <body>
-	<h:form>
-		<ui:repeat value="#{redireccionMB.values}" var="value">
-			<h:inputText value="#{value}" />
-			<br />
-		</ui:repeat>
-
-		<h:commandButton value="Extend">
-			<f:ajax listener="#{redireccionMB.extend()}" process="@form"
-				render="@form" />
-		</h:commandButton>
-		<h:commandButton action="#{redireccionMB.submit()}" value="Save" />
-	</h:form>
+	<p:form>
+		<h1>Pagina success</h1>
+	</p:form>
 </body>
 </html>

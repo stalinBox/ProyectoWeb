@@ -77,17 +77,6 @@ public class MttDaoImpl implements MttDao {
 
 	@Override
 	public boolean create(ModTrqTal mtt) {
-		System.out.println("DISPONIBILIDAD: "
-				+ mtt.getDisponibilidad().toString());
-
-		System.out.println("MODELO: "
-				+ mtt.getModelo().getModCodigo().toString());
-		System.out
-				.println("TALLA: " + mtt.getTalla().getTalCodigo().toString());
-
-		System.out.println("TROQUEL: "
-				+ mtt.getTroquele().getTrqCodigo().toString());
-
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
