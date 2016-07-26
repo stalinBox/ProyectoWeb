@@ -22,8 +22,6 @@ public class TroquelBean implements Serializable {
 	private List<Troquele> torqueles;
 	private Troquele selectedTroquel;
 
-	// private List<SelectItem> selectItemsTroquel;
-
 	@PostConstruct
 	public void init() {
 		selectedTroquel = new Troquele();
@@ -33,6 +31,7 @@ public class TroquelBean implements Serializable {
 		this.torqueles = new ArrayList<Troquele>();
 	}
 
+	// SETTERS AND GETTERS
 	public List<Troquele> getTorqueles() {
 		TroqueleDao troquelDao = new TroquelDaoImpl();
 		this.torqueles = troquelDao.findAll();

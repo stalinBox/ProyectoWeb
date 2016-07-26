@@ -7,17 +7,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import com.project.dao.ModelosDao;
-import com.project.dao.ModelosDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TipprocesoDaoImpl;
 import com.project.dao.TipprocesosDao;
 import com.project.entities.ModTrqTal;
-import com.project.entities.Modelo;
 import com.project.entities.Proceso;
 import com.project.entities.TipoProceso;
 

@@ -24,7 +24,7 @@
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
 					<f:facet name="header">
-					Configuración de turnos
+					TURNOS
 					</f:facet>
 
 					<p:column headerText="Id">
@@ -35,11 +35,11 @@
 						<h:outputText value="#{turno.nombturno}" />
 					</p:column>
 
-					<p:column headerText="Hora Inicio">
+					<p:column headerText="H. Inicio">
 						<h:outputText value="#{turno.HInicio}" />
 					</p:column>
 
-					<p:column headerText="Hora Fin">
+					<p:column headerText="H. Fin">
 						<h:outputText value="#{turno.HFin}" />
 					</p:column>
 
@@ -69,20 +69,19 @@
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
-						<h:outputText for="nombTurno" value="Nombre Turno:" />
-						<p:inputText id="nombTurno"
+						<h:outputText value="Nombre:" />
+						<p:inputText id="entrada"
 							value="#{turnosMB.selectedTurno.nombturno}"
 							onblur="aMayusculas(this.value,this.id)"
-							onkeypress="this.value=this.value.toUpperCase();" />
+							onkeypress="this.value=this.value.toUpperCase();" required="true" />
 
-						<p:outputLabel for="Hinicio" value="H. Inicio(hh:min:ss)" />
-						<p:inputMask id="Hinicio"
-							value="#{turnosMB.selectedTurno.HInicio}" mask="99:99:99" />
+						<p:outputLabel for="timeI" value="Hora Inicio:" />
+						<p:calendar id="timeI" value="#{turnosMB.horaTurnosI}"
+							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
 
-						<p:outputLabel for="Hfin" value="H. Fin  (hh:min:ss)" />
-						<p:inputMask id="Hfin" value="#{turnosMB.selectedTurno.HFin}"
-							mask="99:99:99" />
-
+						<p:outputLabel for="timeF" value="Hora Fin:" />
+						<p:calendar id="timeF" value="#{turnosMB.horaTurnosF}"
+							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
 
 						<f:facet name="footer">
 							<p:separator />
@@ -105,21 +104,25 @@
 				<p:dialog header="Modificar Turno" widgetVar="dialogTurnoUpdate"
 					modal="true" showEffect="fade" hideEffect="explode"
 					resizable="false" id="dlgTurnoUpdate">
+
 					<h:inputHidden value="#{turnosMB.selectedTurno.turnoCodigo}"></h:inputHidden>
+
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
+
 						<h:outputText value="Nombre:" />
-						<p:inputText value="#{turnosMB.selectedTurno.nombturno}"
+						<p:inputText id="entrada"
+							value="#{turnosMB.selectedTurno.nombturno}"
 							onblur="aMayusculas(this.value,this.id)"
-							onkeypress="this.value=this.value.toUpperCase();" />
+							onkeypress="this.value=this.value.toUpperCase();" required="true" />
 
-						<p:outputLabel for="Hinicio" value="H. Inicio(hh:min:ss)" />
-						<p:inputMask id="Hinicio"
-							value="#{turnosMB.selectedTurno.HInicio}" mask="99:99:99" />
+						<p:outputLabel for="timeI" value="Hora Inicio:" />
+						<p:calendar id="timeI" value="#{turnosMB.horaTurnosI}"
+							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
 
-						<p:outputLabel for="Hfin" value="H. Fin  (hh:min:ss)" />
-						<p:inputMask id="Hfin" value="#{turnosMB.selectedTurno.HFin}"
-							mask="99:99:99" />
+						<p:outputLabel for="timeF" value="Hora Fin:" />
+						<p:calendar id="timeF" value="#{turnosMB.horaTurnosF}"
+							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
 
 						<f:facet name="footer">
 							<p:separator />
@@ -127,13 +130,12 @@
 								update="formDataTable, msgs"
 								oncomplete="PF('dialogTurnoUpdate').hide()"
 								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
-								actionListener="#{turnosMB.btnCreateTurno(actionEvent)}" />
+								actionListener="#{turnosMB.btnUpdateTurno(actionEvent)}" />
 
 							<p:commandButton id="btnUpdateCancelar"
 								oncomplete="PF('dialogTurnoUpdate').hide()"
 								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
 						</f:facet>
-
 					</p:panelGrid>
 				</p:dialog>
 			</h:form>
@@ -154,6 +156,7 @@
 						oncomplete="PF('dialogTurnoDelete').hide()" />
 				</p:confirmDialog>
 			</h:form>
+
 		</ui:define>
 	</ui:composition>
 </body>

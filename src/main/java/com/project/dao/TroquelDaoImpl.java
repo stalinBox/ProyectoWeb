@@ -54,9 +54,11 @@ public class TroquelDaoImpl implements TroqueleDao {
 			sesion.beginTransaction();
 			Troquele troquelodb = (Troquele) sesion.load(Troquele.class,
 					troquel.getTrqCodigo());
+
 			// Parametros a cambiar
 			troquelodb.setTrqNombre(troquel.getTrqNombre());
 			// fin de parametros
+
 			sesion.update(troquelodb);
 			sesion.getTransaction().commit();
 			flag = true;

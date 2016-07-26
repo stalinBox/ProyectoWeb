@@ -53,11 +53,13 @@ public class TurnosDaoImpl implements TurnosDao {
 			sesion.beginTransaction();
 			Turno turnodb = (Turno) sesion.load(Turno.class,
 					turno.getTurnoCodigo());
+
 			// Parametros a cambiar
 			turnodb.setNombturno(turno.getNombturno());
 			turnodb.setHInicio(turno.getHInicio());
-			turnodb.setHInicio(turno.getHFin());
+			turnodb.setHFin(turno.getHFin());
 			// fin de parametros
+
 			sesion.update(turnodb);
 			sesion.getTransaction().commit();
 			flag = true;
