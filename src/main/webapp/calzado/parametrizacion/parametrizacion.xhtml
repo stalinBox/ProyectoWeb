@@ -8,26 +8,126 @@
 <h:head></h:head>
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
-	<f:loadBundle basename="messages.properties" var="msg"/>
+		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
 			<p:growl id="msgs" showDetail="true" />
-			<form id="formDataTable">
+			<h:form id="formDataTable">
+				<h1>PARAMETRIZACION</h1>
+				<h:panelGrid columns="5" cellpadding="1">
+					<p:outputLabel value="Días laborables:"></p:outputLabel>
+					<p:inputText value="" size="1"></p:inputText>
 
-				<h:panelGrid columns="5" cellpadding="5">
-					<p:outputLabel value="Dias laborables: "></p:outputLabel>
-					<p:inputText></p:inputText>
-
-					<p:outputLabel value="Fecha: "></p:outputLabel>
+					<p:outputLabel value="Fecha:"></p:outputLabel>
 					<h:outputText value="#{ordenesProdBean.currentDate}">
 						<f:convertDateTime pattern="dd/MM/yyyy" />
 					</h:outputText>
 				</h:panelGrid>
+				<p:commandButton value="GENERAR" icon="fa fa-eject"></p:commandButton>
+			</h:form>
 
-				<h:panelGrid columns="5" cellpadding="5">
-					<p:outputLabel value="#{msg.responsable}"></p:outputLabel>
+			<p:separator />
 
+			<h:form>
+				<p:layout style="min-width:400px; min-height:200px; height:350px ">
+
+					<p:layoutUnit position="west" size="300"
+						style="position: relative;">
+
+						<h:panelGrid columns="1" cellpadding="1">
+
+							<f:facet name="header" align="center">MONTAJE</f:facet>
+							<p:outputLabel value="Responsable:" />
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Número de máquinas:" />
+							<p:inputText value="#{parametrizacionBean.nmaquinas}"></p:inputText>
+
+							<p:outputLabel value="Numeros de líneas convencionales:" />
+							<p:inputText value="#{parametrizacionBean.nlineasConv}"></p:inputText>
+
+							<p:outputLabel value="Numeros de líneas automaticas:" />
+							<p:inputText value="#{parametrizacionBean.nlineasAut}"></p:inputText>
+
+							<p:outputLabel value="Estándar producción convencional:" />
+							<p:inputText value="#{parametrizacionBean.spCon}"></p:inputText>
+
+							<p:outputLabel value="Estándar producción automatica:" />
+							<p:inputText value="#{parametrizacionBean.spAut}"></p:inputText>
+						</h:panelGrid>
+
+					</p:layoutUnit>
+
+					<p:layoutUnit position="center">
+
+						<h:panelGrid columns="1" cellpadding="1">
+							<f:facet name="header" align="center">TROQUELADO</f:facet>
+							<p:outputLabel value="Responsable"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Numero de maquinas"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Linea por dia Convencional"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Linea por dia Automatica"></p:outputLabel>
+							<p:inputText></p:inputText>
+						</h:panelGrid>
+
+					</p:layoutUnit>
+
+					<p:layoutUnit position="east" size="300"
+						style="position: relative;">
+
+						<h:panelGrid columns="1" cellpadding="1">
+							<f:facet name="header" align="center">APARADO</f:facet>
+							<p:outputLabel value="Responsable"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Numero de maquinas"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Linea por dia Convencional"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Linea por dia Automatica"></p:outputLabel>
+							<p:inputText></p:inputText>
+						</h:panelGrid>
+
+					</p:layoutUnit>
+
+				</p:layout>
+			</h:form>
+
+			<p:separator />
+
+			<h:form id="form">
+				<h:panelGrid id="grid" columns="3" style="margin-bottom:10px">
+					<h:outputLabel for="template" value="Numero de dias:"
+						style="font-weight:bold" />
+					<p:inputText id="template"
+						value="#{parametrizacionBean.diasLaborables}" size="1" />
+					<p:commandButton id="btn" update="dynamicColumnsTable"
+						actionListener="#{parametrizacionBean.updateColumns()}"
+						value="Update" process="@parent" />
 				</h:panelGrid>
-			</form>
+
+				<p:dataTable id="dynamicColumnsTable" var="message"
+					value="#{parametrizacionBean.messages}"
+					filteredValue="#{parametrizacionBean.filteredMessages}"
+					emptyMessage="NADA QUE MOSTRAR">
+					<p:columns value="#{parametrizacionBean.columns}" var="column"
+						columnIndexVar="colIndex">
+						<f:facet name="header">
+							<h:outputText value="#{column.header}" />
+						</f:facet>
+
+						<h:outputText value="#{message[column.property]}" />
+					</p:columns>
+
+				</p:dataTable>
+			</h:form>
+
 		</ui:define>
 	</ui:composition>
 </body>
