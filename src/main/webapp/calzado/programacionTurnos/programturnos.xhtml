@@ -1,11 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"> 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head> 
-<body> 
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Sorry</title>
+</h:head>
+<h:body>
+	<script type="text/javascript">
+function addRowOnComplete() {
+    alert();
+}
+</script>
+	<h:form id="formPiece">
 
-</body> 
+		<p:messages id="messages" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:tabView id="ViewPlan">
+
+			<p:tab id="tab2" title="Saisie 1">
+				<p:panel id="panelSaisie" header="Saisir"
+					style="color: brown;font-size: 15px">
+					<h:panelGrid columns="3">
+						<p:outputLabel for="description" value="Description:"></p:outputLabel>
+						<p:inputText id="description" value="#{ecritureCtrl.description}"
+							required="true" label="Description" maxlength="100" size="75">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+						<p:message for="description" />
+
+						<p:outputLabel for="date" value="Date:"></p:outputLabel>
+						<p:calendar locale="fr" id="date" required="true" label="Date"
+							value="#{ecritureCtrl.date}" />
+						<p:message for="date" />
+
+						<p:outputLabel for="code" value="Code Avant"></p:outputLabel>
+						<p:inputText id="code" value="#{ecritureCtrl.code}"
+							required="true">
+
+						</p:inputText>
+						<p:message for="code" />
+
+					</h:panelGrid>
+					<br />
+					<p:dataTable var="line" value="#{ecritureCtrl.lignes}"
+						id="dataTableSaisiePiece">
+
+						<p:column headerText="First Name" style="width:150px">
+							<p:inputText value="#{line.intituleCompte}" style="width:100%" />
+						</p:column>
+
+						<p:column headerText="Last Name" style="width:150px">
+							<p:inputText value="#{line.code}" style="width:100%" />
+						</p:column>
+
+					</p:dataTable>
+
+
+				</p:panel>
+				<p:commandButton actionListener="#{ecritureCtrl.newLine}"
+					value="New" update="dataTableSaisiePiece"
+					oncomplete="addRowOnComplete()" ajax="true" />
+
+			</p:tab>
+
+			<p:tab id="tab3" title="Saisie 2">
+			</p:tab>
+
+		</p:tabView>
+	</h:form>
+
+</h:body>
 </html>

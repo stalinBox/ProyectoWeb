@@ -11,32 +11,79 @@
 		<ui:define name="content">
 			<p:growl id="msgs" showDetail="true" />
 
-			<form id="formDataTable">
-				<h:panelGrid id="p1" columns="5" cellpadding="4"
-					style="margin:0 auto;">
-					<f:facet name="header" align="center">ORDENES DE PRODUCCION</f:facet>
+			<h:form>
+				<p:layout style="min-width:auto; min-height:500px; height:auto ">
+					<p:layoutUnit position="center">
 
-					<p:outputLabel value="Numero de orden: " />
-					<p:inputText value="" />
+						<h:panelGrid id="ordenProd" columns="6" cellpadding="2">
+							<p:outputLabel for="idOp" value="Número de orden: " />
+							<p:inputText id="idOp" size="5" required="true"></p:inputText>
 
-					<p:outputLabel value="Fecha: " />
-					<h:outputText value="#{ordenesProdBean.currentDate}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</h:outputText>
+							<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
+							<p:outputLabel id="idFechaAct"
+								value="#{ordenesProdBean.currentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:outputLabel>
 
-					<p:outputLabel value="Solicita: " />
-
-					<p:outputLabel value="Responsable: " />
-
-					<p:outputLabel value="Fecha Estimada:" />
-
-					<p:outputLabel value="Fecha Final: " />
+							<p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
+							<p:calendar id="idFechaEntr" value="#{ordenesProdBean.fEntrega}"
+								pattern="dd-MM-yyyy" mask="true" locale="de" navigator="true"
+								showOn="button" size="6" />
 
 
-				</h:panelGrid>
-			</form>
+							<p:outputLabel for="idSol" value="Solicitante: " />
+							<p:selectOneMenu id="idSol" value="#{ordenesProdBean.selectedOp}"
+								required="true" style="width:150px">
 
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+							</p:selectOneMenu>
 
+							<p:outputLabel for="idResp" value="Responsable: " />
+							<p:selectOneMenu id="idResp"
+								value="#{ordenesProdBean.selectedOp}" required="true"
+								style="width:150px">
+
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+							</p:selectOneMenu>
+
+						</h:panelGrid>
+
+						<h:panelGrid id="detalleOrdenProd" columns="6" cellpadding="2">
+						</h:panelGrid>
+
+						<p:panelGrid style="margin-top:20px">
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="7">DETALLE ORDEN DE PRODUCCIÓN</p:column>
+								</p:row>
+								<p:row>
+									<p:column>ID</p:column>
+									<p:column>MODELOS</p:column>
+									<p:column>TALLAS</p:column>
+									<p:column>CANTIDAD</p:column>
+								</p:row>
+
+							</f:facet>
+
+							<p:row>
+								<p:column>Seattle</p:column>
+
+								<p:column>Seattle</p:column>
+
+								<p:column>Seattle</p:column>
+
+								<p:column>Chicago</p:column>
+							</p:row>
+
+						</p:panelGrid>
+
+					</p:layoutUnit>
+				</p:layout>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>
