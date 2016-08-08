@@ -12,12 +12,17 @@
 			<p:growl id="msgs" showDetail="true" />
 
 			<h:form>
+				<center>
+					<h1>ORDEN DE PRODUCCIÓN</h1>
+				</center>
+
 				<p:layout style="min-width:auto; min-height:500px; height:auto ">
 					<p:layoutUnit position="center">
 
 						<h:panelGrid id="ordenProd" columns="6" cellpadding="2">
 							<p:outputLabel for="idOp" value="Número de orden: " />
-							<p:inputText id="idOp" size="5" required="true"></p:inputText>
+							<p:inputText id="idOp" size="5" required="true"
+								value="#{ordenesProdBean.nombProv}"></p:inputText>
 
 							<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
 							<p:outputLabel id="idFechaAct"
@@ -31,8 +36,9 @@
 								showOn="button" size="6" />
 
 
-							<p:outputLabel for="idSol" value="Solicitante: " />
-							<p:selectOneMenu id="idSol" value="#{ordenesProdBean.selectedOp}"
+							<p:outputLabel for="idSol" value="Cliente: " />
+							<p:selectOneMenu id="idSol"
+								value="#{ordenesProdBean.selectedOp.usuario1.userId}"
 								required="true" style="width:150px">
 
 								<f:selectItem itemLabel="- Seleccione -" itemValue=""
@@ -42,23 +48,36 @@
 
 							<p:outputLabel for="idResp" value="Responsable: " />
 							<p:selectOneMenu id="idResp"
-								value="#{ordenesProdBean.selectedOp}" required="true"
-								style="width:150px">
+								value="#{ordenesProdBean.selectedOp.usuario2.userId}"
+								required="true" style="width:150px">
 
 								<f:selectItem itemLabel="- Seleccione -" itemValue=""
 									noSelectionOption="true" />
 								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
 							</p:selectOneMenu>
 
-						</h:panelGrid>
+							<p:outputLabel for="idDestino" value="Destino: " />
+							<p:selectOneMenu id="idDestino"
+								value=" #{ordenesProdBean.selectedOp.usuario2.userId}"
+								required="true" style="width:150px">
 
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{ordenesProdBean.selectedLugar}"></f:selectItems>
+							</p:selectOneMenu>
+
+						</h:panelGrid>
+						<p:separator>
+							<p:commandButton value="GUARDAR"
+								actionListener="#{ordenesProdBean.saveOrdeProd(actionEvent)}"></p:commandButton>
+						</p:separator>
 						<h:panelGrid id="detalleOrdenProd" columns="6" cellpadding="2">
 						</h:panelGrid>
 
 						<p:panelGrid style="margin-top:20px">
 							<f:facet name="header">
 								<p:row>
-									<p:column colspan="7">DETALLE ORDEN DE PRODUCCIÓN</p:column>
+									<p:column colspan="7">DETALLE DE LA ORDEN</p:column>
 								</p:row>
 								<p:row>
 									<p:column>ID</p:column>

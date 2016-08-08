@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateLugar" update=":formCreate"
+					oncomplete="PF('dialogLugarCreate').show()" title="Nuevo Lugar"
+					icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="lugar" paginatorPosition="bottom"
+					value="#{lugarBean.lugar}" rows="10" paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<f:facet name="header">
+					LUGARES
+					</f:facet>
+
+					<p:column headerText="Id">
+						<h:outputText value="#{lugar.lugarCodigo}" />
+					</p:column>
+
+					<p:column headerText="Lugar" filterBy="#{lugar.nomlugar}"
+						footerText="contains" filterMatchMode="contains">
+						<h:outputText value="#{lugar.nomlugar}" />
+					</p:column>
+
+					<p:column style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogLugarUpdate').show()" icon="ui-icon-pencil"
+							title="Modificar Lugar">
+							<f:setPropertyActionListener value="#{lugar}"
+								target="#{lugarBean.selectedLugar}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogLugarDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{lugar}"
+								target="#{lugarBean.selectedLugar}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nuevo Lugar" widgetVar="dialogLugarCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgLugarCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{lugarBean.selectedLugar.nomlugar}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogLugarCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{lugarBean.btnCreateLugar(actionEvent)}" />
+
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogLugarCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Lugar" widgetVar="dialogLugarUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgLugarUpdate">
+					<h:inputHidden value="#{lugarBean.selectedLugar.nomlugar}"></h:inputHidden>
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{lugarBean.selectedLugar.nomlugar}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogLugarUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{lugarBean.btnUpdateLugar(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogLugarUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Lugar"
+					severity="alert" widgetVar="dialogLugarDelete">
+
+					<h:inputHidden value="#{lugarBean.selectedLugar.lugarCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogLugarDelete').hide()"
+						actionListener="#{lugarBean.btnDeleteLugar(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogLugarDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>
