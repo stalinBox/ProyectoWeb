@@ -40,7 +40,7 @@
 					</p:column>
 
 					<p:column headerText="Rol">
-						<h:outputText value="#{usuario.rol.rolNombre}" />
+						<h:outputText value="#{usuario.rol1.rolNombre}" />
 					</p:column>
 
 					<p:column style="width:10%">
@@ -77,7 +77,7 @@
 							size="40" />
 
 						<h:outputText value="Rol" />
-						<p:selectOneMenu value="#{usuarioBean.selectedUsuario.rol.rolId}">
+						<p:selectOneMenu value="#{usuarioBean.selectedUsuario.rol1.rolId}">
 							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
 							<f:selectItems value="#{rolBean.selectOneItemsRol}"></f:selectItems>
 						</p:selectOneMenu>
@@ -122,7 +122,7 @@
 							size="40" />
 
 						<h:outputText value="Rol" />
-						<p:selectOneMenu value="#{usuarioBean.selectedUsuario.rol.rolId}">
+						<p:selectOneMenu value="#{usuarioBean.selectedUsuario.rol1.rolId}">
 							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
 							<f:selectItems value="#{rolBean.selectOneItemsRol}"></f:selectItems>
 						</p:selectOneMenu>

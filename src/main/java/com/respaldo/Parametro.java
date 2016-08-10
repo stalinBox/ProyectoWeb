@@ -1,4 +1,4 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
 

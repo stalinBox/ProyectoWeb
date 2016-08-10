@@ -1,4 +1,4 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -22,17 +22,9 @@ public class Talla implements Serializable {
 	@Column(name = "tal_numero")
 	private Integer talNumero;
 
-	// bi-directional many-to-one association to Detalleorden
-	@OneToMany(mappedBy = "talla")
-	private List<Detalleorden> detalleordens;
-
 	// bi-directional many-to-one association to ModTrqTal
 	@OneToMany(mappedBy = "talla")
 	private List<ModTrqTal> modTrqTals;
-
-	// bi-directional many-to-one association to Programturno
-	@OneToMany(mappedBy = "talla")
-	private List<Programturno> programturnos;
 
 	// bi-directional many-to-one association to TTalla
 	@OneToMany(mappedBy = "talla")
@@ -57,28 +49,6 @@ public class Talla implements Serializable {
 		this.talNumero = talNumero;
 	}
 
-	public List<Detalleorden> getDetalleordens() {
-		return this.detalleordens;
-	}
-
-	public void setDetalleordens(List<Detalleorden> detalleordens) {
-		this.detalleordens = detalleordens;
-	}
-
-	public Detalleorden addDetalleorden(Detalleorden detalleorden) {
-		getDetalleordens().add(detalleorden);
-		detalleorden.setTalla(this);
-
-		return detalleorden;
-	}
-
-	public Detalleorden removeDetalleorden(Detalleorden detalleorden) {
-		getDetalleordens().remove(detalleorden);
-		detalleorden.setTalla(null);
-
-		return detalleorden;
-	}
-
 	public List<ModTrqTal> getModTrqTals() {
 		return this.modTrqTals;
 	}
@@ -99,28 +69,6 @@ public class Talla implements Serializable {
 		modTrqTal.setTalla(null);
 
 		return modTrqTal;
-	}
-
-	public List<Programturno> getProgramturnos() {
-		return this.programturnos;
-	}
-
-	public void setProgramturnos(List<Programturno> programturnos) {
-		this.programturnos = programturnos;
-	}
-
-	public Programturno addProgramturno(Programturno programturno) {
-		getProgramturnos().add(programturno);
-		programturno.setTalla(this);
-
-		return programturno;
-	}
-
-	public Programturno removeProgramturno(Programturno programturno) {
-		getProgramturnos().remove(programturno);
-		programturno.setTalla(null);
-
-		return programturno;
 	}
 
 	public List<TTalla> getTTallas() {

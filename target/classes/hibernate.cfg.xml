@@ -29,7 +29,8 @@
 		<mapping class="com.project.entities.TTalla" />
 
 		<mapping class="com.project.entities.TTallaPK" />
-		
+		<mapping class="com.project.entities.ProcesosopPK" />
+
 		<mapping class="com.project.entities.Detalleorden" />
 		<mapping class="com.project.entities.Lineasprod" />
 		<mapping class="com.project.entities.Lugare" />
@@ -38,6 +39,6 @@
 		<mapping class="com.project.entities.Programdia" />
 		<mapping class="com.project.entities.Programturno" />
 		<mapping class="com.project.entities.Turno" />
-		
+		<mapping class="com.project.entities.Procesosop" />
 	</session-factory>
 </hibernate-configuration>

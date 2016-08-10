@@ -34,6 +34,7 @@ public class OrdenesProdBean implements Serializable {
 	private Integer idUserResp;
 	private List<SelectItem> selectedUsuario;
 	private List<SelectItem> selectedLugar;
+
 	private Ordenprod selectedOp;
 	private Integer nombProv;
 
@@ -141,7 +142,7 @@ public class OrdenesProdBean implements Serializable {
 		System.out.println("Save into OrdenProd");
 		String msg = "";
 		OrdenesProdDao oProdDao = new OrdenesProdDaoImpl();
-		this.selectedOp.setNombordprod(nombProv);
+		// this.selectedOp.setNombordprod(nombProv);
 		this.selectedOp.setFActual(currentDate);
 		this.selectedOp.setFFinal(fEntrega);
 		this.selectedOp.setLugare(new Lugare());

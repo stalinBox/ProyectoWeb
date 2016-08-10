@@ -24,7 +24,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
 			System.out.println("ERRORRR FINDBYUSUARIO USER: " + e.toString());
-			//throw e;
+			// throw e;
 		}
 		return entities;
 	}
@@ -45,7 +45,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	public List<Usuario> findAll() {
 		List<Usuario> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Usuario u join fetch u.rol";
+		String sql = "FROM Usuario";
 		System.out.println(sql);
 
 		try {
@@ -55,12 +55,12 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
 			System.out.println("ERRORRRRR FINDALL USER: " + e.toString());
-			//throw e;
+			// throw e;
 		}
 		return listado;
 	}
 
-	//DMLS
+	// DMLS
 	@Override
 	public boolean create(Usuario usuario) {
 		boolean flag;
@@ -73,7 +73,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR CREATE USER: " + e.getMessage().toString());
+			System.out.println("ERRORRRRR CREATE USER: "
+					+ e.getMessage().toString());
 		}
 		return flag;
 	}
@@ -85,20 +86,22 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
 		try {
 			sesion.beginTransaction();
-			Usuario usuariodb = (Usuario) sesion.load(Usuario.class, usuario.getUserId());
-			//Parametros a cambiar
+			Usuario usuariodb = (Usuario) sesion.load(Usuario.class,
+					usuario.getUserId());
+			// Parametros a cambiar
 			usuariodb.setUserEmail(usuario.getUserEmail());
 			usuariodb.setUserName(usuario.getUserName());
-			usuariodb.setRol(usuario.getRol());
+			usuariodb.setRol1(usuario.getRol1());
 			usuariodb.setUserState(usuario.getUserState());
-			//fin de parametros
+			// fin de parametros
 			sesion.update(usuariodb);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR UPDATE USER: " + e.getMessage().toString());
+			System.out.println("ERRORRRRR UPDATE USER: "
+					+ e.getMessage().toString());
 		}
 		return flag;
 	}
@@ -117,7 +120,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE USER: " + e.getMessage().toString());
+			System.out.println("ERRORRRRR DELETE USER: "
+					+ e.getMessage().toString());
 		}
 		return flag;
 	}

@@ -1,7 +1,6 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
 
 @Entity
