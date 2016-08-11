@@ -19,24 +19,7 @@
 	<h3>Dinamycs Components</h3>
 
 	<h:form>
-		<h:dataTable id="tblFields" value="#{redireccionMB.fields}"
-			var="field">
-			<h:column>
-				<h:inputText value="" />
-			</h:column>
 
-			<h:column>
-				<h:commandButton value="Remove">
-					<f:ajax listener="#{redireccionMB.onButtonRemoveFieldClick(field)}"
-						immediate="true" render="@form" />
-				</h:commandButton>
-			</h:column>
-		</h:dataTable>
-
-		<h:commandButton value="Add">
-			<f:ajax listener="#{redireccionMB.onButtonAddFieldClick(p_oEvent)}"
-				execute="@form" render="tblFields" />
-		</h:commandButton>
 	</h:form>
 
 	<p:separator></p:separator>
