@@ -9,173 +9,190 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<p:growl id="msgs" showDetail="true" />
 
-			<h:form id="form1">
-				<center>
-					<h1>ORDEN DE PRODUCCIÓN</h1>
-				</center>
+			<div id="div0">
+				<h:form id="formOrdenProd" style="width: 100%; margin: 0 auto;">
+					<p:growl id="msgs" showDetail="true" />
+					<center>
+						<h1>ORDEN DE PRODUCCIÓN</h1>
+					</center>
 
-				<h:panelGrid id="ordenProd" columns="6" cellpadding="2">
-					<p:outputLabel for="idOp" value="Número de orden: " />
-					<p:inputText id="idOp" size="5" required="true"
-						value="#{ordenesProdBean.nombProv}"></p:inputText>
+					<h:panelGrid id="ordenProd" columns="6" cellpadding="2">
+						<p:outputLabel for="idOp" value="Número de orden: " />
+						<p:inputText id="idOp" size="5" required="true"
+							value="#{ordenesProdBean.nombProv}"></p:inputText>
 
-					<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
-					<p:outputLabel id="idFechaAct"
-						value="#{ordenesProdBean.currentDate}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</p:outputLabel>
+						<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
+						<p:outputLabel id="idFechaAct"
+							value="#{ordenesProdBean.currentDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</p:outputLabel>
 
-					<p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
-					<p:calendar id="idFechaEntr" value="#{ordenesProdBean.fEntrega}"
-						pattern="dd-MM-yyyy" mask="true" locale="de" navigator="true"
-						showOn="button" size="6" required="true" />
+						<p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
+						<p:calendar id="idFechaEntr" value="#{ordenesProdBean.fEntrega}"
+							pattern="dd-MM-yyyy" mask="true" locale="de" navigator="true"
+							showOn="button" size="6" required="true" />
 
 
-					<p:outputLabel for="idSol" value="Cliente: " />
-					<p:selectOneMenu id="idSol"
-						value="#{ordenesProdBean.selectedOp.usuario1.userId}"
-						required="true" style="width:150px">
-
-						<f:selectItem itemLabel="- Seleccione -" itemValue=""
-							noSelectionOption="true" />
-						<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-					</p:selectOneMenu>
-
-					<p:outputLabel for="idResp" value="Responsable: " />
-					<p:selectOneMenu id="idResp"
-						value="#{ordenesProdBean.selectedOp.usuario1.userId}"
-						required="true" style="width:150px">
-
-						<f:selectItem itemLabel="- Seleccione -" itemValue=""
-							noSelectionOption="true" />
-						<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-					</p:selectOneMenu>
-
-					<p:outputLabel for="idDestino" value="Destino: " />
-					<p:selectOneMenu id="idDestino"
-						value="#{ordenesProdBean.selectedOp.usuario2.userId}"
-						required="true" style="width:150px">
-
-						<f:selectItem itemLabel="- Seleccione -" itemValue=""
-							noSelectionOption="true" />
-						<f:selectItems value="#{ordenesProdBean.selectedLugar}"></f:selectItems>
-					</p:selectOneMenu>
-
-				</h:panelGrid>
-
-			</h:form>
-
-			<p:separator />
-
-			<h:form id="form2">
-				<p:growl id="messages" showDetail="true" />
-				<p:panel id="panel" header="Detalle de producción"
-					style="width: 400px;">
-					<p:panelGrid columns="2">
-						<h:outputLabel value="Modelo: " />
-						<p:selectOneMenu value="#{itemDO.modelo}" required="true"
-							style="width:150px">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{detaOrdenBean.selectedModelo}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<h:outputLabel value="Talla: " />
-						<p:selectOneMenu id="idTalla" value="#{itemDO.talla}"
+						<p:outputLabel for="idSol" value="Cliente: " />
+						<p:selectOneMenu id="idSol"
+							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
 							required="true" style="width:150px">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
-							<f:selectItems value="#{detaOrdenBean.selectedTalla}"></f:selectItems>
+							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
 						</p:selectOneMenu>
 
-						<h:outputLabel value="Cantidad: " />
-						<p:inputText value="#{itemDO.cantidad}" />
+						<p:outputLabel for="idResp" value="Responsable: " />
+						<p:selectOneMenu id="idResp"
+							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+							required="true" style="width:150px">
 
-						<f:facet name="footer">
-							<p:commandButton value="Añadir"
-								actionListener="#{itemDO.addAction()}" ajax="true"
-								update="form2" />
-						</f:facet>
-					</p:panelGrid>
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+						</p:selectOneMenu>
 
-					<p:spacer height="5px;" />
+						<p:outputLabel for="idDestino" value="Destino: " />
+						<p:selectOneMenu id="idDestino"
+							value="#{ordenesProdBean.selectedOp.usuario2.userId}"
+							required="true" style="width:150px">
 
-					<p:dataTable id="tblDO" value="#{itemDO.orderList}" var="i"
-						widgetVar="50" style="width: auto;" editable="true">
-						<f:facet name="header">  
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{ordenesProdBean.selectedLugar}"></f:selectItems>
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:form>
+			</div>
+			<p:separator />
+			<div id="div1">
+				<h:form id="formDetaProd" style="width: 300px; margin: 0 auto;">
+					<p:growl id="messages" showDetail="true" />
+					<p:panel id="panel" header="Detalle de producción"
+						style="width: 400px;">
+						<p:panelGrid columns="2" style="width: 100%; margin: 0 auto;">
+
+							<h:outputLabel value="Modelo: " />
+							<p:selectOneMenu value="#{itemDO.modelo}" required="true"
+								style="width:150px">
+
+								<f:selectItem itemLabel="- Seleccione -"
+									noSelectionOption="true" itemValue="0" />
+								<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}" />
+							</p:selectOneMenu>
+
+							<h:outputLabel value="Talla: " />
+							<p:selectOneMenu id="idTalla" value="#{itemDO.talla}"
+								required="true" style="width:150px">
+
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
+							</p:selectOneMenu>
+
+							<h:outputLabel value="Cantidad: " />
+							<p:inputText value="#{itemDO.cantidad}" />
+
+							<f:facet name="footer">
+								<p:commandButton value="Añadir"
+									actionListener="#{itemDO.addAction()}"
+									action="#{detaOrdenBean.submit()}" ajax="true"
+									update="formDetaProd" />
+							</f:facet>
+						</p:panelGrid>
+
+						<p:spacer height="5px;" />
+
+						<p:dataTable id="tblDO" value="#{itemDO.orderList}" var="i"
+							widgetVar="50" style="width: auto;" editable="true">
+							<f:facet name="header">  
                         Lista 
                     </f:facet>
 
-						<p:ajax event="rowEdit" listener="#{itemDO.onEdit}"
-							update=":form2:messages" />
+							<p:ajax event="rowEdit" listener="#{itemDO.onEdit}"
+								update=":formDetaProd:messages" />
 
-						<p:ajax event="rowEditCancel" listener="#{itemDO.onCancel}"
-							update=":form2:messages, tblDO" />
+							<p:ajax event="rowEditCancel" listener="#{itemDO.onCancel}"
+								update=":formDetaProd:messages, tblDO" />
 
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="Modelo" />
-							</f:facet>
-							<p:cellEditor>
-								<f:facet name="output">
-									<h:outputText value="#{i.modelo}" />
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Modelo" />
 								</f:facet>
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{i.modelo}" />
+									</f:facet>
 
-								<f:facet name="input">
-									<p:selectOneMenu value="#{i.modelo}" required="true"
-										style="width:100%">
+									<f:facet name="input">
+										<p:selectOneMenu value="#{i.modelo}" required="true"
+											style="width:100%">
 
-										<f:selectItem itemLabel="- Seleccione -" itemValue=""
-											noSelectionOption="true" />
-										<f:selectItems value="#{detaOrdenBean.selectedModelo}"></f:selectItems>
-									</p:selectOneMenu>
+											<f:selectItem itemLabel="- Seleccione -" itemValue=""
+												noSelectionOption="true" />
+											<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}"></f:selectItems>
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Talla" />
 								</f:facet>
-							</p:cellEditor>
-						</p:column>
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{i.talla}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu id="idTalla" value="#{i.talla}"
+											required="true" style="width:100%">
 
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="Talla" />
-							</f:facet>
-							<p:cellEditor>
-								<f:facet name="output">
-									<h:outputText value="#{i.talla}" />
-								</f:facet>
-								<f:facet name="input">
-									<p:selectOneMenu id="idTalla" value="#{i.talla}"
-										required="true" style="width:100%">
+											<f:selectItem itemLabel="- Seleccione -" itemValue=""
+												noSelectionOption="true" />
+											<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
 
-										<f:selectItem itemLabel="- Seleccione -" itemValue=""
-											noSelectionOption="true" />
-										<f:selectItems value="#{detaOrdenBean.selectedTalla}"></f:selectItems>
-									</p:selectOneMenu>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Cantidad" />
 								</f:facet>
-							</p:cellEditor>
-						</p:column>
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{i.cantidad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{i.cantidad}" style="width:100%" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="Opciones" style="width:50px">
+								<p:rowEditor />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
 
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="Cantidad" />
-							</f:facet>
-							<p:cellEditor>
-								<f:facet name="output">
-									<h:outputText value="#{i.cantidad}" />
-								</f:facet>
-								<f:facet name="input">
-									<p:inputText value="#{i.cantidad}" style="width:100%" />
-								</f:facet>
-							</p:cellEditor>
-						</p:column>
-						<p:column headerText="Opciones" style="width:50px">
-							<p:rowEditor />
-						</p:column>
-					</p:dataTable>
-				</p:panel>
+				</h:form>
+			</div>
+			<div style="width: 300px; margin: 0 auto;">
+				<p:commandButton value="PROCESAR"
+					actionListener="#{itemDO.generateOrder}"></p:commandButton>
+			</div>
 
+
+			<h:form>
+				<p:selectOneMenu value="#{detaOrdenBean.selectedItem}">
+					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+					<f:selectItem itemValue="foo" itemLabel="Foo label" />
+					<f:selectItem itemValue="bar" itemLabel="Bar label" />
+					<f:selectItem itemValue="baz" itemLabel="Baz label" />
+				</p:selectOneMenu>
+				<h:commandButton value="Submit" action="#{detaOrdenBean.submit()}" />
 			</h:form>
 
 		</ui:define>

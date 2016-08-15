@@ -2,6 +2,7 @@ package com.project.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -18,11 +19,25 @@ public class ItemsDetaOrden implements Serializable {
 
 	// VARIABLES
 	private String modelo;
+
 	private Integer talla;
 	private Integer cantidad;
 	ItemsDetaOrdenBean order;
 
+	private Map<Integer, String> vari2;
+
 	// SETTERS AND GETTERS
+
+	// INICIO PRUEBAS
+	public Map<Integer, String> getVari2() {
+		return vari2;
+	}
+
+	public void setVari2(Map<Integer, String> vari2) {
+		this.vari2 = vari2;
+	}
+
+	// FIN PRUEBAS
 
 	public String getModelo() {
 		return modelo;
@@ -65,6 +80,13 @@ public class ItemsDetaOrden implements Serializable {
 	public String addAction() {
 		ItemsDetaOrdenBean orderitem = new ItemsDetaOrdenBean(this.modelo,
 				this.talla, this.cantidad);
+		// Iterator it = vari2.keySet().iterator();
+		// while (it.hasNext()) {
+		// Integer key = (Integer) it.next();
+		// System.out
+		// .println("Clave: " + key + " -> Valor: " + vari2.get(key));
+		// }
+
 		orderList.add(orderitem);
 
 		modelo = "";
@@ -93,5 +115,9 @@ public class ItemsDetaOrden implements Serializable {
 				+ ((ItemsDetaOrdenBean) event.getObject()).getModelo()
 						.toString());
 		orderList.remove(((ItemsDetaOrdenBean) event.getObject()));
+	}
+
+	public void generateOrder() {
+		System.out.println("Order Sucessfull");
 	}
 }
