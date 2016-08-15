@@ -75,7 +75,7 @@
 						<p:panelGrid columns="2" style="width: 100%; margin: 0 auto;">
 
 							<h:outputLabel value="Modelo: " />
-							<p:selectOneMenu value="#{itemDO.modelo}" required="true"
+							<p:selectOneMenu value="#{detaOrdenBean.modelo}" required="true"
 								style="width:150px">
 
 								<f:selectItem itemLabel="- Seleccione -"
@@ -84,7 +84,7 @@
 							</p:selectOneMenu>
 
 							<h:outputLabel value="Talla: " />
-							<p:selectOneMenu id="idTalla" value="#{itemDO.talla}"
+							<p:selectOneMenu id="idTalla" value="#{detaOrdenBean.talla}"
 								required="true" style="width:150px">
 
 								<f:selectItem itemLabel="- Seleccione -" itemValue=""
@@ -93,11 +93,11 @@
 							</p:selectOneMenu>
 
 							<h:outputLabel value="Cantidad: " />
-							<p:inputText value="#{itemDO.cantidad}" />
+							<p:inputText value="#{detaOrdenBean.cantidad}" />
 
 							<f:facet name="footer">
 								<p:commandButton value="Añadir"
-									actionListener="#{itemDO.addAction()}"
+									actionListener="#{detaOrdenBean.addAction()}"
 									action="#{detaOrdenBean.submit()}" ajax="true"
 									update="formDetaProd" />
 							</f:facet>
@@ -105,16 +105,17 @@
 
 						<p:spacer height="5px;" />
 
-						<p:dataTable id="tblDO" value="#{itemDO.orderList}" var="i"
+						<p:dataTable id="tblDO" value="#{detaOrdenBean.orderlist}" var="i"
 							widgetVar="50" style="width: auto;" editable="true">
 							<f:facet name="header">  
                         Lista 
                     </f:facet>
 
-							<p:ajax event="rowEdit" listener="#{itemDO.onEdit}"
+							<p:ajax event="rowEdit" listener="#{detaOrdenBean.onEdit}"
 								update=":formDetaProd:messages" />
 
-							<p:ajax event="rowEditCancel" listener="#{itemDO.onCancel}"
+							<p:ajax event="rowEditCancel"
+								listener="#{detaOrdenBean.onCancel}"
 								update=":formDetaProd:messages, tblDO" />
 
 							<p:column>
@@ -181,20 +182,8 @@
 			</div>
 			<div style="width: 300px; margin: 0 auto;">
 				<p:commandButton value="PROCESAR"
-					actionListener="#{itemDO.generateOrder}"></p:commandButton>
+					actionListener="#{detaOrdenBean.generateOrder}"></p:commandButton>
 			</div>
-
-
-			<h:form>
-				<p:selectOneMenu value="#{detaOrdenBean.selectedItem}">
-					<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
-					<f:selectItem itemValue="foo" itemLabel="Foo label" />
-					<f:selectItem itemValue="bar" itemLabel="Bar label" />
-					<f:selectItem itemValue="baz" itemLabel="Baz label" />
-				</p:selectOneMenu>
-				<h:commandButton value="Submit" action="#{detaOrdenBean.submit()}" />
-			</h:form>
-
 		</ui:define>
 	</ui:composition>
 </body>
