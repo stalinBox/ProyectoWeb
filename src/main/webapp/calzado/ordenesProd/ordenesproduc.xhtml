@@ -97,8 +97,7 @@
 
 							<f:facet name="footer">
 								<p:commandButton value="Añadir"
-									actionListener="#{detaOrdenBean.addAction()}"
-									action="#{detaOrdenBean.submit()}" ajax="true"
+									actionListener="#{detaOrdenBean.addAction()}" ajax="true"
 									update="formDetaProd" />
 							</f:facet>
 						</p:panelGrid>
@@ -106,75 +105,46 @@
 						<p:spacer height="5px;" />
 
 						<p:dataTable id="tblDO" value="#{detaOrdenBean.orderlist}" var="i"
-							widgetVar="50" style="width: auto;" editable="true">
-							<f:facet name="header">  
-                        Lista 
-                    </f:facet>
-
-							<p:ajax event="rowEdit" listener="#{detaOrdenBean.onEdit}"
-								update=":formDetaProd:messages" />
-
-							<p:ajax event="rowEditCancel"
-								listener="#{detaOrdenBean.onCancel}"
-								update=":formDetaProd:messages, tblDO" />
+							style="width: auto;"
+							emptyMessage="No se ha agredado nada a la lista">
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Modelo" />
+									<p:outputLabel value="Modelo" />
 								</f:facet>
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{i.modelo}" />
-									</f:facet>
-
-									<f:facet name="input">
-										<p:selectOneMenu value="#{i.modelo}" required="true"
-											style="width:100%">
-
-											<f:selectItem itemLabel="- Seleccione -" itemValue=""
-												noSelectionOption="true" />
-											<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}"></f:selectItems>
-										</p:selectOneMenu>
-									</f:facet>
-								</p:cellEditor>
+								<p:outputLabel value="#{i.modelo}" />
 							</p:column>
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Talla" />
+									<p:outputLabel value="Talla" />
 								</f:facet>
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{i.talla}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:selectOneMenu id="idTalla" value="#{i.talla}"
-											required="true" style="width:100%">
-
-											<f:selectItem itemLabel="- Seleccione -" itemValue=""
-												noSelectionOption="true" />
-											<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
-										</p:selectOneMenu>
-									</f:facet>
-								</p:cellEditor>
+								<p:outputLabel value="#{i.talla}" />
 							</p:column>
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Cantidad" />
+									<p:outputLabel value="Cantidad" />
 								</f:facet>
-								<p:cellEditor>
-									<f:facet name="output">
-										<h:outputText value="#{i.cantidad}" />
-									</f:facet>
-									<f:facet name="input">
-										<p:inputText value="#{i.cantidad}" style="width:100%" />
-									</f:facet>
-								</p:cellEditor>
+								<p:outputLabel value="#{i.cantidad}" style="width:100%"></p:outputLabel>
 							</p:column>
-							<p:column headerText="Opciones" style="width:50px">
-								<p:rowEditor />
+
+							<p:column headerText="Eliminar?" style="width:50px">
+								<p:commandButton
+									actionListener="#{detaOrdenBean.deleteAction(i)}" ajax="true"
+									update="tblDO, formDetaProd:tblDO, :formDetaProd:messages"
+									process="@this" icon="fa fa-close" title="Eliminar" />
 							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="2" style="text-align:right"
+										footerText="Cantidad de pares:" />
+
+									<p:column colspan="2" footerText="#{detaOrdenBean.total}" />
+
+								</p:row>
+							</p:columnGroup>
 						</p:dataTable>
 					</p:panel>
 

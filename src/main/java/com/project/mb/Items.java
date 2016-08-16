@@ -2,14 +2,14 @@ package com.project.mb;
 
 import java.io.Serializable;
 
-public class ItemsDetaOrdenBean implements Serializable {
+public class Items implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String modelo;
 	private Integer talla;
 	private Integer cantidad;
 
-	public ItemsDetaOrdenBean(String modelo, Integer talla, Integer cantidad) {
+	public Items(String modelo, Integer talla, Integer cantidad) {
 		this.modelo = modelo;
 		this.talla = talla;
 		this.cantidad = cantidad;

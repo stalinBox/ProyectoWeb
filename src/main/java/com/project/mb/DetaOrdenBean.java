@@ -34,7 +34,10 @@ public class DetaOrdenBean implements Serializable {
 	private String modelo;
 	private Integer talla;
 	private Integer cantidad;
-	ItemsDetaOrdenBean order;
+
+	Items order;
+	private static final ArrayList<Items> orderList = new ArrayList<Items>();
+	private static Integer total = 0;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -48,6 +51,7 @@ public class DetaOrdenBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+
 	public List<SelectItem> getSelectedItemsTalla() {
 		this.selectedItemsTalla = new ArrayList<SelectItem>();
 		TallasDao tallasDao = new TallasDaoImpl();
@@ -60,6 +64,10 @@ public class DetaOrdenBean implements Serializable {
 			this.selectedItemsTalla.add(selectItem);
 		}
 		return selectedItemsTalla;
+	}
+
+	public static void setTotal(Integer total) {
+		DetaOrdenBean.total = total;
 	}
 
 	public void setSelectedItemsTalla(List<SelectItem> selectedTalla) {
@@ -116,60 +124,73 @@ public class DetaOrdenBean implements Serializable {
 		this.cantidad = cantidad;
 	}
 
-	public ItemsDetaOrdenBean getOrder() {
+	public Items getOrder() {
 		return order;
 	}
 
-	public void setOrder(ItemsDetaOrdenBean order) {
+	public void setOrder(Items order) {
 		this.order = order;
 	}
 
-	private ArrayList<ItemsDetaOrdenBean> orderList = new ArrayList<ItemsDetaOrdenBean>();
+	public Integer getTotal() {
+		return total;
+	}
 
-	public ArrayList<ItemsDetaOrdenBean> getOrderlist() {
+	public ArrayList<Items> getOrderlist() {
 		return orderList;
 	}
 
 	// DML METODOS
 	public void submit() {
-		for (SelectItem a : this.selectedItemsModelo) {
-			System.out.println("ITEMSSSValue: " + a.getValue().toString());
-			System.out.println("ITEMSSSLabel: " + a.getLabel());
-		}
+		System.out.println("guardar toooodooo :) ");
 	}
 
 	public String addAction() {
-		ItemsDetaOrdenBean orderitem = new ItemsDetaOrdenBean(this.modelo,
-				this.talla, this.cantidad);
+		String itemModelo = null;
+		Integer itemTalla = null;
+		// Convertir las claves a los valores
+		for (SelectItem a : this.selectedItemsModelo) {
+			if (this.modelo.equals(a.getValue().toString())) {
+				itemModelo = a.getLabel();
+			}
+		}
+		for (SelectItem b : this.selectedItemsTalla) {
+			if (this.talla.toString().equals(b.getValue().toString())) {
+				itemTalla = Integer.parseInt(b.getLabel().toString());
+			}
+		}
+		// Añadir al Array los labels convertidos
+		if ((itemModelo != null) && (itemTalla != null)) {
+			Items orderitem = new Items(itemModelo, itemTalla, this.cantidad);
+			orderList.add(orderitem);
+		}
 
-		/* AQUI VA EL CODIGO PARA SACAR EN LA PANTALLA */
-		orderList.add(orderitem);
+		for (Items ol : orderList) {
+			total += Integer.parseInt(ol.getCantidad().toString());
+		}
+
 		modelo = "";
 		talla = 0;
 		cantidad = 0;
 		return null;
 	}
 
-	public String deleteAction(ItemsDetaOrdenBean order) {
-
+	public String deleteAction(Items order) {
+		FacesMessage msg = new FacesMessage("Item Eliminado");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		orderList.remove(order);
 		return null;
 	}
 
 	public void onEdit(RowEditEvent event) {
 		FacesMessage msg = new FacesMessage("Item Editado",
-				((ItemsDetaOrdenBean) event.getObject()).getModelo());
+				((Items) event.getObject()).getModelo());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
 	public void onCancel(RowEditEvent event) {
 		FacesMessage msg = new FacesMessage("Item Eliminado");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-
-		System.out.println("pokemon GO: "
-				+ ((ItemsDetaOrdenBean) event.getObject()).getModelo()
-						.toString());
-		orderList.remove(((ItemsDetaOrdenBean) event.getObject()));
 	}
 
 	public void generateOrder() {
