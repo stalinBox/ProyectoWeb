@@ -9,161 +9,188 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
+import com.project.dao.ModelosDao;
+import com.project.dao.ModelosDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TipprocesoDaoImpl;
 import com.project.dao.TipprocesosDao;
 import com.project.entities.ModTrqTal;
+import com.project.entities.Modelo;
 import com.project.entities.Proceso;
 import com.project.entities.TipoProceso;
 
-@ManagedBean
+@ManagedBean(name = "procesoBean")
 @ViewScoped
 public class ProcesoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	// VARIABLES
-	private Proceso proceso;
-	private List<Proceso> selectedProceso;
-	private List<SelectItem> selectItemsModelo;
-	private List<SelectItem> selectItemsTipPro;
-	private List<SelectItem> selectItemsPredecesor;
-	private String[] ItemsPredecesor;
-	private String codMod;
-	private String tprCod;
-	private String proCod;
-	private String proCap;
-	private String proDur;
-
-	// INICIALIZADORES
-	@PostConstruct
-	public void init() {
-		proceso = new Proceso();
-	}
-
-	public ProcesoBean() {
-		this.selectedProceso = new ArrayList<Proceso>();
-	}
+	private List<ColProcesos> proList = new ArrayList<ColProcesos>();
+	private List<SelectItem> selectedItemsModelo;
+	private List<SelectItem> selectedItemsProcesos;
+	private float duracion;
+	private Integer capacidad;
+	private float tBase;
+	private float tMaq;
+	private float tMano;
+	private float tStandar;
+	private float manObra;
+	private float manReal;
+	private String descripcion;
+	private String automatico;
+	private Proceso selectedProceso;
 
 	// SETTERS AND GETTERS
-	public Proceso getProceso() {
-		return proceso;
-	}
 
-	public void setProceso(Proceso proceso) {
-		this.proceso = proceso;
-	}
-
-	public List<Proceso> getSelectedProceso() {
+	public Proceso getSelectedProceso() {
 		return selectedProceso;
 	}
 
-	public void setSelectedProceso(List<Proceso> selectedProceso) {
+	public void setSelectedProceso(Proceso selectedProceso) {
 		this.selectedProceso = selectedProceso;
 	}
 
-	public String getCodMod() {
-		return codMod;
-	}
-
-	public void setCodMod(String codMod) {
-		this.codMod = codMod;
-	}
-
-	public String getTprCod() {
-		return tprCod;
-	}
-
-	public void setTprCod(String tprCod) {
-		this.tprCod = tprCod;
-	}
-
-	public String getProCod() {
-		return proCod;
-	}
-
-	public void setProCod(String proCod) {
-		this.proCod = proCod;
-	}
-
-	public String getProCap() {
-		return proCap;
-	}
-
-	public void setProCap(String proCap) {
-		this.proCap = proCap;
-	}
-
-	public String getProDur() {
-		return proDur;
-	}
-
-	public void setProDur(String proDur) {
-		this.proDur = proDur;
-	}
-
-	public List<SelectItem> getSelectItemsModelo() {
-		this.selectItemsModelo = new ArrayList<SelectItem>();
-		ProcesoDao modDao = new ProcesoDaoImpl();
-		List<ModTrqTal> modelo = modDao.selectItemsModelos();
-		for (ModTrqTal mod : modelo) {
-			SelectItem selectItem = new SelectItem(mod.getMttCodigo(), mod
-					.getModelo().getModNombre());
-			this.selectItemsModelo.add(selectItem);
+	public List<ColProcesos> getProList() {
+		if (proList.isEmpty()) {
+			prepareSampleData();
 		}
-		return selectItemsModelo;
+		return proList;
 	}
 
-	public void setSelectItemsModelo(List<SelectItem> selectItemsModelo) {
-
-		this.selectItemsModelo = selectItemsModelo;
+	public void setProList(List<ColProcesos> proList) {
+		this.proList = proList;
 	}
 
-	public List<SelectItem> getSelectItemsTipPro() {
-		this.selectItemsTipPro = new ArrayList<SelectItem>();
-		TipprocesosDao tipProDao = new TipprocesoDaoImpl();
-		List<TipoProceso> tipProceso = tipProDao.findAll();
-		for (TipoProceso t : tipProceso) {
-			SelectItem selectItem = new SelectItem(t.getTprCodigo(),
-					t.getTprNombre());
-			this.selectItemsTipPro.add(selectItem);
+	public List<SelectItem> getSelectedItemsModelo() {
+		this.selectedItemsModelo = new ArrayList<SelectItem>();
+		ModelosDao modeloDao = new ModelosDaoImpl();
+		List<Modelo> modelo = modeloDao.findAll();
+		selectedItemsModelo.clear();
+
+		for (Modelo mod : modelo) {
+			SelectItem selectItem = new SelectItem(mod.getModCodigo(),
+					mod.getModNombre());
+			this.selectedItemsModelo.add(selectItem);
 		}
-
-		return selectItemsTipPro;
+		return selectedItemsModelo;
 	}
 
-	public void setSelectItemsTipPro(List<SelectItem> selectItemsTipPro) {
-		this.selectItemsTipPro = selectItemsTipPro;
+	public void setSelectedItemsModelo(List<SelectItem> selectedItemsModelo) {
+		this.selectedItemsModelo = selectedItemsModelo;
 	}
 
-	public List<SelectItem> getSelectItemsPredecesor() {
-		this.selectItemsPredecesor = new ArrayList<SelectItem>();
-		ProcesoDao proDao = new ProcesoDaoImpl();
-		List<Proceso> predecesor = proDao.findAll();
-
-		for (Proceso p : predecesor) {
-			SelectItem selectItem = new SelectItem(p.getProCodigo(), p
-					.getTipoProceso().toString());
-			this.selectItemsPredecesor.add(selectItem);
+	public List<SelectItem> getSelectedItemsProcesos() {
+		this.selectedItemsProcesos = new ArrayList<SelectItem>();
+		TipprocesosDao tpDao = new TipprocesoDaoImpl();
+		List<TipoProceso> tp = tpDao.findAll();
+		selectedItemsProcesos.clear();
+		for (TipoProceso tipoPro : tp) {
+			SelectItem selectItem = new SelectItem(tipoPro.getTprCodigo(),
+					tipoPro.getTprNombre());
+			this.selectedItemsProcesos.add(selectItem);
 		}
-		return selectItemsPredecesor;
+		return selectedItemsProcesos;
 	}
 
-	public void setSelectItemsPredecesor(List<SelectItem> selectItemsPredecesor) {
-		this.selectItemsPredecesor = selectItemsPredecesor;
+	public void setSelectedItemsProcesos(List<SelectItem> selectedItemsProcesos) {
+		this.selectedItemsProcesos = selectedItemsProcesos;
 	}
 
-	public String[] getItemsPredecesor() {
-		return ItemsPredecesor;
+	public float getDuracion() {
+		return duracion;
 	}
 
-	public void setItemsPredecesor(String[] itemsPredecesor) {
-		ItemsPredecesor = itemsPredecesor;
+	public void setDuracion(float duracion) {
+		this.duracion = duracion;
 	}
 
-	// METODOS
-	public void btnCreateProceso() {
+	public Integer getCapacidad() {
+		return capacidad;
+	}
 
-		System.out.println("Se ha guardado");
+	public void setCapacidad(Integer capacidad) {
+		this.capacidad = capacidad;
+	}
+
+	public float gettBase() {
+		return tBase;
+	}
+
+	public void settBase(float tBase) {
+		this.tBase = tBase;
+	}
+
+	public float gettMaq() {
+		return tMaq;
+	}
+
+	public void settMaq(float tMaq) {
+		this.tMaq = tMaq;
+	}
+
+	public float gettMano() {
+		return tMano;
+	}
+
+	public void settMano(float tMano) {
+		this.tMano = tMano;
+	}
+
+	public float gettStandar() {
+		return tStandar;
+	}
+
+	public void settStandar(float tStandar) {
+		this.tStandar = tStandar;
+	}
+
+	public float getManObra() {
+		return manObra;
+	}
+
+	public void setManObra(float manObra) {
+		this.manObra = manObra;
+	}
+
+	public float getManReal() {
+		return manReal;
+	}
+
+	public void setManReal(float manReal) {
+		this.manReal = manReal;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public String getAutomatico() {
+		return automatico;
+	}
+
+	public void setAutomatico(String automatico) {
+		this.automatico = automatico;
+	}
+
+	// FUNCIONES
+	private void prepareSampleData() {
+		// ColProcesos toyotaVios = new ColProcesos();
+		// toyotaVios.setModelo(1);
+		// toyotaVios.setDescripcion("DESCRIPCION");
+		//
+		// proList.add(toyotaVios);
+	}
+
+	public void addProList() {
+		ColProcesos newPro = new ColProcesos();
+		proList.add(newPro);
+	}
+
+	public void removeProList(ColProcesos proce) {
+		proList.remove(proce);
 	}
 }

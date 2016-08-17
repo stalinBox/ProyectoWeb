@@ -8,141 +8,138 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<p:growl id="msgs" showDetail="true" />
+			<p:messages id="messages" />
+			<h:form id="general">
+				<center>
+					<p:panel id="panel" style="margin-bottom:10px;">
+						<h:panelGrid id="p1" columns="5" cellpadding="5">
 
-			<form id="formDataTable">
-				<h:panelGrid id="p1" columns="5" cellpadding="4"
-					style="margin:0 auto;">
+							<p:outputLabel value="Modelo: " />
+							<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
+								style="width:150px" required="true">
 
-					<f:facet name="header" align="center">INGRESO DE DATOS AL PROCESO</f:facet>
-					<p:row>
-						<p:outputLabel for="Proceso" value="PROCESO: " />
-						<p:selectOneMenu id="Proceso" value="#{procesoBean.tprCod}"
-							style="width:150px">
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{mttBean.selectItemsModelo}" />
+								<p:ajax update="basicDT" />
+							</p:selectOneMenu>
 
-							<f:selectItem itemLabel="Seleccionar Proceso" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{procesoBean.selectItemsTipPro}" />
-						</p:selectOneMenu>
-					</p:row>
+							<p:outputLabel value="Troquel: " />
+							<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
+								style="width:150px" required="true">
 
-					<p:row>
-						<p:outputLabel for="modID" value="MODELO" />
-						<p:selectOneMenu id="modID" value="" style="width:150px">
-							<f:selectItem itemLabel="Seleccione un Modelo" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{procesoBean.selectItemsModelo}" />
-						</p:selectOneMenu>
-					</p:row>
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{mttBean.selectItemsTroquel}"></f:selectItems>
+								<p:ajax update="basicDT" />
+							</p:selectOneMenu>
 
-					<p:row>
-						<h:outputLabel for="duracionid" value="DURACIÓN(min): " />
-						<p:spinner id="duracionid" value="#{procesoBean.proDur}"
-							stepFactor="0.1" min="0" max="100" />
-					</p:row>
+						</h:panelGrid>
+					</p:panel>
+				</center>
 
-					<p:row>
-						<h:outputLabel for="predecesoraID" value="PROCESO ANTERIOR:" />
-						<p:selectCheckboxMenu id="predecesoraID"
-							value="#{procesoBean.itemsPredecesor}"
-							label="Selección de prodecesores" filter="true"
-							filterMatchMode="startsWith" panelStyle="width:250px">
-							<f:selectItems value="#{procesoBean.selectItemsPredecesor}"></f:selectItems>
-						</p:selectCheckboxMenu>
-					</p:row>
+				<center>
+					<p:dataTable id="basicDT" var="talla" value="#{mttBean.tallas}"
+						style="width:250px"
+						emptyMessage="Seleccione un MODELO Y UN TROQUEL"
+						rowKey="#{talla.talla.talCodigo}"
+						selection="#{mttBean.selectedMtt}">
 
-					<p:row>
-						<p:outputLabel value="CAPACIDAD" />
-						<p:inputText value="#{procesoBean.proCap}"></p:inputText>
-					</p:row>
+						<p:column headerText="Talla">
+							<h:outputText value="#{talla.talla.talNumero}" />
+						</p:column>
 
-					<p:row>
-						<p:commandButton value="AGREGAR"
-							actionListener="#{procesoBean.btnCreateProceso()}"
-							icon="ui-icon-disk"></p:commandButton>
-					</p:row>
+						<p:column headerText="Disponibilidad" selectionMode="multiple"
+							style="width:100px;text-align:center" />
+					</p:dataTable>
+				</center>
 
-				</h:panelGrid>
-
-				<p:dataTable id="idTableProceso"
-					emptyMessage="No se han cargado datos">
-					<p:column headerText="PROCESO">
-						<h:outputText value="" />
-					</p:column>
-
-					<p:column headerText="MODELO">
-						<h:outputText value="" />
-					</p:column>
-
-					<p:column headerText="DURACION">
-						<h:outputText value="" />
-					</p:column>
-
-					<p:column headerText="PREDECESORA">
-						<h:outputText value="" />
-					</p:column>
-
-					<p:column headerText="CAPACIDAD">
-						<h:outputText value="" />
-					</p:column>
-
-					<p:column headerText="Actualizar/Eliminar" style="width:30%">
-						<p:commandButton id="btnUpdate" icon="ui-icon-pencil"
-							title="Modificar">
-							<f:setPropertyActionListener value="" target="" />
-						</p:commandButton>
-
-						<p:commandButton id="btnDelete" icon="ui-icon-close"
-							title="Eliminar">
-							<f:setPropertyActionListener value="" target="" />
-						</p:commandButton>
-					</p:column>
-
-				</p:dataTable>
-			</form>
-			<p:commandButton value="SIGUIENTE"
-				actionListener="#{procesoBean.btnCreateProceso()}"></p:commandButton>
-
-			<h:form id="formUpdate">
-				<p:dialog header="Modificar Proceso" widgetVar="dialogProcesoUpdate"
-					modal="true" showEffect="fade" hideEffect="explode"
-					resizable="false" id="dlgProcesoUpdate">
-
-					<h:inputHidden value="" />
-					<h:inputHidden value="" />
-
-					<p:panelGrid id="display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
-						<h:outputText value="Cantidad:" />
-						<p:inputText value="" />
-
-						<f:facet name="footer">
-							<p:separator />
-							<p:commandButton id="btnUpdateAceptar" icon="fa fa-fw fa-save"
-								title="Guardar" value="Guardar" />
-
-							<p:commandButton id="btnUpdateCancelar"
-								oncomplete="PF('dialogProcesoUpdate').hide()"
-								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
-						</f:facet>
-
-					</p:panelGrid>
-				</p:dialog>
+				<center>
+					<p:commandButton ajax="false" value="GUARDAR" icon="ui-icon-disk"
+						action="#{mttBean.login()}">
+					</p:commandButton>
+				</center>
 			</h:form>
 
-			<h:form id="formDelete">
-				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade" header="Eliminar el proceso"
-					severity="alert" widgetVar="dialogProcesoDelete">
 
-					<h:inputHidden value="" />
-					<h:inputHidden value="" />
+			<p:separator />
+			<h:form id="pruebas">
 
-					<p:commandButton id="confirm" value="Si" icon="ui-icon-check" />
+				<p:dataTable id="table01" value="#{procesoBean.proList}" var="pro"
+					emptyMessage="No se han ingresado datos" resizableColumns="true">
+					<p:column style="width:6%">
+						<f:facet name="header">Proceso</f:facet>
+						<p:selectOneMenu value="#{pro.tipProceso}" style="width:auto">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesoBean.selectedItemsProcesos}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:7%">
+						<f:facet name="header">Modelo</f:facet>
+						<p:selectOneMenu value="#{pro.modelo}" style="width:auto">
 
-					<p:commandButton id="decline" value="No" icon="ui-icon-close"
-						oncomplete="PF('dialogProcesoDelete').hide()" />
-				</p:confirmDialog>
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesoBean.selectedItemsModelo}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:7%">
+						<f:facet name="header">Predecesor</f:facet>
+						<p:selectOneMenu value="#{pro.proPadre}" style="width:auto">
+
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesoBean.selectedItemsProcesos}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:5%">
+						<f:facet name="header">Duracion</f:facet>
+						<p:spinner value="#{pro.duracion}" stepFactor="0.1" size="2" />
+					</p:column>
+
+					<p:column style="width:5%">
+						<f:facet name="header">Capacidad</f:facet>
+						<p:inputText value="#{pro.capacidad}" size="2" />
+					</p:column>
+
+					<p:column style="width:6%">
+						<f:facet name="header">Tiempo Base</f:facet>
+						<p:inputText value="#{pro.tBase}" size="2" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">Tiempo Maquina</f:facet>
+						<p:inputText value="#{pro.tMaq}" size="2" />
+					</p:column>
+					<p:column style="width:6%">
+						<f:facet name="header">Tiempo Mano</f:facet>
+						<p:inputText value="#{pro.tMano}" size="2" />
+					</p:column>
+					<p:column style="width:7%">
+						<f:facet name="header">Tiempo Estandar</f:facet>
+						<p:inputText value="#{pro.tStandar}" size="2"></p:inputText>
+					</p:column>
+					<p:column style="width:6%">
+						<f:facet name="header">Automatico?</f:facet>
+						<p:selectBooleanButton id="value1" value="#{pro.proAutomatico}"
+							onLabel="Si" offLabel="No" style="width:60px" />
+					</p:column>
+					<p:column style="width:4%">
+						<f:facet name="header">Eliminar?</f:facet>
+
+						<p:commandButton action="#{procesoBean.removeProList(pro)}"
+							icon="fa fa-close">
+							<f:ajax execute=":pruebas" render=":pruebas" />
+						</p:commandButton>
+
+					</p:column>
+				</p:dataTable>
+				<p:separator />
+				<p:commandButton value="Añadir" action="#{procesoBean.addProList()}">
+					<f:ajax execute=":pruebas" render=":pruebas" />
+				</p:commandButton>
 			</h:form>
 		</ui:define>
 	</ui:composition>

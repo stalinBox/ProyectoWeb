@@ -74,7 +74,7 @@
 						style="width: 400px;">
 						<p:panelGrid columns="2" style="width: 100%; margin: 0 auto;">
 
-							<h:outputLabel value="Modelo: " />
+							<p:outputLabel value="Modelo: " />
 							<p:selectOneMenu value="#{detaOrdenBean.modelo}" required="true"
 								style="width:150px">
 
@@ -83,7 +83,7 @@
 								<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}" />
 							</p:selectOneMenu>
 
-							<h:outputLabel value="Talla: " />
+							<p:outputLabel value="Talla: " />
 							<p:selectOneMenu id="idTalla" value="#{detaOrdenBean.talla}"
 								required="true" style="width:150px">
 
@@ -92,7 +92,7 @@
 								<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
 							</p:selectOneMenu>
 
-							<h:outputLabel value="Cantidad: " />
+							<p:outputLabel value="Cantidad: " />
 							<p:inputText value="#{detaOrdenBean.cantidad}" />
 
 							<f:facet name="footer">
