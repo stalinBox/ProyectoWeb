@@ -1,12 +1,6 @@
 package com.project.dao;
 
-import java.util.List;
-
-import org.hibernate.Session;
-
-import com.project.entities.ModTrqTal;
 import com.project.entities.Proceso;
-import com.project.utils.HibernateUtil;
 
 public class ProcesoDaoImpl implements ProcesoDao {
 

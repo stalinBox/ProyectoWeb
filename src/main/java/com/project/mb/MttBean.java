@@ -198,4 +198,10 @@ public class MttBean implements Serializable {
 		context.addCallbackParam("ruta", ruta);
 	}
 
+	public String resetDT() {
+		System.out.println("CLEANNN");
+		codTrq = "";
+		return null;
+	}
+
 }

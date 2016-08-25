@@ -1,7 +1,5 @@
 package com.project.dao;
 
-import java.util.List;
-
 import com.project.entities.Proceso;
 
 public interface ProcesoDao {

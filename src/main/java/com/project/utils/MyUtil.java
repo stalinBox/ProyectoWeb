@@ -31,4 +31,8 @@ public class MyUtil {
 	public static String next() {
 		return "http://localhost:8080/ProyectoWeb/calzado/";
 	}
+
+	public static String rutaExcel() {
+		return "http://localhost:8080/ProyectoWeb/TextExcel/";
+	}
 }

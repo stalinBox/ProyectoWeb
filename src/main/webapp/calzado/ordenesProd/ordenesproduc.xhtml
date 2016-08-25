@@ -136,15 +136,15 @@
 									process="@this" icon="fa fa-close" title="Eliminar" />
 							</p:column>
 
-							<p:columnGroup type="footer">
-								<p:row>
-									<p:column colspan="2" style="text-align:right"
-										footerText="Cantidad de pares:" />
+							<!-- 							<p:columnGroup type="footer"> -->
+							<!-- 								<p:row> -->
+							<!-- 									<p:column colspan="2" style="text-align:right" -->
+							<!-- 										footerText="Cantidad de pares:" /> -->
 
-									<p:column colspan="2" footerText="#{detaOrdenBean.total}" />
+							<!-- 									<p:column colspan="2" footerText="#{detaOrdenBean.total}" /> -->
 
-								</p:row>
-							</p:columnGroup>
+							<!-- 								</p:row> -->
+							<!-- 							</p:columnGroup> -->
 						</p:dataTable>
 					</p:panel>
 
@@ -152,7 +152,7 @@
 			</div>
 			<div style="width: 300px; margin: 0 auto;">
 				<p:commandButton value="PROCESAR"
-					actionListener="#{detaOrdenBean.generateOrder}"></p:commandButton>
+					actionListener="#{printSolveMB.excecuteFunctionMacro()}"></p:commandButton>
 			</div>
 		</ui:define>
 	</ui:composition>

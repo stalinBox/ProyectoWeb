@@ -165,7 +165,7 @@ public class ParametrizacionBean implements Serializable {
 			do {
 				i++;
 				columns.add(new ColumnModel(i.toString(), "val0"));
-			} while (i < Integer.parseInt(this.diasLaborables));
+			} while (i < 5);// Integer.parseInt(this.diasLaborables));
 
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e);

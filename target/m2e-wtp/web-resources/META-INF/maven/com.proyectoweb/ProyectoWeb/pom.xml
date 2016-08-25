@@ -46,20 +46,17 @@
 			<version>2.1.8</version>
 			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
 			<version>2.1.8</version>
 			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>all-themes</artifactId>
 			<version>1.0.10</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -70,21 +67,43 @@
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>tck-utils-api</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
 			<version>2.2.4</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.14</version>
+		</dependency>
+		<dependency>
+			<groupId>poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.1-FINAL</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hynnet</groupId>
+			<artifactId>jacob</artifactId>
+			<version>1.18</version>
+		</dependency>
 	</dependencies>
-
 	<repositories>
 		<repository>
 			<id>prime-repo</id>

@@ -10,63 +10,40 @@
 		<ui:define name="content">
 			<p:messages id="messages" />
 			<h:form id="general">
-				<center>
-					<p:panel id="panel" style="margin-bottom:10px;">
-						<h:panelGrid id="p1" columns="5" cellpadding="5">
+				<p:panelGrid id="p1" columns="4" cellpadding="5">
+					<p:outputLabel for="modelos" value="Modelo:" />
+					<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
+						style="width:150px" required="true"
+						onchange="#{mttBean.resetDT()}">
 
-							<p:outputLabel value="Modelo: " />
-							<p:selectOneMenu id="modelos" value="#{mttBean.codMod}"
-								style="width:150px" required="true">
+						<f:selectItem itemLabel="- Seleccione -" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{mttBean.selectItemsModelo}" />
 
-								<f:selectItem itemLabel="- Seleccione -" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItems value="#{mttBean.selectItemsModelo}" />
-								<p:ajax update="basicDT" />
-							</p:selectOneMenu>
+					</p:selectOneMenu>
 
-							<p:outputLabel value="Troquel: " />
-							<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
-								style="width:150px" required="true">
+					<p:outputLabel for="troqueles" value="Troquel:" />
+					<p:selectOneMenu id="troqueles" value="#{mttBean.codTrq}"
+						style="width:150px" required="true">
 
-								<f:selectItem itemLabel="- Seleccione -" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItems value="#{mttBean.selectItemsTroquel}"></f:selectItems>
-								<p:ajax update="basicDT" />
-							</p:selectOneMenu>
+						<f:selectItem itemLabel="- Seleccione -" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{mttBean.selectItemsTroquel}"></f:selectItems>
+						<p:ajax update="general" />
+					</p:selectOneMenu>
 
-						</h:panelGrid>
-					</p:panel>
-				</center>
-
-				<center>
-					<p:dataTable id="basicDT" var="talla" value="#{mttBean.tallas}"
-						style="width:250px"
-						emptyMessage="Seleccione un MODELO Y UN TROQUEL"
-						rowKey="#{talla.talla.talCodigo}"
-						selection="#{mttBean.selectedMtt}">
-
-						<p:column headerText="Talla">
-							<h:outputText value="#{talla.talla.talNumero}" />
-						</p:column>
-
-						<p:column headerText="Disponibilidad" selectionMode="multiple"
-							style="width:100px;text-align:center" />
-					</p:dataTable>
-				</center>
-
-				<center>
-					<p:commandButton ajax="false" value="GUARDAR" icon="ui-icon-disk"
-						action="#{mttBean.login()}">
-					</p:commandButton>
-				</center>
+					<p:commandButton value="actualizar" ajax="true"
+						actionListener="#{mttBean.resetDT()}" update="general" />
+				</p:panelGrid>
 			</h:form>
 
 
 			<p:separator />
-			<h:form id="pruebas">
+			<h:form id="procesoId">
 
 				<p:dataTable id="table01" value="#{procesoBean.proList}" var="pro"
-					emptyMessage="No se han ingresado datos" resizableColumns="true">
+					emptyMessage="No se han ingresado datos" tableStyle="width:auto"
+					autoResize="true">
 					<p:column style="width:6%">
 						<f:facet name="header">Proceso</f:facet>
 						<p:selectOneMenu value="#{pro.tipProceso}" style="width:auto">
@@ -102,7 +79,7 @@
 
 					<p:column style="width:5%">
 						<f:facet name="header">Capacidad</f:facet>
-						<p:inputText value="#{pro.capacidad}" size="2" />
+						<p:inputText value="#{pro.capacidad}" size="5" />
 					</p:column>
 
 					<p:column style="width:6%">
@@ -131,14 +108,14 @@
 
 						<p:commandButton action="#{procesoBean.removeProList(pro)}"
 							icon="fa fa-close">
-							<f:ajax execute=":pruebas" render=":pruebas" />
+							<f:ajax execute=":procesoId" render=":procesoId" />
 						</p:commandButton>
 
 					</p:column>
 				</p:dataTable>
 				<p:separator />
 				<p:commandButton value="Añadir" action="#{procesoBean.addProList()}">
-					<f:ajax execute=":pruebas" render=":pruebas" />
+					<f:ajax execute=":procesoId" render=":procesoId" />
 				</p:commandButton>
 			</h:form>
 		</ui:define>

@@ -109,13 +109,14 @@
 						value="#{parametrizacionBean.diasLaborables}" size="1" />
 					<p:commandButton id="btn" update="dynamicColumnsTable"
 						actionListener="#{parametrizacionBean.updateColumns()}"
-						value="Update" process="@parent" />
+						value="Generar Filas" process="@parent" />
 				</h:panelGrid>
 
 				<p:dataTable id="dynamicColumnsTable" var="message"
 					value="#{parametrizacionBean.messages}"
 					filteredValue="#{parametrizacionBean.filteredMessages}"
 					emptyMessage="NADA QUE MOSTRAR">
+
 					<p:columns value="#{parametrizacionBean.columns}" var="column"
 						columnIndexVar="colIndex">
 						<f:facet name="header">
