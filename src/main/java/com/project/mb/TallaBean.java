@@ -17,15 +17,16 @@ import com.project.entities.Talla;
 
 @ManagedBean
 @RequestScoped
-public class TallaBean implements Serializable{
+public class TallaBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private List<Talla> tallas;
 	private Talla selectedTalla;
-	//private List<SelectItem> selectItemsTallas;
-	//private List<SelectItem> selectItemsExcludeByTallas;
-	//private Troquele troquel;
-	
+
+	// private List<SelectItem> selectItemsTallas;
+	// private List<SelectItem> selectItemsExcludeByTallas;
+	// private Troquele troquel;
+
 	@PostConstruct
 	public void init() {
 		selectedTalla = new Talla();
@@ -35,43 +36,37 @@ public class TallaBean implements Serializable{
 		this.tallas = new ArrayList<Talla>();
 	}
 
-	/*public List<SelectItem> getSelectItemsExcludeByTallas() {
-		this.selectItemsExcludeByTallas = new ArrayList<SelectItem>();
-		TallasDao tallaExDao = new TallasDaoImpl();
-		List<Talla> talla = tallaExDao.excludeByTalla(this.troquel);
-		for (Talla tal : talla) {
-			SelectItem selectItem = new SelectItem(tal.getTalCodigo(),
-					tal.getTalNumero().toString());
-			this.selectItemsExcludeByTallas.add(selectItem);
-		}
-		return selectItemsExcludeByTallas;
-	}
-public void setSelectItemsExcludeByTallas(
-			List<SelectItem> selectItemsExcludeByTallas) {
-		this.selectItemsExcludeByTallas = selectItemsExcludeByTallas;
-	}*/	
-	/*public List<SelectItem> getSelectItemsTallas() {
-		this.selectItemsTallas = new ArrayList<SelectItem>();
-		TallasDao tallaDao = new TallasDaoImpl();
-		List<Talla> talla = tallaDao.selectItems();
-		for (Talla tal : talla) {
-			SelectItem selectItem = new SelectItem(tal.getTalCodigo(),
-					tal.getTalNumero().toString());
-			this.selectItemsTallas.add(selectItem);
-		}
-		return selectItemsTallas;
-	}
-
-	
-	
-	
-	public void setSelectItemsTallas(List<SelectItem> selectItemsTallas) {
-		this.selectItemsTallas = selectItemsTallas;
-	}*/
+	/*
+	 * public List<SelectItem> getSelectItemsExcludeByTallas() {
+	 * this.selectItemsExcludeByTallas = new ArrayList<SelectItem>(); TallasDao
+	 * tallaExDao = new TallasDaoImpl(); List<Talla> talla =
+	 * tallaExDao.excludeByTalla(this.troquel); for (Talla tal : talla) {
+	 * SelectItem selectItem = new SelectItem(tal.getTalCodigo(),
+	 * tal.getTalNumero().toString());
+	 * this.selectItemsExcludeByTallas.add(selectItem); } return
+	 * selectItemsExcludeByTallas; } public void setSelectItemsExcludeByTallas(
+	 * List<SelectItem> selectItemsExcludeByTallas) {
+	 * this.selectItemsExcludeByTallas = selectItemsExcludeByTallas; }
+	 */
+	/*
+	 * public List<SelectItem> getSelectItemsTallas() { this.selectItemsTallas =
+	 * new ArrayList<SelectItem>(); TallasDao tallaDao = new TallasDaoImpl();
+	 * List<Talla> talla = tallaDao.selectItems(); for (Talla tal : talla) {
+	 * SelectItem selectItem = new SelectItem(tal.getTalCodigo(),
+	 * tal.getTalNumero().toString()); this.selectItemsTallas.add(selectItem); }
+	 * return selectItemsTallas; }
+	 * 
+	 * 
+	 * 
+	 * 
+	 * public void setSelectItemsTallas(List<SelectItem> selectItemsTallas) {
+	 * this.selectItemsTallas = selectItemsTallas; }
+	 */
 
 	public List<Talla> getTallas() {
 		TallasDao tallasDao = new TallasDaoImpl();
 		this.tallas = tallasDao.findAll();
+
 		return tallas;
 	}
 
@@ -82,8 +77,8 @@ public void setSelectItemsExcludeByTallas(
 	public void setSelectedTalla(Talla selectedTalla) {
 		this.selectedTalla = selectedTalla;
 	}
-	
-	//DMLS
+
+	// DMLS
 	public void btnCreateTalla(ActionEvent actionEvent) {
 		String msg = "";
 		TallasDao tallasDao = new TallasDaoImpl();

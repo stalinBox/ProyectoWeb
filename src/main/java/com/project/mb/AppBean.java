@@ -10,7 +10,6 @@ import com.project.utils.MyUtil;
 public class AppBean {
 
 	public AppBean() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getBaseUrl() {

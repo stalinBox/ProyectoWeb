@@ -14,7 +14,6 @@ public class MttDaoImpl implements MttDao {
 
 	@Override
 	public List<ModTrqTal> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
