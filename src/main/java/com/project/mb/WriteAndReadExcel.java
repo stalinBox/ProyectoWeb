@@ -1,10 +1,20 @@
 package com.project.mb;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @ManagedBean
 @ViewScoped
@@ -12,7 +22,7 @@ public class WriteAndReadExcel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// METODOS
-	public void SendPathFile() {
+	public void SendPathFile() throws IOException {
 		String fileName = "contentExcel/caso1.xlsx";
 		String pathFile = GetResourcePathFileExcel(fileName);
 		System.out
@@ -41,7 +51,46 @@ public class WriteAndReadExcel implements Serializable {
 	}
 
 	public void WritingExcel(String path) {
+		// Blank workbook
+		XSSFWorkbook workbook = new XSSFWorkbook();
 
+		// Create a blank sheet
+		XSSFSheet sheet = workbook.createSheet("Hoja1");
+
+		// This data needs to be written (Object[])
+		Map<String, Object[]> data = new TreeMap<String, Object[]>();
+		data.put("1", new Object[] { "Identificador", "NOMBRE", "APELLIDO" });
+		data.put("2", new Object[] { 1, "Kim", "Dotcom" });
+		data.put("3", new Object[] { 2, "carlitos", "Vargar" });
+		data.put("4", new Object[] { 3, "pepe", "cevallos" });
+		data.put("5", new Object[] { 4, "Lorenzo", "Lamas" });
+
+		// Iterate over data and write to sheet
+		Set<String> keyset = data.keySet();
+		int rownum = 0;
+		for (String key : keyset) {
+			Row row = sheet.createRow(rownum++);
+			Object[] objArr = data.get(key);
+			int cellnum = 0;
+			for (Object obj : objArr) {
+				Cell cell = row.createCell(cellnum++);
+				if (obj instanceof String)
+					cell.setCellValue((String) obj);
+				else if (obj instanceof Integer)
+					cell.setCellValue((Integer) obj);
+			}
+		}
+		try {
+			// Write the workbook in file system
+			FileOutputStream out = new FileOutputStream(new File(path));
+			workbook.write(out);
+			out.close();
+
+			System.out.println("casi1.xlsx written successfully on disk.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void ReadingExcel() {
