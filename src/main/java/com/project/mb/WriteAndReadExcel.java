@@ -1,9 +1,11 @@
 package com.project.mb;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -11,8 +13,12 @@ import java.util.TreeMap;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -22,114 +28,143 @@ public class WriteAndReadExcel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// METODOS
-	public void SendPathFile() throws IOException {
-		String fileName = "contentExcel/caso1.xlsx";
-		String pathFile = GetResourcePathFileExcel(fileName);
-		System.out
-				.println("Metodo SendFile del metodo GetResourcePathFileExcel: "
-						+ pathFile);
-		WritingExcel(pathFile);
-	}
-
-	public String GetResourcePathFileExcel(String fileName) {
+	public void SendPathFile() throws IOException, InvalidFormatException {
+		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
 		String pathFile = "";
-		try {
-			ClassLoader classLoader = this.getClass().getClassLoader();
-			File configFile = new File(classLoader.getResource(fileName)
-					.getFile());
-			if (configFile.exists()) {
-				System.out.println("Si Existe");
-				pathFile = configFile.getPath().toString();
-			} else {
-				System.out.println("No Existe");
-			}
-
-		} catch (Exception e) {
-			System.out.println("Error Archivo no encontrado: " + e.toString());
+		String pathLocationFile = "";
+		ClassLoader classLoader = this.getClass().getClassLoader();
+		File configFile = new File(classLoader.getResource(fileName).getFile());
+		if (configFile.exists()) {
+			pathFile = configFile.getPath();
+			pathLocationFile = configFile.getParent();
 		}
-		return pathFile;
+		System.out.println("GetParent: " + pathLocationFile);
+		System.out.println("GetPath:   " + pathFile);
+		WritingExcelXLSM(pathFile, pathLocationFile);
 	}
 
-	public void WritingExcel(String path) {
-		// Blank workbook
-		XSSFWorkbook workbook = new XSSFWorkbook();
+	public void WritingExcelXLSM(String pathFile, String pathLocationFile)
+			throws InvalidFormatException, IOException {
 
-		// Create a blank sheet
-		XSSFSheet sheet = workbook.createSheet("Hoja1");
+		/*
+		 * Crea un archivo en memoria escribe el codigo y lo guarda en la ruta
+		 * asignada
+		 */
+		// // Blank workbook
+		// XSSFWorkbook workbook = new XSSFWorkbook();
+		//
+		// // Create a blank sheet
+		// XSSFSheet sheet = workbook.createSheet("Hoja1");
+		//
+		// // This data needs to be written (Object[])
+		// Map<String, Object[]> data = new TreeMap<String, Object[]>();
+		// data.put("1", new Object[] { "Identificador", "NOMBRE", "APELLIDO"
+		// });
+		// data.put("2", new Object[] { 1, "Kim", "Dotcom" });
+		// data.put("3", new Object[] { 2, "carlitos", "Vargar" });
+		// data.put("4", new Object[] { 3, "pepe", "cevallos" });
+		// data.put("5", new Object[] { 4, "Lorenzo", "Lamas" });
+		// data.put("6", new Object[] { 5, "F", "G" });
+		//
+		// // Iterate over data and write to sheet
+		// Set<String> keyset = data.keySet();
+		// int rownum = 0;
+		// for (String key : keyset) {
+		// Row row = sheet.createRow(rownum++);
+		// Object[] objArr = data.get(key);
+		// int cellnum = 0;
+		// for (Object obj : objArr) {
+		// Cell cell = row.createCell(cellnum++);
+		// if (obj instanceof String)
+		// cell.setCellValue((String) obj);
+		// else if (obj instanceof Integer)
+		// cell.setCellValue((Integer) obj);
+		// }
+		// }
+		// try {
+		// // Write the workbook in file system
+		// FileOutputStream out = new FileOutputStream(new File(path));
+		// workbook.write(out);
+		// out.close();
+		// System.out.println("casi1.xlsx written successfully on disk.");
+		// } catch (FileNotFoundException e) {
+		// e.printStackTrace();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 
-		// This data needs to be written (Object[])
-		Map<String, Object[]> data = new TreeMap<String, Object[]>();
-		data.put("1", new Object[] { "Identificador", "NOMBRE", "APELLIDO" });
-		data.put("2", new Object[] { 1, "Kim", "Dotcom" });
-		data.put("3", new Object[] { 2, "carlitos", "Vargar" });
-		data.put("4", new Object[] { 3, "pepe", "cevallos" });
-		data.put("5", new Object[] { 4, "Lorenzo", "Lamas" });
+		/*
+		 * Abre un archivo cargado en la memoria de JBOSS y lo guarda en la
+		 * misma direccion con otro nombre manteniendo la macro
+		 */
 
-		// Iterate over data and write to sheet
-		Set<String> keyset = data.keySet();
-		int rownum = 0;
-		for (String key : keyset) {
-			Row row = sheet.createRow(rownum++);
-			Object[] objArr = data.get(key);
-			int cellnum = 0;
-			for (Object obj : objArr) {
-				Cell cell = row.createCell(cellnum++);
-				if (obj instanceof String)
-					cell.setCellValue((String) obj);
-				else if (obj instanceof Integer)
-					cell.setCellValue((Integer) obj);
-			}
-		}
 		try {
-			// Write the workbook in file system
-			FileOutputStream out = new FileOutputStream(new File(path));
+
+			Workbook workbook;
+			workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
+
+			FileOutputStream out = new FileOutputStream(new File(
+					pathLocationFile + "\\caso2Real.xlsm"));
 			workbook.write(out);
 			out.close();
+			System.out.println("xlsm creado ... ");
 
-			System.out.println("casi1.xlsx written successfully on disk.");
-
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void ReadingExcel() {
-		// try {
-		// FileInputStream file = new FileInputStream(
-		// new File(
-		// "C:\\Documents and Settings\\admin\\Desktop\\imp data\\howtodoinjava_demo.xlsx"));
-		//
-		// // Create Workbook instance holding reference to .xlsx file
-		// HSSFWorkbook workbook = new HSSFWorkbook(file);
-		//
-		// // Get first/desired sheet from the workbook
-		// HSSFSheet sheet = workbook.getSheetAt(0);
-		//
-		// // Iterate through each rows one by one
-		// Iterator<Row> rowIterator = sheet.iterator();
-		// while (rowIterator.hasNext()) {
-		// Row row = rowIterator.next();
-		// // For each row, iterate through all the columns
-		// Iterator<Cell> cellIterator = row.cellIterator();
-		//
-		// while (cellIterator.hasNext()) {
-		// Cell cell = cellIterator.next();
-		// // Check the cell type and format accordingly
-		// switch (cell.getCellType()) {
-		// case Cell.CELL_TYPE_NUMERIC:
-		// System.out.print(cell.getNumericCellValue() + "\t");
-		// break;
-		// case Cell.CELL_TYPE_STRING:
-		// System.out.print(cell.getStringCellValue() + "\t");
-		// break;
-		// }
-		// }
-		// System.out.println("");
-		// }
-		// file.close();
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-	}
+	public void ReadingExcelXLSM(String path) {
+		/* Lee todas las celdas y hojas de un archivo archivo xlsm */
+		try {
+			// Create a file from the xlsx/xls file
+			File f = new File(path);
 
+			// Create Workbook instance holding reference to .xlsx or .xlsmfile
+			org.apache.poi.ss.usermodel.Workbook workbook = WorkbookFactory
+					.create(f);
+			System.out.println("Nombre del libro excel: " + workbook);
+
+			// printing number of sheet avilable in workbook
+			int numberOfSheets = workbook.getNumberOfSheets();
+			System.out.println("Numero de hojas: " + numberOfSheets);
+			org.apache.poi.ss.usermodel.Sheet sheet = null;
+			// Get the sheet in the xlsx file
+			for (int i = 0; i < numberOfSheets; i++) {
+
+				sheet = workbook.getSheetAt(i);
+				System.out.println("\n" + sheet.getSheetName());
+
+				// Iterate through each rows one by one
+				Iterator<Row> rowIterator = sheet.iterator();
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					// For each row, iterate through all the columns
+					Iterator<Cell> cellIterator = row.cellIterator();
+
+					while (cellIterator.hasNext()) {
+						Cell cell = cellIterator.next();
+						// Check the cell type and format accordingly
+						switch (cell.getCellType()) {
+						case Cell.CELL_TYPE_NUMERIC:
+							System.out.print((int) cell.getNumericCellValue()
+									+ " ");
+							break;
+						case Cell.CELL_TYPE_STRING:
+							System.out.print(cell.getStringCellValue() + " ");
+							break;
+						}
+					}
+
+				}
+			}
+			System.out.println("\n terminado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
