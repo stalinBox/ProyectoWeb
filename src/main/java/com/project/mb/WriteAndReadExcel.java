@@ -17,6 +17,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -25,6 +26,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 @ManagedBean
 @ViewScoped
 public class WriteAndReadExcel implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	// METODOS
@@ -45,64 +47,43 @@ public class WriteAndReadExcel implements Serializable {
 
 	public void WritingExcelXLSM(String pathFile, String pathLocationFile)
 			throws InvalidFormatException, IOException {
-
-		/*
-		 * Crea un archivo en memoria escribe el codigo y lo guarda en la ruta
-		 * asignada
-		 */
-		// // Blank workbook
-		// XSSFWorkbook workbook = new XSSFWorkbook();
-		//
-		// // Create a blank sheet
-		// XSSFSheet sheet = workbook.createSheet("Hoja1");
-		//
-		// // This data needs to be written (Object[])
-		// Map<String, Object[]> data = new TreeMap<String, Object[]>();
-		// data.put("1", new Object[] { "Identificador", "NOMBRE", "APELLIDO"
-		// });
-		// data.put("2", new Object[] { 1, "Kim", "Dotcom" });
-		// data.put("3", new Object[] { 2, "carlitos", "Vargar" });
-		// data.put("4", new Object[] { 3, "pepe", "cevallos" });
-		// data.put("5", new Object[] { 4, "Lorenzo", "Lamas" });
-		// data.put("6", new Object[] { 5, "F", "G" });
-		//
-		// // Iterate over data and write to sheet
-		// Set<String> keyset = data.keySet();
-		// int rownum = 0;
-		// for (String key : keyset) {
-		// Row row = sheet.createRow(rownum++);
-		// Object[] objArr = data.get(key);
-		// int cellnum = 0;
-		// for (Object obj : objArr) {
-		// Cell cell = row.createCell(cellnum++);
-		// if (obj instanceof String)
-		// cell.setCellValue((String) obj);
-		// else if (obj instanceof Integer)
-		// cell.setCellValue((Integer) obj);
-		// }
-		// }
-		// try {
-		// // Write the workbook in file system
-		// FileOutputStream out = new FileOutputStream(new File(path));
-		// workbook.write(out);
-		// out.close();
-		// System.out.println("casi1.xlsx written successfully on disk.");
-		// } catch (FileNotFoundException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-
-		/*
+		/**
 		 * Abre un archivo cargado en la memoria de JBOSS y lo guarda en la
 		 * misma direccion con otro nombre manteniendo la macro
-		 */
+		 **/
+		Workbook workbook;
+		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
 
+		// Obtener el Sheet(Hoja) en la que hay que insertar la orden
+		Sheet sheet = workbook.getSheetAt(0);
+
+		// Generar los datos para ser escritos en la hoja de excel(Se cargara a
+		// traves de la BD)
+		Map<String, Object[]> data = new TreeMap<String, Object[]>();
+		data.put("1", new Object[] { "Identificador", "NOMBRE", "APELLIDO" });
+		data.put("2", new Object[] { 1, "Kim", "Dotcom" });
+		data.put("3", new Object[] { 2, "carlitos", "Vargar" });
+		data.put("4", new Object[] { 3, "pepe", "cevallos" });
+		data.put("5", new Object[] { 4, "Lorenzo", "Lamas" });
+		data.put("6", new Object[] { 5, "F", "G" });
+
+		// Iterate over data and write to sheet
+		Set<String> keyset = data.keySet();
+		int rownum = 0;
+		for (String key : keyset) {
+			Row row = sheet.createRow(rownum++);
+			Object[] objArr = data.get(key);
+			int cellnum = 0;
+			for (Object obj : objArr) {
+				Cell cell = row.createCell(cellnum++);
+				if (obj instanceof String)
+					cell.setCellValue((String) obj);
+				else if (obj instanceof Integer)
+					cell.setCellValue((Integer) obj);
+			}
+		}
+		// Guarda el archivo con otro nombre en la misma direccion
 		try {
-
-			Workbook workbook;
-			workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
-
 			FileOutputStream out = new FileOutputStream(new File(
 					pathLocationFile + "\\caso2Real.xlsm"));
 			workbook.write(out);
@@ -110,8 +91,6 @@ public class WriteAndReadExcel implements Serializable {
 			System.out.println("xlsm creado ... ");
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -156,6 +135,10 @@ public class WriteAndReadExcel implements Serializable {
 							break;
 						case Cell.CELL_TYPE_STRING:
 							System.out.print(cell.getStringCellValue() + " ");
+							break;
+						case Cell.CELL_TYPE_BLANK:
+							System.out.print(cell.getRow()); // getStringCellValue()
+																// + " ");
 							break;
 						}
 					}
