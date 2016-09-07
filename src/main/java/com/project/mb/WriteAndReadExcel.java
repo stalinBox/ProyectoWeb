@@ -16,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,32 +41,36 @@ public class WriteAndReadExcel implements Serializable {
 			pathFile = configFile.getPath();
 			pathLocationFile = configFile.getParent();
 		}
+
 		System.out.println("GetParent: " + pathLocationFile);
 		System.out.println("GetPath:   " + pathFile);
-		WritingExcelXLSM(pathFile, pathLocationFile);
+		// deleteContentSheet(pathFile, pathLocationFile);
+		// WritingExcelXLSM(pathFile, pathLocationFile);
+
 	}
 
+	/**
+	 * Abre un archivo cargado en la memoria de JBOSS y lo guarda en la misma
+	 * direccion con otro nombre manteniendo la macro
+	 **/
 	public void WritingExcelXLSM(String pathFile, String pathLocationFile)
 			throws InvalidFormatException, IOException {
-		/**
-		 * Abre un archivo cargado en la memoria de JBOSS y lo guarda en la
-		 * misma direccion con otro nombre manteniendo la macro
-		 **/
+
 		Workbook workbook;
 		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
-
+		boolean isRowEmpty = false;
 		// Obtener el Sheet(Hoja) en la que hay que insertar la orden
 		Sheet sheet = workbook.getSheetAt(0);
-
-		// Generar los datos para ser escritos en la hoja de excel(Se cargara a
-		// traves de la BD)
 		Map<String, Object[]> data = new TreeMap<String, Object[]>();
+		// Referencia al numero de filas de excel, referencias a las celdas
 		data.put("1", new Object[] { "Identificador", "NOMBRE", "APELLIDO" });
 		data.put("2", new Object[] { 1, "Kim", "Dotcom" });
 		data.put("3", new Object[] { 2, "carlitos", "Vargar" });
 		data.put("4", new Object[] { 3, "pepe", "cevallos" });
 		data.put("5", new Object[] { 4, "Lorenzo", "Lamas" });
 		data.put("6", new Object[] { 5, "F", "G" });
+		data.put("7", new Object[] { 6, "HH", "AA" });
+		data.put("8", new Object[] { 7, "88", "00" });
 
 		// Iterate over data and write to sheet
 		Set<String> keyset = data.keySet();
@@ -97,6 +102,9 @@ public class WriteAndReadExcel implements Serializable {
 		}
 	}
 
+	/**
+	 * Lee todos los libros y celdas de un archivo en excel
+	 **/
 	public void ReadingExcelXLSM(String path) {
 		/* Lee todas las celdas y hojas de un archivo archivo xlsm */
 		try {
@@ -149,5 +157,49 @@ public class WriteAndReadExcel implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/** Limpia las celdas de la hoja de excel */
+	public boolean deleteContentSheet(String pathFile, String pathLocationFile)
+			throws IOException, InvalidFormatException {
+
+		Workbook workbook;
+		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
+		boolean isRowEmpty = false;
+		Sheet sheet = workbook.getSheetAt(0);
+
+		for (int i = 0; i < sheet.getLastRowNum(); i++) {
+			if (sheet.getRow(i) == null) {
+				isRowEmpty = true;
+				sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+				i--;
+				continue;
+			}
+			for (int j = 0; j < sheet.getRow(i).getLastCellNum(); j++) {
+				if (sheet.getRow(i).getCell(j).toString().trim().equals("")) {
+					isRowEmpty = false;
+				} else {
+					isRowEmpty = true;
+					break;
+				}
+			}
+			if (isRowEmpty == true) {
+				sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+				i--;
+			}
+		}
+		try {
+			FileOutputStream out = new FileOutputStream(new File(
+					pathLocationFile + "\\caso2Real.xlsm"));
+			workbook.write(out);
+			out.close();
+			System.out.println("Contenido del sheet eliminado ... ");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
