@@ -1,5 +1,6 @@
 package com.project.mb;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.primefaces.event.RowEditEvent;
 
 import com.project.dao.ModelosDao;
@@ -36,8 +38,8 @@ public class DetaOrdenBean implements Serializable {
 	private Integer cantidad;
 
 	Items order;
-	private static final ArrayList<Items> orderList = new ArrayList<Items>();
-	private static Integer total = 0;
+	private ArrayList<Items> orderList = new ArrayList<Items>();
+	private Integer total = 0;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -51,7 +53,6 @@ public class DetaOrdenBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
-
 	public List<SelectItem> getSelectedItemsTalla() {
 		this.selectedItemsTalla = new ArrayList<SelectItem>();
 		TallasDao tallasDao = new TallasDaoImpl();
@@ -66,8 +67,8 @@ public class DetaOrdenBean implements Serializable {
 		return selectedItemsTalla;
 	}
 
-	public static void setTotal(Integer total) {
-		DetaOrdenBean.total = total;
+	public void setTotal(Integer total) {
+		this.total = total;
 	}
 
 	public void setSelectedItemsTalla(List<SelectItem> selectedTalla) {
@@ -182,12 +183,6 @@ public class DetaOrdenBean implements Serializable {
 		return null;
 	}
 
-	public void onEdit(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Item Editado",
-				((Items) event.getObject()).getModelo());
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-	}
-
 	public void onCancel(RowEditEvent event) {
 		FacesMessage msg = new FacesMessage("Item Eliminado");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -195,5 +190,15 @@ public class DetaOrdenBean implements Serializable {
 
 	public void generateOrder() {
 		System.out.println("Order Sucessfull");
+	}
+
+	public void displayOrden() throws InvalidFormatException, IOException {
+		WriteAndReadExcel wr = new WriteAndReadExcel();
+		wr.getOrder(orderList);
+		// for (Items i : orderList) {
+		// System.out.println("orden modelo: " + i.getModelo() + "Cantidad: "
+		// + i.getCantidad() + "Talla: " + i.getTalla());
+		// }
+
 	}
 }
