@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -40,26 +43,31 @@ public class WriteAndReadExcel implements Serializable {
 		this.dataOrderList = dataOrderList;
 	}
 
-	// METODOS
+	// Obtiene la orden del Bean DetaOrdenBean
 	public void getOrder(ArrayList<Items> orderList)
 			throws InvalidFormatException, IOException {
 		Integer k = 1;
 		for (Items i : orderList) {
 			k++;
-			System.out.println("Modelo: " + i.getModelo() + " Talla: "
-					+ i.getTalla() + " Cantidad: " + i.getCantidad());
+			this.dataOrderList.put("1", new Object[] { "ID", "MODELO", "TALLA",
+					"CANTIDAD", "MODELOS(UNICOS)", "SUBTOTAL",
+					"TOTAL ORDEN DEMANDA", "CAPACIDAD MONTAJE(par/turno)",
+					"TS (min/par)", "XPONDERADO", "COMODIN",
+					"CAPACIDAD PONDERADA MONTAJE", "NUMERO SIN FORMULA",
+					"TOTAL PROM. PONDERADO", "UTILIZACION TURNOS",
+					"TOTAL UTILIZACION TURNOS", "CAL UTILIZACION", "ERROR" });
 
-			this.dataOrderList.put("1", new Object[] { "MODELO", "TALLA",
-					"CANTIDAD" });
-
-			this.dataOrderList.put(k.toString(), new Object[] { i.getModelo(),
-					i.getTalla(), i.getCantidad() });
+			this.dataOrderList.put(
+					k.toString(),
+					new Object[] { k - 1, i.getModelo(), i.getTalla(),
+							i.getCantidad() });
 		}
-		SendPathFile();
+		SendPathFile(orderList);
 
 	}
 
-	public void SendPathFile() throws IOException, InvalidFormatException {
+	public void SendPathFile(ArrayList<Items> orderList) throws IOException,
+			InvalidFormatException {
 		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
 		String pathFile = "";
 		String pathLocationFile = "";
@@ -71,29 +79,24 @@ public class WriteAndReadExcel implements Serializable {
 		}
 		System.out.println("GetParent: " + pathLocationFile);
 		System.out.println("GetPath:   " + pathFile);
-		WritingExcelXLSM(pathFile, pathLocationFile);
+		WritingExcelXLSM(pathFile, pathLocationFile, orderList);
+
 	}
 
 	/**
 	 * Abre un archivo cargado en la memoria de JBOSS y lo guarda en la misma
 	 * direccion con otro nombre manteniendo la macro
 	 **/
-	public void WritingExcelXLSM(String pathFile, String pathLocationFile)
-			throws InvalidFormatException, IOException {
+	public void WritingExcelXLSM(String pathFile, String pathLocationFile,
+			ArrayList<Items> orderList) throws InvalidFormatException,
+			IOException {
 
 		Workbook workbook;
 		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
 		// Obtener el Sheet(Hoja) en la que hay que insertar la orden
 		Sheet sheet = workbook.getSheetAt(0);
-		// Referencia al numero de filas de excel, referencias a las celdas
-		Map<String, Object[]> data = new TreeMap<String, Object[]>();
-		data.put("1", new Object[] { "ID", "NAME", "LASTNAME" });
-		data.put("2", new Object[] { 1, "Amit", "Shukla" });
-		data.put("3", new Object[] { 2, "Lokesh", "Gupta" });
-		data.put("4", new Object[] { 3, "John", "Adwards" });
-		data.put("5", new Object[] { 4, "Brian", "Schultz" });
 
-		// Iterate over data and write to sheet
+		// Ingresa la orden de produccion en excel (4 primeras columnas)
 		Set<String> keyset = this.dataOrderList.keySet();
 		int rownum = 0;
 		for (String key : keyset) {
@@ -108,6 +111,46 @@ public class WriteAndReadExcel implements Serializable {
 					cell.setCellValue((Integer) obj);
 			}
 		}
+
+		// Ingresa los modelos en la columna valores unicos
+		ArrayList<String> pp = new ArrayList<String>();
+		pp = ModelosUnicos(orderList);
+		Integer p = 1;
+		for (String key : pp) {
+			Row r = sheet.getRow(p);
+			if (r == null) {
+				r = sheet.createRow(p);
+			}
+
+			Cell c = r.getCell(4);
+			if (c == null) {
+				c = r.createCell(4, Cell.CELL_TYPE_STRING);
+			}
+
+			c.setCellValue(key);
+			p++;
+		}
+		// Ingreso de CAPACIDAD DE PRODUCCION
+		ArrayList<Integer> pp2 = new ArrayList<Integer>();
+		pp2.add(480);
+		pp2.add(650);
+		pp2.add(295);
+		Integer m = 1;
+		for (Integer key : pp2) {
+			Row r = sheet.getRow(m);
+			if (r == null) {
+				r = sheet.createRow(m);
+			}
+
+			Cell c = r.getCell(7);
+			if (c == null) {
+				c = r.createCell(7, Cell.CELL_TYPE_NUMERIC);
+			}
+
+			c.setCellValue(key);
+			m++;
+		}
+
 		// Guarda el archivo con otro nombre en la misma direccion
 		try {
 			FileOutputStream out = new FileOutputStream(new File(
@@ -121,10 +164,15 @@ public class WriteAndReadExcel implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		String dirFile = pathLocationFile + "\\caso2Real.xlsm";
+		File fileDir = new File(dirFile);
+		System.out.println("direcccion para ejecutar la macro: " + dirFile);
+		ExecuteMacro(fileDir);
 	}
 
 	/**
-	 * Lee todos los libros y celdas de un archivo en excel
+	 * Lee todos los Hojas y celdas de un archivo en excel
 	 **/
 	public void ReadingExcelXLSM(String path) {
 		/* Lee todas las celdas y hojas de un archivo archivo xlsm */
@@ -224,4 +272,29 @@ public class WriteAndReadExcel implements Serializable {
 	// }
 	// return false;
 	// }
+
+	// RETORNA VALORES SIN REPETIR
+	public ArrayList<String> ModelosUnicos(ArrayList<Items> orderListModUnique) {
+		ArrayList<String> arrMod = new ArrayList<String>();
+		ArrayList<Integer> arrCanti = new ArrayList<Integer>();
+		Set<String> hs = new HashSet<>();
+
+		for (Items i : orderListModUnique) {
+			arrMod.add(i.getModelo());
+			arrCanti.add(i.getCantidad());
+		}
+		hs.addAll(arrMod);
+		arrMod.clear();
+		arrMod.addAll(hs);
+		Collections.sort(arrMod);
+
+		return arrMod;
+	}
+
+	public void ExecuteMacro(File pathFile) {
+		String macroName = "!Subtotales";
+		PrintSolveMB execute = new PrintSolveMB();
+		execute.executeMacro(pathFile, macroName);
+		System.out.println("MACRO SUCCESFULL");
+	}
 }

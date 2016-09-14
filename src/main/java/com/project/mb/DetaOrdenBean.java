@@ -3,7 +3,11 @@ package com.project.mb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -141,11 +145,9 @@ public class DetaOrdenBean implements Serializable {
 		return orderList;
 	}
 
-	// DML METODOS
-	public void submit() {
-		System.out.println("guardar toooodooo :) ");
-	}
+	// ACTION METODOS
 
+	// Ingresa los pedidos en la variable orderList
 	public String addAction() {
 		String itemModelo = null;
 		Integer itemTalla = null;
@@ -166,6 +168,8 @@ public class DetaOrdenBean implements Serializable {
 			orderList.add(orderitem);
 		}
 
+		// Total de la orden
+		total = 0;
 		for (Items ol : orderList) {
 			total += Integer.parseInt(ol.getCantidad().toString());
 		}
@@ -174,6 +178,7 @@ public class DetaOrdenBean implements Serializable {
 		talla = 0;
 		cantidad = 0;
 		return null;
+
 	}
 
 	public String deleteAction(Items order) {
@@ -195,10 +200,12 @@ public class DetaOrdenBean implements Serializable {
 	public void displayOrden() throws InvalidFormatException, IOException {
 		WriteAndReadExcel wr = new WriteAndReadExcel();
 		wr.getOrder(orderList);
-		// for (Items i : orderList) {
-		// System.out.println("orden modelo: " + i.getModelo() + "Cantidad: "
-		// + i.getCantidad() + "Talla: " + i.getTalla());
-		// }
-
+		wr.ModelosUnicos(orderList);
 	}
+
+	public void submit() {
+		// ArrayList<String> pp = new ArrayList<String>();
+		// pp = ModelosUnicos(orderList);
+	}
+
 }

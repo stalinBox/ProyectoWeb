@@ -17,30 +17,31 @@ import com.jacob.com.Variant;
 public class PrintSolveMB implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public void excecuteFunctionMacro() throws FileNotFoundException {
-		String file = "D:\\caso1.xlsm";
-		openFile(file);
-	}
-
-	public boolean openFile(String file) {
-		try {
-			final String macroName = "!macro001";
-
-			File fichero = new File(file);
-
-			if (fichero.exists()) {
-				System.out.println("Si existe el archivo");
-				executeMacro(fichero, macroName);
-			} else {
-				System.out.println("No se encuentra el archivo");
-			}
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
+	//
+	// public void excecuteFunctionMacro() throws FileNotFoundException {
+	// String file = "D:\\caso1.xlsm";
+	// openFile(file);
+	// }
+	//
+	// public boolean openFile(String file) {
+	// try {
+	// final String macroName = "!macro001";
+	//
+	// File fichero = new File(file);
+	//
+	// if (fichero.exists()) {
+	// System.out.println("Si existe el archivo");
+	// executeMacro(fichero, macroName);
+	// } else {
+	// System.out.println("No se encuentra el archivo");
+	// }
+	//
+	// return true;
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// return true;
+	// }
 
 	@SuppressWarnings("finally")
 	public boolean executeMacro(File file, String macroName) {
