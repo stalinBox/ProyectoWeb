@@ -3,11 +3,7 @@ package com.project.mb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -40,7 +36,7 @@ public class DetaOrdenBean implements Serializable {
 	private String modelo;
 	private Integer talla;
 	private Integer cantidad;
-
+	private Integer cp;
 	Items order;
 	private ArrayList<Items> orderList = new ArrayList<Items>();
 	private Integer total = 0;
@@ -69,6 +65,14 @@ public class DetaOrdenBean implements Serializable {
 			this.selectedItemsTalla.add(selectItem);
 		}
 		return selectedItemsTalla;
+	}
+
+	public Integer getCp() {
+		return cp;
+	}
+
+	public void setCp(Integer cp) {
+		this.cp = cp;
 	}
 
 	public void setTotal(Integer total) {
@@ -145,7 +149,7 @@ public class DetaOrdenBean implements Serializable {
 		return orderList;
 	}
 
-	// ACTION METODOS
+	// ***** METODOS ***** //
 
 	// Ingresa los pedidos en la variable orderList
 	public String addAction() {
@@ -168,44 +172,38 @@ public class DetaOrdenBean implements Serializable {
 			orderList.add(orderitem);
 		}
 
-		// Total de la orden
-		total = 0;
-		for (Items ol : orderList) {
-			total += Integer.parseInt(ol.getCantidad().toString());
-		}
-
 		modelo = "";
 		talla = 0;
 		cantidad = 0;
+		totalOrden();
 		return null;
-
 	}
 
 	public String deleteAction(Items order) {
 		FacesMessage msg = new FacesMessage("Item Eliminado");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		orderList.remove(order);
+		totalOrden();
 		return null;
-	}
-
-	public void onCancel(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Item Eliminado");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-	}
-
-	public void generateOrder() {
-		System.out.println("Order Sucessfull");
 	}
 
 	public void displayOrden() throws InvalidFormatException, IOException {
 		WriteAndReadExcel wr = new WriteAndReadExcel();
-		wr.getOrder(orderList);
-		wr.ModelosUnicos(orderList);
+		this.cp = wr.getOrder(orderList);
 	}
 
-	public void submit() {
-		// ArrayList<String> pp = new ArrayList<String>();
-		// pp = ModelosUnicos(orderList);
+	// Total de la orden
+	public Integer totalOrden() {
+		total = 0;
+		for (Items ol : orderList) {
+			total += Integer.parseInt(ol.getCantidad().toString());
+		}
+		return total;
+	}
+
+	// PRUEBAS
+	public void submit() throws IOException {
+		// Metodo para hacer pruebas
 	}
 
 }

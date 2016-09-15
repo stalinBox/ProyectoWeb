@@ -28,7 +28,7 @@
 			<p:separator />
 
 			<h:form>
-				<p:layout style="min-width:400px; min-height:200px; height:350px ">
+				<p:layout style="min-width:40px; min-height:10px; height:400px ">
 
 					<p:layoutUnit position="west" size="300"
 						style="position: relative;">
@@ -39,38 +39,53 @@
 							<p:outputLabel value="Responsable:" />
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Número de máquinas:" />
-							<p:inputText value="#{parametrizacionBean.nmaquinas}"></p:inputText>
+							<p:outputLabel value="Líneas Convencionales:" />
+							<p:inputText value=""></p:inputText>
 
-							<p:outputLabel value="Numeros de líneas convencionales:" />
-							<p:inputText value="#{parametrizacionBean.nlineasConv}"></p:inputText>
+							<p:outputLabel value="Turnos/Día:" />
+							<p:inputText value=""></p:inputText>
 
-							<p:outputLabel value="Numeros de líneas automaticas:" />
-							<p:inputText value="#{parametrizacionBean.nlineasAut}"></p:inputText>
+							<p:outputLabel value="Líneas Automáticas:" />
+							<p:inputText value=""></p:inputText>
 
-							<p:outputLabel value="Estándar producción convencional:" />
-							<p:inputText value="#{parametrizacionBean.spCon}"></p:inputText>
+							<p:outputLabel value="Turnos/Día:" />
+							<p:inputText value=""></p:inputText>
 
-							<p:outputLabel value="Estándar producción automatica:" />
-							<p:inputText value="#{parametrizacionBean.spAut}"></p:inputText>
+							<p:outputLabel value="Estándar Producción Convencional" />
+							<p:inputText value=""></p:inputText>
+
+							<p:outputLabel value="Estándar Producción Automática" />
+							<p:inputText value=""></p:inputText>
+
 						</h:panelGrid>
 
 					</p:layoutUnit>
 
-					<p:layoutUnit position="center">
+					<p:layoutUnit position="center" size="300"
+						style="position: relative;">
 
 						<h:panelGrid columns="1" cellpadding="1">
 							<f:facet name="header" align="center">TROQUELADO</f:facet>
+
 							<p:outputLabel value="Responsable"></p:outputLabel>
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Numero de maquinas"></p:outputLabel>
+							<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Linea por dia Convencional"></p:outputLabel>
+							<p:outputLabel value="Turnos/Día"></p:outputLabel>
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Linea por dia Automatica"></p:outputLabel>
+							<p:outputLabel value="Líneas Automáticas"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Turnos/Día"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Estandar Produccion Convencional"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
 							<p:inputText></p:inputText>
 						</h:panelGrid>
 
@@ -81,16 +96,26 @@
 
 						<h:panelGrid columns="1" cellpadding="1">
 							<f:facet name="header" align="center">APARADO</f:facet>
+
 							<p:outputLabel value="Responsable"></p:outputLabel>
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Numero de maquinas"></p:outputLabel>
+							<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Linea por dia Convencional"></p:outputLabel>
+							<p:outputLabel value="Turnos/Día"></p:outputLabel>
 							<p:inputText></p:inputText>
 
-							<p:outputLabel value="Linea por dia Automatica"></p:outputLabel>
+							<p:outputLabel value="Líneas Automáticas"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Turnos/Día"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Estandar Produccion Convencional"></p:outputLabel>
+							<p:inputText></p:inputText>
+
+							<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
 							<p:inputText></p:inputText>
 						</h:panelGrid>
 

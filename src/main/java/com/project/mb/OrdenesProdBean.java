@@ -36,7 +36,6 @@ public class OrdenesProdBean implements Serializable {
 	private List<SelectItem> selectedLugar;
 
 	private Ordenprod selectedOp;
-	private Integer nombProv;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -108,14 +107,6 @@ public class OrdenesProdBean implements Serializable {
 
 	public void setIdUserResp(Integer idUserResp) {
 		this.idUserResp = idUserResp;
-	}
-
-	public Integer getNombProv() {
-		return nombProv;
-	}
-
-	public void setNombProv(Integer nombProv) {
-		this.nombProv = nombProv;
 	}
 
 	public List<SelectItem> getSelectedLugar() {

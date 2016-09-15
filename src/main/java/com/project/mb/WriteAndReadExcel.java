@@ -1,15 +1,14 @@
 package com.project.mb;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -20,10 +19,11 @@ import javax.faces.bean.ViewScoped;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @ManagedBean(name = "WriteAndReadExcel")
@@ -35,6 +35,7 @@ public class WriteAndReadExcel implements Serializable {
 	// VARIABLES
 	private Map<String, Object[]> dataOrderList = new TreeMap<String, Object[]>();
 
+	// SETTERS AND GETTERS
 	public Map<String, Object[]> getDataOrderList() {
 		return dataOrderList;
 	}
@@ -43,10 +44,12 @@ public class WriteAndReadExcel implements Serializable {
 		this.dataOrderList = dataOrderList;
 	}
 
-	// Obtiene la orden del Bean DetaOrdenBean
-	public void getOrder(ArrayList<Items> orderList)
+	// ***************METODOS**************
+	// Obtiene la orden de produccion de Bean y mapea hacia un map
+	public Integer getOrder(ArrayList<Items> orderList)
 			throws InvalidFormatException, IOException {
 		Integer k = 1;
+		Integer CapacidadProd = null;
 		for (Items i : orderList) {
 			k++;
 			this.dataOrderList.put("1", new Object[] { "ID", "MODELO", "TALLA",
@@ -62,15 +65,20 @@ public class WriteAndReadExcel implements Serializable {
 					new Object[] { k - 1, i.getModelo(), i.getTalla(),
 							i.getCantidad() });
 		}
-		SendPathFile(orderList);
-
+		CapacidadProd = SendPathFile(orderList);
+		System.out.println("capacidad de montaje: " + CapacidadProd);
+		return CapacidadProd;
 	}
 
-	public void SendPathFile(ArrayList<Items> orderList) throws IOException,
+	// Obtiene el directorio y la ubicacion del archivo excel
+	public Integer SendPathFile(ArrayList<Items> orderList) throws IOException,
 			InvalidFormatException {
+		// Nombre estatico
 		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
 		String pathFile = "";
 		String pathLocationFile = "";
+		String dirNewLocationFile = "";
+		Integer cpVal = null;
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		File configFile = new File(classLoader.getResource(fileName).getFile());
 		if (configFile.exists()) {
@@ -79,15 +87,17 @@ public class WriteAndReadExcel implements Serializable {
 		}
 		System.out.println("GetParent: " + pathLocationFile);
 		System.out.println("GetPath:   " + pathFile);
-		WritingExcelXLSM(pathFile, pathLocationFile, orderList);
-
+		dirNewLocationFile = WritingExcelXLSM(pathFile, pathLocationFile,
+				orderList);
+		File pathNewFile = new File(dirNewLocationFile);
+		if (ExecuteMacro(pathNewFile) == true) {
+			cpVal = ReadingExcelXLSM(dirNewLocationFile);
+		}
+		return cpVal;
 	}
 
-	/**
-	 * Abre un archivo cargado en la memoria de JBOSS y lo guarda en la misma
-	 * direccion con otro nombre manteniendo la macro
-	 **/
-	public void WritingExcelXLSM(String pathFile, String pathLocationFile,
+	// Escribe en excel la Orden de produccion
+	public String WritingExcelXLSM(String pathFile, String pathLocationFile,
 			ArrayList<Items> orderList) throws InvalidFormatException,
 			IOException {
 
@@ -166,112 +176,82 @@ public class WriteAndReadExcel implements Serializable {
 		}
 
 		String dirFile = pathLocationFile + "\\caso2Real.xlsm";
-		File fileDir = new File(dirFile);
-		System.out.println("direcccion para ejecutar la macro: " + dirFile);
-		ExecuteMacro(fileDir);
+		return dirFile;
 	}
 
-	/**
-	 * Lee todos los Hojas y celdas de un archivo en excel
-	 **/
-	public void ReadingExcelXLSM(String path) {
-		/* Lee todas las celdas y hojas de un archivo archivo xlsm */
-		try {
-			// Create a file from the xlsx/xls file
-			File f = new File(path);
+	// Retorna el valor resultante del solver
+	public Integer ReadingExcelXLSM(String path) throws IOException {
+		Double cpDouble = null;
+		Integer cpInt = null;
+		FileInputStream fis = new FileInputStream(path);
+		Workbook wb = new XSSFWorkbook(fis);
+		Sheet sheet = wb.getSheetAt(0);
 
-			// Create Workbook instance holding reference to .xlsx or .xlsmfile
-			org.apache.poi.ss.usermodel.Workbook workbook = WorkbookFactory
-					.create(f);
-			System.out.println("Nombre del libro excel: " + workbook);
+		FormulaEvaluator evaluator = wb.getCreationHelper()
+				.createFormulaEvaluator();
 
-			// printing number of sheet avilable in workbook
-			int numberOfSheets = workbook.getNumberOfSheets();
-			System.out.println("Numero de hojas: " + numberOfSheets);
-			org.apache.poi.ss.usermodel.Sheet sheet = null;
-			// Get the sheet in the xlsx file
-			for (int i = 0; i < numberOfSheets; i++) {
+		CellReference cellReference = new CellReference("N2");
+		Row row = sheet.getRow(cellReference.getRow());
+		if (row != null) {
+			Cell c = row.getCell(cellReference.getCol());
+			switch (evaluator.evaluateFormulaCell(c)) {
+			case Cell.CELL_TYPE_NUMERIC:
+				cpDouble = c.getNumericCellValue();
+				cpInt = (int) Math.round(cpDouble);
+				break;
 
-				sheet = workbook.getSheetAt(i);
-				System.out.println("\n" + sheet.getSheetName());
+			// CELL_TYPE_FORMULA will never occur
+			case Cell.CELL_TYPE_FORMULA:
+				break;
+			}
+		}
+		System.out.println("Valor para ocupar en double: " + cpDouble);
+		return cpInt;
+	}
 
-				// Iterate through each rows one by one
-				Iterator<Row> rowIterator = sheet.iterator();
-				while (rowIterator.hasNext()) {
-					Row row = rowIterator.next();
-					// For each row, iterate through all the columns
-					Iterator<Cell> cellIterator = row.cellIterator();
+	// **SIN UTILZAR** Pone en blanco las celdas de una hoja en excel
+	public boolean deleteContentSheet(String pathFile, String pathLocationFile)
+			throws IOException, InvalidFormatException {
 
-					while (cellIterator.hasNext()) {
-						Cell cell = cellIterator.next();
-						// Check the cell type and format accordingly
-						switch (cell.getCellType()) {
-						case Cell.CELL_TYPE_NUMERIC:
-							System.out.print((int) cell.getNumericCellValue()
-									+ " ");
-							break;
-						case Cell.CELL_TYPE_STRING:
-							System.out.print(cell.getStringCellValue() + " ");
-							break;
-						case Cell.CELL_TYPE_BLANK:
-							System.out.print(cell.getRow()); // getStringCellValue()
-																// + " ");
-							break;
-						}
-					}
+		Workbook workbook;
+		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
+		boolean isRowEmpty = false;
+		Sheet sheet = workbook.getSheetAt(0);
 
+		for (int i = 0; i < sheet.getLastRowNum(); i++) {
+			if (sheet.getRow(i) == null) {
+				isRowEmpty = true;
+				sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+				i--;
+				continue;
+			}
+			for (int j = 0; j < sheet.getRow(i).getLastCellNum(); j++) {
+				if (sheet.getRow(i).getCell(j).toString().trim().equals("")) {
+					isRowEmpty = false;
+				} else {
+					isRowEmpty = true;
+					break;
 				}
 			}
-			System.out.println("\n terminado");
-		} catch (Exception e) {
+			if (isRowEmpty == true) {
+				sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+				i--;
+			}
+		}
+		try {
+			FileOutputStream out = new FileOutputStream(new File(
+					pathLocationFile + "\\caso2Real.xlsm"));
+			workbook.write(out);
+			out.close();
+			System.out.println("Contenido del sheet eliminado ... ");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
-
-	/** Limpia las celdas de la hoja de excel */
-	// public boolean deleteContentSheet(String pathFile, String
-	// pathLocationFile)
-	// throws IOException, InvalidFormatException {
-	//
-	// Workbook workbook;
-	// workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
-	// boolean isRowEmpty = false;
-	// Sheet sheet = workbook.getSheetAt(0);
-	//
-	// for (int i = 0; i < sheet.getLastRowNum(); i++) {
-	// if (sheet.getRow(i) == null) {
-	// isRowEmpty = true;
-	// sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-	// i--;
-	// continue;
-	// }
-	// for (int j = 0; j < sheet.getRow(i).getLastCellNum(); j++) {
-	// if (sheet.getRow(i).getCell(j).toString().trim().equals("")) {
-	// isRowEmpty = false;
-	// } else {
-	// isRowEmpty = true;
-	// break;
-	// }
-	// }
-	// if (isRowEmpty == true) {
-	// sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-	// i--;
-	// }
-	// }
-	// try {
-	// FileOutputStream out = new FileOutputStream(new File(
-	// pathLocationFile + "\\caso2Real.xlsm"));
-	// workbook.write(out);
-	// out.close();
-	// System.out.println("Contenido del sheet eliminado ... ");
-	//
-	// } catch (FileNotFoundException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// return false;
-	// }
 
 	// RETORNA VALORES SIN REPETIR
 	public ArrayList<String> ModelosUnicos(ArrayList<Items> orderListModUnique) {
@@ -291,10 +271,16 @@ public class WriteAndReadExcel implements Serializable {
 		return arrMod;
 	}
 
-	public void ExecuteMacro(File pathFile) {
+	// EJECUTA LA MACRO EN EXCEL
+	public boolean ExecuteMacro(File pathFile) {
+		// variable con el nombre de la macro
 		String macroName = "!Subtotales";
 		PrintSolveMB execute = new PrintSolveMB();
-		execute.executeMacro(pathFile, macroName);
-		System.out.println("MACRO SUCCESFULL");
+		if (execute.executeMacro(pathFile, macroName) == true) {
+			System.out.println("MACRO SUCCESFULL");
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

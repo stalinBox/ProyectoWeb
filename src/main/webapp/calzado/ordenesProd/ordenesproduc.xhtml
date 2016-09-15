@@ -16,54 +16,40 @@
 					<center>
 						<h1>ORDEN DE PRODUCCIÓN</h1>
 					</center>
+					<center>
+						<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
+							<p:outputLabel for="idSol" value="Cliente: " />
+							<p:selectOneMenu id="idSol"
+								value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+								required="true" style="width:150px">
 
-					<h:panelGrid id="ordenProd" columns="6" cellpadding="2">
-						<p:outputLabel for="idOp" value="Número de orden: " />
-						<p:inputText id="idOp" size="5" required="true"
-							value="#{ordenesProdBean.nombProv}"></p:inputText>
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+							</p:selectOneMenu>
 
-						<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
-						<p:outputLabel id="idFechaAct"
-							value="#{ordenesProdBean.currentDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</p:outputLabel>
+							<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
+							<p:outputLabel id="idFechaAct"
+								value="#{ordenesProdBean.currentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:outputLabel>
 
-						<p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
+							<p:outputLabel for="idResp" value="Responsable: " />
+							<p:selectOneMenu id="idResp"
+								value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+								required="true" style="width:150px">
+
+								<f:selectItem itemLabel="- Seleccione -" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+							</p:selectOneMenu>
+
+							<!-- <p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
 						<p:calendar id="idFechaEntr" value="#{ordenesProdBean.fEntrega}"
 							pattern="dd-MM-yyyy" mask="true" locale="de" navigator="true"
-							showOn="button" size="6" required="true" />
-
-
-						<p:outputLabel for="idSol" value="Cliente: " />
-						<p:selectOneMenu id="idSol"
-							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
-							required="true" style="width:150px">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<p:outputLabel for="idResp" value="Responsable: " />
-						<p:selectOneMenu id="idResp"
-							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
-							required="true" style="width:150px">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<p:outputLabel for="idDestino" value="Destino: " />
-						<p:selectOneMenu id="idDestino"
-							value="#{ordenesProdBean.selectedOp.usuario2.userId}"
-							required="true" style="width:150px">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{ordenesProdBean.selectedLugar}"></f:selectItems>
-						</p:selectOneMenu>
-					</h:panelGrid>
+							showOn="button" size="6" required="true" /> -->
+						</h:panelGrid>
+					</center>
 				</h:form>
 			</div>
 			<p:separator />
@@ -139,7 +125,7 @@
 							<p:columnGroup type="footer">
 								<p:row>
 									<p:column colspan="2" style="text-align:right"
-										footerText="Cantidad de pares:" />
+										footerText="Total:" />
 
 									<p:column colspan="2" footerText="#{detaOrdenBean.total}" />
 
@@ -150,12 +136,10 @@
 
 				</h:form>
 			</div>
+			<p:spacer height="5px;" />
 			<div style="width: 300px; margin: 0 auto;">
-				<p:commandButton value="PROCESAR"
+				<p:commandButton value="PROCESAR ORDEN"
 					actionListener="#{detaOrdenBean.displayOrden()}"></p:commandButton>
-
-				<p:commandButton value="PRUEBAS"
-					actionListener="#{detaOrdenBean.submit()}"></p:commandButton>
 			</div>
 		</ui:define>
 	</ui:composition>
