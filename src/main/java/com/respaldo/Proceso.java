@@ -26,6 +26,14 @@ public class Proceso implements Serializable {
 	@Column(name = "pro_duracion")
 	private BigDecimal proDuracion;
 
+	// bi-directional many-to-one association to Lineasprod
+	@OneToMany(mappedBy = "proceso")
+	private List<Lineasprod> lineasprods;
+
+	// bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy = "proceso")
+	private List<Parametro> parametros;
+
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
 	@JoinColumn(name = "mod_codigo")
@@ -44,6 +52,14 @@ public class Proceso implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "tpr_codigo")
 	private TipoProceso tipoProceso;
+
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "proceso")
+	private List<Procesosop> procesosops;
+
+	// bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy = "proceso")
+	private List<Programturno> programturnos;
 
 	public Proceso() {
 	}
@@ -70,6 +86,50 @@ public class Proceso implements Serializable {
 
 	public void setProDuracion(BigDecimal proDuracion) {
 		this.proDuracion = proDuracion;
+	}
+
+	public List<Lineasprod> getLineasprods() {
+		return this.lineasprods;
+	}
+
+	public void setLineasprods(List<Lineasprod> lineasprods) {
+		this.lineasprods = lineasprods;
+	}
+
+	public Lineasprod addLineasprod(Lineasprod lineasprod) {
+		getLineasprods().add(lineasprod);
+		lineasprod.setProceso(this);
+
+		return lineasprod;
+	}
+
+	public Lineasprod removeLineasprod(Lineasprod lineasprod) {
+		getLineasprods().remove(lineasprod);
+		lineasprod.setProceso(null);
+
+		return lineasprod;
+	}
+
+	public List<Parametro> getParametros() {
+		return this.parametros;
+	}
+
+	public void setParametros(List<Parametro> parametros) {
+		this.parametros = parametros;
+	}
+
+	public Parametro addParametro(Parametro parametro) {
+		getParametros().add(parametro);
+		parametro.setProceso(this);
+
+		return parametro;
+	}
+
+	public Parametro removeParametro(Parametro parametro) {
+		getParametros().remove(parametro);
+		parametro.setProceso(null);
+
+		return parametro;
 	}
 
 	public Modelo getModelo() {
@@ -116,6 +176,50 @@ public class Proceso implements Serializable {
 
 	public void setTipoProceso(TipoProceso tipoProceso) {
 		this.tipoProceso = tipoProceso;
+	}
+
+	public List<Procesosop> getProcesosops() {
+		return this.procesosops;
+	}
+
+	public void setProcesosops(List<Procesosop> procesosops) {
+		this.procesosops = procesosops;
+	}
+
+	public Procesosop addProcesosop(Procesosop procesosop) {
+		getProcesosops().add(procesosop);
+		procesosop.setProceso(this);
+
+		return procesosop;
+	}
+
+	public Procesosop removeProcesosop(Procesosop procesosop) {
+		getProcesosops().remove(procesosop);
+		procesosop.setProceso(null);
+
+		return procesosop;
+	}
+
+	public List<Programturno> getProgramturnos() {
+		return this.programturnos;
+	}
+
+	public void setProgramturnos(List<Programturno> programturnos) {
+		this.programturnos = programturnos;
+	}
+
+	public Programturno addProgramturno(Programturno programturno) {
+		getProgramturnos().add(programturno);
+		programturno.setProceso(this);
+
+		return programturno;
+	}
+
+	public Programturno removeProgramturno(Programturno programturno) {
+		getProgramturnos().remove(programturno);
+		programturno.setProceso(null);
+
+		return programturno;
 	}
 
 }

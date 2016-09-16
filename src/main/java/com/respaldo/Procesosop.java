@@ -1,4 +1,4 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -26,12 +26,12 @@ public class Procesosop implements Serializable {
 
 	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_dest", insertable = false, updatable = false)
+	@JoinColumn(name = "lugar_codigo_dest")
 	private Lugare lugare1;
 
 	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_orig", insertable = false, updatable = false)
+	@JoinColumn(name = "lugar_codigo_orig")
 	private Lugare lugare2;
 
 	// bi-directional many-to-one association to Ordenprod

@@ -1,6 +1,7 @@
 package com.respaldo;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,7 +17,7 @@ public class TTalla implements Serializable {
 
 	// bi-directional many-to-one association to Talla
 	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tal_codigo", nullable = false, insertable = false, updatable = false)
 	private Talla talla;
 
 	// bi-directional many-to-one association to Troquele

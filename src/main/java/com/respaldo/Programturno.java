@@ -2,7 +2,6 @@ package com.respaldo;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -36,7 +35,8 @@ public class Programturno implements Serializable {
 	@Column(name = "f_inicio")
 	private Date fInicio;
 
-	private Time hora;
+	@Temporal(TemporalType.DATE)
+	private Date hora;
 
 	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
@@ -114,11 +114,11 @@ public class Programturno implements Serializable {
 		this.fInicio = fInicio;
 	}
 
-	public Time getHora() {
+	public Date getHora() {
 		return this.hora;
 	}
 
-	public void setHora(Time hora) {
+	public void setHora(Date hora) {
 		this.hora = hora;
 	}
 

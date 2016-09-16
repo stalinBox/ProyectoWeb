@@ -25,6 +25,10 @@ public class Modelo implements Serializable {
 	@Column(name = "mod_piezas")
 	private Integer modPiezas;
 
+	// bi-directional many-to-one association to Detalleorden
+	@OneToMany(mappedBy = "modelo")
+	private List<Detalleorden> detalleordens;
+
 	// bi-directional many-to-one association to ModTrqTal
 	@OneToMany(mappedBy = "modelo")
 	private List<ModTrqTal> modTrqTals;
@@ -32,6 +36,10 @@ public class Modelo implements Serializable {
 	// bi-directional many-to-one association to Proceso
 	@OneToMany(mappedBy = "modelo")
 	private List<Proceso> procesos;
+
+	// bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy = "modelo")
+	private List<Programturno> programturnos;
 
 	public Modelo() {
 	}
@@ -58,6 +66,28 @@ public class Modelo implements Serializable {
 
 	public void setModPiezas(Integer modPiezas) {
 		this.modPiezas = modPiezas;
+	}
+
+	public List<Detalleorden> getDetalleordens() {
+		return this.detalleordens;
+	}
+
+	public void setDetalleordens(List<Detalleorden> detalleordens) {
+		this.detalleordens = detalleordens;
+	}
+
+	public Detalleorden addDetalleorden(Detalleorden detalleorden) {
+		getDetalleordens().add(detalleorden);
+		detalleorden.setModelo(this);
+
+		return detalleorden;
+	}
+
+	public Detalleorden removeDetalleorden(Detalleorden detalleorden) {
+		getDetalleordens().remove(detalleorden);
+		detalleorden.setModelo(null);
+
+		return detalleorden;
 	}
 
 	public List<ModTrqTal> getModTrqTals() {
@@ -102,6 +132,28 @@ public class Modelo implements Serializable {
 		proceso.setModelo(null);
 
 		return proceso;
+	}
+
+	public List<Programturno> getProgramturnos() {
+		return this.programturnos;
+	}
+
+	public void setProgramturnos(List<Programturno> programturnos) {
+		this.programturnos = programturnos;
+	}
+
+	public Programturno addProgramturno(Programturno programturno) {
+		getProgramturnos().add(programturno);
+		programturno.setModelo(this);
+
+		return programturno;
+	}
+
+	public Programturno removeProgramturno(Programturno programturno) {
+		getProgramturnos().remove(programturno);
+		programturno.setModelo(null);
+
+		return programturno;
 	}
 
 }

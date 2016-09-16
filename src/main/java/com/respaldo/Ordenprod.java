@@ -10,63 +10,66 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the ordenprod database table.
  * 
  */
 @Entity
-@NamedQuery(name="Ordenprod.findAll", query="SELECT o FROM Ordenprod o")
+@NamedQuery(name = "Ordenprod.findAll", query = "SELECT o FROM Ordenprod o")
 public class Ordenprod implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ordenprod_codigo")
-	private Integer ordenprodCodigo;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ordenprod_codigo")
+	private String ordenprodCodigo;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_actual")
+	@Column(name = "f_actual")
 	private Date fActual;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_estim")
+	@Column(name = "f_estim")
 	private Date fEstim;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_final")
+	@Column(name = "f_final")
 	private Date fFinal;
 
-	private Integer nombordprod;
+	private String nombordprod;
 
-	//bi-directional many-to-one association to Detalleorden
-	@OneToMany(mappedBy="ordenprod", fetch=FetchType.EAGER)
+	// bi-directional many-to-one association to Detalleorden
+	@OneToMany(mappedBy = "ordenprod", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Detalleorden> detalleordens;
 
-	//bi-directional many-to-one association to Lugare
+	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name="lugar_codigo_dest")
+	@JoinColumn(name = "lugar_codigo_dest")
 	private Lugare lugare;
 
-	//bi-directional many-to-one association to Usuario
+	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name="user_id_resp")
+	@JoinColumn(name = "user_id_resp")
 	private Usuario usuario1;
 
-	//bi-directional many-to-one association to Usuario
+	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name="user_id_soli")
+	@JoinColumn(name = "user_id_soli")
 	private Usuario usuario2;
+
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "ordenprod")
+	private List<Procesosop> procesosops;
 
 	public Ordenprod() {
 	}
 
-	public Integer getOrdenprodCodigo() {
+	public String getOrdenprodCodigo() {
 		return this.ordenprodCodigo;
 	}
 
-	public void setOrdenprodCodigo(Integer ordenprodCodigo) {
+	public void setOrdenprodCodigo(String ordenprodCodigo) {
 		this.ordenprodCodigo = ordenprodCodigo;
 	}
 
@@ -94,11 +97,11 @@ public class Ordenprod implements Serializable {
 		this.fFinal = fFinal;
 	}
 
-	public Integer getNombordprod() {
+	public String getNombordprod() {
 		return this.nombordprod;
 	}
 
-	public void setNombordprod(Integer nombordprod) {
+	public void setNombordprod(String nombordprod) {
 		this.nombordprod = nombordprod;
 	}
 
@@ -146,6 +149,28 @@ public class Ordenprod implements Serializable {
 
 	public void setUsuario2(Usuario usuario2) {
 		this.usuario2 = usuario2;
+	}
+
+	public List<Procesosop> getProcesosops() {
+		return this.procesosops;
+	}
+
+	public void setProcesosops(List<Procesosop> procesosops) {
+		this.procesosops = procesosops;
+	}
+
+	public Procesosop addProcesosop(Procesosop procesosop) {
+		getProcesosops().add(procesosop);
+		procesosop.setOrdenprod(this);
+
+		return procesosop;
+	}
+
+	public Procesosop removeProcesosop(Procesosop procesosop) {
+		getProcesosops().remove(procesosop);
+		procesosop.setOrdenprod(null);
+
+		return procesosop;
 	}
 
 }

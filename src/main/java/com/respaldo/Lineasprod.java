@@ -1,12 +1,7 @@
 package com.respaldo;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import java.util.List;
 
 /**
@@ -23,7 +18,12 @@ public class Lineasprod implements Serializable {
 	@Column(name = "lineapro_codigo")
 	private Integer lineaproCodigo;
 
+	@Column(name = "linea_desc")
+	private String lineaDesc;
+
 	private String nomlinea;
+
+	private Integer nummaq;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
@@ -36,18 +36,15 @@ public class Lineasprod implements Serializable {
 	private Turno turno;
 
 	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "lineasprod", fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "lineasprod")
 	private List<Parametro> parametros;
 
 	// bi-directional many-to-one association to Programdia
-	@OneToMany(mappedBy = "lineasprod", fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "lineasprod")
 	private List<Programdia> programdias;
 
 	// bi-directional many-to-one association to Programturno
-	@OneToMany(mappedBy = "lineasprod", fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "lineasprod")
 	private List<Programturno> programturnos;
 
 	public Lineasprod() {
@@ -61,12 +58,28 @@ public class Lineasprod implements Serializable {
 		this.lineaproCodigo = lineaproCodigo;
 	}
 
+	public String getLineaDesc() {
+		return this.lineaDesc;
+	}
+
+	public void setLineaDesc(String lineaDesc) {
+		this.lineaDesc = lineaDesc;
+	}
+
 	public String getNomlinea() {
 		return this.nomlinea;
 	}
 
 	public void setNomlinea(String nomlinea) {
 		this.nomlinea = nomlinea;
+	}
+
+	public Integer getNummaq() {
+		return this.nummaq;
+	}
+
+	public void setNummaq(Integer nummaq) {
+		this.nummaq = nummaq;
 	}
 
 	public Proceso getProceso() {

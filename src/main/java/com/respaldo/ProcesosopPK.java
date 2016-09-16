@@ -1,4 +1,4 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -16,7 +16,7 @@ public class ProcesosopPK implements Serializable {
 	private Integer proCodigo;
 
 	@Column(name="ordenprod_codigo", insertable=false, updatable=false)
-	private Integer ordenprodCodigo;
+	private String ordenprodCodigo;
 
 	public ProcesosopPK() {
 	}
@@ -26,10 +26,10 @@ public class ProcesosopPK implements Serializable {
 	public void setProCodigo(Integer proCodigo) {
 		this.proCodigo = proCodigo;
 	}
-	public Integer getOrdenprodCodigo() {
+	public String getOrdenprodCodigo() {
 		return this.ordenprodCodigo;
 	}
-	public void setOrdenprodCodigo(Integer ordenprodCodigo) {
+	public void setOrdenprodCodigo(String ordenprodCodigo) {
 		this.ordenprodCodigo = ordenprodCodigo;
 	}
 

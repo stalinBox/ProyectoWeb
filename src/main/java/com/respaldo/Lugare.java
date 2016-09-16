@@ -9,38 +9,37 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
-
 /**
  * The persistent class for the lugares database table.
  * 
  */
 @Entity
-@Table(name="lugares")
-@NamedQuery(name="Lugare.findAll", query="SELECT l FROM Lugare l")
+@Table(name = "lugares")
+@NamedQuery(name = "Lugare.findAll", query = "SELECT l FROM Lugare l")
 public class Lugare implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="lugar_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "lugar_codigo")
 	private Integer lugarCodigo;
 
 	private String nomlugar;
 
-	//bi-directional many-to-one association to Detalleorden
-	@OneToMany(mappedBy="lugare1", fetch=FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Detalleorden> detalleordens1;
-
-	//bi-directional many-to-one association to Detalleorden
-	@OneToMany(mappedBy="lugare2", fetch=FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Detalleorden> detalleordens2;
-
-	//bi-directional many-to-one association to Ordenprod
-	@OneToMany(mappedBy="lugare", fetch=FetchType.EAGER)
+	// bi-directional many-to-one association to Ordenprod
+	@OneToMany(mappedBy = "lugare", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Ordenprod> ordenprods;
+
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "lugare1", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Procesosop> procesosops1;
+
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "lugare2", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Procesosop> procesosops2;
 
 	public Lugare() {
 	}
@@ -59,50 +58,6 @@ public class Lugare implements Serializable {
 
 	public void setNomlugar(String nomlugar) {
 		this.nomlugar = nomlugar;
-	}
-
-	public List<Detalleorden> getDetalleordens1() {
-		return this.detalleordens1;
-	}
-
-	public void setDetalleordens1(List<Detalleorden> detalleordens1) {
-		this.detalleordens1 = detalleordens1;
-	}
-
-	public Detalleorden addDetalleordens1(Detalleorden detalleordens1) {
-		getDetalleordens1().add(detalleordens1);
-		detalleordens1.setLugare1(this);
-
-		return detalleordens1;
-	}
-
-	public Detalleorden removeDetalleordens1(Detalleorden detalleordens1) {
-		getDetalleordens1().remove(detalleordens1);
-		detalleordens1.setLugare1(null);
-
-		return detalleordens1;
-	}
-
-	public List<Detalleorden> getDetalleordens2() {
-		return this.detalleordens2;
-	}
-
-	public void setDetalleordens2(List<Detalleorden> detalleordens2) {
-		this.detalleordens2 = detalleordens2;
-	}
-
-	public Detalleorden addDetalleordens2(Detalleorden detalleordens2) {
-		getDetalleordens2().add(detalleordens2);
-		detalleordens2.setLugare2(this);
-
-		return detalleordens2;
-	}
-
-	public Detalleorden removeDetalleordens2(Detalleorden detalleordens2) {
-		getDetalleordens2().remove(detalleordens2);
-		detalleordens2.setLugare2(null);
-
-		return detalleordens2;
 	}
 
 	public List<Ordenprod> getOrdenprods() {
@@ -125,6 +80,50 @@ public class Lugare implements Serializable {
 		ordenprod.setLugare(null);
 
 		return ordenprod;
+	}
+
+	public List<Procesosop> getProcesosops1() {
+		return this.procesosops1;
+	}
+
+	public void setProcesosops1(List<Procesosop> procesosops1) {
+		this.procesosops1 = procesosops1;
+	}
+
+	public Procesosop addProcesosops1(Procesosop procesosops1) {
+		getProcesosops1().add(procesosops1);
+		procesosops1.setLugare1(this);
+
+		return procesosops1;
+	}
+
+	public Procesosop removeProcesosops1(Procesosop procesosops1) {
+		getProcesosops1().remove(procesosops1);
+		procesosops1.setLugare1(null);
+
+		return procesosops1;
+	}
+
+	public List<Procesosop> getProcesosops2() {
+		return this.procesosops2;
+	}
+
+	public void setProcesosops2(List<Procesosop> procesosops2) {
+		this.procesosops2 = procesosops2;
+	}
+
+	public Procesosop addProcesosops2(Procesosop procesosops2) {
+		getProcesosops2().add(procesosops2);
+		procesosops2.setLugare2(this);
+
+		return procesosops2;
+	}
+
+	public Procesosop removeProcesosops2(Procesosop procesosops2) {
+		getProcesosops2().remove(procesosops2);
+		procesosops2.setLugare2(null);
+
+		return procesosops2;
 	}
 
 }

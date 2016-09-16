@@ -5,46 +5,63 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * The persistent class for the menu database table.
+ * 
+ */
 @Entity
-@NamedQuery(name="Menu.findAll", query="SELECT m FROM Menu m")
+@NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")
 public class Menu implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="menu_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "menu_id")
 	private Integer menuId;
 
-	@Column(name="menu_estado")
+	@Column(name = "menu_estado")
 	private BigDecimal menuEstado;
 
-	@Column(name="menu_icono")
+	@Column(name = "menu_icono")
 	private String menuIcono;
 
-	@Column(name="menu_nivel")
+	@Column(name = "menu_nivel")
 	private Integer menuNivel;
 
-	@Column(name="menu_nombre")
+	@Column(name = "menu_nombre")
 	private String menuNombre;
 
-	@Column(name="menu_orden")
+	@Column(name = "menu_orden")
 	private Integer menuOrden;
 
-	@Column(name="menu_url")
+	@Column(name = "menu_url")
 	private String menuUrl;
 
-	//bi-directional many-to-one association to Menu
+	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name="m_id")
-	private Menu menu;
+	@JoinColumn(name = "m_id", insertable = false, updatable = false)
+	private Menu menu1;
 
-	//bi-directional many-to-one association to Menu
-	@OneToMany(mappedBy="menu")
-	private List<Menu> menus;
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu1")
+	private List<Menu> menus1;
 
-	//bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy="menu")
-	private List<Rolmenu> rolmenus;
+	// bi-directional many-to-one association to Menu
+	@ManyToOne
+	@JoinColumn(name = "m_id", insertable = false, updatable = false)
+	private Menu menu2;
+
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu2")
+	private List<Menu> menus2;
+
+	// bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy = "menu1")
+	private List<Rolmenu> rolmenus1;
+
+	// bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy = "menu2")
+	private List<Rolmenu> rolmenus2;
 
 	public Menu() {
 	}
@@ -105,56 +122,108 @@ public class Menu implements Serializable {
 		this.menuUrl = menuUrl;
 	}
 
-	public Menu getMenu() {
-		return this.menu;
+	public Menu getMenu1() {
+		return this.menu1;
 	}
 
-	public void setMenu(Menu menu) {
-		this.menu = menu;
+	public void setMenu1(Menu menu1) {
+		this.menu1 = menu1;
 	}
 
-	public List<Menu> getMenus() {
-		return this.menus;
+	public List<Menu> getMenus1() {
+		return this.menus1;
 	}
 
-	public void setMenus(List<Menu> menus) {
-		this.menus = menus;
+	public void setMenus1(List<Menu> menus1) {
+		this.menus1 = menus1;
 	}
 
-	public Menu addMenus(Menu menus) {
-		getMenus().add(menus);
-		menus.setMenu(this);
+	public Menu addMenus1(Menu menus1) {
+		getMenus1().add(menus1);
+		menus1.setMenu1(this);
 
-		return menus;
+		return menus1;
 	}
 
-	public Menu removeMenus(Menu menus) {
-		getMenus().remove(menus);
-		menus.setMenu(null);
+	public Menu removeMenus1(Menu menus1) {
+		getMenus1().remove(menus1);
+		menus1.setMenu1(null);
 
-		return menus;
+		return menus1;
 	}
 
-	public List<Rolmenu> getRolmenus() {
-		return this.rolmenus;
+	public Menu getMenu2() {
+		return this.menu2;
 	}
 
-	public void setRolmenus(List<Rolmenu> rolmenus) {
-		this.rolmenus = rolmenus;
+	public void setMenu2(Menu menu2) {
+		this.menu2 = menu2;
 	}
 
-	public Rolmenu addRolmenus(Rolmenu rolmenus) {
-		getRolmenus().add(rolmenus);
-		rolmenus.setMenu(this);
-
-		return rolmenus;
+	public List<Menu> getMenus2() {
+		return this.menus2;
 	}
 
-	public Rolmenu removeRolmenus(Rolmenu rolmenus) {
-		getRolmenus().remove(rolmenus);
-		rolmenus.setMenu(null);
+	public void setMenus2(List<Menu> menus2) {
+		this.menus2 = menus2;
+	}
 
-		return rolmenus;
+	public Menu addMenus2(Menu menus2) {
+		getMenus2().add(menus2);
+		menus2.setMenu2(this);
+
+		return menus2;
+	}
+
+	public Menu removeMenus2(Menu menus2) {
+		getMenus2().remove(menus2);
+		menus2.setMenu2(null);
+
+		return menus2;
+	}
+
+	public List<Rolmenu> getRolmenus1() {
+		return this.rolmenus1;
+	}
+
+	public void setRolmenus1(List<Rolmenu> rolmenus1) {
+		this.rolmenus1 = rolmenus1;
+	}
+
+	public Rolmenu addRolmenus1(Rolmenu rolmenus1) {
+		getRolmenus1().add(rolmenus1);
+		rolmenus1.setMenu1(this);
+
+		return rolmenus1;
+	}
+
+	public Rolmenu removeRolmenus1(Rolmenu rolmenus1) {
+		getRolmenus1().remove(rolmenus1);
+		rolmenus1.setMenu1(null);
+
+		return rolmenus1;
+	}
+
+	public List<Rolmenu> getRolmenus2() {
+		return this.rolmenus2;
+	}
+
+	public void setRolmenus2(List<Rolmenu> rolmenus2) {
+		this.rolmenus2 = rolmenus2;
+	}
+
+	public Rolmenu addRolmenus2(Rolmenu rolmenus2) {
+		getRolmenus2().add(rolmenus2);
+		rolmenus2.setMenu2(this);
+
+		return rolmenus2;
+	}
+
+	public Rolmenu removeRolmenus2(Rolmenu rolmenus2) {
+		getRolmenus2().remove(rolmenus2);
+		rolmenus2.setMenu2(null);
+
+		return rolmenus2;
 	}
 
 }

@@ -11,130 +11,125 @@
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
 			<p:growl id="msgs" showDetail="true" />
-			<h:form id="formDataTable">
-				<h1>PARAMETRIZACION</h1>
-				<h:panelGrid columns="5" cellpadding="1">
-					<p:outputLabel value="Días laborables:"></p:outputLabel>
-					<p:inputText value="" size="1"></p:inputText>
 
-					<p:outputLabel value="Fecha:"></p:outputLabel>
-					<h:outputText value="#{ordenesProdBean.currentDate}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</h:outputText>
-				</h:panelGrid>
+			<h:form id="formParamGeneral">
+
+				<p:panelGrid id="gridGeneral" columns="3">
+					<f:facet name="header">
+						<h:outputText value="PARAMETRIZACIÓN" />
+					</f:facet>
+
+					<p:panelGrid id="gridMontaje" columns="2">
+						<f:facet name="header" style="width:auto">
+							<h:outputText value="MONTAJE" />
+						</f:facet>
+
+						<p:outputLabel value="Responsable:" />
+						<p:inputText></p:inputText>
+						<p:outputLabel value="Líneas Convencionales:" />
+						<p:inputText value=""></p:inputText>
+
+						<p:outputLabel value="Turnos/Día:" />
+						<p:inputText value=""></p:inputText>
+
+						<p:outputLabel value="Líneas Automáticas:" />
+						<p:inputText value=""></p:inputText>
+
+						<p:outputLabel value="Turnos/Día:" />
+						<p:inputText value=""></p:inputText>
+
+						<p:outputLabel value="Estándar Producción Convencional" />
+						<p:inputText value=""></p:inputText>
+
+						<p:outputLabel value="Estándar Producción Automática" />
+						<p:inputText value=""></p:inputText>
+					</p:panelGrid>
+
+					<p:panelGrid id="gridAparado" columns="2">
+						<f:facet name="header" style="width:auto">
+							<h:outputText value="APARADO" />
+						</f:facet>
+						<p:outputLabel value="Responsable:" />
+						<p:inputText></p:inputText>
+						<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Turnos/Día"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Líneas Automáticas"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Turnos/Día"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Estandar Produccion Convencional"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
+						<p:inputText></p:inputText>
+					</p:panelGrid>
+
+					<p:panelGrid id="gridTroquelado" columns="2">
+						<f:facet name="header" style="width:auto">
+							<h:outputText value="TROQUELADO" />
+						</f:facet>
+						<p:outputLabel value="Responsable:" />
+						<p:inputText></p:inputText>
+						<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Turnos/Día"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Líneas Automáticas"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Turnos/Día"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Estandar Produccion Convencional"></p:outputLabel>
+						<p:inputText></p:inputText>
+
+						<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
+						<p:inputText></p:inputText>
+					</p:panelGrid>
+				</p:panelGrid>
+				<p:separator />
 				<p:commandButton value="GENERAR" icon="fa fa-eject"></p:commandButton>
+				<p:separator />
+				<p:panelGrid>
+					<p:column headerText="Id">
+						<h:outputText value="" />
+					</p:column>
+
+					<p:column headerText="Year">
+						<h:outputText value="" />
+					</p:column>
+
+					<p:column headerText="Brand">
+						<h:outputText value="" />
+					</p:column>
+
+					<p:column headerText="Color">
+						<h:outputText value="" />
+					</p:column>
+				</p:panelGrid>
+
 			</h:form>
 
-			<p:separator />
-
-			<h:form>
-				<p:layout style="min-width:40px; min-height:10px; height:400px ">
-
-					<p:layoutUnit position="west" size="300"
-						style="position: relative;">
-
-						<h:panelGrid columns="1" cellpadding="1">
-
-							<f:facet name="header" align="center">MONTAJE</f:facet>
-							<p:outputLabel value="Responsable:" />
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Líneas Convencionales:" />
-							<p:inputText value=""></p:inputText>
-
-							<p:outputLabel value="Turnos/Día:" />
-							<p:inputText value=""></p:inputText>
-
-							<p:outputLabel value="Líneas Automáticas:" />
-							<p:inputText value=""></p:inputText>
-
-							<p:outputLabel value="Turnos/Día:" />
-							<p:inputText value=""></p:inputText>
-
-							<p:outputLabel value="Estándar Producción Convencional" />
-							<p:inputText value=""></p:inputText>
-
-							<p:outputLabel value="Estándar Producción Automática" />
-							<p:inputText value=""></p:inputText>
-
-						</h:panelGrid>
-
-					</p:layoutUnit>
-
-					<p:layoutUnit position="center" size="300"
-						style="position: relative;">
-
-						<h:panelGrid columns="1" cellpadding="1">
-							<f:facet name="header" align="center">TROQUELADO</f:facet>
-
-							<p:outputLabel value="Responsable"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Turnos/Día"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Líneas Automáticas"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Turnos/Día"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Estandar Produccion Convencional"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
-							<p:inputText></p:inputText>
-						</h:panelGrid>
-
-					</p:layoutUnit>
-
-					<p:layoutUnit position="east" size="300"
-						style="position: relative;">
-
-						<h:panelGrid columns="1" cellpadding="1">
-							<f:facet name="header" align="center">APARADO</f:facet>
-
-							<p:outputLabel value="Responsable"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Turnos/Día"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Líneas Automáticas"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Turnos/Día"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Estandar Produccion Convencional"></p:outputLabel>
-							<p:inputText></p:inputText>
-
-							<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
-							<p:inputText></p:inputText>
-						</h:panelGrid>
-
-					</p:layoutUnit>
-
-				</p:layout>
-			</h:form>
-
-			<p:separator />
-
-			<h:form id="form">
-				<h:panelGrid id="grid" columns="3" style="margin-bottom:10px">
-					<h:outputLabel for="template" value="Numero de dias:"
+			<!-- DE AQUI PARA ABAJO ES UN EJEMPLO -->
+			<h1>PRUEBA 1</h1>
+			<h:form id="formDataTable">
+				<h:panelGrid id="grid" columns="2" style="margin-bottom:10px">
+					<h:outputLabel for="template" value="Número de días:"
 						style="font-weight:bold" />
+
 					<p:inputText id="template"
 						value="#{parametrizacionBean.diasLaborables}" size="1" />
 					<p:commandButton id="btn" update="dynamicColumnsTable"
 						actionListener="#{parametrizacionBean.updateColumns()}"
-						value="Generar Filas" process="@parent" />
+						value="Generar" process="@parent" />
 				</h:panelGrid>
 
 				<p:dataTable id="dynamicColumnsTable" var="message"
@@ -153,6 +148,16 @@
 
 				</p:dataTable>
 			</h:form>
+
+			<!-- OTRO EJEMPLO -->
+			<h1>PRUEBA 2</h1>
+			<h1>My Dynamic Data Table</h1>
+			<p>
+				<h:form styleClass="jsfcrud_list_form">
+					<p:panelGrid
+						binding="#{datatableManagedBean.dynamicDataTableGroup}" />
+				</h:form>
+			</p>
 
 		</ui:define>
 	</ui:composition>

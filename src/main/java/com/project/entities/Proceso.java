@@ -2,7 +2,6 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,11 +19,35 @@ public class Proceso implements Serializable {
 	@Column(name = "pro_codigo")
 	private Integer proCodigo;
 
+	@Column(name = "pro_auto")
+	private String proAuto;
+
 	@Column(name = "pro_cap")
 	private Integer proCap;
 
+	@Column(name = "pro_descrip")
+	private String proDescrip;
+
 	@Column(name = "pro_duracion")
-	private BigDecimal proDuracion;
+	private double proDuracion;
+
+	@Column(name = "pro_manobra")
+	private double proManobra;
+
+	@Column(name = "pro_manreal")
+	private double proManreal;
+
+	@Column(name = "pro_tbase")
+	private double proTbase;
+
+	@Column(name = "pro_tmano")
+	private double proTmano;
+
+	@Column(name = "pro_tmaq")
+	private double proTmaq;
+
+	@Column(name = "pro_ts")
+	private double proTs;
 
 	// bi-directional many-to-one association to Lineasprod
 	@OneToMany(mappedBy = "proceso")
@@ -72,6 +95,14 @@ public class Proceso implements Serializable {
 		this.proCodigo = proCodigo;
 	}
 
+	public String getProAuto() {
+		return this.proAuto;
+	}
+
+	public void setProAuto(String proAuto) {
+		this.proAuto = proAuto;
+	}
+
 	public Integer getProCap() {
 		return this.proCap;
 	}
@@ -80,12 +111,68 @@ public class Proceso implements Serializable {
 		this.proCap = proCap;
 	}
 
-	public BigDecimal getProDuracion() {
+	public String getProDescrip() {
+		return this.proDescrip;
+	}
+
+	public void setProDescrip(String proDescrip) {
+		this.proDescrip = proDescrip;
+	}
+
+	public double getProDuracion() {
 		return this.proDuracion;
 	}
 
-	public void setProDuracion(BigDecimal proDuracion) {
+	public void setProDuracion(double proDuracion) {
 		this.proDuracion = proDuracion;
+	}
+
+	public double getProManobra() {
+		return this.proManobra;
+	}
+
+	public void setProManobra(double proManobra) {
+		this.proManobra = proManobra;
+	}
+
+	public double getProManreal() {
+		return this.proManreal;
+	}
+
+	public void setProManreal(double proManreal) {
+		this.proManreal = proManreal;
+	}
+
+	public double getProTbase() {
+		return this.proTbase;
+	}
+
+	public void setProTbase(double proTbase) {
+		this.proTbase = proTbase;
+	}
+
+	public double getProTmano() {
+		return this.proTmano;
+	}
+
+	public void setProTmano(double proTmano) {
+		this.proTmano = proTmano;
+	}
+
+	public double getProTmaq() {
+		return this.proTmaq;
+	}
+
+	public void setProTmaq(double proTmaq) {
+		this.proTmaq = proTmaq;
+	}
+
+	public double getProTs() {
+		return this.proTs;
+	}
+
+	public void setProTs(double proTs) {
+		this.proTs = proTs;
 	}
 
 	public List<Lineasprod> getLineasprods() {

@@ -16,7 +16,7 @@ public class ParametrizacionBean implements Serializable {
 
 	// VARIABLES
 	private Date currentDate;
-	private String diasLaborables;
+	private String diasLaborables = "0";
 	private String NlineasConv;
 	private String NlineasAut;
 	private String Nmaquinas;
@@ -51,6 +51,7 @@ public class ParametrizacionBean implements Serializable {
 		}
 
 		createDynamicColumns();
+
 	}
 
 	// SETTERS AND GETTERS
@@ -153,9 +154,10 @@ public class ParametrizacionBean implements Serializable {
 
 	// METODOS
 	public void createDynamicColumns() {
+		System.out.println("dias Lab: " + this.diasLaborables);
+
 		try {
 			String[] toppings = { "lineaProd" };
-
 			Integer i = 0;
 			columns.clear();
 			for (String k : toppings) {
@@ -165,12 +167,13 @@ public class ParametrizacionBean implements Serializable {
 			do {
 				i++;
 				columns.add(new ColumnModel(i.toString(), "val0"));
-			} while (i < 5);// Integer.parseInt(this.diasLaborables));
+			} while (i <= Integer.parseInt(this.diasLaborables));
 
 		} catch (Exception e) {
-			System.out.println("ERROR: " + e);
+			System.out.println("ERROR AQUI TABLAS: " + e);
 			columns.clear();
 		}
+
 	}
 
 	public void updateColumns() {

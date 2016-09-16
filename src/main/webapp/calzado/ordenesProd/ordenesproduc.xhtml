@@ -52,6 +52,8 @@
 					</center>
 				</h:form>
 			</div>
+
+
 			<p:separator />
 			<div id="div1">
 				<h:form id="formDetaProd" style="width: 300px; margin: 0 auto;">
@@ -133,14 +135,16 @@
 							</p:columnGroup>
 						</p:dataTable>
 					</p:panel>
-
+					<p:resizable for="panel" />
 				</h:form>
 			</div>
+
 			<p:spacer height="5px;" />
-			<div style="width: 300px; margin: 0 auto;">
+			<div id="div2" style="width: 300px; margin: 0 auto;">
 				<p:commandButton value="PROCESAR ORDEN"
 					actionListener="#{detaOrdenBean.displayOrden()}"></p:commandButton>
 			</div>
+
 		</ui:define>
 	</ui:composition>
 </body>
