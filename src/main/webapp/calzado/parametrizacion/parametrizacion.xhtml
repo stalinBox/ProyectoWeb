@@ -19,7 +19,7 @@
 						<h:outputText value="PARAMETRIZACIÓN" />
 					</f:facet>
 
-					<p:panelGrid id="gridMontaje" columns="2">
+					<h:panelGrid id="gridMontaje" columns="2">
 						<f:facet name="header" style="width:auto">
 							<h:outputText value="MONTAJE" />
 						</f:facet>
@@ -43,9 +43,9 @@
 
 						<p:outputLabel value="Estándar Producción Automática" />
 						<p:inputText value=""></p:inputText>
-					</p:panelGrid>
+					</h:panelGrid>
 
-					<p:panelGrid id="gridAparado" columns="2">
+					<h:panelGrid id="gridAparado" columns="2">
 						<f:facet name="header" style="width:auto">
 							<h:outputText value="APARADO" />
 						</f:facet>
@@ -68,9 +68,9 @@
 
 						<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
 						<p:inputText></p:inputText>
-					</p:panelGrid>
+					</h:panelGrid>
 
-					<p:panelGrid id="gridTroquelado" columns="2">
+					<h:panelGrid id="gridTroquelado" columns="2">
 						<f:facet name="header" style="width:auto">
 							<h:outputText value="TROQUELADO" />
 						</f:facet>
@@ -93,7 +93,7 @@
 
 						<p:outputLabel value="Estandar Produccion Automatica"></p:outputLabel>
 						<p:inputText></p:inputText>
-					</p:panelGrid>
+					</h:panelGrid>
 				</p:panelGrid>
 				<p:separator />
 				<p:commandButton value="GENERAR" icon="fa fa-eject"></p:commandButton>
@@ -108,27 +108,32 @@
 						style="font-weight:bold" />
 
 					<p:inputText id="template"
-						value="#{dataGridGenerate2.diasLaborables}" size="1" />
+						value="#{parametrizacionBean.diasLaborables}" size="1" />
 
-					<p:commandButton id="btn" update="dynamicColumnsTable"
-						actionListener="#{dataGridGenerate2.updateColumns()}"
+					<p:commandButton id="btnGenerateFechas"
+						update="dynamicColumnsTableFechas"
+						actionListener="#{parametrizacionBean.updateColumns()}"
 						value="Generar" process="@parent" />
 
+					<p:commandButton id="btnGenerateDistrib"
+						update="dynamicColumnsTableDistrib"
+						actionListener="#{parametrizacionBean.updateColumnsDistrib()}"
+						value="Generar Distribucion Dias" process="@parent" />
 				</h:panelGrid>
 
-				<p:dataTable id="dynamicColumnsTable" var="message"
+				<!-- *********************TABLA FECHAS********************************* -->
+				<p:dataTable id="dynamicColumnsTableFechas" var="message"
 					value="#{dataGridGenerate2.messages}"
 					emptyMessage="NADA QUE MOSTRAR" editable="true" editMode="cell">
 
-					<p:column value="#{dataGridGenerate2.column}" var="col"
-						columnIndexVar="colIndex">
+					<p:columns value="#{dataGridGenerate2.column}" var="col"
+						style="width:115px;">
 						<h:outputText value="#{message[col.property]}" />
-					</p:column>
+					</p:columns>
 
 					<p:columns value="#{dataGridGenerate2.columns}" var="column"
 						columnIndexVar="colIndex">
 						<p:cellEditor>
-
 							<f:facet name="output">
 								<h:outputText value="#{message[column.property]}" />
 							</f:facet>
@@ -140,19 +145,36 @@
 					</p:columns>
 
 				</p:dataTable>
+
+				<!-- *********************TABLA DISTRIBUCION************************** -->
+				<p:dataTable id="dynamicColumnsTableDistrib" var="message"
+					value="#{dataGridGenerate.messages}"
+					emptyMessage="NADA QUE MOSTRAR" editable="true" editMode="cell">
+
+					<p:columns value="#{dataGridGenerate.column}" var="col"
+						style="width:115px;">
+						<h:outputText value="#{message[col.property]}" />
+					</p:columns>
+
+					<p:columns value="#{dataGridGenerate.columns}" var="column"
+						columnIndexVar="colIndex">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{message[column.property]}" size="5" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{message[column.property]}" size="5" />
+							</f:facet>
+						</p:cellEditor>
+					</p:columns>
+				</p:dataTable>
+
+				<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
+
 			</h:form>
 
-			<!-- ****************************************************** -->
-			<!-- PRUEBA 2 -->
-			<p:separator />
-			<h1>PRUEBA 2</h1>
-			<h1>My Dynamic DataTableEEE</h1>
-			<h:form>
-				<p:dataTable editable="true" editMode="cell"
-					binding="#{datatableManagedBean.dynamicDataTableGroup}"
-					emptyMessage="NADA QUE MOSTRARrrrrr" />
-				<p:dataTable />
-			</h:form>
+
+
 		</ui:define>
 	</ui:composition>
 </body>

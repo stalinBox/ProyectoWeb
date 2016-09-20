@@ -15,12 +15,20 @@ public class DataGridGenerate2 implements Serializable {
 	private List<Message> messages;
 	private List<ColumnModel> columns = new ArrayList<ColumnModel>();
 	private List<ColumnModel> column = new ArrayList<ColumnModel>();
-	private String diasLaborables = "";
+	private Integer numLineasC = 1;
+	private String diasLaborables;
 
 	// SETTERS AND GETTERS
-
 	public List<Message> getMessages() {
 		return messages;
+	}
+
+	public Integer getNumLineasC() {
+		return numLineasC;
+	}
+
+	public void setNumLineasC(Integer numLineasC) {
+		this.numLineasC = numLineasC;
 	}
 
 	public List<ColumnModel> getColumn() {
@@ -29,14 +37,6 @@ public class DataGridGenerate2 implements Serializable {
 
 	public void setColumn(List<ColumnModel> column) {
 		this.column = column;
-	}
-
-	public String getDiasLaborables() {
-		return diasLaborables;
-	}
-
-	public void setDiasLaborables(String diasLaborables) {
-		this.diasLaborables = diasLaborables;
 	}
 
 	public List<ColumnModel> getColumns() {
@@ -51,40 +51,65 @@ public class DataGridGenerate2 implements Serializable {
 		this.messages = messages;
 	}
 
+	// SECCION DE METODOS, CONSTRUCTORES CLASES
+
+	// CONTRUCTOR DE LA CLASE***************
 	public DataGridGenerate2() {
+
+		tblFecha();
+		createDynamicColumns(this.diasLaborables);
+	}
+
+	public void updateColumns(String diasLaborables) {
+		createDynamicColumns(diasLaborables);
+		this.diasLaborables = diasLaborables;
+	}
+
+	public void updateColumnsDistrib(String diasLaborables) {
+		createDynamicColumnsDistrib(diasLaborables);
+		this.diasLaborables = diasLaborables;
+	}
+
+	public void tblFecha() {
+		String[] labelRowColumnCeroF = new String[] { "Montaje", "Aparado",
+				"Troquelado" };
+
 		if (messages == null) {
 			messages = new ArrayList<Message>();
-
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < labelRowColumnCeroF.length; i++) {
 				Message message = new Message();
-				message.setDeliveryStatus("successfull");
-				message.setLnpd("L " + i);
-				message.setLineaProd("L " + i);
+				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
+				message.setLblFechas("Fecha " + labelRowColumnCeroF[i]);
+				message.setFechas("06/06/06");
 				messages.add(message);
 			}
 		}
-		createDynamicColumns();
 	}
 
-	public void createDynamicColumns() {
+	public void createDynamicColumns(String diasLaborables) {
 		int bb = 0;
-		if (!(this.diasLaborables.isEmpty())) {
-			bb = Integer.parseInt(this.diasLaborables);
+		if (!(diasLaborables.isEmpty())) {
+			bb = Integer.parseInt(diasLaborables);
 			if (bb == 0) {
 				columns.clear();
 				column.clear();
 			} else {
 				try {
-					String[] toppings = { "lineaProd" };
+					String[] toppings = { "lblFechas" };
 					Integer i = 0;
 					columns.clear();
 					column.clear();
+					// PRIMERA COLUMNA ESTATICA
 					for (String k : toppings) {
-						columns.add(new ColumnModel("Línea/Día", k));
+						// columns.add(new ColumnModel("Línea/Día", k));
+						column.add(new ColumnModel("Línea/Día", k));
 					}
+
+					// COLUMNA REPETITIVA
 					do {
 						i++;
-						columns.add(new ColumnModel(i.toString(), "val0"));
+						columns.add(new ColumnModel(i.toString(), "fechas"));
+						// column.add(new ColumnModel(i.toString(), "val0"));
 					} while (i < bb);
 
 				} catch (Exception e) {
@@ -99,8 +124,60 @@ public class DataGridGenerate2 implements Serializable {
 		}
 	}
 
-	public void updateColumns() {
-		createDynamicColumns();
+	// TABLA DISTRIBUCION
+	public void tblDistrib() {
+		String[] labelRowColumnCeroL = new String[] { "Linea Conv. ",
+				"Linea Auto. " };
+
+		if (messages == null) {
+			messages = new ArrayList<Message>();
+			for (int i = 1; i <= this.numLineasC; i++) {
+				Message message = new Message();
+				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
+				message.setLblLineas("L" + i + "  Convencional");
+				message.setCapDia("Numeros");
+				messages.add(message);
+			}
+		}
+	}
+
+	public void createDynamicColumnsDistrib(String diasLaborables) {
+		int bb = 0;
+		if (!(diasLaborables.isEmpty())) {
+			bb = Integer.parseInt(diasLaborables);
+			if (bb == 0) {
+				columns.clear();
+				column.clear();
+			} else {
+				try {
+					String[] toppings = { "lblLineas" };
+					Integer i = 0;
+					columns.clear();
+					column.clear();
+
+					// PRIMERA COLUMNA ESTATICA
+					for (String k : toppings) {
+						// columns.add(new ColumnModel("Línea/Día", k));
+						column.add(new ColumnModel("Línea/Día", k));
+					}
+
+					// COLUMNA REPETITIVA
+					do {
+						i++;
+						columns.add(new ColumnModel(i.toString(), "capDia"));
+						// column.add(new ColumnModel(i.toString(), "val0"));
+					} while (i < bb);
+
+				} catch (Exception e) {
+					System.out.println("ERROR AQUI TABLAS: " + e);
+					columns.clear();
+					column.clear();
+				}
+			}
+		} else {
+			columns.clear();
+			column.clear();
+		}
 	}
 
 	public static class ColumnModel implements Serializable {
@@ -125,93 +202,44 @@ public class DataGridGenerate2 implements Serializable {
 	public class Message implements Serializable {
 		private static final long serialVersionUID = 1L;
 
-		private String subject;
-		private String text;
-		private String textLength;
-		private String country;
-		private String deliveryStatus;
-
-		private Double val0;
-		private Double val1;
-
-		private String lnpd;
-
-		private String lineaProd;
+		private String lblFechas;
+		private String fechas;
+		private String lblLineas;
+		private String capDia;
 
 		public Message() {
-			textLength = Math.random() * 10 + "";
 		}
 
-		public String getLineaProd() {
-			return lineaProd;
+		public String getLblLineas() {
+			return lblLineas;
 		}
 
-		public void setLineaProd(String lineaProd) {
-			this.lineaProd = lineaProd;
+		public void setLblLineas(String lblLineas) {
+			this.lblLineas = lblLineas;
 		}
 
-		public String getLnpd() {
-			return lnpd;
+		public String getCapDia() {
+			return capDia;
 		}
 
-		public void setLnpd(String lnpd) {
-			this.lnpd = lnpd;
+		public void setCapDia(String capDia) {
+			this.capDia = capDia;
 		}
 
-		public final String getSubject() {
-			return subject;
+		public String getLblFechas() {
+			return lblFechas;
 		}
 
-		public final void setSubject(String subject) {
-			this.subject = subject;
+		public void setLblFechas(String lblFechas) {
+			this.lblFechas = lblFechas;
 		}
 
-		public final String getText() {
-			return text;
+		public String getFechas() {
+			return fechas;
 		}
 
-		public final void setText(String text) {
-			this.text = text;
-		}
-
-		public String getTextLength() {
-			return textLength;
-		}
-
-		public void setTextLength(String textLength) {
-			this.textLength = textLength;
-		}
-
-		public String getCountry() {
-			return country;
-		}
-
-		public void setCountry(String country) {
-			this.country = country;
-		}
-
-		public String getDeliveryStatus() {
-			return deliveryStatus;
-		}
-
-		public void setDeliveryStatus(String deliveryStatus) {
-			this.deliveryStatus = deliveryStatus;
-		}
-
-		public Double getVal0() {
-			return val0;
-		}
-
-		public void setVal0(Double val0) {
-			this.val0 = val0;
-		}
-
-		public Double getVal1() {
-			return val1;
-		}
-
-		public void setVal1(Double val1) {
-			this.val1 = val1;
+		public void setFechas(String fechas) {
+			this.fechas = fechas;
 		}
 
 	}

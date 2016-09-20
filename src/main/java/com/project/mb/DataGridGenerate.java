@@ -2,145 +2,245 @@ package com.project.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlColumn;
-import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlPanelGroup;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.Facet;
-import org.primefaces.component.celleditor.CellEditor;
-import org.primefaces.component.column.Column;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.component.inputtext.InputText;
-import org.primefaces.component.tabview.Tab;
-import org.primefaces.component.tabview.TabView;
-
-import com.project.dao.ModelosDao;
-import com.project.dao.ModelosDaoImpl;
-import com.project.dao.UsuarioDao;
-import com.project.dao.UsuarioDaoImpl;
-import com.project.entities.Modelo;
-
-@ManagedBean(name = "datatableManagedBean")
+@ManagedBean
 @ViewScoped
 public class DataGridGenerate implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private List<Message> messages;
+	private List<ColumnModel> columns = new ArrayList<ColumnModel>();
+	private List<ColumnModel> column = new ArrayList<ColumnModel>();
+	private Integer numLineasC = 1;
+	private String diasLaborables;
 
-	private static List<List<String>> dynamicList; // Simulate fake DB.
-	private static String[] dynamicHeaders; // Optional.
-	private HtmlPanelGroup dynamicDataTableGroup; // Placeholder.
-
-	// Actions
-	// -----------------------------------------------------------------------------------
-
-	private void loadDynamicList() {
-
-		// Set headers (optional).
-		dynamicHeaders = new String[] { "Fechas", "Dia1 ", "Dia 2", "Dia 3",
-				"Dia 4" };
-
-		// Set rows
-		dynamicList = new ArrayList<List<String>>();
-		dynamicList.add(Arrays.asList(new String[] { "Fecha Montaje", "asjgh",
-				"nada", "nada2", "nada 3" }));
-		dynamicList.add(Arrays.asList(new String[] { "Fecha Troquelado",
-				"Americas", "nada" }));
-		dynamicList.add(Arrays.asList(new String[] { "Fecha Aparado", "Asia",
-				"nada" }));
-
+	// SETTERS AND GETTERS
+	public List<Message> getMessages() {
+		return messages;
 	}
 
-	private void populateDynamicDataTable() {
+	public Integer getNumLineasC() {
+		return numLineasC;
+	}
 
-		// Context and Expression Factory
-		FacesContext fCtx = FacesContext.getCurrentInstance();
-		ELContext elCtx = fCtx.getELContext();
-		ExpressionFactory ef = fCtx.getApplication().getExpressionFactory();
+	public void setNumLineasC(Integer numLineasC) {
+		this.numLineasC = numLineasC;
+	}
 
-		// Create <p:dataTable value="#{datatableManagedBean.dynamicList}"
-		// var="dynamicRow">.
+	public List<ColumnModel> getColumn() {
+		return column;
+	}
 
-		DataTable dynamicDataTable = new DataTable();
-		ValueExpression ve = ef.createValueExpression(elCtx,
-				"#{datatableManagedBean.dynamicList}", List.class);
-		dynamicDataTable.setValueExpression("value", ve);
-		dynamicDataTable.setVar("dynamicRow");
-		dynamicDataTable.setEditable(true);
-		dynamicDataTable.setEditMode("cell");
-		dynamicDataTable.setEmptyMessage("nada");
-		// Iterate over columns
-		for (int i = 0; i < dynamicList.get(0).size(); i++) {
+	public void setColumn(List<ColumnModel> column) {
+		this.column = column;
+	}
 
-			// Create <p:column>.
-			Column column = new Column();
-			dynamicDataTable.getChildren().add(column);
+	public List<ColumnModel> getColumns() {
+		return columns;
+	}
 
-			// Create <h:outputText value="dynamicHeaders[i]"> for <f:facet
-			// name="header"> of column.
-			// HtmlOutputText header = new HtmlOutputText();
-			// header.setValue(dynamicHeaders[i]);
-			// column.setHeader(header);
-			column.setHeaderText(dynamicHeaders[i]);
+	public void setColumns(List<ColumnModel> columns) {
+		this.columns = columns;
+	}
 
-			// Create <h:outputText value="#{dynamicRow[" + i + "]}"> for the
-			// body of column.
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
 
-			CellEditor cellEditor = new CellEditor();
-			dynamicDataTable.getChildren().add(cellEditor);
+	// SECCION DE METODOS, CONSTRUCTORES CLASES
 
-			HtmlOutputText output = new HtmlOutputText();
-			InputText inm = new InputText();
+	// CONTRUCTOR DE LA CLASE***************
+	public DataGridGenerate() {
 
-			ve = ef.createValueExpression(elCtx, "#{dynamicRow[" + i + "]}",
-					String.class);
-			output.setValueExpression("value", ve);
-			inm.setValueExpression("vlalue", ve);
-			column.getChildren().add(output);
-			column.getChildren().add(inm);
+		tblDistrib();
+		createDynamicColumnsDistrib(this.diasLaborables);
+	}
 
+	public void updateColumns(String diasLaborables) {
+		createDynamicColumns(diasLaborables);
+		this.diasLaborables = diasLaborables;
+	}
+
+	public void updateColumnsDistrib(String diasLaborables) {
+		createDynamicColumnsDistrib(diasLaborables);
+		this.diasLaborables = diasLaborables;
+	}
+
+	public void tblFecha() {
+		String[] labelRowColumnCeroF = new String[] { "Montaje", "Aparado",
+				"Troquelado" };
+
+		if (messages == null) {
+			messages = new ArrayList<Message>();
+			for (int i = 0; i < labelRowColumnCeroF.length; i++) {
+				Message message = new Message();
+				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
+				message.setLblFechas("Fecha " + labelRowColumnCeroF[i]);
+				message.setFechas("06/06/06");
+				messages.add(message);
+			}
+		}
+	}
+
+	public void createDynamicColumns(String diasLaborables) {
+		int bb = 0;
+		if (!(diasLaborables.isEmpty())) {
+			bb = Integer.parseInt(diasLaborables);
+			if (bb == 0) {
+				columns.clear();
+				column.clear();
+			} else {
+				try {
+					String[] toppings = { "lblFechas" };
+					Integer i = 0;
+					columns.clear();
+					column.clear();
+					// PRIMERA COLUMNA ESTATICA
+					for (String k : toppings) {
+						// columns.add(new ColumnModel("Línea/Día", k));
+						column.add(new ColumnModel("Línea/Día", k));
+					}
+
+					// COLUMNA REPETITIVA
+					do {
+						i++;
+						columns.add(new ColumnModel(i.toString(), "fechas"));
+						// column.add(new ColumnModel(i.toString(), "val0"));
+					} while (i < bb);
+
+				} catch (Exception e) {
+					System.out.println("ERROR AQUI TABLAS: " + e);
+					columns.clear();
+					column.clear();
+				}
+			}
+		} else {
+			columns.clear();
+			column.clear();
+		}
+	}
+
+	// TABLA DISTRIBUCION
+	public void tblDistrib() {
+		String[] labelRowColumnCeroL = new String[] { "Linea Conv. ",
+				"Linea Auto. " };
+
+		if (messages == null) {
+			messages = new ArrayList<Message>();
+			for (int i = 1; i <= this.numLineasC; i++) {
+				Message message = new Message();
+				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
+				message.setLblLineas("L" + i + "  Convencional");
+				message.setCapDia("Numeros");
+				messages.add(message);
+			}
+		}
+	}
+
+	public void createDynamicColumnsDistrib(String diasLaborables) {
+		int bb = 0;
+		if (!(diasLaborables.isEmpty())) {
+			bb = Integer.parseInt(diasLaborables);
+			if (bb == 0) {
+				columns.clear();
+				column.clear();
+			} else {
+				try {
+					String[] toppings = { "lblLineas" };
+					Integer i = 0;
+					columns.clear();
+					column.clear();
+
+					// PRIMERA COLUMNA ESTATICA
+					for (String k : toppings) {
+						// columns.add(new ColumnModel("Línea/Día", k));
+						column.add(new ColumnModel("Línea/Día", k));
+					}
+
+					// COLUMNA REPETITIVA
+					do {
+						i++;
+						columns.add(new ColumnModel(i.toString(), "capDia"));
+						// column.add(new ColumnModel(i.toString(), "val0"));
+					} while (i < bb);
+
+				} catch (Exception e) {
+					System.out.println("ERROR AQUI TABLAS: " + e);
+					columns.clear();
+					column.clear();
+				}
+			}
+		} else {
+			columns.clear();
+			column.clear();
+		}
+	}
+
+	public static class ColumnModel implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String header;
+		private String property;
+
+		public ColumnModel(String header, String property) {
+			this.header = header;
+			this.property = property;
 		}
 
-		// Add the datatable to <h:panelGroup
-		// binding="#{datatableManagedBean.dynamicDataTableGroup}">.
-		dynamicDataTableGroup = new HtmlPanelGroup();
-		dynamicDataTableGroup.getChildren().add(dynamicDataTable);
-
-	}
-
-	// Getters
-	// -----------------------------------------------------------------------------------
-
-	public HtmlPanelGroup getDynamicDataTableGroup() {
-		// This will be called once in the first RESTORE VIEW phase.
-		if (dynamicDataTableGroup == null) {
-			loadDynamicList(); // Preload dynamic list.
-			populateDynamicDataTable(); // Populate editable datatable.
+		public String getHeader() {
+			return header;
 		}
 
-		return dynamicDataTableGroup;
+		public String getProperty() {
+			return property;
+		}
 	}
 
-	public List<List<String>> getDynamicList() {
-		return dynamicList;
-	}
+	public class Message implements Serializable {
+		private static final long serialVersionUID = 1L;
 
-	// Setters
-	// -----------------------------------------------------------------------------------
+		private String lblFechas;
+		private String fechas;
+		private String lblLineas;
+		private String capDia;
 
-	public void setDynamicDataTableGroup(HtmlPanelGroup dynamicDataTableGroup) {
-		this.dynamicDataTableGroup = dynamicDataTableGroup;
+		public Message() {
+		}
+
+		public String getLblLineas() {
+			return lblLineas;
+		}
+
+		public void setLblLineas(String lblLineas) {
+			this.lblLineas = lblLineas;
+		}
+
+		public String getCapDia() {
+			return capDia;
+		}
+
+		public void setCapDia(String capDia) {
+			this.capDia = capDia;
+		}
+
+		public String getLblFechas() {
+			return lblFechas;
+		}
+
+		public void setLblFechas(String lblFechas) {
+			this.lblFechas = lblFechas;
+		}
+
+		public String getFechas() {
+			return fechas;
+		}
+
+		public void setFechas(String fechas) {
+			this.fechas = fechas;
+		}
+
 	}
 }
