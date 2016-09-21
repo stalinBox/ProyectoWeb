@@ -25,7 +25,15 @@
 						</f:facet>
 
 						<p:outputLabel value="Responsable:" />
-						<p:inputText></p:inputText>
+						<p:selectOneMenu id="idRespMontaje"
+							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+							required="true" style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+						</p:selectOneMenu>
+
 						<p:outputLabel value="Líneas Convencionales:" />
 						<p:inputText value=""></p:inputText>
 
@@ -39,10 +47,10 @@
 						<p:inputText value=""></p:inputText>
 
 						<p:outputLabel value="Estándar Producción Convencional" />
-						<p:inputText value=""></p:inputText>
+						<p:inputText value="#{parametrizacionBean.cpProdConvMontaje}"></p:inputText>
 
 						<p:outputLabel value="Estándar Producción Automática" />
-						<p:inputText value=""></p:inputText>
+						<p:inputText value="#{parametrizacionBean.cpProdAutMontaje}"></p:inputText>
 					</h:panelGrid>
 
 					<h:panelGrid id="gridAparado" columns="2">
@@ -50,7 +58,15 @@
 							<h:outputText value="APARADO" />
 						</f:facet>
 						<p:outputLabel value="Responsable:" />
-						<p:inputText></p:inputText>
+						<p:selectOneMenu id="idRespAparado"
+							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+							required="true" style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+						</p:selectOneMenu>
+
 						<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
 						<p:inputText></p:inputText>
 
@@ -74,8 +90,17 @@
 						<f:facet name="header" style="width:auto">
 							<h:outputText value="TROQUELADO" />
 						</f:facet>
+
 						<p:outputLabel value="Responsable:" />
-						<p:inputText></p:inputText>
+						<p:selectOneMenu id="idRespTroquelado"
+							value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+							required="true" style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+						</p:selectOneMenu>
+
 						<p:outputLabel value="Líneas Convencionales:"></p:outputLabel>
 						<p:inputText></p:inputText>
 
@@ -100,8 +125,7 @@
 				<p:separator />
 			</h:form>
 
-			<!-- DE AQUI PARA ABAJO SON EJEMPLOS -->
-			<h1>PRUEBA 1</h1>
+			<!-- ******************* -->
 			<h:form id="formDataTable">
 				<h:panelGrid id="grid" columns="2" style="margin-bottom:10px">
 					<h:outputLabel for="template" value="Número de días:"
@@ -112,31 +136,38 @@
 
 					<p:commandButton id="btnGenerateFechas"
 						update="dynamicColumnsTableFechas"
-						actionListener="#{parametrizacionBean.updateColumns()}"
+						actionListener="#{parametrizacionBean.updateColumnsFechas()}"
 						value="Generar" process="@parent" />
 
 					<p:commandButton id="btnGenerateDistrib"
 						update="dynamicColumnsTableDistrib"
 						actionListener="#{parametrizacionBean.updateColumnsDistrib()}"
 						value="Generar Distribucion Dias" process="@parent" />
+
+					<p:commandButton id="btnGenerateHoras"
+						update="dynamicColumnsTableHoras"
+						actionListener="#{parametrizacionBean.updateColumnsHoras()}"
+						value="Generar Distribucion Dias" process="@parent" />
 				</h:panelGrid>
 
 				<!-- *********************TABLA FECHAS********************************* -->
 				<p:dataTable id="dynamicColumnsTableFechas" var="message"
-					value="#{dataGridGenerate2.messages}"
+					value="#{parametrizacionBean.messagesFechas}"
 					emptyMessage="NADA QUE MOSTRAR" editable="true" editMode="cell">
 
-					<p:columns value="#{dataGridGenerate2.column}" var="col"
+					<p:columns value="#{parametrizacionBean.columnFechas}" var="col"
 						style="width:115px;">
 						<h:outputText value="#{message[col.property]}" />
 					</p:columns>
 
-					<p:columns value="#{dataGridGenerate2.columns}" var="column"
-						columnIndexVar="colIndex">
+					<p:columns value="#{parametrizacionBean.columnsFechas}"
+						var="column" columnIndexVar="colIndex">
 						<p:cellEditor>
+
 							<f:facet name="output">
 								<h:outputText value="#{message[column.property]}" />
 							</f:facet>
+
 							<f:facet name="input">
 								<p:calendar id="idFechaEntr" pattern="dd-MM-yyyy" mask="true"
 									locale="de" navigator="true" showOn="button" size="6" />
@@ -148,16 +179,16 @@
 
 				<!-- *********************TABLA DISTRIBUCION************************** -->
 				<p:dataTable id="dynamicColumnsTableDistrib" var="message"
-					value="#{dataGridGenerate.messages}"
+					value="#{parametrizacionBean.messagesDistrib}"
 					emptyMessage="NADA QUE MOSTRAR" editable="true" editMode="cell">
 
-					<p:columns value="#{dataGridGenerate.column}" var="col"
+					<p:columns value="#{parametrizacionBean.columnDistrib}" var="col"
 						style="width:115px;">
 						<h:outputText value="#{message[col.property]}" />
 					</p:columns>
 
-					<p:columns value="#{dataGridGenerate.columns}" var="column"
-						columnIndexVar="colIndex">
+					<p:columns value="#{parametrizacionBean.columnsDistrib}"
+						var="column" columnIndexVar="colIndex">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{message[column.property]}" size="5" />
@@ -170,7 +201,27 @@
 				</p:dataTable>
 
 				<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
+				<p:dataTable id="dynamicColumnsTableHoras" var="message"
+					value="#{parametrizacionBean.messagesHoras}"
+					emptyMessage="NADA QUE MOSTRAR" editable="true" editMode="cell">
 
+					<p:columns value="#{parametrizacionBean.columnHoras}" var="col"
+						style="width:115px;">
+						<h:outputText value="#{message[col.property]}" />
+					</p:columns>
+
+					<p:columns value="#{parametrizacionBean.columnsHoras}" var="column"
+						columnIndexVar="colIndex">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{message[column.property]}" size="5" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{message[column.property]}" size="5" />
+							</f:facet>
+						</p:cellEditor>
+					</p:columns>
+				</p:dataTable>
 			</h:form>
 
 
