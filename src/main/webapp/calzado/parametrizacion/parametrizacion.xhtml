@@ -125,6 +125,10 @@
 				<p:separator />
 			</h:form>
 
+
+
+			<p:separator />
+
 			<!-- ******************* -->
 			<h:form id="formDataTable">
 				<h:panelGrid id="grid" columns="2" style="margin-bottom:10px">
@@ -148,6 +152,12 @@
 						update="dynamicColumnsTableHoras"
 						actionListener="#{parametrizacionBean.updateColumnsHoras()}"
 						value="Generar Distribucion Dias" process="@parent" />
+
+
+					<!-- **************BOTON PRUEBA ************** -->
+					<p:commandButton value="PRUEBA" icon="fa fa-eject"
+						actionListener="#{parametrizacionBean.createTablas()}" />
+					<!-- **************BOTON PRUEBA ************** -->
 				</h:panelGrid>
 
 				<!-- *********************TABLA FECHAS********************************* -->

@@ -16,9 +16,17 @@ public class ParametrizacionBean implements Serializable {
 
 	// VARIABLES
 	private Date currentDate;
-	private String diasLaborables = "";
+	private String diasLaborables = "1";
+
 	private Integer cpProdConvMontaje = 361;
+
 	private Integer cpProdAutMontaje = 0;
+
+	private Integer numTurnosCov = 0;
+	private Integer numLineasConv = 1;
+
+	private Integer numLineasAut = 0;
+	private Integer numTurnosAut = 0;
 
 	private List<MessageDistrib> messagesDistrib;
 	private List<ColumnModelDistrib> columnsDistrib = new ArrayList<ColumnModelDistrib>();
@@ -67,6 +75,38 @@ public class ParametrizacionBean implements Serializable {
 
 	public void setCpProdAutMontaje(Integer cpProdAutMontaje) {
 		this.cpProdAutMontaje = cpProdAutMontaje;
+	}
+
+	public Integer getNumTurnosCov() {
+		return numTurnosCov;
+	}
+
+	public void setNumTurnosCov(Integer numTurnosCov) {
+		this.numTurnosCov = numTurnosCov;
+	}
+
+	public Integer getNumLineasConv() {
+		return numLineasConv;
+	}
+
+	public void setNumLineasConv(Integer numLineasConv) {
+		this.numLineasConv = numLineasConv;
+	}
+
+	public Integer getNumLineasAut() {
+		return numLineasAut;
+	}
+
+	public void setNumLineasAut(Integer numLineasAut) {
+		this.numLineasAut = numLineasAut;
+	}
+
+	public Integer getNumTurnosAut() {
+		return numTurnosAut;
+	}
+
+	public void setNumTurnosAut(Integer numTurnosAut) {
+		this.numTurnosAut = numTurnosAut;
 	}
 
 	public List<MessageHoras> getMessagesHoras() {
@@ -153,14 +193,21 @@ public class ParametrizacionBean implements Serializable {
 		this.currentDate = currentDate;
 	}
 
-	// SECCION METODOS ***************
+	// SECCION METODOS TABLAS***************
+	public void createTablas() {
+		System.out.println("Mensaje");
+		System.out.println("Var dias: " + this.diasLaborables);
+		System.out.println("Var numLineas: " + this.numLineasConv);
+		// System.out.println("Var numTurnos: " + this.numTurnosCov);
+		// updateColumnsDistrib();
+	}
 
-	// METODO QUE RECIBE FECHAS
+	// METODO QUE RECIBE DISTRIBUCION PARES
 	public void updateColumnsDistrib() {
 		createDynamicColumnsDistrib();
 	}
 
-	// METODO QUE RECIBE DISTRIBUCION
+	// METODO QUE RECIBE FECHAS
 	public void updateColumnsFechas() {
 		createDynamicColumnsFechas();
 	}
@@ -189,9 +236,6 @@ public class ParametrizacionBean implements Serializable {
 
 	// METODO MOSTRAR INTERFAZ DISTRIBUCION PARES
 	public void tblDistrib() {
-		String[] labelRowColumnCeroL = new String[] { "Linea Conv. ",
-				"Linea Auto. " };
-
 		if (messagesDistrib == null) {
 			messagesDistrib = new ArrayList<MessageDistrib>();
 			for (int i = 1; i <= 5; i++) {
@@ -206,9 +250,6 @@ public class ParametrizacionBean implements Serializable {
 
 	// METODO MOSTRAR INTERFAZ HORAS
 	public void tblHoras() {
-		String[] labelRowColumnCeroL = new String[] { "Linea Conv. ",
-				"Linea Auto. " };
-
 		if (messagesHoras == null) {
 			messagesHoras = new ArrayList<MessageHoras>();
 			for (int i = 1; i <= 5; i++) {
