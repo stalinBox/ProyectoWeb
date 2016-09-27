@@ -250,6 +250,20 @@
 				</p:dataTable>
 			</h:form>
 
+			<h:form>
+				<h1>EJEMPLO</h1>
+				<p:dataTable var="user" value="#{basicExampleBean.users}">
+
+					<p:columns value="#{basicExampleBean.columns}" var="column"
+						headerText="#{column.header}">
+
+						<h:outputText value="#{user[column.property]}" />
+
+					</p:columns>
+
+				</p:dataTable>
+			</h:form>
+
 		</ui:define>
 	</ui:composition>
 </body>

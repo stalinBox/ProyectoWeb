@@ -114,13 +114,23 @@ public class ParametrizacionBean implements Serializable {
 	public void tblDistrib(Integer numLineasConvMont, Integer stdProdConv) {
 		Integer[] numerosRep = new Integer[] { 12, 13, 14, 15 };
 
+		Integer[][] numRep = new Integer[][] { { 12, 13, 14, 15 },
+				{ 16, 17, 18, 19 } };
+
+		for (int i = 0; i < numRep.length; i++) {
+			for (int j = 0; j < numRep[0].length; j++) {
+				System.out.println(numRep[i][j]);
+			}
+		}
+
 		if (messagesDistrib == null) {
 			messagesDistrib = new ArrayList<MessageDistrib>();
 			for (int i = 1; i <= numLineasConvMont; i++) {
 				MessageDistrib message = new MessageDistrib();
 				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
 				message.setLblLineas("L" + i + "  Convencional");
-				message.setCapDiaConv(numerosRep[i - 1]);
+				message.setCap(44);
+				message.setCapDia(5);
 				messagesDistrib.add(message);
 			}
 		}
@@ -167,6 +177,8 @@ public class ParametrizacionBean implements Serializable {
 						i++;
 						columnsDistrib.add(new ColumnModelDistrib(i.toString(),
 								"capDiaConv"));
+						columnsDistrib.add(new ColumnModelDistrib(i.toString(),
+								"cap"));
 					} while (i < bb);
 
 				} catch (Exception e) {
@@ -338,8 +350,9 @@ public class ParametrizacionBean implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		private String lblLineas;
-		private String capDia;
+		private Integer capDia;
 		private Integer capDiaConv;
+		private Integer cap;
 
 		public MessageDistrib() {
 		}
@@ -348,15 +361,23 @@ public class ParametrizacionBean implements Serializable {
 			return lblLineas;
 		}
 
+		public Integer getCap() {
+			return cap;
+		}
+
+		public void setCap(Integer cap) {
+			this.cap = cap;
+		}
+
 		public void setLblLineas(String lblLineas) {
 			this.lblLineas = lblLineas;
 		}
 
-		public String getCapDia() {
+		public Integer getCapDia() {
 			return capDia;
 		}
 
-		public void setCapDia(String capDia) {
+		public void setCapDia(Integer capDia) {
 			this.capDia = capDia;
 		}
 
