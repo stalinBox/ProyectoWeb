@@ -250,20 +250,12 @@
 				</p:dataTable>
 			</h:form>
 
-			<h:form>
-				<h1>EJEMPLO</h1>
-				<p:dataTable var="user" value="#{basicExampleBean.users}">
 
-					<p:columns value="#{basicExampleBean.columns}" var="column"
-						headerText="#{column.header}">
-
-						<h:outputText value="#{user[column.property]}" />
-
-					</p:columns>
-
-				</p:dataTable>
+			<h1>EJEMPLO</h1>
+			<h:form id="form" prependId="false">
+				<p:commandButton value="PROBAR"
+					actionListener="#{myservice.DistribucionPares()}" />
 			</h:form>
-
 		</ui:define>
 	</ui:composition>
 </body>

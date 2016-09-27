@@ -92,7 +92,7 @@ public class ParametrizacionBean implements Serializable {
 		createDynamicColumnsHoras();
 	}
 
-	// METODO MOSTRAR ITNERDAZ TABLA FECHA
+	// METODO MOSTRAR INTERFAZ TABLA FECHA
 	public void tblFecha() {
 		String[] labelRowColumnCeroF = new String[] { "Montaje", "Aparado",
 				"Troquelado" };
@@ -103,7 +103,7 @@ public class ParametrizacionBean implements Serializable {
 				MessageFechas message = new MessageFechas();
 				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
 				message.setLblFechas("Fecha " + labelRowColumnCeroF[i]);
-				// message.setFechas("06//06");
+				// message.setFechas("06/06/06");
 				message.setFf(currentDate);
 				messagesFechas.add(message);
 			}
@@ -130,7 +130,6 @@ public class ParametrizacionBean implements Serializable {
 				// MENSAJES PARA LAS FILAS DE LAS COLUMAS
 				message.setLblLineas("L" + i + "  Convencional");
 				message.setCap(44);
-				message.setCapDia(5);
 				messagesDistrib.add(message);
 			}
 		}
@@ -177,8 +176,6 @@ public class ParametrizacionBean implements Serializable {
 						i++;
 						columnsDistrib.add(new ColumnModelDistrib(i.toString(),
 								"capDiaConv"));
-						columnsDistrib.add(new ColumnModelDistrib(i.toString(),
-								"cap"));
 					} while (i < bb);
 
 				} catch (Exception e) {
