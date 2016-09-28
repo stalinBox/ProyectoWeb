@@ -20,7 +20,7 @@ public class ParametrizacionBean implements Serializable {
 
 	private String respMontaje = "";
 	private Integer numLineasConvMont = 0;
-	private Integer numTurnosConvMont = 0;
+	private Integer[] numTurnosConvMont;
 	private Integer numLineasAutMont = 0;
 	private Integer numTurnosAutMont = 0;
 	private Integer stdProdConvMont = 361;
@@ -65,6 +65,18 @@ public class ParametrizacionBean implements Serializable {
 	public ParametrizacionBean() {
 		tblFecha();
 		createDynamicColumnsFechas();
+	}
+
+	public void generaterDaysTurns() {
+		numTurnosConvMont = new Integer[numLineasConvMont];
+	}
+
+	public void showValues() {
+
+		for (Integer i : numTurnosConvMont) {
+			System.out.println("METODO SHOW VALUES" + i);
+		}
+
 	}
 
 	// SECCION METODOS TABLAS***************
@@ -449,11 +461,11 @@ public class ParametrizacionBean implements Serializable {
 		this.numLineasConvMont = numLineasConvMont;
 	}
 
-	public Integer getNumTurnosConvMont() {
+	public Integer[] getNumTurnosConvMont() {
 		return numTurnosConvMont;
 	}
 
-	public void setNumTurnosConvMont(Integer numTurnosConvMont) {
+	public void setNumTurnosConvMont(Integer[] numTurnosConvMont) {
 		this.numTurnosConvMont = numTurnosConvMont;
 	}
 

@@ -3,25 +3,46 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:s="http://jboss.com/products/seam/taglib">
 <h:head></h:head>
 <body>
-	<h:form>
-		<h1>PÁGINA EN MANTENIEMIETO</h1>
-		<p:button value="aceptar"></p:button>
-		<p:spacer></p:spacer>
-		<p:commandLink value="Volver"
-			actionListener="#{redireccionMB.redirect()}"></p:commandLink>
-	</h:form>
 
-	<p:separator></p:separator>
-	<h3>Dinamycs Components</h3>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
 
-	<h:form>
+			<h3>Dynamics Components</h3>
 
-	</h:form>
+			<h:form>
+				<p:inputText value="#{bean.numberOfGuests}" />
+				<p:commandButton value="submit" action="#{bean.submit()}"
+					update=":guests" />
+			</h:form>
 
-	<p:separator></p:separator>
+			<h:panelGroup id="guests">
+				<h:form rendered="#{not empty bean.guests}">
+					<ui:repeat value="#{bean.guests}" varStatus="loop">
+						<p:inputText value="#{bean.guests[loop.index]}" />
+					</ui:repeat>
+					<p:commandButton value="save" action="#{bean.save()}" />
+				</h:form>
+			</h:panelGroup>
+
+
+
+
+
+			<p:separator />
+
+
+
+
+
+		</ui:define>
+	</ui:composition>
+
+
+
 </body>
 </html>

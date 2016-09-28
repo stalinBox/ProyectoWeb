@@ -10,148 +10,224 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
+
 			<p:growl id="msgs" showDetail="true" />
 
 			<h:form id="formParamGeneral">
 
-				<h:panelGrid id="gridGeneral" cellpadding="1" columns="3"
-					style="margin-bottom:10px">
-					<f:facet name="header">
-						<h:outputText value="PARAMETRIZACIÓN" />
-					</f:facet>
+				<p:tabView id="tabSubGen">
+					<p:tab title="MONTAJE">
+						<p:layout style="min-width:400px;min-height:500px;">
+							<p:layoutUnit position="west" size="400" styleClass="west"
+								resizable="true">
+								<h:panelGrid id="gridMontaje" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="MONTAJE" />
+									</f:facet>
+									<p:outputLabel value="Responsable:" />
+									<p:selectOneMenu id="idRespMontaje"
+										value="#{parametrizacionBean.respMontaje}" required="true"
+										style="width:150px">
+										<f:selectItem itemLabel="- Seleccione -" itemValue=""
+											noSelectionOption="true" />
+										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel for="idStdProdConvMont"
+										value="Estándar Producción Convencional" />
+									<p:inputText id="idStdProdConvMont"
+										value="#{parametrizacionBean.stdProdConvMont}"></p:inputText>
+									<p:outputLabel for="idStdProdAutMont"
+										value="Estándar Producción Automática" />
+									<p:inputText id="idStdProdAutMont"
+										value="#{parametrizacionBean.stdProdAutMont}"></p:inputText>
+								</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="center" styleClass="center">
+								<h:panelGrid id="gridLineasConvMont" columns="1">
+									<f:facet name="header">
+										<p:outputLabel value="LINEAS CONVENCIONALES" />
+									</f:facet>
 
-					<h:panelGrid id="gridMontaje" cellpadding="5" columns="2"
-						style="margin-bottom:10px">
-						<f:facet name="header">
-							<h:outputText value="MONTAJE" />
-						</f:facet>
-						<p:outputLabel value="Responsable:" />
-						<p:selectOneMenu id="idRespMontaje"
-							value="#{parametrizacionBean.respMontaje}" required="true"
-							style="width:150px">
+									<h:form>
+										<p:outputLabel value="Número de Líneas: " />
+										<p:inputText id="txtNumber" value="#{bean.numberOfGuests}"
+											size="1" />
+										<br />
+										<p:commandButton value="Turnos" action="#{bean.submit()}"
+											update="formParamGeneral:tabSubGen:guests"
+											process="@this,txtNumber" />
+									</h:form>
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-						</p:selectOneMenu>
+									<h:panelGroup id="guests">
+										<h:form rendered="#{not empty bean.guests}">
+											<ui:repeat value="#{bean.guests}" varStatus="loop">
+												<p:outputLabel value="Turnos/Día: " />
+												<p:inputText value="#{bean.guests[loop.index]}" size="1" />
+												<br />
+											</ui:repeat>
 
-						<p:outputLabel for="idNumLinasConvMont"
-							value="Líneas Convencionales:" />
-						<p:inputText id="idNumLinasConvMont"
-							value="#{parametrizacionBean.numLineasConvMont}"></p:inputText>
-
-						<p:outputLabel for="idNumTurnosConvMont" value="Turnos/Día:" />
-						<p:inputText id="idNumTurnosConvMont"
-							value="#{parametrizacionBean.numTurnosConvMont}"></p:inputText>
-
-						<p:outputLabel for="idNumLineasAutMont"
-							value="Líneas Automáticas:" />
-						<p:inputText id="idNumLineasAutMont"
-							value="#{parametrizacionBean.numLineasAutMont}"></p:inputText>
-
-						<p:outputLabel for="idNumTurnosAutMont" value="Turnos/Día:" />
-						<p:inputText id="idNumTurnosAutMont"
-							value="#{parametrizacionBean.numTurnosAutMont}"></p:inputText>
-
-						<p:outputLabel for="idStdProdConvMont"
-							value="Estándar Producción Convencional" />
-						<p:inputText id="idStdProdConvMont"
-							value="#{parametrizacionBean.stdProdConvMont}"></p:inputText>
-
-						<p:outputLabel for="idStdProdAutMont"
-							value="Estándar Producción Automática" />
-						<p:inputText id="idStdProdAutMont"
-							value="#{parametrizacionBean.stdProdAutMont}"></p:inputText>
-					</h:panelGrid>
+											<p:commandButton value="Mostrar" action="#{bean.save()}"
+												process="@form" />
+										</h:form>
+									</h:panelGroup>
 
 
-					<h:panelGrid id="gridTroquelado" cellpadding="5" columns="2"
-						style="margin-bottom:10px">
-						<f:facet name="header">
-							<h:outputText value="APARADO" />
-						</f:facet>
 
-						<p:outputLabel for="idRespTroquelado" value="Responsable:" />
-						<p:selectOneMenu id="idRespTroquelado"
-							value="#{parametrizacionBean.respTroquelado}" style="width:150px">
+								</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="east" size="400" styleClass="east">
+								<h:panelGrid id="gridLineasAutMont" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS AUTOMATICAS" />
+									</f:facet>
+									<p:outputLabel for="idNumLineasAutMont"
+										value="Líneas Automáticas:" />
+									<p:inputText id="idNumLineasAutMont"
+										value="#{parametrizacionBean.numLineasAutMont}"></p:inputText>
+									<p:outputLabel for="idNumTurnosAutMont" value="Turnos/Día:" />
+									<p:inputText id="idNumTurnosAutMont"
+										value="#{parametrizacionBean.numTurnosAutMont}"></p:inputText>
+								</h:panelGrid>
+							</p:layoutUnit>
+						</p:layout>
+					</p:tab>
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-						</p:selectOneMenu>
 
-						<p:outputLabel for="idNumLineasConvTroq"
-							value="Líneas Convencionales:"></p:outputLabel>
-						<p:inputText id="idNumLineasConvTroq"
-							value="#{parametrizacionBean.numLineasConvTroq}"></p:inputText>
+					<p:tab title="TROQUELADO">
+						<p:layout style="min-width:400px;min-height:500px;">
+							<p:layoutUnit position="west" size="400" styleClass="west"
+								resizable="true">
+								<h:panelGrid id="gridTroqueado" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="TROQUELADO" />
+									</f:facet>
 
-						<p:outputLabel for="idNumTurnosConvTrq" value="Turnos/Día"></p:outputLabel>
-						<p:inputText id="idNumTurnosConvTrq"
-							value="#{parametrizacionBean.numTurnosConvTroq}"></p:inputText>
+									<p:outputLabel for="idRespTroquelado" value="Responsable:" />
+									<p:selectOneMenu id="idRespTroquelado"
+										value="#{parametrizacionBean.respTroquelado}"
+										style="width:150px">
 
-						<p:outputLabel for="idNumLineasAutTrq" value="Líneas Automáticas"></p:outputLabel>
-						<p:inputText id="idNumLineasAutTrq"
-							value="#{parametrizacionBean.numLineasAutTroq}"></p:inputText>
+										<f:selectItem itemLabel="- Seleccione -" itemValue=""
+											noSelectionOption="true" />
+										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+									</p:selectOneMenu>
 
-						<p:outputLabel for="idNumTurnosAutTrq" value="Turnos/Día"></p:outputLabel>
-						<p:inputText id="idNumTurnosAutTrq"
-							value="#{parametrizacionBean.numTurnosAutTroq}"></p:inputText>
+									<p:outputLabel for="idStdProdConvTrq"
+										value="Estandar Produccion Convencional"></p:outputLabel>
+									<p:inputText id="idStdProdConvTrq"
+										value="#{parametrizacionBean.stdProdConvTroq}"></p:inputText>
 
-						<p:outputLabel for="idStdProdConvTrq"
-							value="Estandar Produccion Convencional"></p:outputLabel>
-						<p:inputText id="idStdProdConvTrq"
-							value="#{parametrizacionBean.stdProdConvTroq}"></p:inputText>
+									<p:outputLabel for="idStdProdAutTrq"
+										value="Estandar Produccion Automatica"></p:outputLabel>
+									<p:inputText id="idStdProdAutTrq"
+										value="#{parametrizacionBean.stdProdAutTroq}"></p:inputText>
+								</h:panelGrid>
 
-						<p:outputLabel for="idStdProdAutTrq"
-							value="Estandar Produccion Automatica"></p:outputLabel>
-						<p:inputText id="idStdProdAutTrq"
-							value="#{parametrizacionBean.stdProdAutTroq}"></p:inputText>
+							</p:layoutUnit>
+							<p:layoutUnit position="center" styleClass="center">
+								<h:panelGrid id="gridLineasConvTrq" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS CONVENCIONALES" />
+									</f:facet>
+									<p:outputLabel for="idNumLineasConvTroq"
+										value="Líneas Convencionales:"></p:outputLabel>
+									<p:inputText id="idNumLineasConvTroq"
+										value="#{parametrizacionBean.numLineasConvTroq}"></p:inputText>
 
-					</h:panelGrid>
+									<p:outputLabel for="idNumTurnosConvTrq" value="Turnos/Día"></p:outputLabel>
+									<p:inputText id="idNumTurnosConvTrq"
+										value="#{parametrizacionBean.numTurnosConvTroq}"></p:inputText>
+								</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="east" size="400" styleClass="east">
+								<h:panelGrid id="gridLineasAutTrq" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS AUTOMATICAS" />
+									</f:facet>
+									<p:outputLabel for="idNumLineasAutTrq"
+										value="Líneas Automáticas"></p:outputLabel>
+									<p:inputText id="idNumLineasAutTrq"
+										value="#{parametrizacionBean.numLineasAutTroq}"></p:inputText>
 
-					<h:panelGrid id="gridAparado" cellpadding="5" columns="2"
-						style="margin-bottom:10px">
-						<f:facet name="header">
-							<h:outputText value="TROQUELADO" />
-						</f:facet>
-						<p:outputLabel for="idRespAparado" value="Responsable:" />
-						<p:selectOneMenu id="idRespAparado"
-							value="#{parametrizacionBean.respAparado}" style="width:150px">
+									<p:outputLabel for="idNumTurnosAutTrq" value="Turnos/Día"></p:outputLabel>
+									<p:inputText id="idNumTurnosAutTrq"
+										value="#{parametrizacionBean.numTurnosAutTroq}"></p:inputText>
+								</h:panelGrid>
+							</p:layoutUnit>
+						</p:layout>
+					</p:tab>
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-						</p:selectOneMenu>
 
-						<p:outputLabel for="idNumLineasConvApa"
-							value="Líneas Convencionales:"></p:outputLabel>
-						<p:inputText id="idNumLineasConvApa"
-							value="#{parametrizacionBean.numLineasConvApa}"></p:inputText>
+					<p:tab title="APARADO">
+						<p:layout style="min-width:400px;min-height:500px;">
+							<p:layoutUnit position="west" size="400" styleClass="west"
+								resizable="true">
+								<h:panelGrid id="gridAparado" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="APARADO" />
+									</f:facet>
 
-						<p:outputLabel for="idNumTurnosConvApa" value="Turnos/Día"></p:outputLabel>
-						<p:inputText id="idNumTurnosConvApa"
-							value="#{parametrizacionBean.numTurnosConvApa}"></p:inputText>
+									<p:outputLabel for="idRespAparado" value="Responsable:" />
+									<p:selectOneMenu id="idRespAparado"
+										value="#{parametrizacionBean.respAparado}" style="width:150px">
 
-						<p:outputLabel for="idNumLineasAutApa" value="Líneas Automáticas"></p:outputLabel>
-						<p:inputText id="idNumLineasAutApa"
-							value="#{parametrizacionBean.numLineasAutApa}"></p:inputText>
+										<f:selectItem itemLabel="- Seleccione -" itemValue=""
+											noSelectionOption="true" />
+										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+									</p:selectOneMenu>
 
-						<p:outputLabel for="idNumTurnosAutApa" value="Turnos/Día"></p:outputLabel>
-						<p:inputText id="idNumTurnosAutApa"
-							value="#{parametrizacionBean.numTurnosAutApa}"></p:inputText>
+									<p:outputLabel for="idStdProdConvApa"
+										value="Estandar Produccion Convencional"></p:outputLabel>
+									<p:inputText id="idStdProdConvApa"
+										value="#{parametrizacionBean.stdProdConvApa}"></p:inputText>
 
-						<p:outputLabel for="idStdProdConvApa"
-							value="Estandar Produccion Convencional"></p:outputLabel>
-						<p:inputText id="idStdProdConvApa"
-							value="#{parametrizacionBean.stdProdConvApa}"></p:inputText>
+									<p:outputLabel for="idStdProdAutApa"
+										value="Estandar Produccion Automatica"></p:outputLabel>
+									<p:inputText id="idStdProdAutApa"
+										value="#{parametrizacionBean.stdProdAutApa}"></p:inputText>
+								</h:panelGrid>
 
-						<p:outputLabel for="idStdProdAutApa"
-							value="Estandar Produccion Automatica"></p:outputLabel>
-						<p:inputText id="idStdProdAutApa"
-							value="#{parametrizacionBean.stdProdAutApa}"></p:inputText>
-					</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="center" styleClass="center">
+								<h:panelGrid id="gridLineasConvApa" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS CONVENCIONALES" />
+									</f:facet>
+									<p:outputLabel for="idNumLineasConvApa"
+										value="Líneas Convencionales:"></p:outputLabel>
+									<p:inputText id="idNumLineasConvApa"
+										value="#{parametrizacionBean.numLineasConvApa}"></p:inputText>
 
-				</h:panelGrid>
+									<p:outputLabel for="idNumTurnosConvApa" value="Turnos/Día"></p:outputLabel>
+									<p:inputText id="idNumTurnosConvApa"
+										value="#{parametrizacionBean.numTurnosConvApa}"></p:inputText>
+								</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="east" size="400" styleClass="east">
+								<h:panelGrid id="gridLineasAutApa" cellpadding="5" columns="2"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS AUTOMATICAS" />
+									</f:facet>
+									<p:outputLabel for="idNumLineasAutApa"
+										value="Líneas Automáticas"></p:outputLabel>
+									<p:inputText id="idNumLineasAutApa"
+										value="#{parametrizacionBean.numLineasAutApa}"></p:inputText>
+									<p:outputLabel for="idNumTurnosAutApa" value="Turnos/Día"></p:outputLabel>
+									<p:inputText id="idNumTurnosAutApa"
+										value="#{parametrizacionBean.numTurnosAutApa}"></p:inputText>
+								</h:panelGrid>
+							</p:layoutUnit>
+						</p:layout>
+					</p:tab>
+				</p:tabView>
 
 				<!-- ********************ENVIAR PARAMETROS**************************** -->
 				<h:panelGrid id="grid" style="margin-bottom:10px" columns="7"
@@ -165,9 +241,7 @@
 					<p:commandButton id="btnGenerateTables"
 						update="dynamicColumnsTableFechas,dynamicColumnsTableDistrib,dynamicColumnsTableHoras"
 						actionListener="#{parametrizacionBean.createTablas()}"
-						value="Generar"
-						process="@parent,idNumLinasConvMont,idStdProdConvMont,idNumTurnosConvMont"
-						icon="fa fa-eject" />
+						value="Generar" process="@parent" icon="fa fa-eject" />
 				</h:panelGrid>
 
 
@@ -256,6 +330,9 @@
 				<p:commandButton value="PROBAR"
 					actionListener="#{myservice.DistribucionPares()}" />
 			</h:form>
+
+			<h1>EJEMPLO TAB PARAMETRIZACION</h1>
+
 		</ui:define>
 	</ui:composition>
 </body>
