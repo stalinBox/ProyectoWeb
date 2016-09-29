@@ -28,8 +28,26 @@ public class Myservice implements Serializable {
 
 	// **** Distribucion Dynamic **** //
 	public void distribDynamic() {
-
+		ArrayList<ArrayList<Integer>> array = new ArrayList<ArrayList<Integer>>();
 		System.out.println("Turnos Display: " + numTurnos);
+
+		int d = 1;
+		for (int i = 0; i < this.numlineas; i++) {
+			array.add(new ArrayList<Integer>());
+			d = 0;
+			while (d <= this.numDias) {
+				array.get(i).add(d);
+				d++;
+			}
+		}
+
+		// Mostrar Dinamyc Array
+		for (int i = 0; i < array.size(); i++) {
+			System.out.println("Linea " + i + ": ");
+			for (int j = 0; j < array.get(i).size(); j++) {
+				System.out.println(array.get(i).get(j));
+			}
+		}
 
 	}
 
