@@ -18,9 +18,8 @@
 				<p:tabView id="tabSubGen">
 					<p:tab title="MONTAJE">
 						<p:layout style="min-width:400px;min-height:500px;">
-							<p:layoutUnit position="west" size="400" styleClass="west"
-								resizable="true">
-								<h:panelGrid id="gridMontaje" cellpadding="5" columns="2"
+							<p:layoutUnit position="west" size="400" styleClass="west">
+								<h:panelGrid id="gridMontaje" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="MONTAJE" />
@@ -44,51 +43,76 @@
 								</h:panelGrid>
 							</p:layoutUnit>
 							<p:layoutUnit position="center" styleClass="center">
-								<h:panelGrid id="gridLineasConvMont" columns="1">
-									<f:facet name="header">
-										<p:outputLabel value="LINEAS CONVENCIONALES" />
-									</f:facet>
 
+								<h:panelGrid id="gridLineasConvMont" cellpadding="5"
+									style="margin-bottom:10px" columns="1">
+									<f:facet name="header">
+										<h:outputText value="LINEAS CONVENCIONALES" />
+									</f:facet>
 									<h:form>
 										<p:outputLabel value="Número de Líneas: " />
-										<p:inputText id="txtNumber" value="#{bean.numberOfGuests}"
-											size="1" />
+										<p:inputText id="txtNumber"
+											value="#{parametrizacionBean.numLineasConvMont}" size="1" />
 										<br />
-										<p:commandButton value="Turnos" action="#{bean.submit()}"
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"
 											update="formParamGeneral:tabSubGen:guests"
 											process="@this,txtNumber" />
 									</h:form>
-
 									<h:panelGroup id="guests">
-										<h:form rendered="#{not empty bean.guests}">
-											<ui:repeat value="#{bean.guests}" varStatus="loop">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosConvMont}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosConvMont}"
+												varStatus="loop">
 												<p:outputLabel value="Turnos/Día: " />
-												<p:inputText value="#{bean.guests[loop.index]}" size="1" />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
+													size="1" />
 												<br />
 											</ui:repeat>
 
-											<p:commandButton value="Mostrar" action="#{bean.save()}"
+											<p:commandButton value="Mostrar"
+												action="#{parametrizacionBean.TestShowData()}"
 												process="@form" />
 										</h:form>
 									</h:panelGroup>
-
-
-
 								</h:panelGrid>
 							</p:layoutUnit>
+
 							<p:layoutUnit position="east" size="400" styleClass="east">
-								<h:panelGrid id="gridLineasAutMont" cellpadding="5" columns="2"
+								<h:panelGrid id="gridLineasAutMont" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="LINEAS AUTOMATICAS" />
 									</f:facet>
-									<p:outputLabel for="idNumLineasAutMont"
-										value="Líneas Automáticas:" />
-									<p:inputText id="idNumLineasAutMont"
-										value="#{parametrizacionBean.numLineasAutMont}"></p:inputText>
-									<p:outputLabel for="idNumTurnosAutMont" value="Turnos/Día:" />
-									<p:inputText id="idNumTurnosAutMont"
-										value="#{parametrizacionBean.numTurnosAutMont}"></p:inputText>
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasAutMont}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysAutMont()}"
+											update="formParamGeneral:tabSubGen:guestsAutoMont"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsAutoMont">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosAutMont}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosAutMont}"
+												varStatus="loop">
+												<p:outputLabel value="Turnos/Día: " />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosAutMont[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+											<p:commandButton value="Mostrar"
+												action="#{parametrizacionBean.TestShowDataAut()}"
+												process="@form" />
+										</h:form>
+									</h:panelGroup>
+
 								</h:panelGrid>
 							</p:layoutUnit>
 						</p:layout>
@@ -97,9 +121,8 @@
 
 					<p:tab title="TROQUELADO">
 						<p:layout style="min-width:400px;min-height:500px;">
-							<p:layoutUnit position="west" size="400" styleClass="west"
-								resizable="true">
-								<h:panelGrid id="gridTroqueado" cellpadding="5" columns="2"
+							<p:layoutUnit position="west" size="400" styleClass="west">
+								<h:panelGrid id="gridTroqueado" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="TROQUELADO" />
@@ -128,35 +151,79 @@
 
 							</p:layoutUnit>
 							<p:layoutUnit position="center" styleClass="center">
-								<h:panelGrid id="gridLineasConvTrq" cellpadding="5" columns="2"
+								<h:panelGrid id="gridLineasConvTrq" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="LINEAS CONVENCIONALES" />
 									</f:facet>
-									<p:outputLabel for="idNumLineasConvTroq"
-										value="Líneas Convencionales:"></p:outputLabel>
-									<p:inputText id="idNumLineasConvTroq"
-										value="#{parametrizacionBean.numLineasConvTroq}"></p:inputText>
 
-									<p:outputLabel for="idNumTurnosConvTrq" value="Turnos/Día"></p:outputLabel>
-									<p:inputText id="idNumTurnosConvTrq"
-										value="#{parametrizacionBean.numTurnosConvTroq}"></p:inputText>
+
+									<h:form>
+										<p:outputLabel value="Número de Líneas: " />
+										<p:inputText id="txtNumber"
+											value="#{parametrizacionBean.numLineasConvTroq}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysConvTrqt()}"
+											update="formParamGeneral:tabSubGen:guestsTrq"
+											process="@this,txtNumber" />
+									</h:form>
+									<h:panelGroup id="guestsTrq">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosConvTroq}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosConvTroq}"
+												varStatus="loop">
+												<p:outputLabel value="Turnos/Día: " />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosConvTroq[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+
+											<p:commandButton value="Mostrar"
+												action="#{parametrizacionBean.TestShowDataTrq()}"
+												process="@form" />
+										</h:form>
+									</h:panelGroup>
+
 								</h:panelGrid>
 							</p:layoutUnit>
 							<p:layoutUnit position="east" size="400" styleClass="east">
-								<h:panelGrid id="gridLineasAutTrq" cellpadding="5" columns="2"
+								<h:panelGrid id="gridLineasAutTrq" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="LINEAS AUTOMATICAS" />
 									</f:facet>
-									<p:outputLabel for="idNumLineasAutTrq"
-										value="Líneas Automáticas"></p:outputLabel>
-									<p:inputText id="idNumLineasAutTrq"
-										value="#{parametrizacionBean.numLineasAutTroq}"></p:inputText>
 
-									<p:outputLabel for="idNumTurnosAutTrq" value="Turnos/Día"></p:outputLabel>
-									<p:inputText id="idNumTurnosAutTrq"
-										value="#{parametrizacionBean.numTurnosAutTroq}"></p:inputText>
+
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasAutTroq}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysAutTrq()}"
+											update="formParamGeneral:tabSubGen:guestsAutoTrq"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsAutoTrq">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosAutTroq}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosAutTroq}"
+												varStatus="loop">
+												<p:outputLabel value="Turnos/Día: " />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosAutTroq[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+
+											<p:commandButton value="Mostrar"
+												action="#{parametrizacionBean.TestShowDataAutTrq()}"
+												process="@form" />
+										</h:form>
+									</h:panelGroup>
 								</h:panelGrid>
 							</p:layoutUnit>
 						</p:layout>
@@ -165,9 +232,8 @@
 
 					<p:tab title="APARADO">
 						<p:layout style="min-width:400px;min-height:500px;">
-							<p:layoutUnit position="west" size="400" styleClass="west"
-								resizable="true">
-								<h:panelGrid id="gridAparado" cellpadding="5" columns="2"
+							<p:layoutUnit position="west" size="400" styleClass="west">
+								<h:panelGrid id="gridAparado" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="APARADO" />
@@ -195,36 +261,79 @@
 
 							</p:layoutUnit>
 							<p:layoutUnit position="center" styleClass="center">
-								<h:panelGrid id="gridLineasConvApa" cellpadding="5" columns="2"
+								<h:panelGrid id="gridLineasConvApa" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="LINEAS CONVENCIONALES" />
 									</f:facet>
-									<p:outputLabel for="idNumLineasConvApa"
-										value="Líneas Convencionales:"></p:outputLabel>
-									<p:inputText id="idNumLineasConvApa"
-										value="#{parametrizacionBean.numLineasConvApa}"></p:inputText>
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
 
-									<p:outputLabel for="idNumTurnosConvApa" value="Turnos/Día"></p:outputLabel>
-									<p:inputText id="idNumTurnosConvApa"
-										value="#{parametrizacionBean.numTurnosConvApa}"></p:inputText>
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasConvApa}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysConvApa()}"
+											update="formParamGeneral:tabSubGen:guestsConvApa"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsConvApa">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosConvApa}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosConvApa}"
+												varStatus="loop">
+												<p:outputLabel value="Turnos/Día: " />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosConvApa[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+
+											<p:commandButton value="Mostrar"
+												action="#{parametrizacionBean.TestShowDataApa()}"
+												process="@form" />
+										</h:form>
+									</h:panelGroup>
 								</h:panelGrid>
 							</p:layoutUnit>
+
 							<p:layoutUnit position="east" size="400" styleClass="east">
-								<h:panelGrid id="gridLineasAutApa" cellpadding="5" columns="2"
+								<h:panelGrid id="gridLineasAutApa" cellpadding="5" columns="1"
 									style="margin-bottom:10px">
 									<f:facet name="header">
 										<h:outputText value="LINEAS AUTOMATICAS" />
 									</f:facet>
-									<p:outputLabel for="idNumLineasAutApa"
-										value="Líneas Automáticas"></p:outputLabel>
-									<p:inputText id="idNumLineasAutApa"
-										value="#{parametrizacionBean.numLineasAutApa}"></p:inputText>
-									<p:outputLabel for="idNumTurnosAutApa" value="Turnos/Día"></p:outputLabel>
-									<p:inputText id="idNumTurnosAutApa"
-										value="#{parametrizacionBean.numTurnosAutApa}"></p:inputText>
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasAutApa}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysAutApa()}"
+											update="formParamGeneral:tabSubGen:guestsAutoApa"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsAutoApa">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosAutApa}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosAutApa}"
+												varStatus="loop">
+												<p:outputLabel value="Turnos/Día: " />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosAutApa[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+
+											<p:commandButton value="Mostrar"
+												action="#{parametrizacionBean.TestShowDataAutApa()}"
+												process="@form" />
+										</h:form>
+									</h:panelGroup>
 								</h:panelGrid>
 							</p:layoutUnit>
+
 						</p:layout>
 					</p:tab>
 				</p:tabView>
@@ -237,11 +346,9 @@
 						style="font-weight:bold" />
 					<p:inputText id="idDiasLaborables"
 						value="#{parametrizacionBean.diasLaborables}" size="1" />
+					<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
 
-					<p:commandButton id="btnGenerateTables"
-						update="dynamicColumnsTableFechas,dynamicColumnsTableDistrib,dynamicColumnsTableHoras"
-						actionListener="#{parametrizacionBean.createTablas()}"
-						value="Generar" process="@parent" icon="fa fa-eject" />
+					<!--  **********************************************************************  -->
 				</h:panelGrid>
 
 
@@ -324,14 +431,14 @@
 				</p:dataTable>
 			</h:form>
 
-
-			<h1>EJEMPLO</h1>
-			<h:form id="form" prependId="false">
-				<p:commandButton value="PROBAR"
+			<h1>EJEMPLO DISTRIBUCION PARES SHOW CONSOLA</h1>
+			<h:form id="form">
+				<p:commandButton value="Distrib Pares"
 					actionListener="#{myservice.DistribucionPares()}" />
-			</h:form>
 
-			<h1>EJEMPLO TAB PARAMETRIZACION</h1>
+				<p:commandButton value="Distrib Pares Dynamic"
+					actionListener="#{myservice.distribDynamic()}" />
+			</h:form>
 
 		</ui:define>
 	</ui:composition>

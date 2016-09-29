@@ -19,26 +19,26 @@ public class ParametrizacionBean implements Serializable {
 	private String diasLaborables = "";
 
 	private String respMontaje = "";
-	private Integer numLineasConvMont = 0;
+	private Integer numLineasConvMont;
 	private Integer[] numTurnosConvMont;
-	private Integer numLineasAutMont = 0;
-	private Integer numTurnosAutMont = 0;
+	private Integer numLineasAutMont;
+	private Integer[] numTurnosAutMont;
 	private Integer stdProdConvMont = 361;
 	private Integer stdProdAutMont = 0;
 
 	private String respAparado = "";
-	private Integer numLineasConvApa = 0;
-	private Integer numTurnosConvApa = 0;
-	private Integer numLineasAutApa = 0;
-	private Integer numTurnosAutApa = 0;
+	private Integer numLineasConvApa;
+	private Integer[] numTurnosConvApa;
+	private Integer numLineasAutApa;
+	private Integer[] numTurnosAutApa;
 	private Integer stdProdConvApa = 0;
 	private Integer stdProdAutApa = 0;
 
 	private String respTroquelado = "";
-	private Integer numLineasConvTroq = 0;
-	private Integer numTurnosConvTroq = 0;
-	private Integer numLineasAutTroq = 0;
-	private Integer numTurnosAutTroq = 0;
+	private Integer numLineasConvTroq;
+	private Integer[] numTurnosConvTroq;
+	private Integer numLineasAutTroq;
+	private Integer[] numTurnosAutTroq;
 	private Integer stdProdConvTroq = 0;
 	private Integer stdProdAutTroq = 0;
 
@@ -67,16 +67,82 @@ public class ParametrizacionBean implements Serializable {
 		createDynamicColumnsFechas();
 	}
 
-	public void generaterDaysTurns() {
+	// TURNOS CONV/AUT MONTAJE
+	public void GenerateTurnsDaysConvMont() {
 		numTurnosConvMont = new Integer[numLineasConvMont];
 	}
 
-	public void showValues() {
+	public void GenerateTurnsDaysAutMont() {
+		numTurnosAutMont = new Integer[numLineasAutMont];
+	}
+
+	// TURNOS CONV/AUT MONTAJE TROQUELADO
+	public void GenerateTurnsDaysConvTrqt() {
+		numTurnosConvTroq = new Integer[numLineasConvTroq];
+	}
+
+	public void GenerateTurnsDaysAutTrq() {
+		numTurnosAutTroq = new Integer[numLineasAutTroq];
+	}
+
+	// TURNOS CONV/AUT MONTAJE APARADO
+	public void GenerateTurnsDaysConvApa() {
+		numTurnosConvApa = new Integer[numLineasConvApa];
+	}
+
+	public void GenerateTurnsDaysAutApa() {
+		numTurnosAutApa = new Integer[numLineasAutApa];
+	}
+
+	// PRUEBA SHOWS TURNOS CONV/AUT MONTAJE
+	public void TestShowData() {
+		System.out.println("METOD SAVE MONTAJE");
 
 		for (Integer i : numTurnosConvMont) {
-			System.out.println("METODO SHOW VALUES" + i);
+			System.out.println("Esto esta almacenado: " + i);
 		}
+	}
 
+	public void TestShowDataAut() {
+		System.out.println("METOD SAVE AUTO MONTAJE");
+
+		for (Integer i : numTurnosAutMont) {
+			System.out.println("Esto esta almacenado: " + i);
+		}
+	}
+
+	// PRUEBA SHOWS TURNOS CONV/AUT TROQUELADO
+	public void TestShowDataTrq() {
+		System.out.println("METOD SAVE TROQUELADO");
+
+		for (Integer i : numTurnosConvTroq) {
+			System.out.println("Esto esta almacenado: " + i);
+		}
+	}
+
+	public void TestShowDataAutTrq() {
+		System.out.println("METOD SAVE AUTO TROQUELADO");
+
+		for (Integer i : numTurnosAutTroq) {
+			System.out.println("Esto esta almacenado: " + i);
+		}
+	}
+
+	// PRUEBA SHOWS TURNOS CONV/AUT APARADO
+	public void TestShowDataApa() {
+		System.out.println("METOD SAVE APARADO");
+
+		for (Integer i : numTurnosConvApa) {
+			System.out.println("Esto esta almacenado: " + i);
+		}
+	}
+
+	public void TestShowDataAutApa() {
+		System.out.println("METOD SAVE AUTO APARADO");
+
+		for (Integer i : numTurnosAutApa) {
+			System.out.println("Esto esta almacenado: " + i);
+		}
 	}
 
 	// SECCION METODOS TABLAS***************
@@ -397,7 +463,6 @@ public class ParametrizacionBean implements Serializable {
 		public void setCapDiaConv(Integer capDiaConv) {
 			this.capDiaConv = capDiaConv;
 		}
-
 	}
 
 	// SECCION CLASES TABLA DISTRIBUCION HORAS*****************
@@ -477,11 +542,11 @@ public class ParametrizacionBean implements Serializable {
 		this.numLineasAutMont = numLineasAutMont;
 	}
 
-	public Integer getNumTurnosAutMont() {
+	public Integer[] getNumTurnosAutMont() {
 		return numTurnosAutMont;
 	}
 
-	public void setNumTurnosAutMont(Integer numTurnosAutMont) {
+	public void setNumTurnosAutMont(Integer[] numTurnosAutMont) {
 		this.numTurnosAutMont = numTurnosAutMont;
 	}
 
@@ -517,11 +582,11 @@ public class ParametrizacionBean implements Serializable {
 		this.numLineasConvApa = numLineasConvApa;
 	}
 
-	public Integer getNumTurnosConvApa() {
+	public Integer[] getNumTurnosConvApa() {
 		return numTurnosConvApa;
 	}
 
-	public void setNumTurnosConvApa(Integer numTurnosConvApa) {
+	public void setNumTurnosConvApa(Integer[] numTurnosConvApa) {
 		this.numTurnosConvApa = numTurnosConvApa;
 	}
 
@@ -533,11 +598,11 @@ public class ParametrizacionBean implements Serializable {
 		this.numLineasAutApa = numLineasAutApa;
 	}
 
-	public Integer getNumTurnosAutApa() {
+	public Integer[] getNumTurnosAutApa() {
 		return numTurnosAutApa;
 	}
 
-	public void setNumTurnosAutApa(Integer numTurnosAutApa) {
+	public void setNumTurnosAutApa(Integer[] numTurnosAutApa) {
 		this.numTurnosAutApa = numTurnosAutApa;
 	}
 
@@ -573,11 +638,11 @@ public class ParametrizacionBean implements Serializable {
 		this.numLineasConvTroq = numLineasConvTroq;
 	}
 
-	public Integer getNumTurnosConvTroq() {
+	public Integer[] getNumTurnosConvTroq() {
 		return numTurnosConvTroq;
 	}
 
-	public void setNumTurnosConvTroq(Integer numTurnosConvTroq) {
+	public void setNumTurnosConvTroq(Integer[] numTurnosConvTroq) {
 		this.numTurnosConvTroq = numTurnosConvTroq;
 	}
 
@@ -589,11 +654,11 @@ public class ParametrizacionBean implements Serializable {
 		this.numLineasAutTroq = numLineasAutTroq;
 	}
 
-	public Integer getNumTurnosAutTroq() {
+	public Integer[] getNumTurnosAutTroq() {
 		return numTurnosAutTroq;
 	}
 
-	public void setNumTurnosAutTroq(Integer numTurnosAutTroq) {
+	public void setNumTurnosAutTroq(Integer[] numTurnosAutTroq) {
 		this.numTurnosAutTroq = numTurnosAutTroq;
 	}
 
