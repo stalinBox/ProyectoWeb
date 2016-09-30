@@ -13,10 +13,10 @@ public class Myservice implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer prodTotal = 614;
+	private Integer prodTotal = 2000;
 	private Integer prodCap = 361;
 	private Integer numlineas = 2;
-	private Integer numDias = 5;
+	private Integer numDias = 6;
 	ArrayList<Integer> numTurnos = new ArrayList<Integer>();
 	ArrayList<Integer> distribPares = new ArrayList<Integer>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
@@ -28,60 +28,76 @@ public class Myservice implements Serializable {
 
 	// **** Distribucion Dynamic **** //
 	public void distribDynamic() {
-		ArrayList<ArrayList<Integer>> array = new ArrayList<ArrayList<Integer>>();
-		System.out.println("Turnos Display: " + numTurnos);
+		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> array2 = new ArrayList<Integer>();
 
-		int d = 1;
+		int d = 0;
+
 		for (int i = 0; i < this.numlineas; i++) {
-			array.add(new ArrayList<Integer>());
+			System.out.println("INICIO CICLO");
+			System.out.println("***************** vuelta numero: " + i);
+			array1.add(new ArrayList<Integer>());
 			d = 0;
-			while (d <= this.numDias) {
-				array.get(i).add(d);
-				d++;
+			for (Integer o : this.numTurnos) {
+				array2 = DistribucionPares(o);
+				while (d < this.numDias) {
+					array1.get(i).add(d);
+					d++;
+				}
 			}
+			System.out.println("FIN CICLO");
 		}
 
-		// Mostrar Dinamyc Array
-		for (int i = 0; i < array.size(); i++) {
+		// Mostrar Dinamyc Array1
+		for (int i = 0; i < array1.size(); i++) {
 			System.out.println("Linea " + i + ": ");
-			for (int j = 0; j < array.get(i).size(); j++) {
-				System.out.println(array.get(i).get(j));
+			for (int j = 0; j < array1.get(i).size(); j++) {
+				System.out.println(array1.get(i).get(j));
 			}
 		}
-
 	}
 
-	// **** Distribucion Normal **** //
-	public void DistribucionPares() {
-		System.out.println("Capacidad de produccion: " + this.prodCap);
-		System.out.println("Total a producir: " + this.prodTotal);
-		disribPares(this.prodTotal, this.prodCap);
+	// **** FUNCION DISTRIBUCION PARES **** //
+	public ArrayList<Integer> DistribucionPares(Integer numT) {
+		ArrayList<Integer> arrPares = new ArrayList<Integer>();
+		arrPares = disribPares(this.prodTotal, this.prodCap, numT);
+
+		return arrPares;
 	}
 
-	public void disribPares(Integer pTotal, Integer pCap) {
+	public ArrayList<Integer> disribPares(Integer pTotal, Integer pCap,
+			Integer numTurn) {
 		this.distribPares.clear();
+		int numT = 0;
 		do {
-			pTotal = pTotal - pCap;
+			numT = pCap * numTurn;
+			pTotal = pTotal - numT;
+
 			if (pTotal < 0) {
-				pTotal = pTotal + pCap;
+				pTotal = pTotal + numT;
 				this.distribPares.add(pTotal);
 				break;
 			}
-			this.distribPares.add(pCap);
+			this.distribPares.add(numT);
 		} while (pTotal >= 0);
-		System.out.println(this.distribPares);
-		DistribucionHoras(this.distribPares, (float) pCap);
+		// DistribucionHoras(this.distribPares, (float) numT, numTurn);
+		System.out.println("Distribucion PARES: " + this.distribPares);
+		return this.distribPares;
+
 	}
 
-	public void DistribucionHoras(ArrayList<Integer> distribPares, float prodCap) {
+	public void DistribucionHoras(ArrayList<Integer> distribPares,
+			float prodCap, Integer numTurn) {
 		float a;
+		int t = 8, r;
+		r = t * numTurn;
 		for (Integer i : distribPares) {
 			DecimalFormat formato = new DecimalFormat("##.00");
 			a = 0;
-			a = ((i / (float) prodCap) * 8);
+			a = ((i / (float) prodCap) * r);
 			this.distribhoras.add(formato.format(a));
 		}
-		System.out.println(this.distribhoras);
+		System.out.println("Distribucion HORAS: " + this.distribhoras);
 	}
 
 }
