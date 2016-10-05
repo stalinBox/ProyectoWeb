@@ -20,6 +20,7 @@ public class ParametrizacionBean implements Serializable {
 
 	private String respMontaje = "";
 	private Integer numLineasConvMont;
+
 	private Integer[] numTurnosConvMont;
 	private Integer numLineasAutMont;
 	private Integer[] numTurnosAutMont;
@@ -41,6 +42,15 @@ public class ParametrizacionBean implements Serializable {
 	private Integer[] numTurnosAutTroq;
 	private Integer stdProdConvTroq = 0;
 	private Integer stdProdAutTroq = 0;
+
+	private ArrayList<String> lblMonConv = new ArrayList<String>();
+	private ArrayList<String> lblMonAut = new ArrayList<String>();
+
+	private ArrayList<String> lblTrqConv = new ArrayList<String>();
+	private ArrayList<String> lblTrqAut = new ArrayList<String>();
+
+	private ArrayList<String> lblApaConv = new ArrayList<String>();
+	private ArrayList<String> lblApaAut = new ArrayList<String>();
 
 	private Integer totPedido = 614;
 
@@ -67,37 +77,108 @@ public class ParametrizacionBean implements Serializable {
 		createDynamicColumnsFechas();
 	}
 
+	public ArrayList<String> getLblMonConv() {
+		return lblMonConv;
+	}
+
+	public void setLblMonConv(ArrayList<String> lblMonConv) {
+		this.lblMonConv = lblMonConv;
+	}
+
+	public ArrayList<String> getLblMonAut() {
+		return lblMonAut;
+	}
+
+	public void setLblMonAut(ArrayList<String> lblMonAut) {
+		this.lblMonAut = lblMonAut;
+	}
+
+	public ArrayList<String> getLblApaAut() {
+		return lblApaAut;
+	}
+
+	public void setLblApaAut(ArrayList<String> lblApaAut) {
+		this.lblApaAut = lblApaAut;
+	}
+
+	public ArrayList<String> getLblTrqConv() {
+		return lblTrqConv;
+	}
+
+	public void setLblTrqConv(ArrayList<String> lblTrqConv) {
+		this.lblTrqConv = lblTrqConv;
+	}
+
+	public ArrayList<String> getLblTrqAut() {
+		return lblTrqAut;
+	}
+
+	public void setLblTrqAut(ArrayList<String> lblTrqAut) {
+		this.lblTrqAut = lblTrqAut;
+	}
+
+	public ArrayList<String> getLblApaConv() {
+		return lblApaConv;
+	}
+
+	public void setLblApaConv(ArrayList<String> lblApaConv) {
+		this.lblApaConv = lblApaConv;
+	}
+
 	// TURNOS CONV/AUT MONTAJE
 	public void GenerateTurnsDaysConvMont() {
 		numTurnosConvMont = new Integer[numLineasConvMont];
+		this.lblMonConv.clear();
+		for (int i = 1; i <= this.numLineasConvMont; i++) {
+			this.lblMonConv.add("Turno/Día L" + i + " Convencional: ");
+		}
 	}
 
 	public void GenerateTurnsDaysAutMont() {
+		this.lblMonAut.clear();
 		numTurnosAutMont = new Integer[numLineasAutMont];
+		for (int i = 1; i <= this.numLineasAutMont; i++) {
+			this.lblMonAut.add("Turno/Día L" + i + " Automatica: ");
+		}
 	}
 
 	// TURNOS CONV/AUT MONTAJE TROQUELADO
 	public void GenerateTurnsDaysConvTrqt() {
+		this.lblTrqConv.clear();
 		numTurnosConvTroq = new Integer[numLineasConvTroq];
+		for (int i = 1; i <= this.numLineasConvTroq; i++) {
+			this.lblTrqConv.add("Turno/Día L" + i + " Convencional: ");
+		}
 	}
 
 	public void GenerateTurnsDaysAutTrq() {
+		this.lblTrqAut.clear();
 		numTurnosAutTroq = new Integer[numLineasAutTroq];
+		for (int i = 1; i <= this.numLineasAutTroq; i++) {
+			this.lblTrqAut.add("Turno/Día L" + i + " Automatica: ");
+		}
 	}
 
 	// TURNOS CONV/AUT MONTAJE APARADO
 	public void GenerateTurnsDaysConvApa() {
+		this.lblApaConv.clear();
 		numTurnosConvApa = new Integer[numLineasConvApa];
+		for (int i = 1; i <= this.numLineasConvApa; i++) {
+			this.lblApaConv.add("Turno/Día L" + i + " Convencional: ");
+		}
 	}
 
 	public void GenerateTurnsDaysAutApa() {
+		this.lblApaAut.clear();
 		numTurnosAutApa = new Integer[numLineasAutApa];
+		for (int i = 1; i <= this.numLineasAutTroq; i++) {
+			this.lblApaAut.add("Turno/Día L" + i + " Automatica: ");
+		}
 	}
 
 	// PRUEBA SHOWS TURNOS CONV/AUT MONTAJE
 	public void TestShowData() {
 		System.out.println("METOD SAVE MONTAJE");
-
 		for (Integer i : numTurnosConvMont) {
 			System.out.println("Esto esta almacenado: " + i);
 		}
@@ -105,7 +186,6 @@ public class ParametrizacionBean implements Serializable {
 
 	public void TestShowDataAut() {
 		System.out.println("METOD SAVE AUTO MONTAJE");
-
 		for (Integer i : numTurnosAutMont) {
 			System.out.println("Esto esta almacenado: " + i);
 		}
@@ -114,7 +194,6 @@ public class ParametrizacionBean implements Serializable {
 	// PRUEBA SHOWS TURNOS CONV/AUT TROQUELADO
 	public void TestShowDataTrq() {
 		System.out.println("METOD SAVE TROQUELADO");
-
 		for (Integer i : numTurnosConvTroq) {
 			System.out.println("Esto esta almacenado: " + i);
 		}
@@ -122,7 +201,6 @@ public class ParametrizacionBean implements Serializable {
 
 	public void TestShowDataAutTrq() {
 		System.out.println("METOD SAVE AUTO TROQUELADO");
-
 		for (Integer i : numTurnosAutTroq) {
 			System.out.println("Esto esta almacenado: " + i);
 		}
@@ -131,7 +209,6 @@ public class ParametrizacionBean implements Serializable {
 	// PRUEBA SHOWS TURNOS CONV/AUT APARADO
 	public void TestShowDataApa() {
 		System.out.println("METOD SAVE APARADO");
-
 		for (Integer i : numTurnosConvApa) {
 			System.out.println("Esto esta almacenado: " + i);
 		}
@@ -139,7 +216,6 @@ public class ParametrizacionBean implements Serializable {
 
 	public void TestShowDataAutApa() {
 		System.out.println("METOD SAVE AUTO APARADO");
-
 		for (Integer i : numTurnosAutApa) {
 			System.out.println("Esto esta almacenado: " + i);
 		}

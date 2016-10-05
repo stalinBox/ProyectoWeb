@@ -64,7 +64,8 @@
 											rendered="#{not empty parametrizacionBean.numTurnosConvMont}">
 											<ui:repeat value="#{parametrizacionBean.numTurnosConvMont}"
 												varStatus="loop">
-												<p:outputLabel value="Turnos/Día: " />
+												<p:outputLabel
+													value="#{parametrizacionBean.lblMonConv[loop.index]}" />
 												<p:inputText
 													value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
 													size="1" />
@@ -101,7 +102,8 @@
 											rendered="#{not empty parametrizacionBean.numTurnosAutMont}">
 											<ui:repeat value="#{parametrizacionBean.numTurnosAutMont}"
 												varStatus="loop">
-												<p:outputLabel value="Turnos/Día: " />
+												<p:outputLabel
+													value="#{parametrizacionBean.lblMonAut[loop.index]}" />
 												<p:inputText
 													value="#{parametrizacionBean.numTurnosAutMont[loop.index]}"
 													size="1" />
@@ -157,7 +159,6 @@
 										<h:outputText value="LINEAS CONVENCIONALES" />
 									</f:facet>
 
-
 									<h:form>
 										<p:outputLabel value="Número de Líneas: " />
 										<p:inputText id="txtNumber"
@@ -173,7 +174,8 @@
 											rendered="#{not empty parametrizacionBean.numTurnosConvTroq}">
 											<ui:repeat value="#{parametrizacionBean.numTurnosConvTroq}"
 												varStatus="loop">
-												<p:outputLabel value="Turnos/Día: " />
+												<p:outputLabel
+													value="#{parametrizacionBean.lblTrqConv[loop.index]}" />
 												<p:inputText
 													value="#{parametrizacionBean.numTurnosConvTroq[loop.index]}"
 													size="1" />
@@ -212,7 +214,8 @@
 											rendered="#{not empty parametrizacionBean.numTurnosAutTroq}">
 											<ui:repeat value="#{parametrizacionBean.numTurnosAutTroq}"
 												varStatus="loop">
-												<p:outputLabel value="Turnos/Día: " />
+												<p:outputLabel
+													value="#{parametrizacionBean.lblTrqAut[loop.index]}" />
 												<p:inputText
 													value="#{parametrizacionBean.numTurnosAutTroq[loop.index]}"
 													size="1" />
@@ -282,7 +285,8 @@
 											rendered="#{not empty parametrizacionBean.numTurnosConvApa}">
 											<ui:repeat value="#{parametrizacionBean.numTurnosConvApa}"
 												varStatus="loop">
-												<p:outputLabel value="Turnos/Día: " />
+												<p:outputLabel
+													value="#{parametrizacionBean.lblApaConv[loop.index]}" />
 												<p:inputText
 													value="#{parametrizacionBean.numTurnosConvApa[loop.index]}"
 													size="1" />
@@ -319,7 +323,8 @@
 											rendered="#{not empty parametrizacionBean.numTurnosAutApa}">
 											<ui:repeat value="#{parametrizacionBean.numTurnosAutApa}"
 												varStatus="loop">
-												<p:outputLabel value="Turnos/Día: " />
+												<p:outputLabel
+													value="#{parametrizacionBean.lblApaAut[loop.index]}" />
 												<p:inputText
 													value="#{parametrizacionBean.numTurnosAutApa[loop.index]}"
 													size="1" />
