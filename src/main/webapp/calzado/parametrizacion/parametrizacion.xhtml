@@ -3,7 +3,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich">
 
 <h:head></h:head>
 <body>
@@ -49,7 +51,7 @@
 									<f:facet name="header">
 										<h:outputText value="LINEAS CONVENCIONALES" />
 									</f:facet>
-									<h:form>
+									<h:form id="aa">
 										<p:outputLabel value="Número de Líneas: " />
 										<p:inputText id="txtNumber"
 											value="#{parametrizacionBean.numLineasConvMont}" size="1" />
@@ -352,99 +354,49 @@
 					<p:inputText id="idDiasLaborables"
 						value="#{parametrizacionBean.diasLaborables}" size="1" />
 					<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
-
+					<p:commandButton id="btnGenerateDistrib"
+						actionListener="#{parametrizacionBean.createTablas()}"
+						value="Generar Distribucion Dias" />
 					<!--  **********************************************************************  -->
 				</h:panelGrid>
-
+				<p:separator></p:separator>
 
 				<!-- *********************TABLA FECHAS********************************* -->
-				<p:dataTable id="dynamicColumnsTableFechas" var="message"
-					value="#{parametrizacionBean.messagesFechas}"
-					emptyMessage="NADA QUE MOSTRAR" editable="true" editMode="cell">
 
-					<p:columns value="#{parametrizacionBean.columnFechas}" var="col"
-						style="width:115px;">
-						<h:outputText value="#{message[col.property]}">
-						</h:outputText>
-
-					</p:columns>
-
-					<p:columns value="#{parametrizacionBean.columnsFechas}"
-						var="column" columnIndexVar="colIndex">
-						<p:cellEditor>
-
-							<f:facet name="output">
-								<h:outputText value="#{message[column.property]}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputText>
-							</f:facet>
-
-							<f:facet name="input">
-								<p:calendar id="popup" value="#{message[column.property]}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</p:calendar>
-							</f:facet>
-						</p:cellEditor>
-					</p:columns>
-
-				</p:dataTable>
 
 				<!-- *********************TABLA DISTRIBUCION************************** -->
-				<p:dataTable id="dynamicColumnsTableDistrib" var="message"
-					value="#{parametrizacionBean.messagesDistrib}" emptyMessage=""
-					editable="true" editMode="cell" lazy="true">
 
-					<p:columns value="#{parametrizacionBean.columnDistrib}" var="col"
-						style="width:115px;">
-						<h:outputText value="#{message[col.property]}" />
-					</p:columns>
-
-					<p:columns value="#{parametrizacionBean.columnsDistrib}"
-						var="column" columnIndexVar="colIndex">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{message[column.property]}" size="5" />
-							</f:facet>
-							<f:facet name="input">
-								<h:inputText value="#{message[column.property]}" size="5" />
-							</f:facet>
-						</p:cellEditor>
-					</p:columns>
-				</p:dataTable>
 
 				<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
-				<p:dataTable id="dynamicColumnsTableHoras" var="message"
-					value="#{parametrizacionBean.messagesHoras}" emptyMessage=""
-					editable="true" editMode="cell" style="margin-bottom:20px">
 
-					<p:columns value="#{parametrizacionBean.columnHoras}" var="col"
-						style="width:115px;">
-						<h:outputText value="#{message[col.property]}" />
-					</p:columns>
-
-					<p:columns value="#{parametrizacionBean.columnsHoras}" var="column"
-						columnIndexVar="colIndex">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{message[column.property]}" size="5" />
-							</f:facet>
-							<f:facet name="input">
-								<h:inputText value="#{message[column.property]}" size="5" />
-							</f:facet>
-						</p:cellEditor>
-					</p:columns>
-				</p:dataTable>
+				<!-- ******************FIN TABLAS*********************** -->
 			</h:form>
 
 			<h1>EJEMPLO DISTRIBUCION PARES SHOW CONSOLA</h1>
 			<h:form id="form">
-				<p:commandButton value="Distrib Pares"
-					actionListener="#{myservice.DistribucionPares()}" />
-
 				<p:commandButton value="Distrib Pares Dynamic"
 					actionListener="#{myservice.distribDynamic()}" />
 			</h:form>
 
+			<h1>PRUEBA TABLAS COLUMNAS DYNAMICAS</h1>
+			<h:form id="pprueba">
+				<p:commandButton value="MOSTRAR" actionListener="#{bean.arrShow()}"
+					update="pData" process="@parent" />
+
+				<p:dataTable id="pData" var="rowName" value="#{bean.rowNames}"
+					rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
+					<p:column headerText="" styleClass="ui-widget-header">
+						<h:outputText value="#{rowName}" />
+					</p:column>
+
+					<p:columns var="columnName" value="#{bean.colNames}"
+						headerText="#{columnName}" columnIndexVar="colIdx">
+						<ui:repeat value="#{bean.data3D[rowIdx][colIdx]}" var="data">
+							<h:outputText value="#{data}" />
+						</ui:repeat>
+					</p:columns>
+				</p:dataTable>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>
