@@ -360,15 +360,70 @@
 					<!--  **********************************************************************  -->
 				</h:panelGrid>
 				<p:separator></p:separator>
-
+				<h1>TABLAS</h1>
 				<!-- *********************TABLA FECHAS********************************* -->
+				<h:form id="idTblFechas">
+					<p:commandButton value="MOSTRAR FECHAS"
+						actionListener="#{bean.MyDistribFechas()}" update="pData"
+						process="@parent" />
 
+					<p:dataTable id="pData" var="rowName"
+						value="#{bean.rowNomProcesos}" rowIndexVar="rowIdx"
+						sortMode="multiple" emptyMessage="">
+						<p:column headerText="" styleClass="ui-widget-header">
+							<h:outputText value="#{rowName}" />
+						</p:column>
+
+						<p:columns var="columnName" value="#{bean.colNamesSIM}"
+							headerText="#{columnName}" columnIndexVar="colIdx">
+							<ui:repeat value="#{bean.dataLista3[rowIdx][colIdx]}" var="data">
+								<h:outputText value="#{data}" />
+							</ui:repeat>
+						</p:columns>
+					</p:dataTable>
+				</h:form>
 
 				<!-- *********************TABLA DISTRIBUCION************************** -->
+				<h:form id="idTblDistrib">
+					<p:commandButton value="MOSTRAR DISTRIBUCION"
+						actionListener="#{bean.MyDistribPares()}" process="@parent"
+						update="pData" />
 
+					<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
+						rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
+						<p:column headerText="" styleClass="ui-widget-header">
+							<h:outputText value="#{rowName}" />
+						</p:column>
+
+						<p:columns var="columnName" value="#{bean.colNamesSIM}"
+							headerText="#{columnName}" columnIndexVar="colIdx">
+							<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+								<h:outputText value="#{data}" />
+							</ui:repeat>
+						</p:columns>
+					</p:dataTable>
+				</h:form>
 
 				<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
+				<h:form id="idTblHoras">
+					<p:commandButton value="MOSTRAR HORAS"
+						actionListener="#{bean.MyDistribHoras()}" update="pData"
+						process="@parent" />
 
+					<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
+						rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
+						<p:column headerText="" styleClass="ui-widget-header">
+							<h:outputText value="#{rowName}" />
+						</p:column>
+
+						<p:columns var="columnName" value="#{bean.colNamesSIM}"
+							headerText="#{columnName}" columnIndexVar="colIdx">
+							<ui:repeat value="#{bean.dataLista2[rowIdx][colIdx]}" var="data">
+								<h:outputText value="#{data}" />
+							</ui:repeat>
+						</p:columns>
+					</p:dataTable>
+				</h:form>
 				<!-- ******************FIN TABLAS*********************** -->
 			</h:form>
 
@@ -376,26 +431,6 @@
 			<h:form id="form">
 				<p:commandButton value="Distrib Pares Dynamic"
 					actionListener="#{myservice.distribDynamic()}" />
-			</h:form>
-
-			<h1>PRUEBA TABLAS COLUMNAS DYNAMICAS</h1>
-			<h:form id="pprueba">
-				<p:commandButton value="MOSTRAR" actionListener="#{bean.arrShow()}"
-					update="pData" process="@parent" />
-
-				<p:dataTable id="pData" var="rowName" value="#{bean.rowNames}"
-					rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
-					<p:column headerText="" styleClass="ui-widget-header">
-						<h:outputText value="#{rowName}" />
-					</p:column>
-
-					<p:columns var="columnName" value="#{bean.colNames}"
-						headerText="#{columnName}" columnIndexVar="colIdx">
-						<ui:repeat value="#{bean.data3D[rowIdx][colIdx]}" var="data">
-							<h:outputText value="#{data}" />
-						</ui:repeat>
-					</p:columns>
-				</p:dataTable>
 			</h:form>
 		</ui:define>
 	</ui:composition>

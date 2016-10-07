@@ -5,35 +5,50 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<link href="#{appBean.baseUrl}css/masterPage.css" type="text/css"
-		rel="Stylesheet" />
+	<script>
+		function monitor(data){
+			var loading = document.getElementById("image");
+			if(data.status == "begin"){
+				loading.style.display = "block";
+			}
+			else if(data.status == "success"){
+				loading.style.display = "none";
+			}
+		}
+	</script>
+	<h:outputScript library="javax.faces" name="jsf.js" />
 </h:head>
-<body>
-
-	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
-		<ui:define name="content">
-			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
-			<h3>Redireccionar</h3>
-			<h:form id="formLogin">
-				<p:commandButton id="loginButton" value="SACATELAS" update=":growl"
-					actionListener="#{bean.navegaEnlace(actionEvent)}"
-					oncomplete="handleLoginRequest(xhr, status, args)" />
-
-			</h:form>
-		</ui:define>
-	</ui:composition>
-	<script type="text/javascript">
-    function handleLoginRequest(xhr, status, args) {
-        if(args.validationFailed || !args.loggedIn) {
-            jQuery("#formLogin").effect("shake", {times:3}, 100);
-        }
-        else {
-            console.log(args.ruta);
-            location.href = args.ruta;
-        }
-    }
-</script>
+<h:body>
+	<f:view>
+		<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+			<ui:define name="content">
+				<h1>JavaBeat JSF 2.2 Examples</h1>
+				<h2>JSF2 Ajax Monitoring Example</h2>
+				<h:form prependId="false">
+					<p:inputText id="input" value="#{beanProgressLoading.message}" />
+			#{' '}
+			<h:commandButton value="Display Text"
+						action="#{beanProgressLoading.action}"
+						oncomplete="PF('dialogProgress').show()">
+						<f:ajax execute="@this input" render="output" onevent="monitor"></f:ajax>
+					</h:commandButton>
+			#{' '}
+			<p:outputLabel id="output" value="#{beanProgressLoading.message}"></p:outputLabel>
+					<p:graphicImage id="image" value="/images/ajaxloader.gif"
+						style="display:none;" width="150" height="100"></p:graphicImage>
+				</h:form>
+			</ui:define>
+		</ui:composition>
+	</f:view>
 
 
-</body>
+	<h:form id="formDialog">
+		<p:dialog header="progress" widgetVar="dialogProgress" modal="true"
+			showEffect="fade" hideEffect="explode" resizable="false"
+			id="dlgDialogProgress">
+			<p:graphicImage id="image" value="/images/ajaxloader.gif"
+				style="display:none;" width="150" height="100"></p:graphicImage>
+		</p:dialog>
+	</h:form>
+</h:body>
 </html>

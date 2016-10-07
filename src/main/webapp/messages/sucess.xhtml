@@ -8,9 +8,12 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
 			<h3>Volver</h3>
-			<h:form>
-				<p:commandButton value="Volver" />
+			<h:form id="formLogin">
+				<p:commandButton id="loginButton" value="SACATELAS" update=":growl"
+					actionListener="#{bean.volverEnlace(actionEvent)}" />
 			</h:form>
 
 

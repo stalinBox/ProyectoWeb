@@ -131,5 +131,16 @@
     	document.getElementById(id).value = obj;
     }
 </script>
+	<script>
+		function monitor(data){
+			var loading = document.getElementById("image");
+			if(data.status == "begin"){
+				loading.style.display = "block";
+			}
+			else if(data.status == "success"){
+				loading.style.display = "none";
+			}
+		}
+	</script>
 </h:body>
 </html>

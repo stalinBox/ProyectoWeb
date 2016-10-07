@@ -21,3 +21,12 @@ $(document).ready(function() {
 		setTimeout($.unblockUI, 2000);
 	});
 });
+
+function monitor(data) {
+	var loading = document.getElementById("image");
+	if (data.status == "begin") {
+		loading.style.display = "block";
+	} else if (data.status == "success") {
+		loading.style.display = "none";
+	}
+}

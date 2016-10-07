@@ -3,7 +3,6 @@ package com.project.mb;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -62,54 +61,6 @@ public class ParametrizacionBean implements Serializable {
 
 	public ParametrizacionBean() {
 
-	}
-
-	public ArrayList<String> getLblMonConv() {
-		return lblMonConv;
-	}
-
-	public void setLblMonConv(ArrayList<String> lblMonConv) {
-		this.lblMonConv = lblMonConv;
-	}
-
-	public ArrayList<String> getLblMonAut() {
-		return lblMonAut;
-	}
-
-	public void setLblMonAut(ArrayList<String> lblMonAut) {
-		this.lblMonAut = lblMonAut;
-	}
-
-	public ArrayList<String> getLblApaAut() {
-		return lblApaAut;
-	}
-
-	public void setLblApaAut(ArrayList<String> lblApaAut) {
-		this.lblApaAut = lblApaAut;
-	}
-
-	public ArrayList<String> getLblTrqConv() {
-		return lblTrqConv;
-	}
-
-	public void setLblTrqConv(ArrayList<String> lblTrqConv) {
-		this.lblTrqConv = lblTrqConv;
-	}
-
-	public ArrayList<String> getLblTrqAut() {
-		return lblTrqAut;
-	}
-
-	public void setLblTrqAut(ArrayList<String> lblTrqAut) {
-		this.lblTrqAut = lblTrqAut;
-	}
-
-	public ArrayList<String> getLblApaConv() {
-		return lblApaConv;
-	}
-
-	public void setLblApaConv(ArrayList<String> lblApaConv) {
-		this.lblApaConv = lblApaConv;
 	}
 
 	// TURNOS CONV/AUT MONTAJE
@@ -210,11 +161,9 @@ public class ParametrizacionBean implements Serializable {
 
 	// ********************** SECCION METODOS TABLAS******************
 	public void createTablas() {
-		System.out.println("Numero de lineas: " + this.numLineasConvMont);
-
 		updateColumnsFechas();
-		updateColumnsDistrib(this.numLineasConvMont, this.stdProdConvMont);
-		updateColumnsHoras(this.numLineasConvMont);
+		updateColumnsDistrib();
+		updateColumnsHoras();
 	}
 
 	// METODO QUE RECIBE FECHAS
@@ -223,17 +172,65 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	// METODO QUE RECIBE DISTRIBUCION PARES
-	public void updateColumnsDistrib(Integer numLineasConvMont,
-			Integer stdProdConv) {
+	public void updateColumnsDistrib() {
 
 	}
 
 	// METODO QUE RECIBE HORAS
-	public void updateColumnsHoras(Integer numLineasConvMont) {
+	public void updateColumnsHoras() {
 
 	}
 
 	// SETTERS AND GETTERS
+
+	public ArrayList<String> getLblMonConv() {
+		return lblMonConv;
+	}
+
+	public void setLblMonConv(ArrayList<String> lblMonConv) {
+		this.lblMonConv = lblMonConv;
+	}
+
+	public ArrayList<String> getLblMonAut() {
+		return lblMonAut;
+	}
+
+	public void setLblMonAut(ArrayList<String> lblMonAut) {
+		this.lblMonAut = lblMonAut;
+	}
+
+	public ArrayList<String> getLblApaAut() {
+		return lblApaAut;
+	}
+
+	public void setLblApaAut(ArrayList<String> lblApaAut) {
+		this.lblApaAut = lblApaAut;
+	}
+
+	public ArrayList<String> getLblTrqConv() {
+		return lblTrqConv;
+	}
+
+	public void setLblTrqConv(ArrayList<String> lblTrqConv) {
+		this.lblTrqConv = lblTrqConv;
+	}
+
+	public ArrayList<String> getLblTrqAut() {
+		return lblTrqAut;
+	}
+
+	public void setLblTrqAut(ArrayList<String> lblTrqAut) {
+		this.lblTrqAut = lblTrqAut;
+	}
+
+	public ArrayList<String> getLblApaConv() {
+		return lblApaConv;
+	}
+
+	public void setLblApaConv(ArrayList<String> lblApaConv) {
+		this.lblApaConv = lblApaConv;
+	}
+
 	public Date getCurrentDate() {
 		return currentDate;
 	}

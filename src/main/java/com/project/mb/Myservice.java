@@ -10,13 +10,13 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class Myservice implements Serializable {
-
+	// TODO Clase Bean que genera la matriz: distribución dias/horas
 	private static final long serialVersionUID = 1L;
 
 	private Integer prodTotal = 2000;
-	private Integer prodCap = 361;
-	private Integer numlineas = 2;
-	private Integer numDias = 6;
+	private Integer prodCap = 100;
+	private Integer numlineas = 3;
+	private Integer numDias = 7;
 	ArrayList<Integer> numTurnos = new ArrayList<Integer>();
 	ArrayList<Integer> distribPares = new ArrayList<Integer>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
@@ -24,6 +24,7 @@ public class Myservice implements Serializable {
 	public Myservice() {
 		this.numTurnos.add(1);
 		this.numTurnos.add(2);
+		this.numTurnos.add(3);
 	}
 
 	// **** Distribucion Dynamic **** //
@@ -70,7 +71,7 @@ public class Myservice implements Serializable {
 			numT = pCap * numTurn;
 			pTotal = pTotal - numT;
 
-			if (pTotal < 0) {
+			if (pTotal <= 0) {
 				pTotal = pTotal + numT;
 				this.distribPares.add(pTotal);
 				break;
@@ -99,5 +100,12 @@ public class Myservice implements Serializable {
 		System.out.println("Distribucion HORAS: " + this.distribhoras);
 		return this.distribhoras;
 	}
-
+	// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
+	// for(i=0;i<array.size();i++){ //para cada alumno (para cada fila)
+	// System.out.print("Alumno " + i + ": ");
+	// for(j=0;j<array.get(i).size();j++){ //se recorre todas la columnas de la
+	// fila
+	// System.out.print(array.get(i).get(j) + " "); //se obtiene el elemento i,j
+	// }
+	// }
 }
