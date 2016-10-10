@@ -369,16 +369,24 @@
 
 					<p:dataTable id="pData" var="rowName"
 						value="#{bean.rowNomProcesos}" rowIndexVar="rowIdx"
-						sortMode="multiple" emptyMessage="">
+						emptyMessage="" editable="true" editMode="cell">
 						<p:column headerText="" styleClass="ui-widget-header">
 							<h:outputText value="#{rowName}" />
 						</p:column>
 
 						<p:columns var="columnName" value="#{bean.colNamesSIM}"
 							headerText="#{columnName}" columnIndexVar="colIdx">
-							<ui:repeat value="#{bean.dataLista3[rowIdx][colIdx]}" var="data">
-								<h:outputText value="#{data}" />
-							</ui:repeat>
+							<p:cellEditor>
+								<f:facet name="output">
+									<ui:repeat value="#{bean.dataLista3[rowIdx][colIdx]}"
+										var="data">
+										<h:outputText value="#{data}" />
+									</ui:repeat>
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{data}" />
+								</f:facet>
+							</p:cellEditor>
 						</p:columns>
 					</p:dataTable>
 				</h:form>
@@ -390,16 +398,27 @@
 						update="pData" />
 
 					<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
-						rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
+						rowIndexVar="rowIdx" sortMode="multiple" emptyMessage=""
+						editable="true" editMode="cell">
 						<p:column headerText="" styleClass="ui-widget-header">
 							<h:outputText value="#{rowName}" />
 						</p:column>
 
 						<p:columns var="columnName" value="#{bean.colNamesSIM}"
 							headerText="#{columnName}" columnIndexVar="colIdx">
-							<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
-								<h:outputText value="#{data}" />
-							</ui:repeat>
+							<p:cellEditor>
+								<f:facet name="output">
+									<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+										<h:outputText value="#{data}" />
+									</ui:repeat>
+								</f:facet>
+								<f:facet name="input">
+									<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+										<p:inputText value="#{data}" />
+									</ui:repeat>
+								</f:facet>
+
+							</p:cellEditor>
 						</p:columns>
 					</p:dataTable>
 				</h:form>
