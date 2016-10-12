@@ -15,33 +15,34 @@ public class ParametrizacionBean implements Serializable {
 
 	// VARIABLES
 	private Date currentDate;
-	private String diasLaborables = "";
+	private String diasLaborables;
 
-	private String respMontaje = "";
+	private String respMontaje;
 	private Integer numLineasConvMont;
 
 	private Integer[] numTurnosConvMont;
 	private Integer numLineasAutMont;
 	private Integer[] numTurnosAutMont;
-	private Integer stdProdConvMont = 361;
-	private Integer stdProdAutMont = 0;
+	private Integer stdProdConvMont;
+	private Integer stdProdAutMont;
 
-	private String respAparado = "";
+	private String respAparado;
 	private Integer numLineasConvApa;
 	private Integer[] numTurnosConvApa;
 	private Integer numLineasAutApa;
 	private Integer[] numTurnosAutApa;
-	private Integer stdProdConvApa = 0;
-	private Integer stdProdAutApa = 0;
+	private Integer stdProdConvApa;
+	private Integer stdProdAutApa;
 
-	private String respTroquelado = "";
+	private String respTroquelado;
 	private Integer numLineasConvTroq;
 	private Integer[] numTurnosConvTroq;
 	private Integer numLineasAutTroq;
 	private Integer[] numTurnosAutTroq;
-	private Integer stdProdConvTroq = 0;
-	private Integer stdProdAutTroq = 0;
+	private Integer stdProdConvTroq;
+	private Integer stdProdAutTroq;
 
+	private ArrayList<Integer> addNumTurnosConvMont = new ArrayList<Integer>();
 	private ArrayList<String> lblMonConv = new ArrayList<String>();
 	private ArrayList<String> lblMonAut = new ArrayList<String>();
 
@@ -56,11 +57,31 @@ public class ParametrizacionBean implements Serializable {
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
-		currentDate = new Date();
+		this.currentDate = new Date();
+
+		this.stdProdConvMont = 361;
+		this.totPedido = 614;
+
+		this.stdProdConvApa = 0;
+		this.stdProdConvTroq = 0;
+		this.stdProdAutApa = 0;
+		this.stdProdAutMont = 0;
+		this.stdProdAutTroq = 0;
 	}
 
+	// CONSTRUCTOR
 	public ParametrizacionBean() {
 
+	}
+
+	public void ExecuteParams() {
+		// DistribucionTables nn = new DistribucionTables(100, 2000);
+		System.out.println("PARAMETROS A UTILZAR");
+
+		System.out.println("Dias: " + this.diasLaborables);
+		System.out.println("Std Produccion: " + this.stdProdConvMont);
+		System.out.println("Total Pedido: " + this.totPedido);
+		System.out.println("Responsable: " + this.respMontaje);
 	}
 
 	// TURNOS CONV/AUT MONTAJE
@@ -114,12 +135,15 @@ public class ParametrizacionBean implements Serializable {
 		}
 	}
 
-	// PRUEBA SHOWS TURNOS CONV/AUT MONTAJE
+	// ********* PRUEBA SHOWS TURNOS CONV/AUT MONTAJE ******************
 	public void TestShowData() {
-		System.out.println("METOD SAVE MONTAJE");
-		for (Integer i : numTurnosConvMont) {
-			System.out.println("Esto esta almacenado: " + i);
+		System.out.println("METOD");
+		this.addNumTurnosConvMont.clear();
+		for (Integer i : this.numTurnosConvMont) {
+			this.addNumTurnosConvMont.add(i);
 		}
+
+		System.out.println(this.addNumTurnosConvMont);
 	}
 
 	public void TestShowDataAut() {
@@ -185,6 +209,14 @@ public class ParametrizacionBean implements Serializable {
 
 	public ArrayList<String> getLblMonConv() {
 		return lblMonConv;
+	}
+
+	public ArrayList<Integer> getAddNumTurnosConvMont() {
+		return addNumTurnosConvMont;
+	}
+
+	public void setAddNumTurnosConvMont(ArrayList<Integer> addNumTurnosConvMont) {
+		this.addNumTurnosConvMont = addNumTurnosConvMont;
 	}
 
 	public void setLblMonConv(ArrayList<String> lblMonConv) {
@@ -414,4 +446,13 @@ public class ParametrizacionBean implements Serializable {
 	public void setCurrentDate(Date currentDate) {
 		this.currentDate = currentDate;
 	}
+
+	public Integer getTotPedido() {
+		return totPedido;
+	}
+
+	public void setTotPedido(Integer totPedido) {
+		this.totPedido = totPedido;
+	}
+
 }

@@ -12,6 +12,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.project.dao.RolDao;
+import com.project.dao.RolDaoImpl;
 import com.project.dao.UsuarioDao;
 import com.project.dao.UsuarioDaoImpl;
 import com.project.entities.Usuario;
@@ -22,6 +24,7 @@ public class UsuarioBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Usuario> usuarios;
 	private Usuario selectedUsuario;
+	private Integer rolId;
 
 	@PostConstruct
 	public void init() {
@@ -30,6 +33,14 @@ public class UsuarioBean implements Serializable {
 
 	public UsuarioBean() {
 		this.usuarios = new ArrayList<Usuario>();
+	}
+
+	public Integer getRolId() {
+		return rolId;
+	}
+
+	public void setRolId(Integer rolId) {
+		this.rolId = rolId;
 	}
 
 	public List<Usuario> getUsuarios() {
@@ -46,11 +57,13 @@ public class UsuarioBean implements Serializable {
 		this.selectedUsuario = selectedUsuario;
 	}
 
-	
 	public void btnCreateUsuario(ActionEvent actionEvent) {
 		String msg = "";
 		UsuarioDao usuarioDao = new UsuarioDaoImpl();
-		//this.selectedUsuario.setRol(1);
+		RolDao rolDao = new RolDaoImpl();
+
+		// this.selectedUsuario.setRol1(rol1);
+
 		this.selectedUsuario.setUserPasswd("");
 		this.selectedUsuario.setUserCreation("admin");
 		Date hoy = new Date();

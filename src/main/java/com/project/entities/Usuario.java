@@ -41,9 +41,6 @@ public class Usuario implements Serializable {
 	@Column(name = "user_state")
 	private BigDecimal userState;
 
-	@Column(name = "user_theme")
-	private String userTheme;
-
 	// bi-directional many-to-one association to Ordenprod
 	@OneToMany(mappedBy = "usuario1")
 	private List<Ordenprod> ordenprods1;
@@ -67,10 +64,12 @@ public class Usuario implements Serializable {
 
 	// bi-directional many-to-one association to Rol
 	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "rol_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "rol_id", insertable = false, updatable = false)
 	private Rol rol2;
 
 	public Usuario() {
+		this.rol1 = new Rol();
+		this.rol2 = new Rol();
 	}
 
 	public Integer getUserId() {
@@ -127,14 +126,6 @@ public class Usuario implements Serializable {
 
 	public void setUserState(BigDecimal userState) {
 		this.userState = userState;
-	}
-
-	public String getUserTheme() {
-		return this.userTheme;
-	}
-
-	public void setUserTheme(String userTheme) {
-		this.userTheme = userTheme;
 	}
 
 	public List<Ordenprod> getOrdenprods1() {

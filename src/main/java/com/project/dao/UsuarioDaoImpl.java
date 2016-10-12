@@ -24,7 +24,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
 			System.out.println("ERRORRR FINDBYUSUARIO USER: " + e.toString());
-			// throw e;
+			throw e;
 		}
 		return entities;
 	}

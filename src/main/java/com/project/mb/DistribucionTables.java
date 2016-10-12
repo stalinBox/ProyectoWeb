@@ -9,19 +9,24 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class Myservice implements Serializable {
+public class DistribucionTables implements Serializable {
 	// TODO Clase Bean que genera la matriz: distribución dias/horas
 	private static final long serialVersionUID = 1L;
 
-	private Integer prodTotal = 2000;
-	private Integer prodCap = 100;
-	private Integer numlineas = 3;
-	private Integer numDias = 7;
+	private Integer prodTotal;
+	private Integer prodCap;
+
 	ArrayList<Integer> numTurnos = new ArrayList<Integer>();
 	ArrayList<Integer> distribPares = new ArrayList<Integer>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
 
-	public Myservice() {
+	public DistribucionTables(Integer cp, Integer total) {
+		super();
+		this.prodCap = cp;
+		this.prodTotal = total;
+	}
+
+	public DistribucionTables() {
 		this.numTurnos.add(1);
 		this.numTurnos.add(2);
 		this.numTurnos.add(3);
@@ -37,9 +42,7 @@ public class Myservice implements Serializable {
 		for (Integer o : this.numTurnos) {
 			array1.add(new ArrayList<Integer>());
 			array3.add(new ArrayList<Object>());
-
 			array2 = DistribucionP(o);
-
 			array4 = DistribucionHoras(this.distribPares, (float) this.prodCap,
 					o);
 			for (Integer q : array2) {
@@ -100,6 +103,7 @@ public class Myservice implements Serializable {
 		System.out.println("Distribucion HORAS: " + this.distribhoras);
 		return this.distribhoras;
 	}
+
 	// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
 	// for(i=0;i<array.size();i++){ //para cada alumno (para cada fila)
 	// System.out.print("Alumno " + i + ": ");
@@ -108,4 +112,22 @@ public class Myservice implements Serializable {
 	// System.out.print(array.get(i).get(j) + " "); //se obtiene el elemento i,j
 	// }
 	// }
+
+	// SETTERS AND GETTERS
+	public Integer getProdTotal() {
+		return prodTotal;
+	}
+
+	public void setProdTotal(Integer prodTotal) {
+		this.prodTotal = prodTotal;
+	}
+
+	public Integer getProdCap() {
+		return prodCap;
+	}
+
+	public void setProdCap(Integer prodCap) {
+		this.prodCap = prodCap;
+	}
+
 }

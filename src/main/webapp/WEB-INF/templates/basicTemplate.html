@@ -22,9 +22,7 @@
 			<ui:insert name="top">
 				CALZADO
 			</ui:insert>
-
 		</div>
-
 		<div id="menu">
 			<h:form>
 				<p:growl id="messages" />
@@ -32,7 +30,7 @@
 				<p:menubar>
 					<p:submenu label="Seguridad" icon="ui-icon-document">
 						<p:menuitem value="Usuarios"
-							url="#{appBean.basePath}usuario/index.jsf" />
+							url="#{appBean.basePath}usuario/indexUser.jsf" />
 						<p:separator />
 						<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"
 							oncomplete="handleLoginRequest(xhr, status, args)" />

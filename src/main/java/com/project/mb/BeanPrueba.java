@@ -29,10 +29,12 @@ public class BeanPrueba implements Serializable {
 	private List<String> colNamesSIM = new ArrayList<String>();
 	private List<String> rowNomProcesos = new ArrayList<String>();
 
-	// ARRAY CON DATOS PARA VISUALIZAR
+	// ARRAYS 3D CON DATOS QUE CONTENDRA AL ARRAY 2D
 	private ArrayList<ArrayList<ArrayList<Integer>>> dataLista = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	private ArrayList<ArrayList<ArrayList<Integer>>> dataLista2 = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	private ArrayList<ArrayList<ArrayList<String>>> dataLista3 = new ArrayList<ArrayList<ArrayList<String>>>();
+
+	// ARRAY 2D EL CUAL SERA LLENADO CON DATOS DE LA DISTRIBUCION
 	private ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
 	private ArrayList<ArrayList<Integer>> array2 = new ArrayList<ArrayList<Integer>>();
 	private ArrayList<ArrayList<String>> array3 = new ArrayList<ArrayList<String>>();
@@ -86,7 +88,6 @@ public class BeanPrueba implements Serializable {
 		array2.get(2).add(2);
 		array2.get(2).add(2);
 		array2.get(2).add(2);
-
 	}
 
 	public BeanPrueba() {
@@ -98,9 +99,11 @@ public class BeanPrueba implements Serializable {
 	}
 
 	public void MyDistribPares() {
+		dataLista.clear();
 		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
 		this.rowNamesSIM.clear();
 		this.colNamesSIM.clear();
+
 		for (int i = 1; i <= this.numLineas; i++) {
 			this.rowNamesSIM.add("L" + i + " Convencional");
 		}
@@ -127,6 +130,7 @@ public class BeanPrueba implements Serializable {
 	}
 
 	public void MyDistribHoras() {
+		dataLista2.clear();
 		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
 		this.rowNamesSIM.clear();
 		this.colNamesSIM.clear();
@@ -156,6 +160,7 @@ public class BeanPrueba implements Serializable {
 	}
 
 	public void MyDistribFechas() {
+		dataLista3.clear();
 		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
 		this.rowNomProcesos.clear();
 		this.colNamesSIM.clear();

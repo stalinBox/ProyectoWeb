@@ -19,107 +19,110 @@
 
 				<p:tabView id="tabSubGen">
 					<p:tab title="MONTAJE">
-						<p:layout style="min-width:400px;min-height:500px;">
-							<p:layoutUnit position="west" size="400" styleClass="west">
-								<h:panelGrid id="gridMontaje" cellpadding="5" columns="1"
-									style="margin-bottom:10px">
-									<f:facet name="header">
-										<h:outputText value="MONTAJE" />
-									</f:facet>
-									<p:outputLabel value="Responsable:" />
-									<p:selectOneMenu id="idRespMontaje"
-										value="#{parametrizacionBean.respMontaje}" required="true"
-										style="width:150px">
-										<f:selectItem itemLabel="- Seleccione -" itemValue=""
-											noSelectionOption="true" />
-										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-									</p:selectOneMenu>
-									<p:outputLabel for="idStdProdConvMont"
-										value="Estándar Producción Convencional" />
-									<p:inputText id="idStdProdConvMont"
-										value="#{parametrizacionBean.stdProdConvMont}"></p:inputText>
-									<p:outputLabel for="idStdProdAutMont"
-										value="Estándar Producción Automática" />
-									<p:inputText id="idStdProdAutMont"
-										value="#{parametrizacionBean.stdProdAutMont}"></p:inputText>
-								</h:panelGrid>
-							</p:layoutUnit>
-							<p:layoutUnit position="center" styleClass="center">
+						<h:form id="mtn">
+							<p:layout style="min-width:400px;min-height:500px;">
+								<p:layoutUnit position="west" size="400" styleClass="west">
+									<h:panelGrid id="gridMontaje" cellpadding="5" columns="1"
+										style="margin-bottom:10px">
+										<f:facet name="header">
+											<p:messages id="alertMtn" />
+											<h:outputText value="MONTAJE" />
+										</f:facet>
+										<p:outputLabel for="idRespMontaje" value="Responsable:" />
+										<p:selectOneMenu id="idRespMontaje"
+											value="#{parametrizacionBean.respMontaje}" required="true"
+											style="width:150px" requiredMessage="Responsable Requerido">
+											<f:selectItem itemLabel="- Seleccione -" itemValue=""
+												noSelectionOption="true" />
+											<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+										</p:selectOneMenu>
+										<p:outputLabel for="idStdProdConvMont"
+											value="Estándar Producción Convencional" />
+										<p:inputText id="idStdProdConvMont"
+											value="#{parametrizacionBean.stdProdConvMont}"
+											disabled="true" />
+										<p:outputLabel for="idStdProdAutMont"
+											value="Estándar Producción Automática" />
+										<p:inputText id="idStdProdAutMont"
+											value="#{parametrizacionBean.stdProdAutMont}" disabled="true" />
+									</h:panelGrid>
 
-								<h:panelGrid id="gridLineasConvMont" cellpadding="5"
-									style="margin-bottom:10px" columns="1">
-									<f:facet name="header">
-										<h:outputText value="LINEAS CONVENCIONALES" />
-									</f:facet>
-									<h:form id="aa">
-										<p:outputLabel value="Número de Líneas: " />
-										<p:inputText id="txtNumber"
-											value="#{parametrizacionBean.numLineasConvMont}" size="1" />
-										<br />
-										<p:commandButton value="Turnos"
-											action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"
-											update="formParamGeneral:tabSubGen:guests"
-											process="@this,txtNumber" />
-									</h:form>
-									<h:panelGroup id="guests">
-										<h:form
-											rendered="#{not empty parametrizacionBean.numTurnosConvMont}">
-											<ui:repeat value="#{parametrizacionBean.numTurnosConvMont}"
-												varStatus="loop">
-												<p:outputLabel
-													value="#{parametrizacionBean.lblMonConv[loop.index]}" />
-												<p:inputText
-													value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
-													size="1" />
-												<br />
-											</ui:repeat>
 
-											<p:commandButton value="Mostrar"
-												action="#{parametrizacionBean.TestShowData()}"
-												process="@form" />
+								</p:layoutUnit>
+								<p:layoutUnit position="center" styleClass="center">
+									<h:panelGrid id="gridLineasConvMont" cellpadding="5"
+										style="margin-bottom:10px" columns="1">
+										<f:facet name="header">
+											<h:outputText value="LINEAS CONVENCIONALES" />
+										</f:facet>
+										<h:form id="aa">
+											<p:outputLabel value="Número de Líneas: " />
+											<p:inputText id="txtNumber"
+												value="#{parametrizacionBean.numLineasConvMont}" size="1" />
+											<br />
+											<p:commandButton value="Turnos"
+												action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"
+												update="formParamGeneral:tabSubGen:mtn:guests"
+												process="@this,txtNumber" />
 										</h:form>
-									</h:panelGroup>
-								</h:panelGrid>
-							</p:layoutUnit>
+										<h:panelGroup id="guests">
+											<h:form id="paramMontaje"
+												rendered="#{not empty parametrizacionBean.numTurnosConvMont}">
+												<ui:repeat value="#{parametrizacionBean.numTurnosConvMont}"
+													varStatus="loop">
+													<p:outputLabel
+														value="#{parametrizacionBean.lblMonConv[loop.index]}" />
+													<p:inputText
+														value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
+														size="1" />
+													<br />
+												</ui:repeat>
+												<p:commandButton value="Guardar"
+													action="#{parametrizacionBean.TestShowData()}"
+													process="@parent" />
+											</h:form>
+										</h:panelGroup>
+									</h:panelGrid>
+								</p:layoutUnit>
 
-							<p:layoutUnit position="east" size="400" styleClass="east">
-								<h:panelGrid id="gridLineasAutMont" cellpadding="5" columns="1"
-									style="margin-bottom:10px">
-									<f:facet name="header">
-										<h:outputText value="LINEAS AUTOMATICAS" />
-									</f:facet>
-									<h:form>
-										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
-
-										<p:inputText id="txtNumberAuto"
-											value="#{parametrizacionBean.numLineasAutMont}" size="1" />
-										<br />
-										<p:commandButton value="Turnos"
-											action="#{parametrizacionBean.GenerateTurnsDaysAutMont()}"
-											update="formParamGeneral:tabSubGen:guestsAutoMont"
-											process="@this,txtNumberAuto" />
-									</h:form>
-									<h:panelGroup id="guestsAutoMont">
-										<h:form
-											rendered="#{not empty parametrizacionBean.numTurnosAutMont}">
-											<ui:repeat value="#{parametrizacionBean.numTurnosAutMont}"
-												varStatus="loop">
-												<p:outputLabel
-													value="#{parametrizacionBean.lblMonAut[loop.index]}" />
-												<p:inputText
-													value="#{parametrizacionBean.numTurnosAutMont[loop.index]}"
-													size="1" />
-												<br />
-											</ui:repeat>
-											<p:commandButton value="Mostrar"
-												action="#{parametrizacionBean.TestShowDataAut()}"
-												process="@form" />
+								<p:layoutUnit position="east" size="400" styleClass="east">
+									<h:panelGrid id="gridLineasAutMont" cellpadding="5" columns="1"
+										style="margin-bottom:10px">
+										<f:facet name="header">
+											<h:outputText value="LINEAS AUTOMATICAS" />
+										</f:facet>
+										<h:form>
+											<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+											<p:inputText id="txtNumberAuto"
+												value="#{parametrizacionBean.numLineasAutMont}" size="1" />
+											<br />
+											<p:commandButton value="Turnos"
+												action="#{parametrizacionBean.GenerateTurnsDaysAutMont()}"
+												update="formParamGeneral:tabSubGen:mtn:guestsAutoMont"
+												process="@this,txtNumberAuto" />
 										</h:form>
-									</h:panelGroup>
+										<h:panelGroup id="guestsAutoMont">
+											<h:form
+												rendered="#{not empty parametrizacionBean.numTurnosAutMont}">
+												<ui:repeat value="#{parametrizacionBean.numTurnosAutMont}"
+													varStatus="loop">
+													<p:outputLabel
+														value="#{parametrizacionBean.lblMonAut[loop.index]}" />
+													<p:inputText
+														value="#{parametrizacionBean.numTurnosAutMont[loop.index]}"
+														size="1" />
+													<br />
+												</ui:repeat>
+												<p:commandButton value="Guardar"
+													action="#{parametrizacionBean.TestShowDataAut()}"
+													process="@form" />
+											</h:form>
+										</h:panelGroup>
+									</h:panelGrid>
+								</p:layoutUnit>
+							</p:layout>
 
-								</h:panelGrid>
-							</p:layoutUnit>
-						</p:layout>
+						</h:form>
 					</p:tab>
 
 
@@ -131,28 +134,24 @@
 									<f:facet name="header">
 										<h:outputText value="TROQUELADO" />
 									</f:facet>
-
 									<p:outputLabel for="idRespTroquelado" value="Responsable:" />
 									<p:selectOneMenu id="idRespTroquelado"
 										value="#{parametrizacionBean.respTroquelado}"
 										style="width:150px">
-
 										<f:selectItem itemLabel="- Seleccione -" itemValue=""
 											noSelectionOption="true" />
 										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
 									</p:selectOneMenu>
-
 									<p:outputLabel for="idStdProdConvTrq"
-										value="Estandar Produccion Convencional"></p:outputLabel>
+										value="Estandar Produccion Convencional" />
 									<p:inputText id="idStdProdConvTrq"
-										value="#{parametrizacionBean.stdProdConvTroq}"></p:inputText>
+										value="#{parametrizacionBean.stdProdConvTroq}" disabled="true" />
 
 									<p:outputLabel for="idStdProdAutTrq"
-										value="Estandar Produccion Automatica"></p:outputLabel>
+										value="Estandar Produccion Automatica" />
 									<p:inputText id="idStdProdAutTrq"
-										value="#{parametrizacionBean.stdProdAutTroq}"></p:inputText>
+										value="#{parametrizacionBean.stdProdAutTroq}" disabled="true" />
 								</h:panelGrid>
-
 							</p:layoutUnit>
 							<p:layoutUnit position="center" styleClass="center">
 								<h:panelGrid id="gridLineasConvTrq" cellpadding="5" columns="1"
@@ -160,7 +159,6 @@
 									<f:facet name="header">
 										<h:outputText value="LINEAS CONVENCIONALES" />
 									</f:facet>
-
 									<h:form>
 										<p:outputLabel value="Número de Líneas: " />
 										<p:inputText id="txtNumber"
@@ -183,13 +181,11 @@
 													size="1" />
 												<br />
 											</ui:repeat>
-
-											<p:commandButton value="Mostrar"
+											<p:commandButton value="Guardar"
 												action="#{parametrizacionBean.TestShowDataTrq()}"
 												process="@form" />
 										</h:form>
 									</h:panelGroup>
-
 								</h:panelGrid>
 							</p:layoutUnit>
 							<p:layoutUnit position="east" size="400" styleClass="east">
@@ -198,11 +194,8 @@
 									<f:facet name="header">
 										<h:outputText value="LINEAS AUTOMATICAS" />
 									</f:facet>
-
-
 									<h:form>
 										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
-
 										<p:inputText id="txtNumberAuto"
 											value="#{parametrizacionBean.numLineasAutTroq}" size="1" />
 										<br />
@@ -223,8 +216,7 @@
 													size="1" />
 												<br />
 											</ui:repeat>
-
-											<p:commandButton value="Mostrar"
+											<p:commandButton value="Guardar"
 												action="#{parametrizacionBean.TestShowDataAutTrq()}"
 												process="@form" />
 										</h:form>
@@ -254,14 +246,14 @@
 									</p:selectOneMenu>
 
 									<p:outputLabel for="idStdProdConvApa"
-										value="Estandar Produccion Convencional"></p:outputLabel>
+										value="Estandar Produccion Convencional" />
 									<p:inputText id="idStdProdConvApa"
-										value="#{parametrizacionBean.stdProdConvApa}"></p:inputText>
+										value="#{parametrizacionBean.stdProdConvApa}" disabled="true" />
 
 									<p:outputLabel for="idStdProdAutApa"
-										value="Estandar Produccion Automatica"></p:outputLabel>
+										value="Estandar Produccion Automatica" />
 									<p:inputText id="idStdProdAutApa"
-										value="#{parametrizacionBean.stdProdAutApa}"></p:inputText>
+										value="#{parametrizacionBean.stdProdAutApa}" disabled="true" />
 								</h:panelGrid>
 
 							</p:layoutUnit>
@@ -295,7 +287,7 @@
 												<br />
 											</ui:repeat>
 
-											<p:commandButton value="Mostrar"
+											<p:commandButton value="Guardar"
 												action="#{parametrizacionBean.TestShowDataApa()}"
 												process="@form" />
 										</h:form>
@@ -333,7 +325,7 @@
 												<br />
 											</ui:repeat>
 
-											<p:commandButton value="Mostrar"
+											<p:commandButton value="Guardar"
 												action="#{parametrizacionBean.TestShowDataAutApa()}"
 												process="@form" />
 										</h:form>
@@ -344,112 +336,120 @@
 						</p:layout>
 					</p:tab>
 				</p:tabView>
-
-				<!-- ********************ENVIAR PARAMETROS**************************** -->
+			</h:form>
+			<h:form id="sendParamsGene">
 				<h:panelGrid id="grid" style="margin-bottom:10px" columns="7"
 					cellpadding="5">
-
+					<f:facet name="header">
+						<p:messages id="msgs" />
+					</f:facet>
 					<p:outputLabel for="idDiasLaborables" value="Número de días:"
 						style="font-weight:bold" />
 					<p:inputText id="idDiasLaborables"
-						value="#{parametrizacionBean.diasLaborables}" size="1" />
-					<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
-					<p:commandButton id="btnGenerateDistrib"
-						actionListener="#{parametrizacionBean.createTablas()}"
-						value="Generar Distribucion Dias" />
-					<!--  **********************************************************************  -->
+						value="#{parametrizacionBean.diasLaborables}" size="1"
+						required="true" requiredMessage="Número de días Requerido" />
 				</h:panelGrid>
-				<p:separator></p:separator>
-				<h1>TABLAS</h1>
-				<!-- *********************TABLA FECHAS********************************* -->
-				<h:form id="idTblFechas">
-					<p:commandButton value="MOSTRAR FECHAS"
-						actionListener="#{bean.MyDistribFechas()}" update="pData"
-						process="@parent" />
-
-					<p:dataTable id="pData" var="rowName"
-						value="#{bean.rowNomProcesos}" rowIndexVar="rowIdx"
-						emptyMessage="" editable="true" editMode="cell">
-						<p:column headerText="" styleClass="ui-widget-header">
-							<h:outputText value="#{rowName}" />
-						</p:column>
-
-						<p:columns var="columnName" value="#{bean.colNamesSIM}"
-							headerText="#{columnName}" columnIndexVar="colIdx">
-							<p:cellEditor>
-								<f:facet name="output">
-									<ui:repeat value="#{bean.dataLista3[rowIdx][colIdx]}"
-										var="data">
-										<h:outputText value="#{data}" />
-									</ui:repeat>
-								</f:facet>
-								<f:facet name="input">
-									<p:inputText value="#{data}" />
-								</f:facet>
-							</p:cellEditor>
-						</p:columns>
-					</p:dataTable>
-				</h:form>
-
-				<!-- *********************TABLA DISTRIBUCION************************** -->
-				<h:form id="idTblDistrib">
-					<p:commandButton value="MOSTRAR DISTRIBUCION"
-						actionListener="#{bean.MyDistribPares()}" process="@parent"
-						update="pData" />
-
-					<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
-						rowIndexVar="rowIdx" sortMode="multiple" emptyMessage=""
-						editable="true" editMode="cell">
-						<p:column headerText="" styleClass="ui-widget-header">
-							<h:outputText value="#{rowName}" />
-						</p:column>
-
-						<p:columns var="columnName" value="#{bean.colNamesSIM}"
-							headerText="#{columnName}" columnIndexVar="colIdx">
-							<p:cellEditor>
-								<f:facet name="output">
-									<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
-										<h:outputText value="#{data}" />
-									</ui:repeat>
-								</f:facet>
-								<f:facet name="input">
-									<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
-										<p:inputText value="#{data}" />
-									</ui:repeat>
-								</f:facet>
-
-							</p:cellEditor>
-						</p:columns>
-					</p:dataTable>
-				</h:form>
-
-				<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
-				<h:form id="idTblHoras">
-					<p:commandButton value="MOSTRAR HORAS"
-						actionListener="#{bean.MyDistribHoras()}" update="pData"
-						process="@parent" />
-
-					<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
-						rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
-						<p:column headerText="" styleClass="ui-widget-header">
-							<h:outputText value="#{rowName}" />
-						</p:column>
-
-						<p:columns var="columnName" value="#{bean.colNamesSIM}"
-							headerText="#{columnName}" columnIndexVar="colIdx">
-							<ui:repeat value="#{bean.dataLista2[rowIdx][colIdx]}" var="data">
-								<h:outputText value="#{data}" />
-							</ui:repeat>
-						</p:columns>
-					</p:dataTable>
-				</h:form>
-				<!-- ******************FIN TABLAS*********************** -->
+				<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
+				<p:commandButton id="btnGenerateDistrib"
+					actionListener="#{parametrizacionBean.ExecuteParams()}"
+					value="Generar Distribucion Dias"
+					process="@this, :sendParamsGene, :formParamGeneral:tabSubGen:mtn"
+					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn"
+					ajax="true" />
+				<!--  **********************************************************************  -->
 			</h:form>
+			<p:separator></p:separator>
+			<h1>TABLAS</h1>
+			<!-- *********************TABLA FECHAS********************************* -->
+			<h:form id="idTblFechas">
+				<p:commandButton value="MOSTRAR FECHAS"
+					actionListener="#{bean.MyDistribFechas()}" update="pData"
+					process="@parent" />
+
+				<p:dataTable id="pData" var="rowName" value="#{bean.rowNomProcesos}"
+					rowIndexVar="rowIdx" emptyMessage="" editable="true"
+					editMode="cell">
+					<p:column headerText="" styleClass="ui-widget-header">
+						<h:outputText value="#{rowName}" />
+					</p:column>
+
+					<p:columns var="columnName" value="#{bean.colNamesSIM}"
+						headerText="#{columnName}" columnIndexVar="colIdx">
+						<p:cellEditor>
+							<f:facet name="output">
+								<ui:repeat value="#{bean.dataLista3[rowIdx][colIdx]}" var="data">
+									<h:outputText value="#{data}" />
+								</ui:repeat>
+							</f:facet>
+							<f:facet name="input">
+								<p:calendar id="popup" value="#{data}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:calendar>
+							</f:facet>
+						</p:cellEditor>
+					</p:columns>
+				</p:dataTable>
+			</h:form>
+
+			<!-- *********************TABLA DISTRIBUCION************************** -->
+			<h:form id="idTblDistrib">
+				<p:commandButton value="MOSTRAR DISTRIBUCION"
+					actionListener="#{bean.MyDistribPares()}" process="@parent"
+					update="pData" />
+
+				<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
+					rowIndexVar="rowIdx" sortMode="multiple" emptyMessage=""
+					editable="true" editMode="cell">
+					<p:column headerText="" styleClass="ui-widget-header">
+						<h:outputText value="#{rowName}" />
+					</p:column>
+
+					<p:columns var="columnName" value="#{bean.colNamesSIM}"
+						headerText="#{columnName}" columnIndexVar="colIdx">
+						<p:cellEditor>
+							<f:facet name="output">
+								<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+									<h:outputText value="#{data}" />
+								</ui:repeat>
+							</f:facet>
+							<f:facet name="input">
+								<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+									<p:inputText value="#{data}" />
+								</ui:repeat>
+							</f:facet>
+
+						</p:cellEditor>
+					</p:columns>
+				</p:dataTable>
+			</h:form>
+
+			<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
+			<h:form id="idTblHoras">
+				<p:commandButton value="MOSTRAR HORAS"
+					actionListener="#{bean.MyDistribHoras()}" update="pData"
+					process="@parent" />
+
+				<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
+					rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
+					<p:column headerText="" styleClass="ui-widget-header">
+						<h:outputText value="#{rowName}" />
+					</p:column>
+
+					<p:columns var="columnName" value="#{bean.colNamesSIM}"
+						headerText="#{columnName}" columnIndexVar="colIdx">
+						<ui:repeat value="#{bean.dataLista2[rowIdx][colIdx]}" var="data">
+							<h:outputText value="#{data}" />
+						</ui:repeat>
+					</p:columns>
+				</p:dataTable>
+			</h:form>
+			<!-- ******************FIN TABLAS*********************** -->
+
 
 			<h1>EJEMPLO DISTRIBUCION PARES SHOW CONSOLA</h1>
 			<h:form id="form">
 				<p:commandButton value="Distrib Pares Dynamic"
-					actionListener="#{myservice.distribDynamic()}" />
+					actionListener="#{distribucionTables.distribDynamic()}" />
 			</h:form>
 		</ui:define>
 	</ui:composition>
