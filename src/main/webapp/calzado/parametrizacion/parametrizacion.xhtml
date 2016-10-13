@@ -31,7 +31,7 @@
 										<p:outputLabel for="idRespMontaje" value="Responsable:" />
 										<p:selectOneMenu id="idRespMontaje"
 											value="#{parametrizacionBean.respMontaje}" required="true"
-											style="width:150px" requiredMessage="Responsable Requerido">
+											style="width:150px" requiredMessage="Campo requerido">
 											<f:selectItem itemLabel="- Seleccione -" itemValue=""
 												noSelectionOption="true" />
 											<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
@@ -47,12 +47,12 @@
 											value="#{parametrizacionBean.stdProdAutMont}" disabled="true" />
 									</h:panelGrid>
 
-
 								</p:layoutUnit>
 								<p:layoutUnit position="center" styleClass="center">
 									<h:panelGrid id="gridLineasConvMont" cellpadding="5"
 										style="margin-bottom:10px" columns="1">
 										<f:facet name="header">
+											<p:messages id="alertMtnLines" />
 											<h:outputText value="LINEAS CONVENCIONALES" />
 										</f:facet>
 										<h:form id="aa">
@@ -347,18 +347,18 @@
 						style="font-weight:bold" />
 					<p:inputText id="idDiasLaborables"
 						value="#{parametrizacionBean.diasLaborables}" size="1"
-						required="true" requiredMessage="Número de días Requerido" />
+						required="true" requiredMessage="Campo requerido" />
 				</h:panelGrid>
 				<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
 				<p:commandButton id="btnGenerateDistrib"
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
-					process="@this, :sendParamsGene, :formParamGeneral:tabSubGen:mtn"
+					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber"
 					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn"
-					ajax="true" />
+					ajax="true" partialSubmit="true" />
 				<!--  **********************************************************************  -->
 			</h:form>
-			<p:separator></p:separator>
+			<p:separator />
 			<h1>TABLAS</h1>
 			<!-- *********************TABLA FECHAS********************************* -->
 			<h:form id="idTblFechas">

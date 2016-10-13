@@ -16,7 +16,7 @@ import com.project.utils.MyUtil;
 @ManagedBean(name = "bean")
 @ViewScoped
 public class BeanPrueba implements Serializable {
-	// TODO Clase Bean que genera las tablas
+	// TODO Clase que genera las tablas
 	// DistribucionPares/DistribucionHoras/DistribucionFechas
 
 	private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ public class BeanPrueba implements Serializable {
 	private Integer numDias;
 	private Integer numLineas;
 
-	// ARRAYS SIMULACRO
+	// ARRAYS NOMBRES PARA LA COLUMNA INICIAR Y LA CABECERA
 	private List<String> rowNamesSIM = new ArrayList<String>();
 	private List<String> colNamesSIM = new ArrayList<String>();
 	private List<String> rowNomProcesos = new ArrayList<String>();

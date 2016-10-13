@@ -10,21 +10,15 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class DistribucionTables implements Serializable {
-	// TODO Clase Bean que genera la matriz: distribución dias/horas
+	// TODO Clase que genera la matriz: distribución dias/horas
 	private static final long serialVersionUID = 1L;
 
-	private Integer prodTotal;
-	private Integer prodCap;
+	private Integer prodTotal = 1000;
+	private Integer prodCap = 100;
 
 	ArrayList<Integer> numTurnos = new ArrayList<Integer>();
 	ArrayList<Integer> distribPares = new ArrayList<Integer>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
-
-	public DistribucionTables(Integer cp, Integer total) {
-		super();
-		this.prodCap = cp;
-		this.prodTotal = total;
-	}
 
 	public DistribucionTables() {
 		this.numTurnos.add(1);

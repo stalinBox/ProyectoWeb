@@ -77,11 +77,16 @@ public class ParametrizacionBean implements Serializable {
 	public void ExecuteParams() {
 		// DistribucionTables nn = new DistribucionTables(100, 2000);
 		System.out.println("PARAMETROS A UTILZAR");
-
 		System.out.println("Dias: " + this.diasLaborables);
 		System.out.println("Std Produccion: " + this.stdProdConvMont);
 		System.out.println("Total Pedido: " + this.totPedido);
 		System.out.println("Responsable: " + this.respMontaje);
+		System.out.println("Numero de lineas: " + this.numLineasConvMont);
+		System.out.println("Turnos por cada Linea: "
+				+ this.addNumTurnosConvMont);
+
+		// EJECUCION DE PROCESO
+
 	}
 
 	// TURNOS CONV/AUT MONTAJE
