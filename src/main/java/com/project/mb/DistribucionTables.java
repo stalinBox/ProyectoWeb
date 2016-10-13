@@ -1,33 +1,45 @@
 package com.project.mb;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
-@ManagedBean
-@ViewScoped
-public class DistribucionTables implements Serializable {
+public class DistribucionTables {
 	// TODO Clase que genera la matriz: distribución dias/horas
-	private static final long serialVersionUID = 1L;
 
-	private Integer prodTotal = 1000;
-	private Integer prodCap = 100;
+	private Integer prodTotal;
+	private Integer prodCap;
 
 	ArrayList<Integer> numTurnos = new ArrayList<Integer>();
 	ArrayList<Integer> distribPares = new ArrayList<Integer>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
 
 	public DistribucionTables() {
-		this.numTurnos.add(1);
-		this.numTurnos.add(2);
-		this.numTurnos.add(3);
+
+	}
+
+	public ArrayList<ArrayList<Integer>> receivParamsPares(Integer prodTotal,
+			Integer prodCap, ArrayList<Integer> ListaTurnos) {
+		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
+		this.prodTotal = prodTotal;
+		this.prodCap = prodCap;
+		this.numTurnos = ListaTurnos;
+
+		array1 = distribDynamic();
+		return array1;
+	}
+
+	public ArrayList<ArrayList<Object>> receivParamsHoras(Integer prodTotal,
+			Integer prodCap, ArrayList<Integer> ListaTurnos) {
+		this.prodTotal = prodTotal;
+		this.prodCap = prodCap;
+		this.numTurnos = ListaTurnos;
+		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
+		array3 = distribDynamic2();
+		return array3;
 	}
 
 	// **** Distribucion Dynamic **** //
-	public void distribDynamic() {
+	public ArrayList<ArrayList<Integer>> distribDynamic() {
 		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
 		ArrayList<Integer> array2 = new ArrayList<Integer>();
 		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
@@ -49,8 +61,32 @@ public class DistribucionTables implements Serializable {
 			array2.clear();
 			array4.clear();
 		}
-		System.out.println("ARRAY PARES: " + array1);
-		System.out.println("ARRAY HORAS: " + array3);
+		return array1;
+	}
+
+	public ArrayList<ArrayList<Object>> distribDynamic2() {
+		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> array2 = new ArrayList<Integer>();
+		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
+		ArrayList<Object> array4 = new ArrayList<Object>();
+		int k = 0;
+		for (Integer o : this.numTurnos) {
+			array1.add(new ArrayList<Integer>());
+			array3.add(new ArrayList<Object>());
+			array2 = DistribucionP(o);
+			array4 = DistribucionHoras(this.distribPares, (float) this.prodCap,
+					o);
+			for (Integer q : array2) {
+				array1.get(k).add(q);
+			}
+			for (Object q : array4) {
+				array3.get(k).add(q);
+			}
+			k++;
+			array2.clear();
+			array4.clear();
+		}
+		return array3;
 	}
 
 	// **** FUNCION DISTRIBUCION PARES **** //

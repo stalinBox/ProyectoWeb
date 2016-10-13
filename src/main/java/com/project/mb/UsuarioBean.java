@@ -12,8 +12,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.project.dao.RolDao;
-import com.project.dao.RolDaoImpl;
 import com.project.dao.UsuarioDao;
 import com.project.dao.UsuarioDaoImpl;
 import com.project.entities.Usuario;
@@ -60,7 +58,7 @@ public class UsuarioBean implements Serializable {
 	public void btnCreateUsuario(ActionEvent actionEvent) {
 		String msg = "";
 		UsuarioDao usuarioDao = new UsuarioDaoImpl();
-		RolDao rolDao = new RolDaoImpl();
+		// RolDao rolDao = new RolDaoImpl();
 
 		// this.selectedUsuario.setRol1(rol1);
 

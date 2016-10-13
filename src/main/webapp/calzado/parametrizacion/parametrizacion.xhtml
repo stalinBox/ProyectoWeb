@@ -353,31 +353,28 @@
 				<p:commandButton id="btnGenerateDistrib"
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
-					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber"
-					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn"
+					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :idTblFechas, :idTblDistrib, :idTblHoras"
+					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:pData, :idTblDistrib:pData, :idTblHoras:pData"
 					ajax="true" partialSubmit="true" />
 				<!--  **********************************************************************  -->
 			</h:form>
 			<p:separator />
-			<h1>TABLAS</h1>
 			<!-- *********************TABLA FECHAS********************************* -->
 			<h:form id="idTblFechas">
-				<p:commandButton value="MOSTRAR FECHAS"
-					actionListener="#{bean.MyDistribFechas()}" update="pData"
-					process="@parent" />
-
-				<p:dataTable id="pData" var="rowName" value="#{bean.rowNomProcesos}"
-					rowIndexVar="rowIdx" emptyMessage="" editable="true"
-					editMode="cell">
+				<p:dataTable id="pData" var="rowName"
+					value="#{parametrizacionBean.rowNameProcesos}" rowIndexVar="rowIdx"
+					emptyMessage="" editable="true" editMode="cell">
 					<p:column headerText="" styleClass="ui-widget-header">
 						<h:outputText value="#{rowName}" />
 					</p:column>
 
-					<p:columns var="columnName" value="#{bean.colNamesSIM}"
+					<p:columns var="columnName" value="#{parametrizacionBean.colNames}"
 						headerText="#{columnName}" columnIndexVar="colIdx">
 						<p:cellEditor>
 							<f:facet name="output">
-								<ui:repeat value="#{bean.dataLista3[rowIdx][colIdx]}" var="data">
+								<ui:repeat
+									value="#{parametrizacionBean.array3DFechas[rowIdx][colIdx]}"
+									var="data">
 									<h:outputText value="#{data}" />
 								</ui:repeat>
 							</f:facet>
@@ -393,27 +390,27 @@
 
 			<!-- *********************TABLA DISTRIBUCION************************** -->
 			<h:form id="idTblDistrib">
-				<p:commandButton value="MOSTRAR DISTRIBUCION"
-					actionListener="#{bean.MyDistribPares()}" process="@parent"
-					update="pData" />
-
-				<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
-					rowIndexVar="rowIdx" sortMode="multiple" emptyMessage=""
-					editable="true" editMode="cell">
+				<p:dataTable id="pData" var="rowName"
+					value="#{parametrizacionBean.rowNames}" rowIndexVar="rowIdx"
+					sortMode="multiple" emptyMessage="" editable="true" editMode="cell">
 					<p:column headerText="" styleClass="ui-widget-header">
 						<h:outputText value="#{rowName}" />
 					</p:column>
 
-					<p:columns var="columnName" value="#{bean.colNamesSIM}"
+					<p:columns var="columnName" value="#{parametrizacionBean.colNames}"
 						headerText="#{columnName}" columnIndexVar="colIdx">
 						<p:cellEditor>
 							<f:facet name="output">
-								<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+								<ui:repeat
+									value="#{parametrizacionBean.array3DDistribPares[rowIdx][colIdx]}"
+									var="data">
 									<h:outputText value="#{data}" />
 								</ui:repeat>
 							</f:facet>
 							<f:facet name="input">
-								<ui:repeat value="#{bean.dataLista[rowIdx][colIdx]}" var="data">
+								<ui:repeat
+									value="#{parametrizacionBean.array3DDistribPares[rowIdx][colIdx]}"
+									var="data">
 									<p:inputText value="#{data}" />
 								</ui:repeat>
 							</f:facet>
@@ -425,26 +422,24 @@
 
 			<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
 			<h:form id="idTblHoras">
-				<p:commandButton value="MOSTRAR HORAS"
-					actionListener="#{bean.MyDistribHoras()}" update="pData"
-					process="@parent" />
-
-				<p:dataTable id="pData" var="rowName" value="#{bean.rowNamesSIM}"
-					rowIndexVar="rowIdx" sortMode="multiple" emptyMessage="">
+				<p:dataTable id="pData" var="rowName"
+					value="#{parametrizacionBean.rowNames}" rowIndexVar="rowIdx"
+					sortMode="multiple" emptyMessage="">
 					<p:column headerText="" styleClass="ui-widget-header">
 						<h:outputText value="#{rowName}" />
 					</p:column>
 
-					<p:columns var="columnName" value="#{bean.colNamesSIM}"
+					<p:columns var="columnName" value="#{parametrizacionBean.colNames}"
 						headerText="#{columnName}" columnIndexVar="colIdx">
-						<ui:repeat value="#{bean.dataLista2[rowIdx][colIdx]}" var="data">
+						<ui:repeat
+							value="#{parametrizacionBean.array3DDistribHoras[rowIdx][colIdx]}"
+							var="data">
 							<h:outputText value="#{data}" />
 						</ui:repeat>
 					</p:columns>
 				</p:dataTable>
 			</h:form>
 			<!-- ******************FIN TABLAS*********************** -->
-
 
 			<h1>EJEMPLO DISTRIBUCION PARES SHOW CONSOLA</h1>
 			<h:form id="form">

@@ -3,6 +3,7 @@ package com.project.mb;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -54,6 +55,20 @@ public class ParametrizacionBean implements Serializable {
 
 	private Integer totPedido = 614;
 
+	// ARRAYS PARA LAS CABECERAS Y COLUMNA INDICE DE LAS TABLAS
+	private List<String> rowNames = new ArrayList<String>();
+	private List<String> colNames = new ArrayList<String>();
+	private List<String> rowNameProcesos = new ArrayList<String>();
+
+	// ARRAYS 3D PARA VISUALIZAR EN LAS TABLAS
+	private ArrayList<ArrayList<ArrayList<String>>> array3DFechas = new ArrayList<ArrayList<ArrayList<String>>>();
+	private ArrayList<ArrayList<ArrayList<Integer>>> array3DDistribPares = new ArrayList<ArrayList<ArrayList<Integer>>>();
+	private ArrayList<ArrayList<ArrayList<Object>>> array3DDistribHoras = new ArrayList<ArrayList<ArrayList<Object>>>();
+
+	// ARRAY 2D EL CUAL SERA LLENADO CON DATOS DE LA DISTRIBUCION
+	private ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Integer>> array2 = new ArrayList<ArrayList<Integer>>();
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
@@ -67,6 +82,50 @@ public class ParametrizacionBean implements Serializable {
 		this.stdProdAutApa = 0;
 		this.stdProdAutMont = 0;
 		this.stdProdAutTroq = 0;
+
+		// INICIALIZACION ARRAY1
+		// Row 1 pos(0,i)
+		array1.add(new ArrayList<Integer>());
+		array1.get(0).add(111);
+		array1.get(0).add(222);
+		array1.get(0).add(333);
+		array1.get(0).add(444);
+
+		// Row 2 pos(1,i)
+		array1.add(new ArrayList<Integer>());
+		array1.get(1).add(00);
+		array1.get(1).add(55);
+		array1.get(1).add(66);
+		array1.get(1).add(77);
+
+		// Row 3 pos(1,i)
+		array1.add(new ArrayList<Integer>());
+		array1.get(2).add(11);
+		array1.get(2).add(22);
+		array1.get(2).add(33);
+		array1.get(2).add(44);
+
+		// INICIALIZACION ARRAY2
+		// Row 1 pos(0,i)
+		array2.add(new ArrayList<Integer>());
+		array2.get(0).add(0);
+		array2.get(0).add(0);
+		array2.get(0).add(0);
+		array2.get(0).add(0);
+
+		// Row 2 pos(1,i)
+		array2.add(new ArrayList<Integer>());
+		array2.get(1).add(1);
+		array2.get(1).add(1);
+		array2.get(1).add(1);
+		array2.get(1).add(1);
+
+		// Row 3 pos(1,i)
+		array2.add(new ArrayList<Integer>());
+		array2.get(2).add(2);
+		array2.get(2).add(2);
+		array2.get(2).add(2);
+		array2.get(2).add(2);
 	}
 
 	// CONSTRUCTOR
@@ -75,6 +134,8 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public void ExecuteParams() {
+		ArrayList<ArrayList<Integer>> array0 = new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<Object>> array00 = new ArrayList<ArrayList<Object>>();
 		// DistribucionTables nn = new DistribucionTables(100, 2000);
 		System.out.println("PARAMETROS A UTILZAR");
 		System.out.println("Dias: " + this.diasLaborables);
@@ -85,8 +146,112 @@ public class ParametrizacionBean implements Serializable {
 		System.out.println("Turnos por cada Linea: "
 				+ this.addNumTurnosConvMont);
 
-		// EJECUCION DE PROCESO
+		// PARA ENVIAR Y RECIBIR MATRICES
+		DistribucionTables nn = new DistribucionTables();
+		array0 = nn.receivParamsPares(this.totPedido, this.stdProdConvMont,
+				this.addNumTurnosConvMont);
 
+		array00 = nn.receivParamsHoras(this.totPedido, this.stdProdConvMont,
+				this.addNumTurnosConvMont);
+
+		System.out.println("Esto es lo que devolvio (PARES): " + array0);
+		System.out.println("Esto es lo que devolvio (HORAS): " + array00);
+
+		// Aqui llenar los datos hacia el array1 y el array2
+		//
+		//
+		//
+		//
+		//
+
+		// PARA MOSTRAR TABLAS (SHOW TABLAS)
+		MyDistribFechas();
+		MyDistribPares();
+		MyDistribHoras();
+	}
+
+	// METODOS GENERAR TABLAS
+	public void MyDistribPares() {
+		this.array3DDistribPares.clear();
+		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
+		this.rowNames.clear();
+		this.colNames.clear();
+
+		for (int i = 1; i <= this.numLineasConvMont; i++) {
+			this.rowNames.add("L" + i + " Convencional");
+		}
+		for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+			this.colNames.add("Dia " + i);
+		}
+
+		// CONFIGURAR ESTRUCTURA 3D
+		for (int i = 0; i < rowNames.size(); i++) {
+			this.array3DDistribPares.add(new ArrayList<ArrayList<Integer>>());
+			for (int j = 0; j < colNames.size(); j++) {
+				this.array3DDistribPares.get(i).add(new ArrayList<Integer>());
+			}
+		}
+
+		// AGREGAR LOS DATOS DE 2D a 3D
+		for (int i = 0; i < array1.size(); i++) {
+			for (int j = 0; j < array1.get(i).size(); j++) {
+				// System.out.print(array1.get(i).get(j) + " ");
+				int g = array1.get(i).get(j);
+				this.array3DDistribPares.get(i).get(j).add(g);
+			}
+		}
+	}
+
+	public void MyDistribHoras() {
+		this.array3DDistribHoras.clear();
+		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
+		this.rowNames.clear();
+		this.colNames.clear();
+		for (int i = 1; i <= this.numLineasConvMont; i++) {
+			this.rowNames.add("L" + i + " Convencional");
+		}
+		for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+			this.colNames.add("Dia " + i);
+		}
+
+		// CONFIGURAR ESTRUCTURA 3D
+		for (int i = 0; i < rowNames.size(); i++) {
+			this.array3DDistribHoras.add(new ArrayList<ArrayList<Object>>());
+			for (int j = 0; j < colNames.size(); j++) {
+				this.array3DDistribHoras.get(i).add(new ArrayList<Object>());
+			}
+		}
+
+		// AGREGAR LOS DATOS DE 2D a 3D
+		for (int i = 0; i < array2.size(); i++) {
+			for (int j = 0; j < array2.get(i).size(); j++) {
+				// System.out.print(array1.get(i).get(j) + " ");
+				float g = (float) array2.get(i).get(j);
+				this.array3DDistribHoras.get(i).get(j).add(g);
+			}
+		}
+	}
+
+	public void MyDistribFechas() {
+		this.array3DFechas.clear();
+		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
+		this.rowNameProcesos.clear();
+		this.colNames.clear();
+
+		this.rowNameProcesos.add("FECHA MONTAJE");
+		this.rowNameProcesos.add("FECHA APARADO");
+		this.rowNameProcesos.add("FECHA TROQUELADO");
+
+		for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+			this.colNames.add("Dia " + i);
+		}
+		// CONFIGURAR ESTRUCTURA 3D
+		for (int i = 0; i < rowNameProcesos.size(); i++) {
+			this.array3DFechas.add(new ArrayList<ArrayList<String>>());
+			for (int j = 0; j < colNames.size(); j++) {
+				this.array3DFechas.get(i).add(new ArrayList<String>());
+			}
+		}
 	}
 
 	// TURNOS CONV/AUT MONTAJE
@@ -214,6 +379,57 @@ public class ParametrizacionBean implements Serializable {
 
 	public ArrayList<String> getLblMonConv() {
 		return lblMonConv;
+	}
+
+	public ArrayList<ArrayList<ArrayList<String>>> getArray3DFechas() {
+		return array3DFechas;
+	}
+
+	public void setArray3DFechas(
+			ArrayList<ArrayList<ArrayList<String>>> array3dFechas) {
+		array3DFechas = array3dFechas;
+	}
+
+	public ArrayList<ArrayList<ArrayList<Object>>> getArray3DDistribHoras() {
+		return array3DDistribHoras;
+	}
+
+	public void setArray3DDistribHoras(
+			ArrayList<ArrayList<ArrayList<Object>>> array3dDistribHoras) {
+		array3DDistribHoras = array3dDistribHoras;
+	}
+
+	public ArrayList<ArrayList<ArrayList<Integer>>> getArray3DDistribPares() {
+		return array3DDistribPares;
+	}
+
+	public void setArray3DDistribPares(
+			ArrayList<ArrayList<ArrayList<Integer>>> array3dDistribPares) {
+		array3DDistribPares = array3dDistribPares;
+	}
+
+	public List<String> getRowNames() {
+		return rowNames;
+	}
+
+	public void setRowNames(List<String> rowNames) {
+		this.rowNames = rowNames;
+	}
+
+	public List<String> getColNames() {
+		return colNames;
+	}
+
+	public void setColNames(List<String> colNames) {
+		this.colNames = colNames;
+	}
+
+	public List<String> getRowNameProcesos() {
+		return rowNameProcesos;
+	}
+
+	public void setRowNameProcesos(List<String> rowNameProcesos) {
+		this.rowNameProcesos = rowNameProcesos;
 	}
 
 	public ArrayList<Integer> getAddNumTurnosConvMont() {
