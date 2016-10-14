@@ -45,6 +45,12 @@
 											value="Estándar Producción Automática" />
 										<p:inputText id="idStdProdAutMont"
 											value="#{parametrizacionBean.stdProdAutMont}" disabled="true" />
+
+
+										<p:outputLabel value="total Pedido" />
+										<p:inputText value="#{parametrizacionBean.totPedido}"
+											disabled="true" />
+
 									</h:panelGrid>
 
 								</p:layoutUnit>
@@ -77,9 +83,7 @@
 														size="1" />
 													<br />
 												</ui:repeat>
-												<p:commandButton value="Guardar"
-													action="#{parametrizacionBean.TestShowData()}"
-													process="@parent" />
+
 											</h:form>
 										</h:panelGroup>
 									</h:panelGrid>
@@ -353,7 +357,7 @@
 				<p:commandButton id="btnGenerateDistrib"
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
-					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :idTblFechas, :idTblDistrib, :idTblHoras"
+					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :idTblFechas, :idTblDistrib, :idTblHoras, :formParamGeneral:tabSubGen:mtn:paramMontaje"
 					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:pData, :idTblDistrib:pData, :idTblHoras:pData"
 					ajax="true" partialSubmit="true" />
 				<!--  **********************************************************************  -->
@@ -440,12 +444,6 @@
 				</p:dataTable>
 			</h:form>
 			<!-- ******************FIN TABLAS*********************** -->
-
-			<h1>EJEMPLO DISTRIBUCION PARES SHOW CONSOLA</h1>
-			<h:form id="form">
-				<p:commandButton value="Distrib Pares Dynamic"
-					actionListener="#{distribucionTables.distribDynamic()}" />
-			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

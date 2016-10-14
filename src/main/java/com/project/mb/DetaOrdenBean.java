@@ -21,6 +21,7 @@ import com.project.dao.TallasDaoImpl;
 import com.project.entities.Detalleorden;
 import com.project.entities.Modelo;
 import com.project.entities.Talla;
+import com.project.utils.MyUtil;
 
 @ManagedBean
 @ViewScoped
@@ -35,10 +36,10 @@ public class DetaOrdenBean implements Serializable {
 	private String modelo;
 	private Integer talla;
 	private Integer cantidad;
-	private Integer cp;
+	private static Integer cp;
 	Items order;
 	private ArrayList<Items> orderList = new ArrayList<Items>();
-	private Integer total = 0;
+	private static Integer total;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -51,7 +52,96 @@ public class DetaOrdenBean implements Serializable {
 	public DetaOrdenBean() {
 	}
 
+	// ****************** METODOS ************************* //
+
+	// Ingresa los pedidos en la variable orderList
+	public String addAction() {
+		String itemModelo = null;
+		Integer itemTalla = null;
+		// Convertir las claves a los valores
+		for (SelectItem a : this.selectedItemsModelo) {
+			if (this.modelo.equals(a.getValue().toString())) {
+				itemModelo = a.getLabel();
+			}
+		}
+		for (SelectItem b : this.selectedItemsTalla) {
+			if (this.talla.toString().equals(b.getValue().toString())) {
+				itemTalla = Integer.parseInt(b.getLabel().toString());
+			}
+		}
+		// Añadir al Array los labels convertidos
+		if ((itemModelo != null) && (itemTalla != null)) {
+			Items orderitem = new Items(itemModelo, itemTalla, this.cantidad);
+			orderList.add(orderitem);
+		}
+
+		modelo = "";
+		talla = 0;
+		cantidad = 0;
+		totalOrden();
+		return null;
+	}
+
+	public String deleteAction(Items order) {
+		FacesMessage msg = new FacesMessage("Item Eliminado");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		orderList.remove(order);
+		totalOrden();
+		return null;
+	}
+
+	public void displayOrden() throws InvalidFormatException, IOException {
+		// /* PRUEBAS */
+		// cp = 60;
+		// total = 100;
+		//
+		// /* FIN PRUEBAS */
+
+		WriteAndReadExcel wr = new WriteAndReadExcel();
+		// Store la capacidad de produccion
+		cp = wr.getOrder(orderList);
+
+		// Store la orden total del pedido
+		total = totalOrden();
+
+		System.out.println("TOTAL DE LA ORDEN BEANDETA: " + this.total);
+		System.out.println("CAPACIDAD TOTAL BEANDETA : " + this.cp);
+
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "parametrizacion/parametrizacion.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+
+			ParametrizacionBean nn = new ParametrizacionBean(cp, total);
+
+			nn.setStdProdConvMont(cp);
+			nn.setTotPedido(total);
+			System.out.println("/////Esto se ha enviado CP: " + cp);
+			System.out.println("/////Esto se ha enviado TOTAL: " + total);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	// Total de la orden
+	public Integer totalOrden() {
+		total = 0;
+		for (Items ol : orderList) {
+			total += Integer.parseInt(ol.getCantidad().toString());
+		}
+		return total;
+	}
+
+	// PRUEBAS
+	public void submit() throws IOException {
+		// Metodo para hacer pruebas
+	}
+
 	// SETTERS AND GETTERS
+
 	public List<SelectItem> getSelectedItemsTalla() {
 		this.selectedItemsTalla = new ArrayList<SelectItem>();
 		TallasDao tallasDao = new TallasDaoImpl();
@@ -146,63 +236,6 @@ public class DetaOrdenBean implements Serializable {
 
 	public ArrayList<Items> getOrderlist() {
 		return orderList;
-	}
-
-	// ***** METODOS ***** //
-
-	// Ingresa los pedidos en la variable orderList
-	public String addAction() {
-		String itemModelo = null;
-		Integer itemTalla = null;
-		// Convertir las claves a los valores
-		for (SelectItem a : this.selectedItemsModelo) {
-			if (this.modelo.equals(a.getValue().toString())) {
-				itemModelo = a.getLabel();
-			}
-		}
-		for (SelectItem b : this.selectedItemsTalla) {
-			if (this.talla.toString().equals(b.getValue().toString())) {
-				itemTalla = Integer.parseInt(b.getLabel().toString());
-			}
-		}
-		// Añadir al Array los labels convertidos
-		if ((itemModelo != null) && (itemTalla != null)) {
-			Items orderitem = new Items(itemModelo, itemTalla, this.cantidad);
-			orderList.add(orderitem);
-		}
-
-		modelo = "";
-		talla = 0;
-		cantidad = 0;
-		totalOrden();
-		return null;
-	}
-
-	public String deleteAction(Items order) {
-		FacesMessage msg = new FacesMessage("Item Eliminado");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		orderList.remove(order);
-		totalOrden();
-		return null;
-	}
-
-	public void displayOrden() throws InvalidFormatException, IOException {
-		WriteAndReadExcel wr = new WriteAndReadExcel();
-		this.cp = wr.getOrder(orderList);
-	}
-
-	// Total de la orden
-	public Integer totalOrden() {
-		total = 0;
-		for (Items ol : orderList) {
-			total += Integer.parseInt(ol.getCantidad().toString());
-		}
-		return total;
-	}
-
-	// PRUEBAS
-	public void submit() throws IOException {
-		// Metodo para hacer pruebas
 	}
 
 }
