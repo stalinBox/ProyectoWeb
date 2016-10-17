@@ -5,18 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<script>
-		function monitor(data){
-			var loading = document.getElementById("image");
-			if(data.status == "begin"){
-				loading.style.display = "block";
-			}
-			else if(data.status == "success"){
-				loading.style.display = "none";
-			}
-		}
-	</script>
-	<h:outputScript library="javax.faces" name="jsf.js" />
 </h:head>
 <h:body>
 	<f:view>
@@ -37,6 +25,9 @@
 					<p:graphicImage id="image" value="/images/ajaxloader.gif"
 						style="display:none;" width="150" height="100"></p:graphicImage>
 				</h:form>
+
+				<p:commandButton id="loginButton" value="SACATELAS"
+					actionListener="#{bean.navegaEnlace(actionEvent)}" />
 			</ui:define>
 		</ui:composition>
 	</f:view>

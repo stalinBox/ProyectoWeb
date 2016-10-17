@@ -41,12 +41,13 @@ public class BeanPrueba implements Serializable {
 	}
 
 	// navegar entre paginas
-	public void volverEnlace(ActionEvent actionEvent) {
+	public void volverEnlace(ActionEvent actionEvent) throws Exception {
 		String ruta = "";
 		ruta = MyUtil.messages() + "failed.jsf";
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

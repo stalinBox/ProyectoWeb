@@ -45,12 +45,6 @@
 											value="Estándar Producción Automática" />
 										<p:inputText id="idStdProdAutMont"
 											value="#{parametrizacionBean.stdProdAutMont}" disabled="true" />
-
-
-										<p:outputLabel value="total Pedido" />
-										<p:inputText value="#{parametrizacionBean.totPedido}"
-											disabled="true" />
-
 									</h:panelGrid>
 
 								</p:layoutUnit>
@@ -444,6 +438,10 @@
 				</p:dataTable>
 			</h:form>
 			<!-- ******************FIN TABLAS*********************** -->
+			<h:form>
+				<p:separator></p:separator>
+				<p:commandButton value="SIGUIENTE" />
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

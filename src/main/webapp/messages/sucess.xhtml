@@ -11,11 +11,25 @@
 
 			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
 			<h3>Volver</h3>
+
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loadingProgress.gif" />
+			</p:dialog>
+
+			<h:form>
+				<p:commandButton value="ENVIAR"
+					actionListener="#{beanProgressLoading.action}" />
+			</h:form>
+
 			<h:form id="formLogin">
 				<p:commandButton id="loginButton" value="SACATELAS" update=":growl"
 					actionListener="#{bean.volverEnlace(actionEvent)}" />
 			</h:form>
-
 
 		</ui:define>
 	</ui:composition>
