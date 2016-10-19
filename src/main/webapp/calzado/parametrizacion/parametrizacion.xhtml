@@ -354,6 +354,8 @@
 					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :idTblFechas, :idTblDistrib, :idTblHoras, :formParamGeneral:tabSubGen:mtn:paramMontaje"
 					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:pData, :idTblDistrib:pData, :idTblHoras:pData"
 					ajax="true" partialSubmit="true" />
+				<p:commandButton value="REPROCESAR"></p:commandButton>
+				<p:commandButton value="CONTINUAR"></p:commandButton>
 				<!--  **********************************************************************  -->
 			</h:form>
 			<p:separator />
@@ -362,6 +364,9 @@
 				<p:dataTable id="pData" var="rowName"
 					value="#{parametrizacionBean.rowNameProcesos}" rowIndexVar="rowIdx"
 					emptyMessage="" editable="true" editMode="cell">
+					<f:facet name="header">
+						<p:outputLabel value="FECHAS" />
+					</f:facet>
 					<p:column headerText="" styleClass="ui-widget-header">
 						<h:outputText value="#{rowName}" />
 					</p:column>
@@ -388,9 +393,15 @@
 
 			<!-- *********************TABLA DISTRIBUCION************************** -->
 			<h:form id="idTblDistrib">
+				<br />
 				<p:dataTable id="pData" var="rowName"
 					value="#{parametrizacionBean.rowNames}" rowIndexVar="rowIdx"
-					sortMode="multiple" emptyMessage="" editable="true" editMode="cell">
+					sortMode="multiple" emptyMessage="" editable="true" editMode="cell"
+					paginatorPosition="bottom" rows="10" paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+					<f:facet name="header">
+						<p:outputLabel value="SEMANA DISTRIBUCION PARES" />
+					</f:facet>
 					<p:column headerText="" styleClass="ui-widget-header">
 						<h:outputText value="#{rowName}" />
 					</p:column>
@@ -420,9 +431,13 @@
 
 			<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
 			<h:form id="idTblHoras">
+				<br />
 				<p:dataTable id="pData" var="rowName"
 					value="#{parametrizacionBean.rowNames}" rowIndexVar="rowIdx"
 					sortMode="multiple" emptyMessage="">
+					<f:facet name="header">
+						<p:outputLabel value="HORAS" />
+					</f:facet>
 					<p:column headerText="" styleClass="ui-widget-header">
 						<h:outputText value="#{rowName}" />
 					</p:column>
@@ -438,10 +453,6 @@
 				</p:dataTable>
 			</h:form>
 			<!-- ******************FIN TABLAS*********************** -->
-			<h:form>
-				<p:separator></p:separator>
-				<p:commandButton value="SIGUIENTE" />
-			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

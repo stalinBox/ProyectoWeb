@@ -7,39 +7,102 @@
 <h:head>
 </h:head>
 <h:body>
-	<f:view>
-		<ui:composition template="/WEB-INF/templates/basicTemplate.html">
-			<ui:define name="content">
-				<h1>JavaBeat JSF 2.2 Examples</h1>
-				<h2>JSF2 Ajax Monitoring Example</h2>
-				<h:form prependId="false">
-					<p:inputText id="input" value="#{beanProgressLoading.message}" />
-			#{' '}
-			<h:commandButton value="Display Text"
-						action="#{beanProgressLoading.action}"
-						oncomplete="PF('dialogProgress').show()">
-						<f:ajax execute="@this input" render="output" onevent="monitor"></f:ajax>
-					</h:commandButton>
-			#{' '}
-			<p:outputLabel id="output" value="#{beanProgressLoading.message}"></p:outputLabel>
-					<p:graphicImage id="image" value="/images/ajaxloader.gif"
-						style="display:none;" width="150" height="100"></p:graphicImage>
-				</h:form>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
 
-				<p:commandButton id="loginButton" value="SACATELAS"
-					actionListener="#{bean.navegaEnlace(actionEvent)}" />
-			</ui:define>
-		</ui:composition>
-	</f:view>
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loadingProgress.gif" />
+			</p:dialog>
+
+			<h:form>
+				<p:growl id="messages" showDetail="true" />
+
+				<h:panelGrid columnClasses="value">
+					<h3 style="margin-top: 0">Editable Schedule</h3>
+					<p:schedule id="schedule" value="#{beanPrueba.eventModel}"
+						widgetVar="myschedule" timeZone="GMT+2">
+
+						<p:ajax event="dateSelect" listener="#{beanPrueba.onDateSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventSelect" listener="#{beanPrueba.onEventSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventMove" listener="#{beanPrueba.onEventMove}"
+							update="messages" />
+						<p:ajax event="eventResize" listener="#{beanPrueba.onEventResize}"
+							update="messages" />
+
+					</p:schedule>
+
+					<h3>Locale Support ( Example: Español )</h3>
+					<p:schedule id="scheduleLocale" value="#{beanPrueba.eventModel}"
+						locale="tr" />
+
+					<h3>Lazy Schedule</h3>
+					<p:schedule value="#{beanPrueba.lazyEventModel}" />
+				</h:panelGrid>
+
+				<p:dialog widgetVar="eventDialog" header="Event Details"
+					showEffect="clip" hideEffect="clip">
+					<h:panelGrid id="eventDetails" columns="2">
+						<p:outputLabel for="title" value="Titles:" />
+						<p:inputText id="title" value="#{beanPrueba.event.title}"
+							required="true" />
+
+						<p:outputLabel for="from" value="From:" />
+						<p:calendar id="from" value="#{beanPrueba.event.startDate}"
+							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="to" value="To:" />
+						<p:calendar id="to" value="#{beanPrueba.event.endDate}"
+							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="allDay" value="All Day:" />
+						<h:selectBooleanCheckbox id="allDay"
+							value="#{beanPrueba.event.allDay}" />
+
+						<p:commandButton type="reset" value="Reset" />
+						<p:commandButton id="addButton" value="Save"
+							actionListener="#{beanPrueba.addEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<script type="text/javascript">
+    PrimeFaces.locales['es'] = {
+        closeText: 'Cerrar',
+        prevText: 'Atras',
+        nextText: 'Adelante',
+        currentText: 'Día Actual',
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                          'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
+        dayNamesShort: ['Do','Lu','Ma','Mx','Ju','Vi','Sa'],
+        dayNamesMin: ['Do','Lu','Ma','Mx','Ju','Vi','Sa'],
+        weekHeader: 'Todo el día',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        allDayText : 'Todo el día'
+    };
+</script>
+			<style type="text/css">
+.value {
+	width: 1000px;
+}
+</style>
 
 
-	<h:form id="formDialog">
-		<p:dialog header="progress" widgetVar="dialogProgress" modal="true"
-			showEffect="fade" hideEffect="explode" resizable="false"
-			id="dlgDialogProgress">
-			<p:graphicImage id="image" value="/images/ajaxloader.gif"
-				style="display:none;" width="150" height="100"></p:graphicImage>
-		</p:dialog>
-	</h:form>
+		</ui:define>
+	</ui:composition>
 </h:body>
 </html>

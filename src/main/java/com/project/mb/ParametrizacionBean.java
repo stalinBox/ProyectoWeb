@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @ViewScoped
@@ -70,8 +72,15 @@ public class ParametrizacionBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		DetaOrdenBean nb = new DetaOrdenBean();
-		this.stdProdConvMont = nb.getCp();
-		this.totPedido = nb.getTotal();
+		/**************
+		 * esto es el codigo real this.stdProdConvMont = nb.getCp(); //
+		 * this.totPedido = nb.getTotal();
+		 */
+
+		// PARA PRUEBAS
+		this.stdProdConvMont = 362;
+		this.totPedido = 1150;
+		// FIN PRUEBAS
 
 		this.currentDate = new Date();
 		this.stdProdConvApa = 0;
@@ -98,34 +107,42 @@ public class ParametrizacionBean implements Serializable {
 	public void ExecuteParams() {
 		ArrayList<ArrayList<Integer>> array0 = new ArrayList<ArrayList<Integer>>();
 		ArrayList<ArrayList<Object>> array00 = new ArrayList<ArrayList<Object>>();
+		String msg = "";
+		try {
+			// GUARDAR LOS TURNOS
+			TestShowData();
 
-		// GUARDAR LOS TURNOS
-		TestShowData();
+			System.out.println("PARAMETROS A UTILZAR");
+			System.out.println("Dias: " + this.diasLaborables);
+			System.out.println("Std Produccion: " + this.stdProdConvMont);
+			System.out.println("Total Pedido: " + this.totPedido);
+			System.out.println("Responsable: " + this.respMontaje);
+			System.out.println("Numero de lineas: " + this.numLineasConvMont);
+			System.out.println("Turnos por cada Linea: "
+					+ this.addNumTurnosConvMont);
 
-		System.out.println("PARAMETROS A UTILZAR");
-		System.out.println("Dias: " + this.diasLaborables);
-		System.out.println("Std Produccion: " + this.stdProdConvMont);
-		System.out.println("Total Pedido: " + this.totPedido);
-		System.out.println("Responsable: " + this.respMontaje);
-		System.out.println("Numero de lineas: " + this.numLineasConvMont);
-		System.out.println("Turnos por cada Linea: "
-				+ this.addNumTurnosConvMont);
+			// PARA ENVIAR Y RECIBIR MATRICES
+			DistribucionTables nn = new DistribucionTables();
+			array0 = nn.receivParamsPares(this.totPedido, this.stdProdConvMont,
+					this.addNumTurnosConvMont);
 
-		// PARA ENVIAR Y RECIBIR MATRICES
-		DistribucionTables nn = new DistribucionTables();
-		array0 = nn.receivParamsPares(this.totPedido, this.stdProdConvMont,
-				this.addNumTurnosConvMont);
+			array00 = nn.receivParamsHoras(this.totPedido,
+					this.stdProdConvMont, this.addNumTurnosConvMont);
 
-		array00 = nn.receivParamsHoras(this.totPedido, this.stdProdConvMont,
-				this.addNumTurnosConvMont);
+			System.out.println("Esto es lo que devolvio (PARES): " + array0);
+			System.out.println("Esto es lo que devolvio (HORAS): " + array00);
 
-		System.out.println("Esto es lo que devolvio (PARES): " + array0);
-		System.out.println("Esto es lo que devolvio (HORAS): " + array00);
-
-		// PARA MOSTRAR TABLAS (SHOW TABLAS)
-		MyDistribFechas();
-		MyDistribPares(array0);
-		MyDistribHoras(array00);
+			// PARA MOSTRAR TABLAS (SHOW TABLAS)
+			MyDistribFechas();
+			MyDistribPares(array0);
+			MyDistribHoras(array00);
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = "Error: HACEN FALTA MAS DIAS PARA PROCESAR LA ORDEN";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	// METODOS GENERAR TABLAS

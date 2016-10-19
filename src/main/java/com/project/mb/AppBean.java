@@ -1,15 +1,17 @@
 package com.project.mb;
 
-import javax.faces.bean.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
 
 import com.project.utils.MyUtil;
 
 @ManagedBean
-@ApplicationScoped
+@ViewScoped
 public class AppBean {
 
 	public AppBean() {
+
 	}
 
 	public String getBaseUrl() {
