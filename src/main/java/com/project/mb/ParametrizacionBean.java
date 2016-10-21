@@ -78,7 +78,7 @@ public class ParametrizacionBean implements Serializable {
 		 */
 
 		// PARA PRUEBAS
-		this.stdProdConvMont = 362;
+		this.stdProdConvMont = 200;
 		this.totPedido = 1150;
 		// FIN PRUEBAS
 
@@ -175,6 +175,7 @@ public class ParametrizacionBean implements Serializable {
 				this.array3DDistribPares.get(i).get(j).add(g);
 			}
 		}
+		System.out.println("Estooooooo: " + array3DDistribPares);
 	}
 
 	public void MyDistribHoras(ArrayList<ArrayList<Object>> array00) {

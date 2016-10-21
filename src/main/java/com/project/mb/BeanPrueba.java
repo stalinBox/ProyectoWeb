@@ -1,8 +1,10 @@
 package com.project.mb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -26,62 +28,74 @@ public class BeanPrueba implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private ScheduleModel eventModel;
-
-	private ScheduleModel lazyEventModel;
-
 	private ScheduleEvent event = new DefaultScheduleEvent();
+	private ArrayList<ArrayList<ArrayList<Integer>>> array3DPrueba = new ArrayList<ArrayList<ArrayList<Integer>>>();
+	private ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
 
 	@PostConstruct
 	public void init() {
-		eventModel = new DefaultScheduleModel();
-		eventModel.addEvent(new DefaultScheduleEvent("Champions League Match",
-				previousDay8Pm(), previousDay11Pm()));
-		eventModel.addEvent(new DefaultScheduleEvent("Birthday Party",
-				today1Pm(), today6Pm()));
-		eventModel.addEvent(new DefaultScheduleEvent("Breakfast at Tiffanys",
-				nextDay9Am(), nextDay11Am()));
-		eventModel.addEvent(new DefaultScheduleEvent(
-				"Plant the new garden stuff", theDayAfter3Pm(),
-				fourDaysLater3pm()));
+		array1.add(new ArrayList<Integer>());
+		array1.get(0).add(111);
+		array1.get(0).add(222);
+		array1.get(0).add(333);
+		array1.get(0).add(444);
 
-		lazyEventModel = new LazyScheduleModel() {
+		array1.add(new ArrayList<Integer>());
+		array1.get(1).add(555);
+		array1.get(1).add(666);
+		array1.get(1).add(777);
+		array1.get(1).add(888);
 
-			private static final long serialVersionUID = 1L;
+		array1.add(new ArrayList<Integer>());
+		array1.get(2).add(999);
+		array1.get(2).add(000);
+		array1.get(2).add(112);
+		array1.get(2).add(113);
 
-			@Override
-			public void loadEvents(Date start, Date end) {
-				Date random = getRandomDate(start);
-				addEvent(new DefaultScheduleEvent("Lazy Event 1", random,
-						random));
-
-				random = getRandomDate(start);
-				addEvent(new DefaultScheduleEvent("Lazy Event 2", random,
-						random));
+		System.out.println("Array de ejemplo: " + array1);
+		// CONFIGURAR ESTRUCTURA 3D
+		for (int i = 0; i <= 3; i++) {
+			this.array3DPrueba.add(new ArrayList<ArrayList<Integer>>());
+			for (int j = 0; j <= 3; j++) {
+				this.array3DPrueba.get(i).add(new ArrayList<Integer>());
 			}
-		};
-	}
+		}
+		// AGREGAR LOS DATOS DE 2D a 3D
+		for (int i = 0; i < array1.size(); i++) {
+			for (int j = 0; j < array1.get(i).size(); j++) {
+				int g = array1.get(i).get(j);
+				this.array3DPrueba.get(i).get(j).add(g);
+			}
+		}
+		System.out.println("Array 3D pruebas: " + array3DPrueba);
 
-	public Date getRandomDate(Date base) {
-		Calendar date = Calendar.getInstance();
-		date.setTime(base);
-		date.add(Calendar.DATE, ((int) (Math.random() * 30)) + 1);
-		return date.getTime();
-	}
+		// INSERTAR EN EL MODELO
+		eventModel = new DefaultScheduleModel();
+		//
+		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA1",
+		// nextDay9Am(),
+		// nextDay11Am()));
+		//
+		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA2",
+		// nextDay9Am(),
+		// nextDay11Am()));
+		//
+		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA3",
+		// nextDay9Am(),
+		// nextDay11Am()));
 
-	public Date getInitialDate() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(calendar.get(Calendar.YEAR), Calendar.FEBRUARY,
-				calendar.get(Calendar.DATE), 0, 0, 0);
+		// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
+		for (int i = 0; i < array1.size(); i++) {
+			for (int j = 0; j < array1.get(i).size(); j++) {
+				System.out.print(array1.get(i).get(j) + " ");
 
-		return calendar.getTime();
-	}
+				// AÑADIR EVENTOS EN EL DIA
 
-	public ScheduleModel getEventModel() {
-		return eventModel;
-	}
+				eventModel.addEvent(new DefaultScheduleEvent(array1.get(i)
+						.get(j).toString(), nextDay6Am(), previousDay8Pm()));
 
-	public ScheduleModel getLazyEventModel() {
-		return lazyEventModel;
+			}
+		}
 	}
 
 	private Calendar today() {
@@ -100,67 +114,16 @@ public class BeanPrueba implements Serializable {
 		return t.getTime();
 	}
 
-	private Date previousDay11Pm() {
+	private Date nextDay6Am() {
 		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-		t.set(Calendar.HOUR, 11);
-
-		return t.getTime();
-	}
-
-	private Date today1Pm() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.HOUR, 1);
-
-		return t.getTime();
-	}
-
-	private Date theDayAfter3Pm() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 2);
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.HOUR, 3);
-
-		return t.getTime();
-	}
-
-	private Date today6Pm() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.AM_PM, Calendar.AM);
+		t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
 		t.set(Calendar.HOUR, 6);
 
 		return t.getTime();
 	}
 
-	private Date nextDay9Am() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.AM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-		t.set(Calendar.HOUR, 9);
-
-		return t.getTime();
-	}
-
-	private Date nextDay11Am() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.AM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-		t.set(Calendar.HOUR, 11);
-
-		return t.getTime();
-	}
-
-	private Date fourDaysLater3pm() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 4);
-		t.set(Calendar.HOUR, 3);
-
-		return t.getTime();
-	}
-
+	// SETTERS AND GETTERS
 	public ScheduleEvent getEvent() {
 		return event;
 	}
@@ -169,6 +132,11 @@ public class BeanPrueba implements Serializable {
 		this.event = event;
 	}
 
+	public ScheduleModel getEventModel() {
+		return eventModel;
+	}
+
+	// EVENTOS DEL SCHEDULE
 	public void addEvent(ActionEvent actionEvent) {
 		if (event.getId() == null)
 			eventModel.addEvent(event);
@@ -191,7 +159,6 @@ public class BeanPrueba implements Serializable {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Event moved", "Day delta:" + event.getDayDelta()
 						+ ", Minute delta:" + event.getMinuteDelta());
-
 		addMessage(message);
 	}
 
@@ -199,7 +166,6 @@ public class BeanPrueba implements Serializable {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Event resized", "Day delta:" + event.getDayDelta()
 						+ ", Minute delta:" + event.getMinuteDelta());
-
 		addMessage(message);
 	}
 

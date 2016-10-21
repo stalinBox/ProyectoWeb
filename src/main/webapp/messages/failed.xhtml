@@ -21,50 +21,44 @@
 				<p:growl id="messages" showDetail="true" />
 
 				<h:panelGrid columnClasses="value">
-					<h3 style="margin-top: 0">Editable Schedule</h3>
+					<h3 style="margin-top: 0">SCHEDULE EDITABLES</h3>
 					<p:schedule id="schedule" value="#{beanPrueba.eventModel}"
-						widgetVar="myschedule" timeZone="GMT+2">
+						widgetVar="myschedule" timeZone="GMT-5" locale="es"
+						rightHeaderTemplate="" showWeekends="true">
 
-						<p:ajax event="dateSelect" listener="#{beanPrueba.onDateSelect}"
+						<!-- <p:ajax event="dateSelect" listener="#{beanPrueba.onDateSelect}"
 							update="eventDetails" oncomplete="PF('eventDialog').show();" />
 						<p:ajax event="eventSelect" listener="#{beanPrueba.onEventSelect}"
 							update="eventDetails" oncomplete="PF('eventDialog').show();" />
 						<p:ajax event="eventMove" listener="#{beanPrueba.onEventMove}"
 							update="messages" />
 						<p:ajax event="eventResize" listener="#{beanPrueba.onEventResize}"
-							update="messages" />
+							update="messages" /> -->
 
 					</p:schedule>
-
-					<h3>Locale Support ( Example: Español )</h3>
-					<p:schedule id="scheduleLocale" value="#{beanPrueba.eventModel}"
-						locale="tr" />
-
-					<h3>Lazy Schedule</h3>
-					<p:schedule value="#{beanPrueba.lazyEventModel}" />
 				</h:panelGrid>
 
-				<p:dialog widgetVar="eventDialog" header="Event Details"
-					showEffect="clip" hideEffect="clip">
+				<p:dialog widgetVar="eventDialog" header="Detalle" showEffect="clip"
+					hideEffect="clip">
 					<h:panelGrid id="eventDetails" columns="2">
-						<p:outputLabel for="title" value="Titles:" />
+						<p:outputLabel for="title" value="Título:" />
 						<p:inputText id="title" value="#{beanPrueba.event.title}"
 							required="true" />
 
-						<p:outputLabel for="from" value="From:" />
+						<p:outputLabel for="from" value="Desde:" />
 						<p:calendar id="from" value="#{beanPrueba.event.startDate}"
-							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+							timeZone="GMT-5" pattern="dd/MM/yyyy HH:mm" />
 
-						<p:outputLabel for="to" value="To:" />
+						<p:outputLabel for="to" value="Hasta:" />
 						<p:calendar id="to" value="#{beanPrueba.event.endDate}"
-							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+							timeZone="GMT-5" pattern="dd/MM/yyyy HH:mm" />
 
-						<p:outputLabel for="allDay" value="All Day:" />
+						<p:outputLabel for="allDay" value="Todo el día:" />
 						<h:selectBooleanCheckbox id="allDay"
 							value="#{beanPrueba.event.allDay}" />
 
-						<p:commandButton type="reset" value="Reset" />
-						<p:commandButton id="addButton" value="Save"
+						<p:commandButton type="reset" value="Restaurar" />
+						<p:commandButton id="addButton" value="Guardar"
 							actionListener="#{beanPrueba.addEvent}"
 							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
 					</h:panelGrid>
@@ -74,17 +68,18 @@
 			<script type="text/javascript">
     PrimeFaces.locales['es'] = {
         closeText: 'Cerrar',
-        prevText: 'Atras',
-        nextText: 'Adelante',
-        currentText: 'Día Actual',
+        prevText: 'Anterioooooooooooooooorr',
+        nextText: 'Aiguienteeeeeeeeeeeeeee',
+        currentText: 'Hoy',
         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
             'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-        monthNamesShort: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                          'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-        dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
-        dayNamesShort: ['Do','Lu','Ma','Mx','Ju','Vi','Sa'],
-        dayNamesMin: ['Do','Lu','Ma','Mx','Ju','Vi','Sa'],
-        weekHeader: 'Todo el día',
+        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+            'Jul','Ago','Sep','Oct','Nov','Dic'],
+        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mie','Juv','Vie','Sab'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+        weekHeader: 'Semana',
+        dateFormat:'dd/mm/yy',
         firstDay: 1,
         isRTL: false,
         showMonthAfterYear: false,
@@ -100,7 +95,6 @@
 	width: 1000px;
 }
 </style>
-
 
 		</ui:define>
 	</ui:composition>
