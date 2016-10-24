@@ -52,7 +52,12 @@ public class BeanPrueba implements Serializable {
 		array1.get(2).add(112);
 		array1.get(2).add(113);
 
-		System.out.println("Array de ejemplo: " + array1);
+		array1.add(new ArrayList<Integer>());
+		array1.get(3).add(121);
+		array1.get(3).add(131);
+		array1.get(3).add(141);
+		array1.get(3).add(151);
+
 		// CONFIGURAR ESTRUCTURA 3D
 		for (int i = 0; i <= 3; i++) {
 			this.array3DPrueba.add(new ArrayList<ArrayList<Integer>>());
@@ -67,11 +72,9 @@ public class BeanPrueba implements Serializable {
 				this.array3DPrueba.get(i).get(j).add(g);
 			}
 		}
-		System.out.println("Array 3D pruebas: " + array3DPrueba);
 
 		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
-		//
 		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA1",
 		// nextDay9Am(),
 		// nextDay11Am()));
@@ -84,16 +87,17 @@ public class BeanPrueba implements Serializable {
 		// nextDay9Am(),
 		// nextDay11Am()));
 
-		// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
+		Calendar b = null;
 		for (int i = 0; i < array1.size(); i++) {
+			b = nextDay6Am(b);
+			if (b.MONDAY == 2) {
+				b = nextDay6Am(b);
+			}
 			for (int j = 0; j < array1.get(i).size(); j++) {
-				System.out.print(array1.get(i).get(j) + " ");
-
 				// AÑADIR EVENTOS EN EL DIA
-
-				eventModel.addEvent(new DefaultScheduleEvent(array1.get(i)
-						.get(j).toString(), nextDay6Am(), previousDay8Pm()));
-
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ "Convencional: " + array1.get(j).get(i).toString(), b
+						.getTime(), b.getTime()));
 			}
 		}
 	}
@@ -105,22 +109,20 @@ public class BeanPrueba implements Serializable {
 		return calendar;
 	}
 
-	private Date previousDay8Pm() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-		t.set(Calendar.HOUR, 8);
-
-		return t.getTime();
-	}
-
-	private Date nextDay6Am() {
-		Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.AM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-		t.set(Calendar.HOUR, 6);
-
-		return t.getTime();
+	private Calendar nextDay6Am(Calendar a) {
+		Calendar t = null;
+		if (a == null) {
+			t = (Calendar) today().clone();
+			t.set(Calendar.AM_PM, Calendar.AM);
+			t.set(Calendar.DATE, t.get(Calendar.DATE));
+			t.set(Calendar.HOUR, 6);
+			return t;
+		} else {
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			a.set(Calendar.HOUR, 8);
+			return a;
+		}
 	}
 
 	// SETTERS AND GETTERS
