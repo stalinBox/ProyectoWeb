@@ -17,23 +17,34 @@
 				<p:graphicImage value="/images/loadingProgress.gif" />
 			</p:dialog>
 
-			<h:form>
+			<h:form id="form1">
 				<p:growl id="messages" showDetail="true" />
-
+				<p:outputLabel value="Horas extras:" />
+				<p:selectBooleanButton id="bol" value="#{beanPrueba.hExtras}"
+					onLabel="Si" offLabel="No" style="width:60px" />
+				<br />
+				<br />
+				<br />
+				<p:commandButton value="Generar"
+					actionListener="#{beanPrueba.generateSchedule()}"
+					process="@this, :form1:bol" update=":form1:schedule" />
+				<br />
+				<br />
+				<br />
 				<h:panelGrid columnClasses="value">
 					<h3 style="margin-top: 0">SCHEDULE EDITABLES</h3>
 					<p:schedule id="schedule" value="#{beanPrueba.eventModel}"
 						widgetVar="myschedule" timeZone="GMT-5" locale="es"
 						rightHeaderTemplate="" showWeekends="true" styleClass="custom">
 
-						<!-- <p:ajax event="dateSelect" listener="#{beanPrueba.onDateSelect}"
+						<p:ajax event="dateSelect" listener="#{beanPrueba.onDateSelect}"
 							update="eventDetails" oncomplete="PF('eventDialog').show();" />
 						<p:ajax event="eventSelect" listener="#{beanPrueba.onEventSelect}"
 							update="eventDetails" oncomplete="PF('eventDialog').show();" />
 						<p:ajax event="eventMove" listener="#{beanPrueba.onEventMove}"
 							update="messages" />
 						<p:ajax event="eventResize" listener="#{beanPrueba.onEventResize}"
-							update="messages" /> -->
+							update="messages" />
 
 					</p:schedule>
 				</h:panelGrid>

@@ -38,7 +38,7 @@ public class DistribucionTables {
 		return array3;
 	}
 
-	// **** Distribucion Dynamic **** //
+	// **** Distribution Dynamic **** //
 	public ArrayList<ArrayList<Integer>> distribDynamic() {
 		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
 		ArrayList<Integer> array2 = new ArrayList<Integer>();

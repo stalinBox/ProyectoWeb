@@ -17,7 +17,6 @@ import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
@@ -31,9 +30,42 @@ public class BeanPrueba implements Serializable {
 	private ScheduleEvent event = new DefaultScheduleEvent();
 	private ArrayList<ArrayList<ArrayList<Integer>>> array3DPrueba = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	private ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Object>> array2 = new ArrayList<ArrayList<Object>>();
+	private boolean hExtras;
 
 	@PostConstruct
 	public void init() {
+		array2.add(new ArrayList<Object>());
+		array2.get(0).add(1.11);
+		array2.get(0).add(2.22);
+		array2.get(0).add(3.33);
+		array2.get(0).add(4.44);
+
+		array2.add(new ArrayList<Object>());
+		array2.get(1).add(5.55);
+		array2.get(1).add(6.66);
+		array2.get(1).add(7.77);
+		array2.get(1).add(8.88);
+
+		array2.add(new ArrayList<Object>());
+		array2.get(2).add(9.99);
+		array2.get(2).add(0.01);
+		array2.get(2).add(1.12);
+		array2.get(2).add(1.13);
+
+		array2.add(new ArrayList<Object>());
+		array2.get(3).add(1.21);
+		array2.get(3).add(1.31);
+		array2.get(3).add(1.41);
+		array2.get(3).add(1.51);
+
+		array2.add(new ArrayList<Object>());
+		array2.get(4).add(1.00);
+		array2.get(4).add(2.00);
+		array2.get(4).add(3.00);
+		array2.get(4).add(4.00);
+
+		// *****
 		array1.add(new ArrayList<Integer>());
 		array1.get(0).add(111);
 		array1.get(0).add(222);
@@ -58,48 +90,29 @@ public class BeanPrueba implements Serializable {
 		array1.get(3).add(141);
 		array1.get(3).add(151);
 
+		array1.add(new ArrayList<Integer>());
+		array1.get(4).add(100);
+		array1.get(4).add(200);
+		array1.get(4).add(300);
+		array1.get(4).add(400);
+
 		// CONFIGURAR ESTRUCTURA 3D
-		for (int i = 0; i <= 3; i++) {
+		for (int i = 0; i < 5; i++) {
 			this.array3DPrueba.add(new ArrayList<ArrayList<Integer>>());
-			for (int j = 0; j <= 3; j++) {
+			for (int j = 0; j < 4; j++) {
 				this.array3DPrueba.get(i).add(new ArrayList<Integer>());
 			}
 		}
+		int g = 0;
 		// AGREGAR LOS DATOS DE 2D a 3D
 		for (int i = 0; i < array1.size(); i++) {
 			for (int j = 0; j < array1.get(i).size(); j++) {
-				int g = array1.get(i).get(j);
+				g = array1.get(i).get(j);
 				this.array3DPrueba.get(i).get(j).add(g);
 			}
 		}
-
-		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
-		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA1",
-		// nextDay9Am(),
-		// nextDay11Am()));
-		//
-		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA2",
-		// nextDay9Am(),
-		// nextDay11Am()));
-		//
-		// eventModel.addEvent(new DefaultScheduleEvent("CHUMAAA3",
-		// nextDay9Am(),
-		// nextDay11Am()));
 
-		Calendar b = null;
-		for (int i = 0; i < array1.size(); i++) {
-			b = nextDay6Am(b);
-			if (b.MONDAY == 2) {
-				b = nextDay6Am(b);
-			}
-			for (int j = 0; j < array1.get(i).size(); j++) {
-				// AÑADIR EVENTOS EN EL DIA
-				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
-						+ "Convencional: " + array1.get(j).get(i).toString(), b
-						.getTime(), b.getTime()));
-			}
-		}
 	}
 
 	private Calendar today() {
@@ -109,25 +122,100 @@ public class BeanPrueba implements Serializable {
 		return calendar;
 	}
 
-	private Calendar nextDay6Am(Calendar a) {
-		Calendar t = null;
+	@SuppressWarnings("deprecation")
+	private Calendar nextDayExtras(Calendar a) {
 		if (a == null) {
-			t = (Calendar) today().clone();
-			t.set(Calendar.AM_PM, Calendar.AM);
-			t.set(Calendar.DATE, t.get(Calendar.DATE));
-			t.set(Calendar.HOUR, 6);
-			return t;
+			a = (Calendar) today().clone();
+			a.set(Calendar.AM_PM, Calendar.AM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE));
+			a.set(Calendar.HOUR, 6);
 		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			a.set(Calendar.HOUR, 8);
-			return a;
+			if (a.getTime().getDay() == 6) {
+				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+				nextDay(a);
+			} else {
+				a.set(Calendar.AM_PM, Calendar.PM);
+				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+				a.set(Calendar.HOUR, 8);
+			}
+		}
+		return a;
+	}
+
+	@SuppressWarnings("deprecation")
+	private Calendar nextDay(Calendar a) {
+		if (a == null) {
+			a = (Calendar) today().clone();
+			a.set(Calendar.AM_PM, Calendar.AM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE));
+			a.set(Calendar.HOUR, 6);
+		} else {
+			if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
+				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+				nextDay(a);
+			} else {
+				a.set(Calendar.AM_PM, Calendar.PM);
+				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+				a.set(Calendar.HOUR, 8);
+			}
+		}
+		return a;
+	}
+
+	// METODOS
+
+	public void withHextras() {
+		// INSERTAR EN EL MODELO
+		eventModel = new DefaultScheduleModel();
+		Calendar b = null;
+		for (int i = 0; i < array3DPrueba.size(); i++) {
+			b = nextDayExtras(b);
+			for (int j = 0; j < array3DPrueba.get(i).size(); j++) {
+				// AÑADIR EVENTOS EN EL DIA
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ "Convencional: "
+						+ array3DPrueba.get(i).get(j).toString(), b.getTime(),
+						b.getTime()));
+			}
+		}
+	}
+
+	public void withOutHextras() {
+		// INSERTAR EN EL MODELO
+		eventModel = new DefaultScheduleModel();
+		Calendar b = null;
+		for (int i = 0; i < array3DPrueba.size(); i++) {
+			b = nextDay(b);
+			for (int j = 0; j < array3DPrueba.get(i).size(); j++) {
+				// AÑADIR EVENTOS EN EL DIA
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ "Convencional: "
+						+ array3DPrueba.get(i).get(j).toString(), b.getTime(),
+						b.getTime()));
+			}
+		}
+	}
+
+	public void generateSchedule() {
+		System.out.println("Verdadero o falso: " + this.hExtras);
+		if (this.hExtras == true) {
+			withHextras();
+		} else {
+			withOutHextras();
 		}
 	}
 
 	// SETTERS AND GETTERS
 	public ScheduleEvent getEvent() {
 		return event;
+	}
+
+	public boolean gethExtras() {
+		return hExtras;
+	}
+
+	public void sethExtras(boolean hExtras) {
+		this.hExtras = hExtras;
 	}
 
 	public void setEvent(ScheduleEvent event) {
