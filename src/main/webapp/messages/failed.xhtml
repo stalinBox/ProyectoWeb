@@ -27,8 +27,14 @@
 				<br />
 				<p:commandButton value="Generar"
 					actionListener="#{beanPrueba.generateSchedule()}"
-					process="@this, :form1:bol" update=":form1:schedule" />
+					process="@this, :form1:bol, :form1:button"
+					update=":form1:schedule, :form1:messages" />
 				<br />
+				<p:outputLabel for="button" value="Fecha para montar: " />
+				<p:calendar id="button" value="#{beanPrueba.fMontaje}"
+					showOn="button" required="true"
+					requiredMessage="Es necesaria la fecha para montar" size="4"
+					locale="es" />
 				<br />
 				<br />
 				<h:panelGrid columnClasses="value">
@@ -87,8 +93,8 @@
         monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
             'Jul','Ago','Sep','Oct','Nov','Dic'],
         dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-        dayNamesShort: ['Dom','Lun','Mar','Mie','Juv','Vie','Sab'],
-        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+        dayNamesShort: ['Dom','Lun','Mar','Mie','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
         weekHeader: 'Semana',
         dateFormat:'dd/mm/yy',
         firstDay: 1,

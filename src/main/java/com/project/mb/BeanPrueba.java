@@ -32,6 +32,7 @@ public class BeanPrueba implements Serializable {
 	private ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
 	private ArrayList<ArrayList<Object>> array2 = new ArrayList<ArrayList<Object>>();
 	private boolean hExtras;
+	private Date fMontaje;
 
 	@PostConstruct
 	public void init() {
@@ -112,64 +113,47 @@ public class BeanPrueba implements Serializable {
 			}
 		}
 		eventModel = new DefaultScheduleModel();
-
 	}
 
-	private Calendar today() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.DATE), 0, 0, 0);
-		return calendar;
-	}
+	// private Calendar today() {
+	// Calendar calendar = Calendar.getInstance();
+	// calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+	// calendar.get(Calendar.DATE), 0, 0, 0);
+	// return calendar;
+	// }
 
 	@SuppressWarnings("deprecation")
 	private Calendar nextDayExtras(Calendar a) {
-		if (a == null) {
-			a = (Calendar) today().clone();
-			a.set(Calendar.AM_PM, Calendar.AM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE));
-			a.set(Calendar.HOUR, 6);
+		if (a.getTime().getDay() == 6) {
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			nextDayExtras(a);
 		} else {
-			if (a.getTime().getDay() == 6) {
-				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-				nextDay(a);
-			} else {
-				a.set(Calendar.AM_PM, Calendar.PM);
-				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-				a.set(Calendar.HOUR, 8);
-			}
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			a.set(Calendar.HOUR, 8);
 		}
 		return a;
 	}
 
 	@SuppressWarnings("deprecation")
 	private Calendar nextDay(Calendar a) {
-		if (a == null) {
-			a = (Calendar) today().clone();
-			a.set(Calendar.AM_PM, Calendar.AM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE));
-			a.set(Calendar.HOUR, 6);
+		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			nextDay(a);
 		} else {
-			if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-				nextDay(a);
-			} else {
-				a.set(Calendar.AM_PM, Calendar.PM);
-				a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-				a.set(Calendar.HOUR, 8);
-			}
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			a.set(Calendar.HOUR, 8);
 		}
 		return a;
 	}
 
 	// METODOS
-
-	public void withHextras() {
+	public void withHextras(Calendar fMontajeParamE) {
 		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
-		Calendar b = null;
+		Calendar b = fMontajeParamE;
 		for (int i = 0; i < array3DPrueba.size(); i++) {
-			b = nextDayExtras(b);
 			for (int j = 0; j < array3DPrueba.get(i).size(); j++) {
 				// AÑADIR EVENTOS EN EL DIA
 				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
@@ -177,15 +161,15 @@ public class BeanPrueba implements Serializable {
 						+ array3DPrueba.get(i).get(j).toString(), b.getTime(),
 						b.getTime()));
 			}
+			b = nextDayExtras(b);
 		}
 	}
 
-	public void withOutHextras() {
+	public void withOutHextras(Calendar fMontajeParam) {
 		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
-		Calendar b = null;
+		Calendar b = fMontajeParam;
 		for (int i = 0; i < array3DPrueba.size(); i++) {
-			b = nextDay(b);
 			for (int j = 0; j < array3DPrueba.get(i).size(); j++) {
 				// AÑADIR EVENTOS EN EL DIA
 				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
@@ -193,21 +177,48 @@ public class BeanPrueba implements Serializable {
 						+ array3DPrueba.get(i).get(j).toString(), b.getTime(),
 						b.getTime()));
 			}
+			b = nextDay(b);
 		}
+	}
+
+	public Calendar DateToCalendar(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
 	}
 
 	public void generateSchedule() {
+		Calendar tConvertCal = null;
 		System.out.println("Verdadero o falso: " + this.hExtras);
-		if (this.hExtras == true) {
-			withHextras();
+		System.out.println("Fecha seleccionada: " + this.fMontaje);
+		tConvertCal = DateToCalendar(this.fMontaje);
+		System.out.println("Numero del dia elegido: " + this.fMontaje.getDay());
+
+		if (this.fMontaje.getDay() == 0 || this.fMontaje.getDay() == 6) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(
+							"No se puede programar los fines de semana"));
+
+		} else if (this.hExtras == true) {
+			withHextras(tConvertCal);
 		} else {
-			withOutHextras();
+			withOutHextras(tConvertCal);
 		}
 	}
 
 	// SETTERS AND GETTERS
+
 	public ScheduleEvent getEvent() {
 		return event;
+	}
+
+	public Date getfMontaje() {
+		return fMontaje;
+	}
+
+	public void setfMontaje(Date fMontaje) {
+		this.fMontaje = fMontaje;
 	}
 
 	public boolean gethExtras() {
