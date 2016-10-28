@@ -36,6 +36,7 @@ public class BeanPrueba implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		// ***** DISTRIBUCION HORAS
 		array2.add(new ArrayList<Object>());
 		array2.get(0).add(1.11);
 		array2.get(0).add(2.22);
@@ -66,7 +67,7 @@ public class BeanPrueba implements Serializable {
 		array2.get(4).add(3.00);
 		array2.get(4).add(4.00);
 
-		// *****
+		// ***** DISTRIBUCION EXAMPLE
 		array1.add(new ArrayList<Integer>());
 		array1.get(0).add(111);
 		array1.get(0).add(222);
@@ -195,10 +196,12 @@ public class BeanPrueba implements Serializable {
 		System.out.println("Numero del dia elegido: " + this.fMontaje.getDay());
 
 		if (this.fMontaje.getDay() == 0 || this.fMontaje.getDay() == 6) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(
-							"No se puede programar los fines de semana"));
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									"No se puede empezar a programar los fines de semana"));
 
 		} else if (this.hExtras == true) {
 			withHextras(tConvertCal);
@@ -243,7 +246,6 @@ public class BeanPrueba implements Serializable {
 			eventModel.addEvent(event);
 		else
 			eventModel.updateEvent(event);
-
 		event = new DefaultScheduleEvent();
 	}
 

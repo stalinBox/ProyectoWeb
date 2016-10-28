@@ -8,10 +8,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+/**
+ * @author STALIN RAMÍREZ
+ *
+ */
 @ManagedBean
 @ViewScoped
 public class ParametrizacionBean implements Serializable {
@@ -58,6 +61,7 @@ public class ParametrizacionBean implements Serializable {
 
 	private Integer totPedido;
 
+	private ArrayList<Integer> valoresCP = new ArrayList<Integer>();
 	// ARRAYS PARA LAS CABECERAS Y COLUMNA INDICE DE LAS TABLAS
 	private List<String> rowNames = new ArrayList<String>();
 	private List<String> colNames = new ArrayList<String>();
@@ -72,19 +76,22 @@ public class ParametrizacionBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		DetaOrdenBean nb = new DetaOrdenBean();
-		/**************
-		 * esto es el codigo real this.stdProdConvMont = nb.getCp(); //
-		 * this.totPedido = nb.getTotal();
-		 */
+		this.valoresCP = DetaOrdenBean.getCp();
+		this.stdProdConvMont = this.valoresCP.get(0);
+		this.stdProdConvApa = this.valoresCP.get(1);
+		this.stdProdConvTroq = this.valoresCP.get(2);
+		this.totPedido = nb.getTotal();
 
 		// PARA PRUEBAS
-		this.stdProdConvMont = 200;
-		this.totPedido = 1150;
+		// this.stdProdConvMont = 200;
+		// this.stdProdConvApa = 300;
+		// this.stdProdConvTroq = 400;
+		// this.totPedido = 1150;
 		// FIN PRUEBAS
 
 		this.currentDate = new Date();
-		this.stdProdConvApa = 0;
-		this.stdProdConvTroq = 0;
+		// this.stdProdConvApa = 0;
+		// this.stdProdConvTroq = 0;
 		this.stdProdAutApa = 0;
 		this.stdProdAutMont = 0;
 		this.stdProdAutTroq = 0;
@@ -95,12 +102,21 @@ public class ParametrizacionBean implements Serializable {
 
 	}
 
-	public ParametrizacionBean(Integer a, Integer b) {
+	public ParametrizacionBean(ArrayList<Integer> cp, Integer b) {
 		this();
-		this.stdProdConvMont = a;
+		this.valoresCP = cp;
 		this.totPedido = b;
 
-		System.out.println("***** Standar Montaje: " + this.stdProdConvMont);
+		this.stdProdConvMont = cp.get(0);
+		this.stdProdConvApa = cp.get(1);
+		this.stdProdConvTroq = cp.get(2);
+
+		System.out.println("***** PARAMETRIZACION BEAN Standar Montaje: "
+				+ this.stdProdConvMont);
+		System.out.println("***** PARAMETRIZACION BEAN Standar Aparado: "
+				+ this.stdProdConvApa);
+		System.out.println("***** PARAMETRIZACION BEAN Standar Troquelado: "
+				+ this.stdProdConvTroq);
 		System.out.println("***** Total Pedidio: " + this.totPedido);
 	}
 
@@ -111,7 +127,6 @@ public class ParametrizacionBean implements Serializable {
 		try {
 			// GUARDAR LOS TURNOS
 			TestShowData();
-
 			System.out.println("PARAMETROS A UTILZAR");
 			System.out.println("Dias: " + this.diasLaborables);
 			System.out.println("Std Produccion: " + this.stdProdConvMont);
@@ -333,6 +348,14 @@ public class ParametrizacionBean implements Serializable {
 
 	public ArrayList<String> getLblMonConv() {
 		return lblMonConv;
+	}
+
+	public ArrayList<Integer> getValoresCP() {
+		return valoresCP;
+	}
+
+	public void setValoresCP(ArrayList<Integer> valoresCP) {
+		this.valoresCP = valoresCP;
 	}
 
 	public ArrayList<ArrayList<ArrayList<String>>> getArray3DFechas() {

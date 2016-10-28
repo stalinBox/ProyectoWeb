@@ -45,11 +45,11 @@ public class WriteAndReadExcel implements Serializable {
 	}
 
 	// ***************METODOS**************
-	// Obtiene la orden de produccion de Bean y mapea hacia un map
-	public Integer getOrder(ArrayList<Items> orderList)
+	// OBTIENE LA ORDEN DE PRODUCCION DE BEAN Y MAPEA HACIA UN MAP
+	public ArrayList<Integer> getOrder(ArrayList<Items> orderList)
 			throws InvalidFormatException, IOException {
+		ArrayList<Integer> cpStands = new ArrayList<Integer>();
 		Integer k = 1;
-		Integer CapacidadProd = null;
 		for (Items i : orderList) {
 			k++;
 			this.dataOrderList.put("1", new Object[] { "ID", "MODELO", "TALLA",
@@ -65,20 +65,21 @@ public class WriteAndReadExcel implements Serializable {
 					new Object[] { k - 1, i.getModelo(), i.getTalla(),
 							i.getCantidad() });
 		}
-		CapacidadProd = SendPathFile(orderList);
-		System.out.println("capacidad de montaje: " + CapacidadProd);
-		return CapacidadProd;
+		cpStands = SendPathFile(orderList);
+		System.out.println("capacidad de montaje,aparado,troquelado: "
+				+ cpStands);
+		return cpStands;
 	}
 
-	// Obtiene el directorio y la ubicacion del archivo excel
-	public Integer SendPathFile(ArrayList<Items> orderList) throws IOException,
-			InvalidFormatException {
-		// Nombre estatico
+	// OBTIENE EL DIRECTORIO Y LA UBICACION DEL ARCHIVO EXCEL
+	public ArrayList<Integer> SendPathFile(ArrayList<Items> orderList)
+			throws IOException, InvalidFormatException {
+		ArrayList<Integer> cpStands = new ArrayList<Integer>();
+		// NOMBRE ESTATICO
 		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
 		String pathFile = "";
 		String pathLocationFile = "";
 		String dirNewLocationFile = "";
-		Integer cpVal = null;
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		File configFile = new File(classLoader.getResource(fileName).getFile());
 		if (configFile.exists()) {
@@ -87,26 +88,28 @@ public class WriteAndReadExcel implements Serializable {
 		}
 		System.out.println("GetParent: " + pathLocationFile);
 		System.out.println("GetPath:   " + pathFile);
+
+		// METODO PARA ENVIAR LA ORDEN Y ESCRIBIR EN EXCEL
 		dirNewLocationFile = WritingExcelXLSM(pathFile, pathLocationFile,
 				orderList);
 		File pathNewFile = new File(dirNewLocationFile);
 		if (ExecuteMacro(pathNewFile) == true) {
-			cpVal = ReadingExcelXLSM(dirNewLocationFile);
+			cpStands = ReadingExcelXLSM(dirNewLocationFile);
 		}
-		return cpVal;
+		return cpStands;
 	}
 
-	// Escribe en excel la Orden de produccion
+	// ESCRIBE EN EXCEL LA ORDEN DE PRODUCCION
 	public String WritingExcelXLSM(String pathFile, String pathLocationFile,
 			ArrayList<Items> orderList) throws InvalidFormatException,
 			IOException {
 
 		Workbook workbook;
 		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
-		// Obtener el Sheet(Hoja) en la que hay que insertar la orden
+		// OBTENER EL SHEET(HOJA) EN LA QUE HAY QUE INSERTAR LA ORDEN
 		Sheet sheet = workbook.getSheetAt(0);
 
-		// Ingresa la orden de produccion en excel (4 primeras columnas)
+		// INGRESA LA ORDEN DE PRODUCCION EN EXCEL (4 PRIMERAS COLUMNAS)
 		Set<String> keyset = this.dataOrderList.keySet();
 		int rownum = 0;
 		for (String key : keyset) {
@@ -122,7 +125,7 @@ public class WriteAndReadExcel implements Serializable {
 			}
 		}
 
-		// Ingresa los modelos en la columna valores unicos
+		// INGRESA LOS MODELOS EN LA COLUMNA VALORES UNICOS
 		ArrayList<String> pp = new ArrayList<String>();
 		pp = ModelosUnicos(orderList);
 		Integer p = 1;
@@ -140,7 +143,7 @@ public class WriteAndReadExcel implements Serializable {
 			c.setCellValue(key);
 			p++;
 		}
-		// Ingreso de CAPACIDAD DE PRODUCCION
+		// INGRESAR DE CAPACIDAD DE PRODUCCION MONTAJE
 		ArrayList<Integer> pp2 = new ArrayList<Integer>();
 		pp2.add(480);
 		pp2.add(650);
@@ -161,7 +164,49 @@ public class WriteAndReadExcel implements Serializable {
 			m++;
 		}
 
-		// Guarda el archivo con otro nombre en la misma direccion
+		// INGRESAR LA CAPACIDAD DE PRODUCCION APARADO
+		ArrayList<Integer> pp3 = new ArrayList<Integer>();
+		Sheet sheetApa = workbook.getSheetAt(1);
+		pp3.add(460);
+		pp3.add(510);
+		pp3.add(333);
+		Integer m1 = 1;
+		for (Integer key : pp3) {
+			Row r = sheetApa.getRow(m1);
+			if (r == null) {
+				r = sheetApa.createRow(m1);
+			}
+
+			Cell c = r.getCell(0);
+			if (c == null) {
+				c = r.createCell(0, Cell.CELL_TYPE_NUMERIC);
+			}
+
+			c.setCellValue(key);
+			m1++;
+		}
+		// INGRESAR LA CAPACIDAD DE PRODUCCION DE TROQUELADO
+		ArrayList<Integer> pp4 = new ArrayList<Integer>();
+		Sheet sheetTrq = workbook.getSheetAt(2);
+		pp4.add(334);
+		pp4.add(693);
+		pp4.add(265);
+		Integer m2 = 1;
+		for (Integer key : pp4) {
+			Row r = sheetTrq.getRow(m2);
+			if (r == null) {
+				r = sheetTrq.createRow(m2);
+			}
+
+			Cell c = r.getCell(0);
+			if (c == null) {
+				c = r.createCell(0, Cell.CELL_TYPE_NUMERIC);
+			}
+			c.setCellValue(key);
+			m2++;
+		}
+
+		// GUARDA EL ARCHIVO CON OTRO NOMBRE EN LA MISMA DIRECCION
 		try {
 			FileOutputStream out = new FileOutputStream(new File(
 					pathLocationFile + "\\caso2Real.xlsm"));
@@ -179,37 +224,81 @@ public class WriteAndReadExcel implements Serializable {
 		return dirFile;
 	}
 
-	// Retorna el valor resultante del solver
-	public Integer ReadingExcelXLSM(String path) throws IOException {
-		Double cpDouble = null;
+	// RETORNA EL VALOR RESULTANTE DEL SOLVER
+	public ArrayList<Integer> ReadingExcelXLSM(String path) throws IOException {
+		ArrayList<Integer> standaresProcesos = new ArrayList<Integer>();
+		// PARA MONTAJE
+		Double cpDoubleMontaje = null;
 		Integer cpInt = null;
+		// PARA APARADO
+		Double cpDoubleApa = null;
+		Integer cpIntApa = null;
+		// PARA TROQUELADO
+		Double cpDoubleTrq = null;
+		Integer cpIntTrq = null;
+
 		FileInputStream fis = new FileInputStream(path);
 		Workbook wb = new XSSFWorkbook(fis);
 		Sheet sheet = wb.getSheetAt(0);
+		Sheet sheetApa = wb.getSheetAt(1);
+		Sheet sheetTrq = wb.getSheetAt(2);
 
 		FormulaEvaluator evaluator = wb.getCreationHelper()
 				.createFormulaEvaluator();
 
 		CellReference cellReference = new CellReference("N2");
+		CellReference cellReference1 = new CellReference("G2");
+
 		Row row = sheet.getRow(cellReference.getRow());
-		if (row != null) {
+		Row rowApa = sheetApa.getRow(cellReference1.getRow());
+		Row rowTrq = sheetTrq.getRow(cellReference1.getRow());
+
+		if (row != null && rowApa != null && rowTrq != null) {
 			Cell c = row.getCell(cellReference.getCol());
+			Cell c1 = rowApa.getCell(cellReference1.getCol());
+			Cell c2 = rowTrq.getCell(cellReference1.getCol());
+			// VALOR MONTAJE
 			switch (evaluator.evaluateFormulaCell(c)) {
 			case Cell.CELL_TYPE_NUMERIC:
-				cpDouble = c.getNumericCellValue();
-				cpInt = (int) Math.round(cpDouble);
+				cpDoubleMontaje = c.getNumericCellValue();
+				cpInt = (int) Math.round(cpDoubleMontaje);
 				break;
-
-			// CELL_TYPE_FORMULA will never occur
+			case Cell.CELL_TYPE_FORMULA:
+				break;
+			}
+			// VALOR APARADO
+			switch (evaluator.evaluateFormulaCell(c1)) {
+			case Cell.CELL_TYPE_NUMERIC:
+				cpDoubleApa = c1.getNumericCellValue();
+				cpIntApa = (int) Math.round(cpDoubleApa);
+				break;
+			case Cell.CELL_TYPE_FORMULA:
+				break;
+			}
+			// VALOR TROQUELADO
+			switch (evaluator.evaluateFormulaCell(c2)) {
+			case Cell.CELL_TYPE_NUMERIC:
+				cpDoubleTrq = c2.getNumericCellValue();
+				cpIntTrq = (int) Math.round(cpDoubleTrq);
+				break;
 			case Cell.CELL_TYPE_FORMULA:
 				break;
 			}
 		}
-		System.out.println("Valor para ocupar en double: " + cpDouble);
-		return cpInt;
+		standaresProcesos.add(cpInt);
+		standaresProcesos.add(cpIntApa);
+		standaresProcesos.add(cpIntTrq);
+
+		System.out.println("Valor para ocupar en double MONTAJE: "
+				+ cpDoubleMontaje);
+		System.out.println("Valor para ocupar en double APARADO: "
+				+ cpDoubleApa);
+		System.out.println("Valor para ocupar en double TROQUELADO: "
+				+ cpDoubleTrq);
+		return standaresProcesos;
 	}
 
-	// **SIN UTILZAR** Pone en blanco las celdas de una hoja en excel
+	// **SIN UTILZAR** PONE EN BLANCO LAS CELDAS DE UNA HOJA EN EXCEL
 	public boolean deleteContentSheet(String pathFile, String pathLocationFile)
 			throws IOException, InvalidFormatException {
 
@@ -273,14 +362,25 @@ public class WriteAndReadExcel implements Serializable {
 
 	// EJECUTA LA MACRO EN EXCEL
 	public boolean ExecuteMacro(File pathFile) {
-		// variable con el nombre de la macro
-		String macroName = "!Subtotales";
+		// VARIABLE CON EL NOMBRE DE LA MACRO
+		String macroNameMontaje = "!calculoMontaje";
+		String macroNameAparado = "!calculoAparado";
+		String macroNameTroquelado = "!calculoTroquelado";
 		PrintSolveMB execute = new PrintSolveMB();
-		if (execute.executeMacro(pathFile, macroName) == true) {
-			System.out.println("MACRO SUCCESFULL");
-			return true;
-		} else {
-			return false;
+		try {
+			if (execute.executeMacro(pathFile, macroNameMontaje) == true
+					&& execute.executeMacro(pathFile, macroNameAparado) == true
+					&& execute.executeMacro(pathFile, macroNameTroquelado) == true) {
+				System.out.println("MACROS SUCCESFULL");
+				return true;
+			} else {
+				System.out.println("FALLO ALGO EN LAS MACRO");
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return false;
+
 	}
 }

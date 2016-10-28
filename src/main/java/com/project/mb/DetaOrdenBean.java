@@ -36,7 +36,7 @@ public class DetaOrdenBean implements Serializable {
 	private String modelo;
 	private Integer talla;
 	private Integer cantidad;
-	private static Integer cp;
+	private static ArrayList<Integer> cp = new ArrayList<Integer>();
 	Items order;
 	private ArrayList<Items> orderList = new ArrayList<Items>();
 	private static Integer total;
@@ -91,11 +91,6 @@ public class DetaOrdenBean implements Serializable {
 	}
 
 	public void displayOrden() throws InvalidFormatException, IOException {
-		// /* PRUEBAS */
-		// cp = 60;
-		// total = 100;
-		//
-		// /* FIN PRUEBAS */
 
 		WriteAndReadExcel wr = new WriteAndReadExcel();
 		// Store la capacidad de produccion
@@ -115,10 +110,8 @@ public class DetaOrdenBean implements Serializable {
 
 			ParametrizacionBean nn = new ParametrizacionBean(cp, total);
 
-			nn.setStdProdConvMont(cp);
+			nn.setValoresCP(cp);
 			nn.setTotPedido(total);
-			System.out.println("/////Esto se ha enviado CP: " + cp);
-			System.out.println("/////Esto se ha enviado TOTAL: " + total);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,12 +149,12 @@ public class DetaOrdenBean implements Serializable {
 		return selectedItemsTalla;
 	}
 
-	public Integer getCp() {
+	public static ArrayList<Integer> getCp() {
 		return cp;
 	}
 
-	public void setCp(Integer cp) {
-		this.cp = cp;
+	public static void setCp(ArrayList<Integer> cp) {
+		DetaOrdenBean.cp = cp;
 	}
 
 	public void setTotal(Integer total) {
