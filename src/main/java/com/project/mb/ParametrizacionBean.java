@@ -2,6 +2,8 @@ package com.project.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,17 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
+
+import com.project.utils.MyUtil;
 
 /**
  * @author STALIN RAMÍREZ
@@ -72,36 +85,44 @@ public class ParametrizacionBean implements Serializable {
 	private ArrayList<ArrayList<ArrayList<Integer>>> array3DDistribPares = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	private ArrayList<ArrayList<ArrayList<String>>> array3DDistribHoras = new ArrayList<ArrayList<ArrayList<String>>>();
 
+	// PARA EL SCHEDULE
+	private ScheduleModel eventModel;
+	private ScheduleEvent event = new DefaultScheduleEvent();
+	private boolean hExtras;
+	private Date fMontaje;
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
-		DetaOrdenBean nb = new DetaOrdenBean();
-		this.valoresCP = DetaOrdenBean.getCp();
-		this.stdProdConvMont = this.valoresCP.get(0);
-		this.stdProdConvApa = this.valoresCP.get(1);
-		this.stdProdConvTroq = this.valoresCP.get(2);
-		this.totPedido = nb.getTotal();
+
+		// DetaOrdenBean nb = new DetaOrdenBean();
+		// this.valoresCP = DetaOrdenBean.getCp();
+		// this.stdProdConvMont = this.valoresCP.get(0);
+		// this.stdProdConvApa = this.valoresCP.get(1);
+		// this.stdProdConvTroq = this.valoresCP.get(2);
+		// this.totPedido = nb.getTotal();
 
 		// PARA PRUEBAS
-		// this.stdProdConvMont = 200;
-		// this.stdProdConvApa = 300;
-		// this.stdProdConvTroq = 400;
-		// this.totPedido = 1150;
+		this.stdProdConvMont = 200;
+		this.stdProdConvApa = 300;
+		this.stdProdConvTroq = 400;
+		this.totPedido = 1150;
 		// FIN PRUEBAS
 
 		this.currentDate = new Date();
-		// this.stdProdConvApa = 0;
-		// this.stdProdConvTroq = 0;
 		this.stdProdAutApa = 0;
 		this.stdProdAutMont = 0;
 		this.stdProdAutTroq = 0;
+
+		eventModel = new DefaultScheduleModel();
 	}
 
-	// CONSTRUCTOR
+	// CONSTRUCTOR1
 	public ParametrizacionBean() {
 
 	}
 
+	// CONSTRUCTOR2
 	public ParametrizacionBean(ArrayList<Integer> cp, Integer b) {
 		this();
 		this.valoresCP = cp;
@@ -111,24 +132,20 @@ public class ParametrizacionBean implements Serializable {
 		this.stdProdConvApa = cp.get(1);
 		this.stdProdConvTroq = cp.get(2);
 
-		System.out.println("***** PARAMETRIZACION BEAN Standar Montaje: "
-				+ this.stdProdConvMont);
-		System.out.println("***** PARAMETRIZACION BEAN Standar Aparado: "
-				+ this.stdProdConvApa);
-		System.out.println("***** PARAMETRIZACION BEAN Standar Troquelado: "
-				+ this.stdProdConvTroq);
-		System.out.println("***** Total Pedidio: " + this.totPedido);
 	}
 
 	public void ExecuteParams() {
+		System.out.println("HOLA MUNDO");
 		ArrayList<ArrayList<Integer>> array0 = new ArrayList<ArrayList<Integer>>();
 		ArrayList<ArrayList<Object>> array00 = new ArrayList<ArrayList<Object>>();
 		String msg = "";
 		try {
 			// GUARDAR LOS TURNOS
 			TestShowData();
+
+			// IMPRIMIR PARAMETOS
 			System.out.println("PARAMETROS A UTILZAR");
-			System.out.println("Dias: " + this.diasLaborables);
+			// System.out.println("Dias: " + this.diasLaborables);
 			System.out.println("Std Produccion: " + this.stdProdConvMont);
 			System.out.println("Total Pedido: " + this.totPedido);
 			System.out.println("Responsable: " + this.respMontaje);
@@ -151,6 +168,7 @@ public class ParametrizacionBean implements Serializable {
 			MyDistribFechas();
 			MyDistribPares(array0);
 			MyDistribHoras(array00);
+			generateSchedule();
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = "Error: HACEN FALTA MAS DIAS PARA PROCESAR LA ORDEN";
@@ -160,24 +178,24 @@ public class ParametrizacionBean implements Serializable {
 		}
 	}
 
-	// METODOS GENERAR TABLAS
+	// METODOS PARA LLENAR LAS MATRICES
 	public void MyDistribPares(ArrayList<ArrayList<Integer>> array0) {
 		this.array3DDistribPares.clear();
 		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-		this.rowNames.clear();
-		this.colNames.clear();
+		// this.rowNames.clear();
+		// this.colNames.clear();
+		// for (int i = 1; i <= this.numLineasConvMont; i++) {
+		// this.rowNames.add("L" + i + " Convencional");
+		// }
+		// for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+		// this.colNames.add("Dia " + i);
+		// }
 
-		for (int i = 1; i <= this.numLineasConvMont; i++) {
-			this.rowNames.add("L" + i + " Convencional");
-		}
-		for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-			this.colNames.add("Dia " + i);
-		}
-
+		System.out.println("array0: " + array0);
 		// CONFIGURAR ESTRUCTURA 3D
-		for (int i = 0; i < rowNames.size(); i++) {
+		for (int i = 0; i < array0.size(); i++) {
 			this.array3DDistribPares.add(new ArrayList<ArrayList<Integer>>());
-			for (int j = 0; j < colNames.size(); j++) {
+			for (int j = 0; j < array0.get(i).size(); j++) {
 				this.array3DDistribPares.get(i).add(new ArrayList<Integer>());
 			}
 		}
@@ -190,25 +208,25 @@ public class ParametrizacionBean implements Serializable {
 				this.array3DDistribPares.get(i).get(j).add(g);
 			}
 		}
-		System.out.println("Estooooooo: " + array3DDistribPares);
+		System.out.println("Array PARES 3D: " + this.array3DDistribPares);
 	}
 
 	public void MyDistribHoras(ArrayList<ArrayList<Object>> array00) {
 		this.array3DDistribHoras.clear();
 		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-		this.rowNames.clear();
-		this.colNames.clear();
-		for (int i = 1; i <= this.numLineasConvMont; i++) {
-			this.rowNames.add("L" + i + " Convencional");
-		}
-		for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-			this.colNames.add("Dia " + i);
-		}
+		// this.rowNames.clear();
+		// this.colNames.clear();
+		// for (int i = 1; i <= this.numLineasConvMont; i++) {
+		// this.rowNames.add("L" + i + " Convencional");
+		// }
+		// for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+		// this.colNames.add("Dia " + i);
+		// }
 
 		// CONFIGURAR ESTRUCTURA 3D
-		for (int i = 0; i < rowNames.size(); i++) {
+		for (int i = 0; i < array00.size(); i++) {
 			this.array3DDistribHoras.add(new ArrayList<ArrayList<String>>());
-			for (int j = 0; j < colNames.size(); j++) {
+			for (int j = 0; j < array00.get(i).size(); j++) {
 				this.array3DDistribHoras.get(i).add(new ArrayList<String>());
 			}
 		}
@@ -233,9 +251,9 @@ public class ParametrizacionBean implements Serializable {
 		this.rowNameProcesos.add("FECHA APARADO");
 		this.rowNameProcesos.add("FECHA TROQUELADO");
 
-		for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-			this.colNames.add("Dia " + i);
-		}
+		// for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+		// this.colNames.add("Dia " + i);
+		// }
 		// CONFIGURAR ESTRUCTURA 3D
 		for (int i = 0; i < rowNameProcesos.size(); i++) {
 			this.array3DFechas.add(new ArrayList<ArrayList<String>>());
@@ -245,7 +263,146 @@ public class ParametrizacionBean implements Serializable {
 		}
 	}
 
-	// TURNOS CONV/AUT MONTAJE
+	// ***************RECORRER DIAS EN EL CALENDAR*************
+	@SuppressWarnings("deprecation")
+	private Calendar nextDayExtras(Calendar a) {
+		if (a.getTime().getDay() == 6) {
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			nextDayExtras(a);
+		} else {
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			a.set(Calendar.HOUR, 8);
+		}
+		return a;
+	}
+
+	@SuppressWarnings("deprecation")
+	private Calendar nextDay(Calendar a) {
+		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			nextDay(a);
+		} else {
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+			a.set(Calendar.HOUR, 8);
+		}
+		return a;
+	}
+
+	// METODOS
+	public void withHextras(Calendar fMontajeParamE) {
+		// INSERTAR EN EL MODELO
+		eventModel = new DefaultScheduleModel();
+		Calendar b = fMontajeParamE;
+		for (int i = 0; i < array3DDistribPares.size(); i++) {
+			for (int j = 0; j < array3DDistribPares.get(i).size(); j++) {
+				// AÑADIR EVENTOS EN EL DIA
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ "Convencional: "
+						+ array3DDistribPares.get(i).get(j).toString(), b
+						.getTime(), b.getTime()));
+			}
+			b = nextDayExtras(b);
+		}
+	}
+
+	public void withOutHextras(Calendar fMontajeParam) {
+		// INSERTAR EN EL MODELO
+		eventModel = new DefaultScheduleModel();
+		Calendar b = fMontajeParam;
+		http://stackoverflow.com/questions/34744288/java-3d-arraylist-into-a-3d-array
+		// for (int i = 0; i < array3DDistribPares.size(); i++) {
+		// for (int j = 0; j < array3DDistribPares.get(i).size(); j++) {
+		// System.out.println(":" + array3DDistribPares.get(j).get(i));
+		// // eventModel.addEvent(new DefaultScheduleEvent(
+		// // array3DDistribPares.get(j).get(i).toString(), b
+		// // .getTime(), b.getTime()));
+		// }
+		// b = nextDay(b);
+		// }
+	}
+
+	public Calendar DateToCalendar(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void generateSchedule() {
+		Calendar tConvertCal = null;
+
+		System.out.println("Verdadero o falso: " + this.hExtras);
+		System.out.println("Fecha seleccionada: " + this.fMontaje);
+
+		tConvertCal = DateToCalendar(this.fMontaje);
+		System.out.println("Numero del dia elegido: " + this.fMontaje.getDay());
+
+		if (this.fMontaje.getDay() == 0 || this.fMontaje.getDay() == 6) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									"No se puede empezar a programar los fines de semana"));
+
+		} else if (this.hExtras == true) {
+			withHextras(tConvertCal);
+		} else {
+			withOutHextras(tConvertCal);
+		}
+	}
+
+	public void reprocesar() {
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "ordenesProd/ordenesproduc.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// EVENTOS DEL SCHEDULE
+	public void addEvent(ActionEvent actionEvent) {
+		if (event.getId() == null)
+			eventModel.addEvent(event);
+		else
+			eventModel.updateEvent(event);
+		event = new DefaultScheduleEvent();
+	}
+
+	public void onEventSelect(SelectEvent selectEvent) {
+		event = (ScheduleEvent) selectEvent.getObject();
+	}
+
+	public void onDateSelect(SelectEvent selectEvent) {
+		event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(),
+				(Date) selectEvent.getObject());
+	}
+
+	public void onEventMove(ScheduleEntryMoveEvent event) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Event moved", "Day delta:" + event.getDayDelta()
+						+ ", Minute delta:" + event.getMinuteDelta());
+		addMessage(message);
+	}
+
+	public void onEventResize(ScheduleEntryResizeEvent event) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Event resized", "Day delta:" + event.getDayDelta()
+						+ ", Minute delta:" + event.getMinuteDelta());
+		addMessage(message);
+	}
+
+	private void addMessage(FacesMessage message) {
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	// ****************TURNOS CONV/AUT MONTAJE*******************
 	public void GenerateTurnsDaysConvMont() {
 		numTurnosConvMont = new Integer[numLineasConvMont];
 		this.lblMonConv.clear();
@@ -296,7 +453,7 @@ public class ParametrizacionBean implements Serializable {
 		}
 	}
 
-	// ********* PRUEBA SHOWS TURNOS CONV/AUT MONTAJE ******************
+	// ********* TURNOS CONV/AUT MONTAJE ******************
 	public void TestShowData() {
 		System.out.println("METOD");
 		this.addNumTurnosConvMont.clear();
@@ -348,6 +505,38 @@ public class ParametrizacionBean implements Serializable {
 
 	public ArrayList<String> getLblMonConv() {
 		return lblMonConv;
+	}
+
+	public ScheduleModel getEventModel() {
+		return eventModel;
+	}
+
+	public void setEventModel(ScheduleModel eventModel) {
+		this.eventModel = eventModel;
+	}
+
+	public ScheduleEvent getEvent() {
+		return event;
+	}
+
+	public void setEvent(ScheduleEvent event) {
+		this.event = event;
+	}
+
+	public Date getfMontaje() {
+		return fMontaje;
+	}
+
+	public void setfMontaje(Date fMontaje) {
+		this.fMontaje = fMontaje;
+	}
+
+	public boolean ishExtras() {
+		return hExtras;
+	}
+
+	public void sethExtras(boolean hExtras) {
+		this.hExtras = hExtras;
 	}
 
 	public ArrayList<Integer> getValoresCP() {

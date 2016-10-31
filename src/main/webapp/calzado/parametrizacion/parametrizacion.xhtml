@@ -12,6 +12,54 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
+			<script type="text/javascript">
+    PrimeFaces.locales['es'] = {
+        closeText: 'Cerrar',
+        prevText: 'Anterioooooooooooooooorr',
+        nextText: 'Aiguienteeeeeeeeeeeeeee',
+        currentText: 'Hoy',
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+            'Jul','Ago','Sep','Oct','Nov','Dic'],
+        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mie','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Semana',
+        dateFormat:'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        allDayText : 'Todo el día'
+    };
+</script>
+			<style type="text/css">
+.value {
+	width: 1000px;
+}
+
+/* .custom .ui-state-highlight { */
+/* 	background: red !important; */
+/* } */
+.fc-sat {
+	background: Aquamarine !important;
+}
+
+.fc-sun {
+	background: Aqua !important;
+}
+</style>
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loadingProgress.gif" />
+			</p:dialog>
 
 			<p:growl id="msgs" showDetail="true" />
 
@@ -56,14 +104,20 @@
 											<h:outputText value="LINEAS CONVENCIONALES" />
 										</f:facet>
 										<h:form id="aa">
+											<p:messages autoUpdate="true" />
 											<p:outputLabel value="Número de Líneas: " />
 											<p:inputText id="txtNumber"
-												value="#{parametrizacionBean.numLineasConvMont}" size="1" />
+												value="#{parametrizacionBean.numLineasConvMont}" size="1">
+												<f:validateDoubleRange minimum="1" maximum="10" />
+											</p:inputText>
+											<p:message for="txtNumber" />
+											<h:outputText
+												value="#{parametrizacionBean.numLineasConvMont}" />
 											<br />
 											<p:commandButton value="Turnos"
 												action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"
 												update="formParamGeneral:tabSubGen:mtn:guests"
-												process="@this,txtNumber" />
+												process="@this,txtNumber" validateClient="true" />
 										</h:form>
 										<h:panelGroup id="guests">
 											<h:form id="paramMontaje"
@@ -77,7 +131,22 @@
 														size="1" />
 													<br />
 												</ui:repeat>
-
+												<br />
+												<br />
+												<p:outputLabel for="bol" value="Horas extras:" />
+												<br />
+												<p:selectBooleanButton id="bol"
+													value="#{parametrizacionBean.hExtras}" onLabel="Si"
+													offLabel="No" style="width:60px" />
+												<br />
+												<br />
+												<p:outputLabel for="btnFechaMtn" value="Fecha para montar: " />
+												<br />
+												<p:calendar id="btnFechaMtn"
+													value="#{parametrizacionBean.fMontaje}" showOn="button"
+													required="true"
+													requiredMessage="Es necesaria la fecha para montar"
+													size="4" locale="es" />
 											</h:form>
 										</h:panelGroup>
 									</h:panelGrid>
@@ -350,108 +419,63 @@
 				<p:commandButton id="btnGenerateDistrib"
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
-					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :idTblFechas, :idTblDistrib, :idTblHoras, :formParamGeneral:tabSubGen:mtn:paramMontaje"
-					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:pData, :idTblDistrib:pData, :idTblHoras:pData"
+					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :formParamGeneral:tabSubGen:mtn:paramMontaje, :formParamGeneral:tabSubGen:mtn:paramMontaje:bol, :formParamGeneral:tabSubGen:mtn:paramMontaje:btnFechaMtn"
+					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:schedule"
 					ajax="true" partialSubmit="true" />
-				<p:commandButton value="REPROCESAR"></p:commandButton>
-				<p:commandButton value="CONTINUAR"></p:commandButton>
+
+				<p:commandButton value="REPROCESAR"
+					actionListener="#{parametrizacionBean.reprocesar()}" />
+
+				<p:commandButton value="CONTINUAR" />
 				<!--  **********************************************************************  -->
 			</h:form>
 			<p:separator />
-			<!-- *********************TABLA FECHAS********************************* -->
 			<h:form id="idTblFechas">
-				<p:dataTable id="pData" var="rowName"
-					value="#{parametrizacionBean.rowNameProcesos}" rowIndexVar="rowIdx"
-					emptyMessage="" editable="true" editMode="cell">
-					<f:facet name="header">
-						<p:outputLabel value="FECHAS" />
-					</f:facet>
-					<p:column headerText="" styleClass="ui-widget-header">
-						<h:outputText value="#{rowName}" />
-					</p:column>
-
-					<p:columns var="columnName" value="#{parametrizacionBean.colNames}"
-						headerText="#{columnName}" columnIndexVar="colIdx">
-						<p:cellEditor>
-							<f:facet name="output">
-								<ui:repeat
-									value="#{parametrizacionBean.array3DFechas[rowIdx][colIdx]}"
-									var="data">
-									<h:outputText value="#{data}" />
-								</ui:repeat>
-							</f:facet>
-							<f:facet name="input">
-								<p:calendar id="popup" value="#{data}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</p:calendar>
-							</f:facet>
-						</p:cellEditor>
-					</p:columns>
-				</p:dataTable>
-			</h:form>
-
-			<!-- *********************TABLA DISTRIBUCION************************** -->
-			<h:form id="idTblDistrib">
+				<p:growl id="messages" showDetail="true" />
 				<br />
-				<p:dataTable id="pData" var="rowName"
-					value="#{parametrizacionBean.rowNames}" rowIndexVar="rowIdx"
-					sortMode="multiple" emptyMessage="" editable="true" editMode="cell"
-					paginatorPosition="bottom" rows="10" paginator="true"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-					<f:facet name="header">
-						<p:outputLabel value="SEMANA DISTRIBUCION PARES" />
-					</f:facet>
-					<p:column headerText="" styleClass="ui-widget-header">
-						<h:outputText value="#{rowName}" />
-					</p:column>
+				<h:panelGrid columnClasses="value">
+					<p:schedule id="schedule" value="#{parametrizacionBean.eventModel}"
+						widgetVar="myschedule" timeZone="GMT-5" locale="es"
+						rightHeaderTemplate="" showWeekends="true" styleClass="custom">
+						<p:ajax event="dateSelect"
+							listener="#{parametrizacionBean.onDateSelect()}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventSelect"
+							listener="#{parametrizacionBean.onEventSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventMove"
+							listener="#{parametrizacionBean.onEventMove}" update="messages" />
+						<p:ajax event="eventResize"
+							listener="#{parametrizacionBean.onEventResize}" update="messages" />
+					</p:schedule>
+				</h:panelGrid>
 
-					<p:columns var="columnName" value="#{parametrizacionBean.colNames}"
-						headerText="#{columnName}" columnIndexVar="colIdx">
-						<p:cellEditor>
-							<f:facet name="output">
-								<ui:repeat
-									value="#{parametrizacionBean.array3DDistribPares[rowIdx][colIdx]}"
-									var="data">
-									<h:outputText value="#{data}" />
-								</ui:repeat>
-							</f:facet>
-							<f:facet name="input">
-								<ui:repeat
-									value="#{parametrizacionBean.array3DDistribPares[rowIdx][colIdx]}"
-									var="data">
-									<p:inputText value="#{data}" />
-								</ui:repeat>
-							</f:facet>
+				<p:dialog widgetVar="eventDialog" header="Detalle" showEffect="clip"
+					hideEffect="clip">
+					<h:panelGrid id="eventDetails" columns="2">
+						<p:outputLabel for="title" value="Título:" />
+						<p:inputText id="title" value="#{beanPrueba.event.title}"
+							required="true" />
 
-						</p:cellEditor>
-					</p:columns>
-				</p:dataTable>
+						<p:outputLabel for="from" value="Desde:" />
+						<p:calendar id="from" value="#{beanPrueba.event.startDate}"
+							timeZone="GMT-5" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="to" value="Hasta:" />
+						<p:calendar id="to" value="#{beanPrueba.event.endDate}"
+							timeZone="GMT-5" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="allDay" value="Todo el día:" />
+						<h:selectBooleanCheckbox id="allDay"
+							value="#{beanPrueba.event.allDay}" />
+
+						<p:commandButton type="reset" value="Restaurar" />
+						<p:commandButton id="addButton" value="Guardar"
+							actionListener="#{beanPrueba.addEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+					</h:panelGrid>
+				</p:dialog>
 			</h:form>
-
-			<!-- ******************TABLA HORAS PLANIFICADAS*********************** -->
-			<h:form id="idTblHoras">
-				<br />
-				<p:dataTable id="pData" var="rowName"
-					value="#{parametrizacionBean.rowNames}" rowIndexVar="rowIdx"
-					sortMode="multiple" emptyMessage="">
-					<f:facet name="header">
-						<p:outputLabel value="HORAS" />
-					</f:facet>
-					<p:column headerText="" styleClass="ui-widget-header">
-						<h:outputText value="#{rowName}" />
-					</p:column>
-
-					<p:columns var="columnName" value="#{parametrizacionBean.colNames}"
-						headerText="#{columnName}" columnIndexVar="colIdx">
-						<ui:repeat
-							value="#{parametrizacionBean.array3DDistribHoras[rowIdx][colIdx]}"
-							var="data">
-							<h:outputText value="#{data}" />
-						</ui:repeat>
-					</p:columns>
-				</p:dataTable>
-			</h:form>
-			<!-- ******************FIN TABLAS*********************** -->
 		</ui:define>
 	</ui:composition>
 </body>

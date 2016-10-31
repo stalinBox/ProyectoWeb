@@ -20,7 +20,7 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
-@ManagedBean
+@ManagedBean(name = "hoto")
 @ViewScoped
 public class BeanPrueba implements Serializable {
 
@@ -98,9 +98,12 @@ public class BeanPrueba implements Serializable {
 		array1.get(4).add(300);
 		array1.get(4).add(400);
 
+		System.out.println("Tamaño: " + array1.size());
+
 		// CONFIGURAR ESTRUCTURA 3D
 		for (int i = 0; i < 5; i++) {
 			this.array3DPrueba.add(new ArrayList<ArrayList<Integer>>());
+			System.out.println("Tamaño OTRO: " + array1.get(i).size());
 			for (int j = 0; j < 4; j++) {
 				this.array3DPrueba.get(i).add(new ArrayList<Integer>());
 			}
@@ -188,6 +191,7 @@ public class BeanPrueba implements Serializable {
 		return cal;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void generateSchedule() {
 		Calendar tConvertCal = null;
 		System.out.println("Verdadero o falso: " + this.hExtras);
