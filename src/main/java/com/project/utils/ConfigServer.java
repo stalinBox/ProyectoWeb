@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class ConfigServer {
@@ -14,6 +15,7 @@ public class ConfigServer {
 	private static final String KILL = "taskkill /F /IM ";
 
 	public static void main(String[] args) throws Exception {
+
 		Properties propiedades = new Properties();
 		InputStream entrada = null;
 		String processName = "EXCEL.EXE";

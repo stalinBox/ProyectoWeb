@@ -135,8 +135,7 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public void ExecuteParams() {
-		System.out.println("HOLA MUNDO");
-		ArrayList<ArrayList<Integer>> array0 = new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<Object>> array0 = new ArrayList<ArrayList<Object>>();
 		ArrayList<ArrayList<Object>> array00 = new ArrayList<ArrayList<Object>>();
 		String msg = "";
 		try {
@@ -164,11 +163,37 @@ public class ParametrizacionBean implements Serializable {
 			System.out.println("Esto es lo que devolvio (PARES): " + array0);
 			System.out.println("Esto es lo que devolvio (HORAS): " + array00);
 
+			Object[][] array = new Object[array00.size()][];
+			for (int i = 0; i < array00.size(); i++) {
+				ArrayList<Object> row = array00.get(i);
+				array[i] = row.toArray(new String[row.size()]);
+			}
+
+			Object[][] matrizT = new Object[array[0].length][array.length];
+			for (int x = 0; x < array.length; x++) {
+				for (int y = 0; y < array[x].length; y++) {
+					matrizT[y][x] = array[x][y];
+				}
+			}
+
+			Object[][] array2 = new Object[array0.size()][];
+			for (int i = 0; i < array0.size(); i++) {
+				ArrayList<Object> row = array0.get(i);
+				array2[i] = row.toArray(new Object[row.size()]);
+			}
+
+			Object[][] matrizT1 = new Object[array2[0].length][array2.length];
+			for (int x = 0; x < array2.length; x++) {
+				for (int y = 0; y < array2[x].length; y++) {
+					matrizT1[y][x] = array2[x][y];
+				}
+			}
+
 			// PARA MOSTRAR TABLAS (SHOW TABLAS)
-			MyDistribFechas();
-			MyDistribPares(array0);
-			MyDistribHoras(array00);
-			generateSchedule();
+			// MyDistribFechas();
+			// MyDistribPares(array0);
+			// MyDistribHoras(array00);
+			generateSchedule(matrizT, matrizT1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = "Error: HACEN FALTA MAS DIAS PARA PROCESAR LA ORDEN";
@@ -179,89 +204,89 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	// METODOS PARA LLENAR LAS MATRICES
-	public void MyDistribPares(ArrayList<ArrayList<Integer>> array0) {
-		this.array3DDistribPares.clear();
-		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-		// this.rowNames.clear();
-		// this.colNames.clear();
-		// for (int i = 1; i <= this.numLineasConvMont; i++) {
-		// this.rowNames.add("L" + i + " Convencional");
-		// }
-		// for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-		// this.colNames.add("Dia " + i);
-		// }
+	// public void MyDistribPares(ArrayList<ArrayList<Integer>> array0) {
+	// this.array3DDistribPares.clear();
+	// // ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
+	// // this.rowNames.clear();
+	// // this.colNames.clear();
+	// // for (int i = 1; i <= this.numLineasConvMont; i++) {
+	// // this.rowNames.add("L" + i + " Convencional");
+	// // }
+	// // for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+	// // this.colNames.add("Dia " + i);
+	// // }
+	//
+	// System.out.println("array0: " + array0);
+	// // CONFIGURAR ESTRUCTURA 3D
+	// for (int i = 0; i < array0.size(); i++) {
+	// this.array3DDistribPares.add(new ArrayList<ArrayList<Integer>>());
+	// for (int j = 0; j < array0.get(i).size(); j++) {
+	// this.array3DDistribPares.get(i).add(new ArrayList<Integer>());
+	// }
+	// }
+	//
+	// // AGREGAR LOS DATOS DE 2D a 3D
+	// for (int i = 0; i < array0.size(); i++) {
+	// for (int j = 0; j < array0.get(i).size(); j++) {
+	// // System.out.print(array1.get(i).get(j) + " ");
+	// int g = array0.get(i).get(j);
+	// this.array3DDistribPares.get(i).get(j).add(g);
+	// }
+	// }
+	// System.out.println("Array PARES 3D: " + this.array3DDistribPares);
+	// }
 
-		System.out.println("array0: " + array0);
-		// CONFIGURAR ESTRUCTURA 3D
-		for (int i = 0; i < array0.size(); i++) {
-			this.array3DDistribPares.add(new ArrayList<ArrayList<Integer>>());
-			for (int j = 0; j < array0.get(i).size(); j++) {
-				this.array3DDistribPares.get(i).add(new ArrayList<Integer>());
-			}
-		}
+	// public void MyDistribHoras(ArrayList<ArrayList<Object>> array00) {
+	// this.array3DDistribHoras.clear();
+	// // ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
+	// // this.rowNames.clear();
+	// // this.colNames.clear();
+	// // for (int i = 1; i <= this.numLineasConvMont; i++) {
+	// // this.rowNames.add("L" + i + " Convencional");
+	// // }
+	// // for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+	// // this.colNames.add("Dia " + i);
+	// // }
+	//
+	// // CONFIGURAR ESTRUCTURA 3D
+	// for (int i = 0; i < array00.size(); i++) {
+	// this.array3DDistribHoras.add(new ArrayList<ArrayList<String>>());
+	// for (int j = 0; j < array00.get(i).size(); j++) {
+	// this.array3DDistribHoras.get(i).add(new ArrayList<String>());
+	// }
+	// }
+	//
+	// // AGREGAR LOS DATOS DE 2D a 3D
+	// for (int i = 0; i < array00.size(); i++) {
+	// for (int j = 0; j < array00.get(i).size(); j++) {
+	// // System.out.print(array1.get(i).get(j) + " ");
+	// Object g = array00.get(i).get(j);
+	// this.array3DDistribHoras.get(i).get(j).add(String.valueOf(g));
+	// }
+	// }
+	// }
 
-		// AGREGAR LOS DATOS DE 2D a 3D
-		for (int i = 0; i < array0.size(); i++) {
-			for (int j = 0; j < array0.get(i).size(); j++) {
-				// System.out.print(array1.get(i).get(j) + " ");
-				int g = array0.get(i).get(j);
-				this.array3DDistribPares.get(i).get(j).add(g);
-			}
-		}
-		System.out.println("Array PARES 3D: " + this.array3DDistribPares);
-	}
-
-	public void MyDistribHoras(ArrayList<ArrayList<Object>> array00) {
-		this.array3DDistribHoras.clear();
-		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-		// this.rowNames.clear();
-		// this.colNames.clear();
-		// for (int i = 1; i <= this.numLineasConvMont; i++) {
-		// this.rowNames.add("L" + i + " Convencional");
-		// }
-		// for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-		// this.colNames.add("Dia " + i);
-		// }
-
-		// CONFIGURAR ESTRUCTURA 3D
-		for (int i = 0; i < array00.size(); i++) {
-			this.array3DDistribHoras.add(new ArrayList<ArrayList<String>>());
-			for (int j = 0; j < array00.get(i).size(); j++) {
-				this.array3DDistribHoras.get(i).add(new ArrayList<String>());
-			}
-		}
-
-		// AGREGAR LOS DATOS DE 2D a 3D
-		for (int i = 0; i < array00.size(); i++) {
-			for (int j = 0; j < array00.get(i).size(); j++) {
-				// System.out.print(array1.get(i).get(j) + " ");
-				Object g = array00.get(i).get(j);
-				this.array3DDistribHoras.get(i).get(j).add(String.valueOf(g));
-			}
-		}
-	}
-
-	public void MyDistribFechas() {
-		this.array3DFechas.clear();
-		// ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-		this.rowNameProcesos.clear();
-		this.colNames.clear();
-
-		this.rowNameProcesos.add("FECHA MONTAJE");
-		this.rowNameProcesos.add("FECHA APARADO");
-		this.rowNameProcesos.add("FECHA TROQUELADO");
-
-		// for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-		// this.colNames.add("Dia " + i);
-		// }
-		// CONFIGURAR ESTRUCTURA 3D
-		for (int i = 0; i < rowNameProcesos.size(); i++) {
-			this.array3DFechas.add(new ArrayList<ArrayList<String>>());
-			for (int j = 0; j < colNames.size(); j++) {
-				this.array3DFechas.get(i).add(new ArrayList<String>());
-			}
-		}
-	}
+	// public void MyDistribFechas() {
+	// this.array3DFechas.clear();
+	// // ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
+	// this.rowNameProcesos.clear();
+	// this.colNames.clear();
+	//
+	// this.rowNameProcesos.add("FECHA MONTAJE");
+	// this.rowNameProcesos.add("FECHA APARADO");
+	// this.rowNameProcesos.add("FECHA TROQUELADO");
+	//
+	// // for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
+	// // this.colNames.add("Dia " + i);
+	// // }
+	// // CONFIGURAR ESTRUCTURA 3D
+	// for (int i = 0; i < rowNameProcesos.size(); i++) {
+	// this.array3DFechas.add(new ArrayList<ArrayList<String>>());
+	// for (int j = 0; j < colNames.size(); j++) {
+	// this.array3DFechas.get(i).add(new ArrayList<String>());
+	// }
+	// }
+	// }
 
 	// ***************RECORRER DIAS EN EL CALENDAR*************
 	@SuppressWarnings("deprecation")
@@ -307,20 +332,18 @@ public class ParametrizacionBean implements Serializable {
 		}
 	}
 
-	public void withOutHextras(Calendar fMontajeParam) {
+	public void withOutHextras(Object[][] matrizT, Calendar fMontajeParam) {
 		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
 		Calendar b = fMontajeParam;
-		http://stackoverflow.com/questions/34744288/java-3d-arraylist-into-a-3d-array
-		// for (int i = 0; i < array3DDistribPares.size(); i++) {
-		// for (int j = 0; j < array3DDistribPares.get(i).size(); j++) {
-		// System.out.println(":" + array3DDistribPares.get(j).get(i));
-		// // eventModel.addEvent(new DefaultScheduleEvent(
-		// // array3DDistribPares.get(j).get(i).toString(), b
-		// // .getTime(), b.getTime()));
-		// }
-		// b = nextDay(b);
-		// }
+
+		for (int i = 0; i < matrizT.length; i++) {
+			for (int j = 0; j < matrizT[i].length; j++) {
+				eventModel.addEvent(new DefaultScheduleEvent(matrizT[i][j]
+						.toString(), b.getTime(), b.getTime()));
+			}
+			b = nextDay(b);
+		}
 	}
 
 	public Calendar DateToCalendar(Date date) {
@@ -330,7 +353,7 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void generateSchedule() {
+	public void generateSchedule(Object[][] matrizT, Object[][] matrizT1) {
 		Calendar tConvertCal = null;
 
 		System.out.println("Verdadero o falso: " + this.hExtras);
@@ -350,7 +373,7 @@ public class ParametrizacionBean implements Serializable {
 		} else if (this.hExtras == true) {
 			withHextras(tConvertCal);
 		} else {
-			withOutHextras(tConvertCal);
+			withOutHextras(matrizT1, tConvertCal);
 		}
 	}
 

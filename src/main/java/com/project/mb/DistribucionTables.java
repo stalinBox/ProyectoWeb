@@ -10,16 +10,16 @@ public class DistribucionTables {
 	private Integer prodCap;
 
 	ArrayList<Integer> numTurnos = new ArrayList<Integer>();
-	ArrayList<Integer> distribPares = new ArrayList<Integer>();
+	ArrayList<Object> distribPares = new ArrayList<Object>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
 
 	public DistribucionTables() {
 
 	}
 
-	public ArrayList<ArrayList<Integer>> receivParamsPares(Integer prodTotal,
+	public ArrayList<ArrayList<Object>> receivParamsPares(Integer prodTotal,
 			Integer prodCap, ArrayList<Integer> ListaTurnos) {
-		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<Object>> array1 = new ArrayList<ArrayList<Object>>();
 		this.prodTotal = prodTotal;
 		this.prodCap = prodCap;
 		this.numTurnos = ListaTurnos;
@@ -30,28 +30,29 @@ public class DistribucionTables {
 
 	public ArrayList<ArrayList<Object>> receivParamsHoras(Integer prodTotal,
 			Integer prodCap, ArrayList<Integer> ListaTurnos) {
+		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
 		this.prodTotal = prodTotal;
 		this.prodCap = prodCap;
 		this.numTurnos = ListaTurnos;
-		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
+
 		array3 = distribDynamic2();
 		return array3;
 	}
 
 	// **** Distribution Dynamic **** //
-	public ArrayList<ArrayList<Integer>> distribDynamic() {
-		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> array2 = new ArrayList<Integer>();
+	public ArrayList<ArrayList<Object>> distribDynamic() {
+		ArrayList<ArrayList<Object>> array1 = new ArrayList<ArrayList<Object>>();
+		ArrayList<Object> array2 = new ArrayList<Object>();
 		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
 		ArrayList<Object> array4 = new ArrayList<Object>();
 		int k = 0;
 		for (Integer o : this.numTurnos) {
-			array1.add(new ArrayList<Integer>());
+			array1.add(new ArrayList<Object>());
 			array3.add(new ArrayList<Object>());
 			array2 = DistribucionP(o);
 			array4 = DistribucionHoras(this.distribPares, (float) this.prodCap,
 					o);
-			for (Integer q : array2) {
+			for (Object q : array2) {
 				array1.get(k).add(q);
 			}
 			for (Object q : array4) {
@@ -65,18 +66,18 @@ public class DistribucionTables {
 	}
 
 	public ArrayList<ArrayList<Object>> distribDynamic2() {
-		ArrayList<ArrayList<Integer>> array1 = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> array2 = new ArrayList<Integer>();
+		ArrayList<ArrayList<Object>> array1 = new ArrayList<ArrayList<Object>>();
+		ArrayList<Object> array2 = new ArrayList<Object>();
 		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
 		ArrayList<Object> array4 = new ArrayList<Object>();
 		int k = 0;
 		for (Integer o : this.numTurnos) {
-			array1.add(new ArrayList<Integer>());
+			array1.add(new ArrayList<Object>());
 			array3.add(new ArrayList<Object>());
 			array2 = DistribucionP(o);
 			array4 = DistribucionHoras(this.distribPares, (float) this.prodCap,
 					o);
-			for (Integer q : array2) {
+			for (Object q : array2) {
 				array1.get(k).add(q);
 			}
 			for (Object q : array4) {
@@ -90,13 +91,13 @@ public class DistribucionTables {
 	}
 
 	// **** FUNCION DISTRIBUCION PARES **** //
-	public ArrayList<Integer> DistribucionP(Integer numT) {
-		ArrayList<Integer> arrPares = new ArrayList<Integer>();
+	public ArrayList<Object> DistribucionP(Integer numT) {
+		ArrayList<Object> arrPares = new ArrayList<Object>();
 		arrPares = DistribucionPares(this.prodTotal, this.prodCap, numT);
 		return arrPares;
 	}
 
-	public ArrayList<Integer> DistribucionPares(Integer pTotal, Integer pCap,
+	public ArrayList<Object> DistribucionPares(Integer pTotal, Integer pCap,
 			Integer numTurn) {
 		this.distribPares.clear();
 		int numT = 0;
@@ -116,18 +117,20 @@ public class DistribucionTables {
 
 	}
 
-	public ArrayList<Object> DistribucionHoras(ArrayList<Integer> distribPares,
+	public ArrayList<Object> DistribucionHoras(ArrayList<Object> distribPares,
 			float prodCap, Integer numTurn) {
 		this.distribhoras.clear();
 
-		float a, pp;
-		int t = 8, r;
+		double a, pp;
+		String epa = null;
+		Integer t = 8, r;
 		pp = prodCap * numTurn;
 		r = t * numTurn;
-		for (Integer i : distribPares) {
+		for (Object i : distribPares) {
 			DecimalFormat formato = new DecimalFormat("##.00");
 			a = 0;
-			a = ((i / pp) * r);
+			epa = i.toString();
+			a = ((Double.valueOf(epa) / pp) * r);
 			this.distribhoras.add(formato.format(a));
 		}
 		System.out.println("Distribucion HORAS: " + this.distribhoras);
