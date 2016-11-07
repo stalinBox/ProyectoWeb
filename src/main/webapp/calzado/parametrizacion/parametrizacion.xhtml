@@ -79,13 +79,13 @@
 										<p:outputLabel for="idRespMontaje" value="Responsable:" />
 										<p:selectOneMenu id="idRespMontaje"
 											value="#{parametrizacionBean.respMontaje}" required="true"
-											style="width:150px" requiredMessage="Campo requerido">
+											style="width:150px">
 											<f:selectItem itemLabel="- Seleccione -" itemValue=""
 												noSelectionOption="true" />
 											<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
 										</p:selectOneMenu>
 										<p:outputLabel for="idStdProdConvMont"
-											value="Estándar Producción Convencional" />
+											value="Estándar Producción Convencional (promedio calculado)" />
 										<p:inputText id="idStdProdConvMont"
 											value="#{parametrizacionBean.stdProdConvMont}"
 											disabled="true" />
@@ -100,7 +100,6 @@
 									<h:panelGrid id="gridLineasConvMont" cellpadding="5"
 										style="margin-bottom:10px" columns="1">
 										<f:facet name="header">
-											<p:messages id="alertMtnLines" />
 											<h:outputText value="LINEAS CONVENCIONALES" />
 										</f:facet>
 										<h:form id="aa">
@@ -108,9 +107,8 @@
 											<p:outputLabel value="Número de Líneas: " />
 											<p:inputText id="txtNumber"
 												value="#{parametrizacionBean.numLineasConvMont}" size="1">
-												<f:validateDoubleRange minimum="1" maximum="10" />
 											</p:inputText>
-											<p:message for="txtNumber" />
+
 											<h:outputText
 												value="#{parametrizacionBean.numLineasConvMont}" />
 											<br />
@@ -210,7 +208,7 @@
 										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
 									</p:selectOneMenu>
 									<p:outputLabel for="idStdProdConvTrq"
-										value="Estandar Produccion Convencional Troquelado" />
+										value="Estandar Produccion Convencional (promedio calculado)" />
 									<p:inputText id="idStdProdConvTrq"
 										value="#{parametrizacionBean.stdProdConvTroq}" disabled="true" />
 									<p:outputLabel for="idStdProdAutTrq"
@@ -312,7 +310,7 @@
 									</p:selectOneMenu>
 
 									<p:outputLabel for="idStdProdConvApa"
-										value="Estandar Produccion Convencional" />
+										value="Estandar Produccion Convencional (promedio calculado)" />
 									<p:inputText id="idStdProdConvApa"
 										value="#{parametrizacionBean.stdProdConvApa}" disabled="true" />
 
@@ -412,8 +410,8 @@
 					<p:outputLabel for="idDiasLaborables" value="Número de días:"
 						style="font-weight:bold" />
 					<p:inputText id="idDiasLaborables"
-						value="#{parametrizacionBean.diasLaborables}" size="1"
-						required="true" requiredMessage="Campo requerido" />
+						value="#{parametrizacionBean.diasLaborables}" size="1" />
+
 				</h:panelGrid>
 				<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
 				<p:commandButton id="btnGenerateDistrib"

@@ -1,8 +1,9 @@
 package com.project.mb;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -91,22 +92,26 @@ public class ParametrizacionBean implements Serializable {
 	private boolean hExtras;
 	private Date fMontaje;
 
+	// PARA MOSTRAR INFO DIAS
+	private float dias;
+	private String d;
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
 
-		// DetaOrdenBean nb = new DetaOrdenBean();
-		// this.valoresCP = DetaOrdenBean.getCp();
-		// this.stdProdConvMont = this.valoresCP.get(0);
-		// this.stdProdConvApa = this.valoresCP.get(1);
-		// this.stdProdConvTroq = this.valoresCP.get(2);
-		// this.totPedido = nb.getTotal();
+		DetaOrdenBean nb = new DetaOrdenBean();
+		this.valoresCP = DetaOrdenBean.getCp();
+		this.stdProdConvMont = this.valoresCP.get(0);
+		this.stdProdConvApa = this.valoresCP.get(1);
+		this.stdProdConvTroq = this.valoresCP.get(2);
+		this.totPedido = nb.getTotal();
 
 		// PARA PRUEBAS
-		this.stdProdConvMont = 200;
-		this.stdProdConvApa = 300;
-		this.stdProdConvTroq = 400;
-		this.totPedido = 1150;
+		// this.stdProdConvMont = 200;
+		// this.stdProdConvApa = 300;
+		// this.stdProdConvTroq = 400;
+		// this.totPedido = 1150;
 		// FIN PRUEBAS
 
 		this.currentDate = new Date();
@@ -316,34 +321,75 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	// METODOS
-	public void withHextras(Calendar fMontajeParamE) {
+	public void withHextras(Object[][] matrizT, Calendar fMontajeParam) {
 		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
-		Calendar b = fMontajeParamE;
-		for (int i = 0; i < array3DDistribPares.size(); i++) {
-			for (int j = 0; j < array3DDistribPares.get(i).size(); j++) {
-				// AÑADIR EVENTOS EN EL DIA
+		Calendar b = fMontajeParam;
+		float d = 0, s = 0;
+
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		for (int i = 0; i < matrizT.length; i++) {
+			d++;
+			for (int j = 0; j < matrizT[i].length; j++) {
 				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
-						+ "Convencional: "
-						+ array3DDistribPares.get(i).get(j).toString(), b
-						.getTime(), b.getTime()));
+						+ ": " + matrizT[i][j].toString(), b.getTime(), b
+						.getTime()));
 			}
 			b = nextDayExtras(b);
 		}
+		s = (d / 6);
+		formatter.format(s);
+
+		if (s > 4) {
+			this.d = "La programacion no debe sobrepasar el mes 4 semanas, ud ha programado "
+					+ s + " Semanas";
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(this.d));
+			eventModel = new DefaultScheduleModel();
+		} else {
+			this.d = "Se ha programado para " + s + " Semanas ";
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(this.d));
+		}
+
+		System.out.println("Dias labadorados: " + d);
+		System.out.println("Semanas labadoradas: " + s);
+
 	}
 
 	public void withOutHextras(Object[][] matrizT, Calendar fMontajeParam) {
 		// INSERTAR EN EL MODELO
 		eventModel = new DefaultScheduleModel();
 		Calendar b = fMontajeParam;
+		float d = 0, s = 0;
 
+		NumberFormat formatter = new DecimalFormat("#0.00");
 		for (int i = 0; i < matrizT.length; i++) {
+			d++;
 			for (int j = 0; j < matrizT[i].length; j++) {
-				eventModel.addEvent(new DefaultScheduleEvent(matrizT[i][j]
-						.toString(), b.getTime(), b.getTime()));
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ ": " + matrizT[i][j].toString(), b.getTime(), b
+						.getTime()));
 			}
 			b = nextDay(b);
 		}
+		s = (d / 5);
+		formatter.format(s);
+
+		if (s > 4) {
+			this.d = "La programacion no debe sobrepasar el mes 4 semanas, ud ha programado "
+					+ s + " Semanas";
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(this.d));
+			eventModel = new DefaultScheduleModel();
+		} else {
+			this.d = "Se ha programado para " + s + " Semanas ";
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(this.d));
+		}
+
+		System.out.println("Dias labadorados: " + d);
+		System.out.println("Semanas labadoradas: " + s);
 	}
 
 	public Calendar DateToCalendar(Date date) {
@@ -369,9 +415,9 @@ public class ParametrizacionBean implements Serializable {
 							null,
 							new FacesMessage(
 									"No se puede empezar a programar los fines de semana"));
-
+			eventModel = new DefaultScheduleModel();
 		} else if (this.hExtras == true) {
-			withHextras(tConvertCal);
+			withHextras(matrizT1, tConvertCal);
 		} else {
 			withOutHextras(matrizT1, tConvertCal);
 		}
@@ -528,6 +574,22 @@ public class ParametrizacionBean implements Serializable {
 
 	public ArrayList<String> getLblMonConv() {
 		return lblMonConv;
+	}
+
+	public String getD() {
+		return d;
+	}
+
+	public void setD(String d) {
+		this.d = d;
+	}
+
+	public float getDias() {
+		return dias;
+	}
+
+	public void setDias(float dias) {
+		this.dias = dias;
 	}
 
 	public ScheduleModel getEventModel() {

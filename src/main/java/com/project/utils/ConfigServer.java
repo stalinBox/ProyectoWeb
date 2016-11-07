@@ -1,29 +1,18 @@
 package com.project.utils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class ConfigServer {
 	private static String ipServer;
-	private static final String TASKLIST = "tasklist";
-	private static final String KILL = "taskkill /F /IM ";
 
 	public static void main(String[] args) throws Exception {
 
 		Properties propiedades = new Properties();
 		InputStream entrada = null;
-		String processName = "EXCEL.EXE";
-
-		// KILLING A PROCESS ON WINDOWS
-		if (isProcessRunning(processName)) {
-			killProcess(processName);
-		}
 
 		// GET IP ADDRESS OF THE SERVER
 		try {
@@ -54,26 +43,5 @@ public class ConfigServer {
 				}
 			}
 		}
-	}
-
-	// LIST RUN PROCESS
-	private static boolean isProcessRunning(String serviceName)
-			throws Exception {
-		Process p = Runtime.getRuntime().exec(TASKLIST);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				p.getInputStream()));
-		String line;
-		while ((line = reader.readLine()) != null) {
-			System.out.println(line);
-			if (line.contains(serviceName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// KILL A PROCESS
-	public static void killProcess(String serviceName) throws Exception {
-		Runtime.getRuntime().exec(KILL + serviceName);
 	}
 }

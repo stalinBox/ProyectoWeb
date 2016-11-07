@@ -21,6 +21,7 @@ import com.project.dao.TallasDaoImpl;
 import com.project.entities.Detalleorden;
 import com.project.entities.Modelo;
 import com.project.entities.Talla;
+import com.project.utils.KillProcessEXCEL;
 import com.project.utils.MyUtil;
 
 @ManagedBean
@@ -38,7 +39,7 @@ public class DetaOrdenBean implements Serializable {
 	private Integer cantidad;
 	private static ArrayList<Integer> cp = new ArrayList<Integer>();
 	Items order;
-	private ArrayList<Items> orderList = new ArrayList<Items>();
+	private static final ArrayList<Items> orderList = new ArrayList<Items>();
 	private static Integer total;
 
 	// INICIALIZADORES
@@ -91,6 +92,9 @@ public class DetaOrdenBean implements Serializable {
 	}
 
 	public void displayOrden() throws InvalidFormatException, IOException {
+		// MATANDO PROCESO EN EXCEL
+		KillProcessEXCEL a = new KillProcessEXCEL();
+		a.main(null);
 
 		WriteAndReadExcel wr = new WriteAndReadExcel();
 		// Store la capacidad de produccion
