@@ -73,7 +73,6 @@
 									<h:panelGrid id="gridMontaje" cellpadding="5" columns="1"
 										style="margin-bottom:10px">
 										<f:facet name="header">
-											<p:messages id="alertMtn" />
 											<h:outputText value="MONTAJE" />
 										</f:facet>
 										<p:outputLabel for="idRespMontaje" value="Responsable:" />
@@ -93,6 +92,9 @@
 											value="Estándar Producción Automática" />
 										<p:inputText id="idStdProdAutMont"
 											value="#{parametrizacionBean.stdProdAutMont}" disabled="true" />
+										<p:outputLabel value="Producción Total:"></p:outputLabel>
+										<p:inputText id="idProdTotal"
+											value="#{parametrizacionBean.totPedido}" disabled="true" />
 									</h:panelGrid>
 
 								</p:layoutUnit>
@@ -215,6 +217,9 @@
 										value="Estandar Produccion Automatica" />
 									<p:inputText id="idStdProdAutTrq"
 										value="#{parametrizacionBean.stdProdAutTroq}" disabled="true" />
+									<p:outputLabel value="Producción Total:"></p:outputLabel>
+									<p:inputText value="#{parametrizacionBean.totPedido}"
+										disabled="true" />
 								</h:panelGrid>
 							</p:layoutUnit>
 							<p:layoutUnit position="center" styleClass="center">
@@ -318,6 +323,10 @@
 										value="Estandar Produccion Automatica" />
 									<p:inputText id="idStdProdAutApa"
 										value="#{parametrizacionBean.stdProdAutApa}" disabled="true" />
+
+									<p:outputLabel value="Producción Total:"></p:outputLabel>
+									<p:inputText value="#{parametrizacionBean.totPedido}"
+										disabled="true" />
 								</h:panelGrid>
 
 							</p:layoutUnit>
@@ -418,8 +427,8 @@
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
 					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :formParamGeneral:tabSubGen:mtn:paramMontaje, :formParamGeneral:tabSubGen:mtn:paramMontaje:bol, :formParamGeneral:tabSubGen:mtn:paramMontaje:btnFechaMtn"
-					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:schedule"
-					ajax="true" partialSubmit="true" />
+					update=":sendParamsGene:msgs, :idTblFechas:schedule" ajax="true"
+					partialSubmit="true" />
 
 				<p:commandButton value="REPROCESAR"
 					actionListener="#{parametrizacionBean.reprocesar()}" />

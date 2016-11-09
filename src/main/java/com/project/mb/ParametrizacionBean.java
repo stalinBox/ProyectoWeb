@@ -100,18 +100,20 @@ public class ParametrizacionBean implements Serializable {
 	@PostConstruct
 	public void init() {
 
-		DetaOrdenBean nb = new DetaOrdenBean();
-		this.valoresCP = DetaOrdenBean.getCp();
-		this.stdProdConvMont = this.valoresCP.get(0);
-		this.stdProdConvApa = this.valoresCP.get(1);
-		this.stdProdConvTroq = this.valoresCP.get(2);
-		this.totPedido = nb.getTotal();
+		// PARA NO PRUEBAS
+		// DetaOrdenBean nb = new DetaOrdenBean();
+		// this.valoresCP = DetaOrdenBean.getCp();
+		// this.stdProdConvMont = this.valoresCP.get(0);
+		// this.stdProdConvApa = this.valoresCP.get(1);
+		// this.stdProdConvTroq = this.valoresCP.get(2);
+		// this.totPedido = nb.getTotal();
+		// ****************
 
 		// PARA PRUEBAS
-		// this.stdProdConvMont = 200;
-		// this.stdProdConvApa = 300;
-		// this.stdProdConvTroq = 400;
-		// this.totPedido = 1150;
+		this.stdProdConvMont = 362;
+		this.stdProdConvApa = 381;
+		this.stdProdConvTroq = 390;
+		this.totPedido = 614;
 		// FIN PRUEBAS
 
 		this.currentDate = new Date();
