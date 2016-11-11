@@ -452,16 +452,6 @@
 					actionListener="#{parametrizacionBean.reprocesar()}" />
 
 				<p:commandButton value="CONTINUAR" />
-
-				<p:commandButton value="Guardar Troqueles Turnos"
-					action="#{parametrizacionBean.TestShowDataTrq()}"
-					process="@this, :formParamGeneral:tabSubGen:trq:paramTrq"
-					ajax="true" partialSubmit="true" />
-
-				<p:commandButton value="Guardar Aparado Turnos"
-					action="#{parametrizacionBean.TestShowDataApa()}"
-					process="@this, :formParamGeneral:tabSubGen:apa:paramApa"
-					ajax="true" partialSubmit="true" />
 				<!--  **********************************************************************  -->
 			</h:form>
 			<p:separator />
@@ -472,7 +462,7 @@
 					<p:schedule id="schedule" value="#{parametrizacionBean.eventModel}"
 						widgetVar="myschedule" timeZone="GMT-5" locale="es"
 						rightHeaderTemplate="" showWeekends="true" styleClass="custom">
-						<p:ajax event="dateSelect"
+						<!-- <p:ajax event="dateSelect"
 							listener="#{parametrizacionBean.onDateSelect()}"
 							update="eventDetails" oncomplete="PF('eventDialog').show();" />
 						<p:ajax event="eventSelect"
@@ -481,7 +471,7 @@
 						<p:ajax event="eventMove"
 							listener="#{parametrizacionBean.onEventMove}" update="messages" />
 						<p:ajax event="eventResize"
-							listener="#{parametrizacionBean.onEventResize}" update="messages" />
+							listener="#{parametrizacionBean.onEventResize}" update="messages" /> -->
 					</p:schedule>
 				</h:panelGrid>
 

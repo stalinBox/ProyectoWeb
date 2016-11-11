@@ -24,6 +24,8 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import com.project.utils.ConvertArrayToMatriz;
+import com.project.utils.ConvertMatrizTranspuesta;
 import com.project.utils.MyUtil;
 
 /**
@@ -152,18 +154,27 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public void ExecuteParams() {
+		// ARRAYS FOR MONTAJE
 		ArrayList<ArrayList<Object>> array0 = new ArrayList<ArrayList<Object>>();
 		ArrayList<ArrayList<Object>> array00 = new ArrayList<ArrayList<Object>>();
+
+		// ARRAYS FOR TROQUELADO
+		ArrayList<ArrayList<Object>> arrayHTRQ = new ArrayList<ArrayList<Object>>();
+
+		// ARRAYS FOR APARADO
+		ArrayList<ArrayList<Object>> arrayHAPA = new ArrayList<ArrayList<Object>>();
+
 		String msg = "";
 		try {
 			// STORE TURNS
 			TestShowData();
-			System.out.println("se ejecuto: turnos montaje");
+			System.out.println("Se guardaron turnos de Montaje");
+
+			TestShowDataTrq();
+			System.out.println("Se guardaron turnos de Troquelado");
 
 			TestShowDataApa();
-			System.out.println("se ejecuto: turnos aparado");
-			TestShowDataTrq();
-			System.out.println("se ejecuto: turnos troquelado");
+			System.out.println("Se guardaron turnos de Aparado");
 
 			// PRINT PARAMS
 			System.out.println("PARAMETROS A UTILZAR");
@@ -183,34 +194,65 @@ public class ParametrizacionBean implements Serializable {
 			array00 = nn.receivParamsHoras(this.totPedido,
 					this.stdProdConvMont, this.addNumTurnosConvMont);
 
+			arrayHTRQ = nn.receivParamsHoras(this.totPedido,
+					this.stdProdConvTroq, this.addNumTurnosConvTrq);
+
+			arrayHAPA = nn.receivParamsHoras(this.totPedido,
+					this.stdProdConvApa, this.addNumTurnosConvApa);
+
 			System.out.println("Esto es lo que devolvio (PARES): " + array0);
 			System.out.println("Esto es lo que devolvio (HORAS): " + array00);
 
-			Object[][] array = new Object[array00.size()][];
-			for (int i = 0; i < array00.size(); i++) {
-				ArrayList<Object> row = array00.get(i);
-				array[i] = row.toArray(new String[row.size()]);
-			}
+			System.out.println("Esto es lo que devolvio TRQ (HORAS): "
+					+ arrayHTRQ);
 
-			Object[][] matrizT = new Object[array[0].length][array.length];
-			for (int x = 0; x < array.length; x++) {
-				for (int y = 0; y < array[x].length; y++) {
-					matrizT[y][x] = array[x][y];
-				}
-			}
+			System.out.println("Esto es lo que devolvio APA (HORAS): "
+					+ arrayHAPA);
 
+			// CONVERT OBJECT FROM ARRAYLIST TO [][]
+			ConvertMatrizTranspuesta convertTranspuesta = new ConvertMatrizTranspuesta();
+			ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
+
+			// MONTAJE MATRICES
+			// ARRAY PARES
 			Object[][] array2 = new Object[array0.size()][];
-			for (int i = 0; i < array0.size(); i++) {
-				ArrayList<Object> row = array0.get(i);
-				array2[i] = row.toArray(new Object[row.size()]);
-			}
+			array2 = convert.convertArray(array0);
 
-			Object[][] matrizT1 = new Object[array2[0].length][array2.length];
-			for (int x = 0; x < array2.length; x++) {
-				for (int y = 0; y < array2[x].length; y++) {
-					matrizT1[y][x] = array2[x][y];
-				}
-			}
+			// TRANSPUESTA PARES
+			Object[][] matrizT1 = null;
+			matrizT1 = convertTranspuesta.converMatrizTranspuesta(array2);
+
+			// ARRAY HORAS
+			Object[][] array = new Object[array00.size()][];
+			array = convert.convertArray(array00);
+
+			// TRANSPUESTA HORAS
+			Object[][] matrizT = null;
+			matrizT = convertTranspuesta.converMatrizTranspuesta(array);
+
+			// APARADO MATRICES ***FALTA
+			// ARRAY PARES
+			// TRANSPUESTA PARES
+
+			// ARRAY HORAS
+			Object[][] arrayAPARADOh = new Object[arrayHAPA.size()][];
+			arrayAPARADOh = convert.convertArray(arrayHAPA);
+			// TRANSPUESTA HORAS
+			Object[][] matrizTaparadoH = null;
+			matrizTaparadoH = convertTranspuesta
+					.converMatrizTranspuesta(arrayAPARADOh);
+
+			// TROQUELADO MATRICES ***FALTA
+			// ARRAY PARES
+			// TRANSPUESTA PARES
+
+			// ARRAY HORAS
+			Object[][] arrayTRQh = new Object[arrayHTRQ.size()][];
+			arrayTRQh = convert.convertArray(arrayHTRQ);
+			// TRANSPUESTA HORAS
+			Object[][] matrizTtroquelH = null;
+			matrizTtroquelH = convertTranspuesta
+					.converMatrizTranspuesta(arrayTRQh);
 
 			// PARA MOSTRAR TABLAS (SHOW TABLAS)
 			// MyDistribFechas();
@@ -219,7 +261,7 @@ public class ParametrizacionBean implements Serializable {
 			generateSchedule(matrizT, matrizT1);
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = "Error: HACEN FALTA MAS DIAS PARA PROCESAR LA ORDEN";
+			msg = "Error: ERROR EN LA LLAMADA PRINCIPAL";
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
