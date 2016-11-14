@@ -1,10 +1,7 @@
-/**
- * 
- */
 PrimeFaces.locales['es'] = {
 	closeText : 'Cerrar',
-	prevText : 'Ant',
-	nextText : 'Sig',
+	prevText : 'Anterior',
+	nextText : 'Siguiente',
 	currentText : 'Hoy',
 	monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
 			'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre',
@@ -13,13 +10,13 @@ PrimeFaces.locales['es'] = {
 			'Sep', 'Oct', 'Nov', 'Dic' ],
 	dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves',
 			'Viernes', 'Sábado' ],
-	dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Juv', 'Vie', 'Sab' ],
-	dayNamesMin : [ 'Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa' ],
+	dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Juv', 'Vie', 'Sáb' ],
+	dayNamesMin : [ 'Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá' ],
 	weekHeader : 'Semana',
 	dateFormat : 'dd/mm/yy',
 	firstDay : 1,
-	isRTL : !1,
-	showMonthAfterYear : !1,
+	isRTL : false,
+	showMonthAfterYear : false,
 	yearSuffix : '',
 	month : 'Mes',
 	week : 'Semana',

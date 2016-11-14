@@ -1,0 +1,16 @@
+@CHARSET "ISO-8859-1";
+
+.value {
+	width: 1000px;
+}
+
+/* .custom .ui-state-highlight { */
+/* 	background: red !important; */
+/* } */
+.fc-sat {
+	background: Aquamarine !important;
+}
+
+.fc-sun {
+	background: Aqua !important;
+}

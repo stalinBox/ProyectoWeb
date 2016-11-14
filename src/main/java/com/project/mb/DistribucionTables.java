@@ -112,7 +112,6 @@ public class DistribucionTables {
 			}
 			this.distribPares.add(numT);
 		} while (pTotal >= 0);
-		System.out.println("Distribucion PARES: " + this.distribPares);
 		return this.distribPares;
 
 	}
@@ -133,7 +132,6 @@ public class DistribucionTables {
 			a = ((Double.valueOf(epa) / pp) * r);
 			this.distribhoras.add(formato.format(a));
 		}
-		System.out.println("Distribucion HORAS: " + this.distribhoras);
 		return this.distribhoras;
 	}
 

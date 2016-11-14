@@ -12,47 +12,7 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
-			<script type="text/javascript">
-    PrimeFaces.locales['es'] = {
-        closeText: 'Cerrar',
-        prevText: 'Anterior',
-        nextText: 'Siguiente',
-        currentText: 'Hoy',
-        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
-            'Jul','Ago','Sep','Oct','Nov','Dic'],
-        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-        dayNamesShort: ['Dom','Lun','Mar','Mie','Juv','Vie','Sáb'],
-        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-        weekHeader: 'Semana',
-        dateFormat:'dd/mm/yy',
-        firstDay: 1,
-        isRTL: false,
-        showMonthAfterYear: false,
-        yearSuffix: '',
-        month: 'Mes',
-        week: 'Semana',
-        day: 'Día',
-        allDayText : 'Todo el día'
-    };
-</script>
-			<style type="text/css">
-.value {
-	width: 1000px;
-}
 
-/* .custom .ui-state-highlight { */
-/* 	background: red !important; */
-/* } */
-.fc-sat {
-	background: Aquamarine !important;
-}
-
-.fc-sun {
-	background: Aqua !important;
-}
-</style>
 			<p:ajaxStatus onstart="PF('statusDialog').show()"
 				onsuccess="PF('statusDialog').hide()" />
 

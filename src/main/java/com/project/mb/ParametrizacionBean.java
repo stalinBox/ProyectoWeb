@@ -160,9 +160,11 @@ public class ParametrizacionBean implements Serializable {
 
 		// ARRAYS FOR TROQUELADO
 		ArrayList<ArrayList<Object>> arrayHTRQ = new ArrayList<ArrayList<Object>>();
+		ArrayList<ArrayList<Object>> arrayPTRQ = new ArrayList<ArrayList<Object>>();
 
 		// ARRAYS FOR APARADO
 		ArrayList<ArrayList<Object>> arrayHAPA = new ArrayList<ArrayList<Object>>();
+		ArrayList<ArrayList<Object>> arrayPAPA = new ArrayList<ArrayList<Object>>();
 
 		String msg = "";
 		try {
@@ -188,52 +190,66 @@ public class ParametrizacionBean implements Serializable {
 
 			// SEND AND GET ARRAYS
 			DistribucionTables nn = new DistribucionTables();
+			// MONTAJE
 			array0 = nn.receivParamsPares(this.totPedido, this.stdProdConvMont,
 					this.addNumTurnosConvMont);
-
 			array00 = nn.receivParamsHoras(this.totPedido,
 					this.stdProdConvMont, this.addNumTurnosConvMont);
 
+			// TROQUELADO
+			arrayPTRQ = nn.receivParamsPares(this.totPedido,
+					this.stdProdConvTroq, this.addNumTurnosConvTrq);
 			arrayHTRQ = nn.receivParamsHoras(this.totPedido,
 					this.stdProdConvTroq, this.addNumTurnosConvTrq);
 
+			// APARADO
+			arrayPAPA = nn.receivParamsPares(this.totPedido,
+					this.stdProdConvApa, this.addNumTurnosConvApa);
 			arrayHAPA = nn.receivParamsHoras(this.totPedido,
 					this.stdProdConvApa, this.addNumTurnosConvApa);
 
-			System.out.println("Esto es lo que devolvio (PARES): " + array0);
-			System.out.println("Esto es lo que devolvio (HORAS): " + array00);
-
-			System.out.println("Esto es lo que devolvio TRQ (HORAS): "
+			System.out.println("Esto es lo que devolvio MTN(PARES): " + array0);
+			System.out
+					.println("Esto es lo que devolvio MTN(HORAS): " + array00);
+			System.out.println("Esto es lo que devolvio TRQ(PARES): "
+					+ arrayPTRQ);
+			System.out.println("Esto es lo que devolvio TRQ(HORAS): "
 					+ arrayHTRQ);
-
-			System.out.println("Esto es lo que devolvio APA (HORAS): "
+			System.out.println("Esto es lo que devolvio APA(PARES): "
+					+ arrayPAPA);
+			System.out.println("Esto es lo que devolvio APA(HORAS): "
 					+ arrayHAPA);
 
 			// CONVERT OBJECT FROM ARRAYLIST TO [][]
 			ConvertMatrizTranspuesta convertTranspuesta = new ConvertMatrizTranspuesta();
 			ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
 
-			// MONTAJE MATRICES
+			// MONTAJE MATRICES *****************************
 			// ARRAY PARES
 			Object[][] array2 = new Object[array0.size()][];
 			array2 = convert.convertArray(array0);
 
 			// TRANSPUESTA PARES
-			Object[][] matrizT1 = null;
-			matrizT1 = convertTranspuesta.converMatrizTranspuesta(array2);
+			Object[][] matrizTPmontaje = null;
+			matrizTPmontaje = convertTranspuesta
+					.converMatrizTranspuesta(array2);
 
 			// ARRAY HORAS
 			Object[][] array = new Object[array00.size()][];
 			array = convert.convertArray(array00);
 
 			// TRANSPUESTA HORAS
-			Object[][] matrizT = null;
-			matrizT = convertTranspuesta.converMatrizTranspuesta(array);
+			Object[][] matrizTHmontaje = null;
+			matrizTHmontaje = convertTranspuesta.converMatrizTranspuesta(array);
 
-			// APARADO MATRICES ***FALTA
+			// APARADO MATRICES ****************************
 			// ARRAY PARES
+			Object[][] arrayApaPares = new Object[arrayPAPA.size()][];
+			arrayApaPares = convert.convertArray(arrayPAPA);
 			// TRANSPUESTA PARES
-
+			Object[][] matrizTaparadoP = null;
+			matrizTaparadoP = convertTranspuesta
+					.converMatrizTranspuesta(arrayApaPares);
 			// ARRAY HORAS
 			Object[][] arrayAPARADOh = new Object[arrayHAPA.size()][];
 			arrayAPARADOh = convert.convertArray(arrayHAPA);
@@ -242,9 +258,14 @@ public class ParametrizacionBean implements Serializable {
 			matrizTaparadoH = convertTranspuesta
 					.converMatrizTranspuesta(arrayAPARADOh);
 
-			// TROQUELADO MATRICES ***FALTA
+			// TROQUELADO MATRICES ***********************
 			// ARRAY PARES
+			Object[][] arrayTrqPares = new Object[arrayPTRQ.size()][];
+			arrayTrqPares = convert.convertArray(arrayPTRQ);
 			// TRANSPUESTA PARES
+			Object[][] matrizTtroquelP = null;
+			matrizTtroquelP = convertTranspuesta
+					.converMatrizTranspuesta(arrayTrqPares);
 
 			// ARRAY HORAS
 			Object[][] arrayTRQh = new Object[arrayHTRQ.size()][];
@@ -254,11 +275,8 @@ public class ParametrizacionBean implements Serializable {
 			matrizTtroquelH = convertTranspuesta
 					.converMatrizTranspuesta(arrayTRQh);
 
-			// PARA MOSTRAR TABLAS (SHOW TABLAS)
-			// MyDistribFechas();
-			// MyDistribPares(array0);
-			// MyDistribHoras(array00);
-			generateSchedule(matrizT, matrizT1);
+			generateSchedule(matrizTPmontaje, matrizTaparadoP, matrizTtroquelP);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = "Error: ERROR EN LA LLAMADA PRINCIPAL";
@@ -267,91 +285,6 @@ public class ParametrizacionBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 	}
-
-	// METODOS PARA LLENAR LAS MATRICES
-	// public void MyDistribPares(ArrayList<ArrayList<Integer>> array0) {
-	// this.array3DDistribPares.clear();
-	// // ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-	// // this.rowNames.clear();
-	// // this.colNames.clear();
-	// // for (int i = 1; i <= this.numLineasConvMont; i++) {
-	// // this.rowNames.add("L" + i + " Convencional");
-	// // }
-	// // for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-	// // this.colNames.add("Dia " + i);
-	// // }
-	//
-	// System.out.println("array0: " + array0);
-	// // CONFIGURAR ESTRUCTURA 3D
-	// for (int i = 0; i < array0.size(); i++) {
-	// this.array3DDistribPares.add(new ArrayList<ArrayList<Integer>>());
-	// for (int j = 0; j < array0.get(i).size(); j++) {
-	// this.array3DDistribPares.get(i).add(new ArrayList<Integer>());
-	// }
-	// }
-	//
-	// // AGREGAR LOS DATOS DE 2D a 3D
-	// for (int i = 0; i < array0.size(); i++) {
-	// for (int j = 0; j < array0.get(i).size(); j++) {
-	// // System.out.print(array1.get(i).get(j) + " ");
-	// int g = array0.get(i).get(j);
-	// this.array3DDistribPares.get(i).get(j).add(g);
-	// }
-	// }
-	// System.out.println("Array PARES 3D: " + this.array3DDistribPares);
-	// }
-
-	// public void MyDistribHoras(ArrayList<ArrayList<Object>> array00) {
-	// this.array3DDistribHoras.clear();
-	// // ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-	// // this.rowNames.clear();
-	// // this.colNames.clear();
-	// // for (int i = 1; i <= this.numLineasConvMont; i++) {
-	// // this.rowNames.add("L" + i + " Convencional");
-	// // }
-	// // for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-	// // this.colNames.add("Dia " + i);
-	// // }
-	//
-	// // CONFIGURAR ESTRUCTURA 3D
-	// for (int i = 0; i < array00.size(); i++) {
-	// this.array3DDistribHoras.add(new ArrayList<ArrayList<String>>());
-	// for (int j = 0; j < array00.get(i).size(); j++) {
-	// this.array3DDistribHoras.get(i).add(new ArrayList<String>());
-	// }
-	// }
-	//
-	// // AGREGAR LOS DATOS DE 2D a 3D
-	// for (int i = 0; i < array00.size(); i++) {
-	// for (int j = 0; j < array00.get(i).size(); j++) {
-	// // System.out.print(array1.get(i).get(j) + " ");
-	// Object g = array00.get(i).get(j);
-	// this.array3DDistribHoras.get(i).get(j).add(String.valueOf(g));
-	// }
-	// }
-	// }
-
-	// public void MyDistribFechas() {
-	// this.array3DFechas.clear();
-	// // ENCABEZADOS Y NOMBRES DE LAS FILAS/COLUMNAS
-	// this.rowNameProcesos.clear();
-	// this.colNames.clear();
-	//
-	// this.rowNameProcesos.add("FECHA MONTAJE");
-	// this.rowNameProcesos.add("FECHA APARADO");
-	// this.rowNameProcesos.add("FECHA TROQUELADO");
-	//
-	// // for (int i = 1; i <= Integer.parseInt(this.diasLaborables); i++) {
-	// // this.colNames.add("Dia " + i);
-	// // }
-	// // CONFIGURAR ESTRUCTURA 3D
-	// for (int i = 0; i < rowNameProcesos.size(); i++) {
-	// this.array3DFechas.add(new ArrayList<ArrayList<String>>());
-	// for (int j = 0; j < colNames.size(); j++) {
-	// this.array3DFechas.get(i).add(new ArrayList<String>());
-	// }
-	// }
-	// }
 
 	// ***************RECORRER DIAS EN EL CALENDAR*************
 	@SuppressWarnings("deprecation")
@@ -380,11 +313,47 @@ public class ParametrizacionBean implements Serializable {
 		return a;
 	}
 
-	// METODOS
-	public void withHextras(Object[][] matrizT, Calendar fMontajeParam) {
-		// INSERTAR EN EL MODELO
+	@SuppressWarnings("deprecation")
+	private Calendar prevDayApa(Date date) {
+		Calendar a = null;
+		a = DateToCalendar(date);
+		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
+			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
+		} else {
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
+		}
+		return a;
+	}
+
+	@SuppressWarnings("deprecation")
+	private Calendar prevDayTrq(Date date) {
+		Calendar a = null;
+		a = DateToCalendar(date);
+		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
+			a.set(Calendar.DATE, a.get(Calendar.DATE) - 2);
+		} else {
+			a.set(Calendar.AM_PM, Calendar.PM);
+			a.set(Calendar.DATE, a.get(Calendar.DATE) - 2);
+		}
+		return a;
+	}
+
+	public Calendar DateToCalendar(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
+	}
+
+	// INSERTAR EN EL MODELO CON HORAS EXTRAS
+	public void withHextras(Object[][] matrizT, Calendar fMontajeParam,
+			Object[][] matrizTaparadoH, Calendar tConvertCalApa,
+			Object[][] matrizTtroquelP, Calendar tConvertCalTrq) {
+
 		eventModel = new DefaultScheduleModel();
-		Calendar b = fMontajeParam;
+		Calendar m = fMontajeParam;
+		Calendar a = tConvertCalApa;
+		Calendar t = tConvertCalTrq;
 		float d = 0, s = 0;
 
 		NumberFormat formatter = new DecimalFormat("#0.00");
@@ -392,10 +361,20 @@ public class ParametrizacionBean implements Serializable {
 			d++;
 			for (int j = 0; j < matrizT[i].length; j++) {
 				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
-						+ ": " + matrizT[i][j].toString(), b.getTime(), b
-						.getTime()));
+						+ " Montaje: " + matrizT[i][j].toString(), m.getTime(),
+						m.getTime()));
+
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ " Aparado: " + matrizTaparadoH[i][j].toString(), a
+						.getTime(), a.getTime()));
+
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ " Troquelado: " + matrizTtroquelP[i][j].toString(), t
+						.getTime(), t.getTime()));
 			}
-			b = nextDayExtras(b);
+			m = nextDayExtras(m);
+			a = nextDayExtras(a);
+			t = nextDayExtras(t);
 		}
 		s = (d / 6);
 		formatter.format(s);
@@ -414,13 +393,17 @@ public class ParametrizacionBean implements Serializable {
 
 		System.out.println("Dias labadorados: " + d);
 		System.out.println("Semanas labadoradas: " + s);
-
 	}
 
-	public void withOutHextras(Object[][] matrizT, Calendar fMontajeParam) {
-		// INSERTAR EN EL MODELO
+	// INSERTAR EN EL MODELO SIN HORAS EXTRAS
+	public void withOutHextras(Object[][] matrizT, Calendar fMontajeParam,
+			Object[][] matrizTaparadoP, Calendar tConvertCalApa,
+			Object[][] matrizTtroquelP, Calendar tConvertCalTrq) {
+
 		eventModel = new DefaultScheduleModel();
-		Calendar b = fMontajeParam;
+		Calendar m = fMontajeParam;
+		Calendar a = tConvertCalApa;
+		Calendar t = tConvertCalTrq;
 		float d = 0, s = 0;
 
 		NumberFormat formatter = new DecimalFormat("#0.00");
@@ -428,10 +411,21 @@ public class ParametrizacionBean implements Serializable {
 			d++;
 			for (int j = 0; j < matrizT[i].length; j++) {
 				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
-						+ ": " + matrizT[i][j].toString(), b.getTime(), b
-						.getTime()));
+						+ " Montaje: " + matrizT[i][j].toString(), m.getTime(),
+						m.getTime()));
+
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ " Aparado: " + matrizTaparadoP[i][j].toString(), a
+						.getTime(), a.getTime()));
+
+				eventModel.addEvent(new DefaultScheduleEvent("L" + (j + 1)
+						+ " Troquelado: " + matrizTtroquelP[i][j].toString(), t
+						.getTime(), t.getTime()));
+
 			}
-			b = nextDay(b);
+			m = nextDay(m);
+			a = nextDay(a);
+			t = nextDay(t);
 		}
 		s = (d / 5);
 		formatter.format(s);
@@ -452,21 +446,23 @@ public class ParametrizacionBean implements Serializable {
 		System.out.println("Semanas labadoradas: " + s);
 	}
 
-	public Calendar DateToCalendar(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		return cal;
-	}
-
+	// GENERAR LOS EVENTOS EN EL CALENDARIO
 	@SuppressWarnings("deprecation")
-	public void generateSchedule(Object[][] matrizT, Object[][] matrizT1) {
+	public void generateSchedule(Object[][] matrizTPmontaje,
+			Object[][] matrizTaparadoP, Object[][] matrizTtroquelP) {
+
 		Calendar tConvertCal = null;
+		Calendar tConvertCalApa = null;
+		Calendar tConvertCalTrq = null;
 
-		System.out.println("Verdadero o falso: " + this.hExtras);
 		System.out.println("Fecha seleccionada: " + this.fMontaje);
-
 		tConvertCal = DateToCalendar(this.fMontaje);
-		System.out.println("Numero del dia elegido: " + this.fMontaje.getDay());
+		tConvertCalApa = prevDayApa(this.fMontaje);
+		tConvertCalTrq = prevDayTrq(this.fMontaje);
+
+		System.out.println("Fecha Montaje: " + tConvertCal.getTime());
+		System.out.println("Fecha Aparado: " + tConvertCalApa.getTime());
+		System.out.println("Fecha Troquelado: " + tConvertCalTrq.getTime());
 
 		if (this.fMontaje.getDay() == 0 || this.fMontaje.getDay() == 6) {
 			FacesContext
@@ -477,12 +473,15 @@ public class ParametrizacionBean implements Serializable {
 									"No se puede empezar a programar los fines de semana"));
 			eventModel = new DefaultScheduleModel();
 		} else if (this.hExtras == true) {
-			withHextras(matrizT1, tConvertCal);
+			withHextras(matrizTPmontaje, tConvertCal, matrizTaparadoP,
+					tConvertCalApa, matrizTtroquelP, tConvertCalTrq);
 		} else {
-			withOutHextras(matrizT1, tConvertCal);
+			withOutHextras(matrizTPmontaje, tConvertCal, matrizTaparadoP,
+					tConvertCalApa, matrizTtroquelP, tConvertCalTrq);
 		}
 	}
 
+	// METODO BTN REPROCESAR
 	public void reprocesar() {
 		String ruta = "";
 		ruta = MyUtil.calzadoPath() + "ordenesProd/ordenesproduc.jsf";
