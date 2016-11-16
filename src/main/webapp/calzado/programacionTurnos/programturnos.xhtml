@@ -5,12 +5,162 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Sorry</title>
-</h:head>
 <h:body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
 
+			<h1>HELLO WORLD..!</h1>
 
+			<h:form id="ordenProceso">
+				<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
+					<p:outputLabel value="Proceso" />
+					<p:outputLabel value="Nº Orden" />
+					<p:outputLabel value="Origen Lugar" />
+					<p:outputLabel value="Responsable" />
+
+					<p:outputLabel value="Fecha actual" />
+					<p:outputLabel value="Fecha estimada" />
+					<p:outputLabel value="Destino" />
+				</h:panelGrid>
+
+			</h:form>
+			<p:separator />
+			<h:form>
+				<p:commandButton value="Consultar" />
+			</h:form>
+			<p:separator />
+			<h:form id="programTurnos">
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:dataTable id="proTurnos" var="pt" value="" editable="true"
+					style="margin-bottom:20px">
+					<f:facet name="header">
+					</f:facet>
+
+					<p:ajax event="rowEdit"
+						listener="#{paramTurnosBean.onRowEdit(RowEditEvent)}"
+						update=":programTurnos:msgs" />
+					<p:ajax event="rowEditCancel"
+						listener="#{paramTurnosBean.onRowCancel(RowEditEvent)}"
+						update=":programTurnos:msgs" />
+
+					<p:column headerText="Dia">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="F. inicio">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Modelo">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{detaOrdenBean.modelo}" required="true"
+									style="width:150px">
+
+									<f:selectItem itemLabel="- Seleccione -"
+										noSelectionOption="true" itemValue="0" />
+									<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Talla">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu id="idTalla" value="#{detaOrdenBean.talla}"
+									required="true" style="width:150px">
+
+									<f:selectItem itemLabel="- Seleccione -" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Turnos">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Cant Estim">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Cant Real">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="F. Final">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Hora">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:32px">
+						<p:rowEditor />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+	</ui:composition>
 </h:body>
 </html>
