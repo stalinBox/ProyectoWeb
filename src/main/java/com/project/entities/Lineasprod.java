@@ -4,48 +4,37 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the lineasprod database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Lineasprod.findAll", query = "SELECT l FROM Lineasprod l")
+@NamedQuery(name="Lineasprod.findAll", query="SELECT l FROM Lineasprod l")
 public class Lineasprod implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "lineapro_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="lineapro_codigo")
 	private Integer lineaproCodigo;
 
-	@Column(name = "linea_desc")
+	@Column(name="linea_desc")
 	private String lineaDesc;
+
+	private String lineaaut;
 
 	private String nomlinea;
 
 	private Integer nummaq;
 
-	// bi-directional many-to-one association to Proceso
-	@ManyToOne
-	@JoinColumn(name = "pro_codigo", nullable = false, insertable = false, updatable = false)
-	private Proceso proceso;
+	//bi-directional many-to-one association to Lineasturno
+	@OneToMany(mappedBy="lineasprod")
+	private List<Lineasturno> lineasturnos;
 
-	// bi-directional many-to-one association to Turno
-	@ManyToOne
-	@JoinColumn(name = "turno_codigo", nullable = false, insertable = false, updatable = false)
-	private Turno turno;
-
-	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "lineasprod")
-	private List<Parametro> parametros;
-
-	// bi-directional many-to-one association to Programdia
-	@OneToMany(mappedBy = "lineasprod")
-	private List<Programdia> programdias;
-
-	// bi-directional many-to-one association to Programturno
-	@OneToMany(mappedBy = "lineasprod")
-	private List<Programturno> programturnos;
+	//bi-directional many-to-one association to Maquina
+	@OneToMany(mappedBy="lineasprod")
+	private List<Maquina> maquinas;
 
 	public Lineasprod() {
 	}
@@ -66,6 +55,14 @@ public class Lineasprod implements Serializable {
 		this.lineaDesc = lineaDesc;
 	}
 
+	public String getLineaaut() {
+		return this.lineaaut;
+	}
+
+	public void setLineaaut(String lineaaut) {
+		this.lineaaut = lineaaut;
+	}
+
 	public String getNomlinea() {
 		return this.nomlinea;
 	}
@@ -82,86 +79,48 @@ public class Lineasprod implements Serializable {
 		this.nummaq = nummaq;
 	}
 
-	public Proceso getProceso() {
-		return this.proceso;
+	public List<Lineasturno> getLineasturnos() {
+		return this.lineasturnos;
 	}
 
-	public void setProceso(Proceso proceso) {
-		this.proceso = proceso;
+	public void setLineasturnos(List<Lineasturno> lineasturnos) {
+		this.lineasturnos = lineasturnos;
 	}
 
-	public Turno getTurno() {
-		return this.turno;
+	public Lineasturno addLineasturno(Lineasturno lineasturno) {
+		getLineasturnos().add(lineasturno);
+		lineasturno.setLineasprod(this);
+
+		return lineasturno;
 	}
 
-	public void setTurno(Turno turno) {
-		this.turno = turno;
+	public Lineasturno removeLineasturno(Lineasturno lineasturno) {
+		getLineasturnos().remove(lineasturno);
+		lineasturno.setLineasprod(null);
+
+		return lineasturno;
 	}
 
-	public List<Parametro> getParametros() {
-		return this.parametros;
+	public List<Maquina> getMaquinas() {
+		return this.maquinas;
 	}
 
-	public void setParametros(List<Parametro> parametros) {
-		this.parametros = parametros;
+	public void setMaquinas(List<Maquina> maquinas) {
+		this.maquinas = maquinas;
 	}
 
-	public Parametro addParametro(Parametro parametro) {
-		getParametros().add(parametro);
-		parametro.setLineasprod(this);
+	public Maquina addMaquina(Maquina maquina) {
+		getMaquinas().add(maquina);
+		maquina.setLineasprod(this);
 
-		return parametro;
+		return maquina;
 	}
 
-	public Parametro removeParametro(Parametro parametro) {
-		getParametros().remove(parametro);
-		parametro.setLineasprod(null);
+	public Maquina removeMaquina(Maquina maquina) {
+		getMaquinas().remove(maquina);
+		maquina.setLineasprod(null);
 
-		return parametro;
-	}
-
-	public List<Programdia> getProgramdias() {
-		return this.programdias;
-	}
-
-	public void setProgramdias(List<Programdia> programdias) {
-		this.programdias = programdias;
-	}
-
-	public Programdia addProgramdia(Programdia programdia) {
-		getProgramdias().add(programdia);
-		programdia.setLineasprod(this);
-
-		return programdia;
-	}
-
-	public Programdia removeProgramdia(Programdia programdia) {
-		getProgramdias().remove(programdia);
-		programdia.setLineasprod(null);
-
-		return programdia;
-	}
-
-	public List<Programturno> getProgramturnos() {
-		return this.programturnos;
-	}
-
-	public void setProgramturnos(List<Programturno> programturnos) {
-		this.programturnos = programturnos;
-	}
-
-	public Programturno addProgramturno(Programturno programturno) {
-		getProgramturnos().add(programturno);
-		programturno.setLineasprod(this);
-
-		return programturno;
-	}
-
-	public Programturno removeProgramturno(Programturno programturno) {
-		getProgramturnos().remove(programturno);
-		programturno.setLineasprod(null);
-
-		return programturno;
+		return maquina;
 	}
 
 }

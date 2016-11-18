@@ -24,7 +24,7 @@ public class Programdia implements Serializable {
 
 	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo")
+	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false, nullable = false)
 	private Lineasprod lineasprod;
 
 	// bi-directional many-to-one association to Parametro

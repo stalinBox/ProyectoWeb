@@ -16,7 +16,7 @@ public class ProcesosopPK implements Serializable {
 	private Integer proCodigo;
 
 	@Column(name="ordenprod_codigo", insertable=false, updatable=false)
-	private String ordenprodCodigo;
+	private Integer ordenprodCodigo;
 
 	public ProcesosopPK() {
 	}
@@ -26,10 +26,10 @@ public class ProcesosopPK implements Serializable {
 	public void setProCodigo(Integer proCodigo) {
 		this.proCodigo = proCodigo;
 	}
-	public String getOrdenprodCodigo() {
+	public Integer getOrdenprodCodigo() {
 		return this.ordenprodCodigo;
 	}
-	public void setOrdenprodCodigo(String ordenprodCodigo) {
+	public void setOrdenprodCodigo(Integer ordenprodCodigo) {
 		this.ordenprodCodigo = ordenprodCodigo;
 	}
 

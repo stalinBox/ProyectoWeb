@@ -22,7 +22,7 @@ public class TTalla implements Serializable {
 
 	// bi-directional many-to-one association to Troquele
 	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "trq_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "trq_codigo", nullable = false, insertable = false, updatable = false)
 	private Troquele troquele;
 
 	public TTalla() {

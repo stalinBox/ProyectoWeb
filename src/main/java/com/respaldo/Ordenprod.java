@@ -22,7 +22,7 @@ public class Ordenprod implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ordenprod_codigo")
-	private String ordenprodCodigo;
+	private Integer ordenprodCodigo;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "f_actual")
@@ -35,8 +35,6 @@ public class Ordenprod implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "f_final")
 	private Date fFinal;
-
-	private String nombordprod;
 
 	// bi-directional many-to-one association to Detalleorden
 	@OneToMany(mappedBy = "ordenprod", fetch = FetchType.EAGER)
@@ -65,11 +63,11 @@ public class Ordenprod implements Serializable {
 	public Ordenprod() {
 	}
 
-	public String getOrdenprodCodigo() {
+	public Integer getOrdenprodCodigo() {
 		return this.ordenprodCodigo;
 	}
 
-	public void setOrdenprodCodigo(String ordenprodCodigo) {
+	public void setOrdenprodCodigo(Integer ordenprodCodigo) {
 		this.ordenprodCodigo = ordenprodCodigo;
 	}
 
@@ -95,14 +93,6 @@ public class Ordenprod implements Serializable {
 
 	public void setFFinal(Date fFinal) {
 		this.fFinal = fFinal;
-	}
-
-	public String getNombordprod() {
-		return this.nombordprod;
-	}
-
-	public void setNombordprod(String nombordprod) {
-		this.nombordprod = nombordprod;
 	}
 
 	public List<Detalleorden> getDetalleordens() {

@@ -2,35 +2,43 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * The persistent class for the programdias database table.
  * 
  */
 @Entity
-@Table(name = "programdias")
-@NamedQuery(name = "Programdia.findAll", query = "SELECT p FROM Programdia p")
+@Table(name="programdias")
+@NamedQuery(name="Programdia.findAll", query="SELECT p FROM Programdia p")
 public class Programdia implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "progdias_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="progdias_codigo")
 	private Integer progdiasCodigo;
 
-	private Integer cantidad;
+	private double canthoras;
 
-	private String dia;
+	private double cantpares;
 
-	// bi-directional many-to-one association to Lineasprod
+	@Temporal(TemporalType.DATE)
+	private Date ffin;
+
+	@Temporal(TemporalType.DATE)
+	private Date finicio;
+
+	//bi-directional many-to-one association to Parametro
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false, nullable = false)
-	private Lineasprod lineasprod;
-
-	// bi-directional many-to-one association to Parametro
-	@ManyToOne
-	@JoinColumn(name = "param_codigo")
+	@JoinColumn(name="param_codigo")
 	private Parametro parametro;
+
+	//bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy="programdia")
+	private List<Programturno> programturnos;
 
 	public Programdia() {
 	}
@@ -43,28 +51,36 @@ public class Programdia implements Serializable {
 		this.progdiasCodigo = progdiasCodigo;
 	}
 
-	public Integer getCantidad() {
-		return this.cantidad;
+	public double getCanthoras() {
+		return this.canthoras;
 	}
 
-	public void setCantidad(Integer cantidad) {
-		this.cantidad = cantidad;
+	public void setCanthoras(double canthoras) {
+		this.canthoras = canthoras;
 	}
 
-	public String getDia() {
-		return this.dia;
+	public double getCantpares() {
+		return this.cantpares;
 	}
 
-	public void setDia(String dia) {
-		this.dia = dia;
+	public void setCantpares(double cantpares) {
+		this.cantpares = cantpares;
 	}
 
-	public Lineasprod getLineasprod() {
-		return this.lineasprod;
+	public Date getFfin() {
+		return this.ffin;
 	}
 
-	public void setLineasprod(Lineasprod lineasprod) {
-		this.lineasprod = lineasprod;
+	public void setFfin(Date ffin) {
+		this.ffin = ffin;
+	}
+
+	public Date getFinicio() {
+		return this.finicio;
+	}
+
+	public void setFinicio(Date finicio) {
+		this.finicio = finicio;
 	}
 
 	public Parametro getParametro() {
@@ -73,6 +89,28 @@ public class Programdia implements Serializable {
 
 	public void setParametro(Parametro parametro) {
 		this.parametro = parametro;
+	}
+
+	public List<Programturno> getProgramturnos() {
+		return this.programturnos;
+	}
+
+	public void setProgramturnos(List<Programturno> programturnos) {
+		this.programturnos = programturnos;
+	}
+
+	public Programturno addProgramturno(Programturno programturno) {
+		getProgramturnos().add(programturno);
+		programturno.setProgramdia(this);
+
+		return programturno;
+	}
+
+	public Programturno removeProgramturno(Programturno programturno) {
+		getProgramturnos().remove(programturno);
+		programturno.setProgramdia(null);
+
+		return programturno;
 	}
 
 }

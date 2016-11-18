@@ -14,6 +14,7 @@ import javax.faces.event.ActionEvent;
 
 import com.project.dao.UsuarioDao;
 import com.project.dao.UsuarioDaoImpl;
+import com.project.entities.Rol;
 import com.project.entities.Usuario;
 
 @ManagedBean
@@ -58,12 +59,13 @@ public class UsuarioBean implements Serializable {
 	public void btnCreateUsuario(ActionEvent actionEvent) {
 		String msg = "";
 		UsuarioDao usuarioDao = new UsuarioDaoImpl();
-		// RolDao rolDao = new RolDaoImpl();
-
-		// this.selectedUsuario.setRol1(rol1);
-
-		this.selectedUsuario.setUserPasswd("");
+		Rol rol = new Rol();
 		this.selectedUsuario.setUserCreation("admin");
+
+		System.out.println("El rol elegido Rol " + this.rolId);
+		rol.setRolId(this.rolId);
+		this.selectedUsuario.setRol1(rol);
+
 		Date hoy = new Date();
 		// String fecha = new SimpleDateFormat("yyyy-mm-dd").format(hoy);
 		this.selectedUsuario.setUserDateCreation(hoy);

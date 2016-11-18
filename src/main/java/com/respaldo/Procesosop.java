@@ -26,12 +26,12 @@ public class Procesosop implements Serializable {
 
 	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_dest")
+	@JoinColumn(name = "lugar_codigo_dest", insertable = false, updatable = false)
 	private Lugare lugare1;
 
 	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_orig")
+	@JoinColumn(name = "lugar_codigo_orig", insertable = false, updatable = false)
 	private Lugare lugare2;
 
 	// bi-directional many-to-one association to Ordenprod
