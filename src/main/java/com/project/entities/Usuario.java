@@ -70,6 +70,7 @@ public class Usuario implements Serializable {
 
 	public Usuario() {
 		this.rol1 = new Rol();
+		this.rol2 = new Rol();
 	}
 
 	public Integer getUserId() {

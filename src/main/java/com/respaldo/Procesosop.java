@@ -3,61 +3,69 @@ package com.respaldo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+
 
 /**
  * The persistent class for the procesosop database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Procesosop.findAll", query = "SELECT p FROM Procesosop p")
+@NamedQuery(name="Procesosop.findAll", query="SELECT p FROM Procesosop p")
 public class Procesosop implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private ProcesosopPK id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="processop_cod")
+	private Integer processopCod;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "f_actual")
+	@Column(name="f_actual")
 	private Date fActual;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "f_estim")
+	@Column(name="f_estim")
 	private Date fEstim;
 
-	// bi-directional many-to-one association to Lugare
+	//bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_dest", insertable = false, updatable = false)
+	@JoinColumn(name="lugar_codigo_dest")
 	private Lugare lugare1;
 
-	// bi-directional many-to-one association to Lugare
+	//bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_orig", insertable = false, updatable = false)
+	@JoinColumn(name="lugar_codigo_orig")
 	private Lugare lugare2;
 
-	// bi-directional many-to-one association to Ordenprod
+	//bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name = "ordenprod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name="ordenprod_codigo")
 	private Ordenprod ordenprod;
 
-	// bi-directional many-to-one association to Proceso
+	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name="pro_codigo")
 	private Proceso proceso;
 
-	// bi-directional many-to-one association to Usuario
+	//bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_resp", insertable = false, updatable = false)
+	@JoinColumn(name="user_id_resp")
 	private Usuario usuario;
+
+	//bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy="procesosop")
+	private List<Programturno> programturnos;
 
 	public Procesosop() {
 	}
 
-	public ProcesosopPK getId() {
-		return this.id;
+	public Integer getProcessopCod() {
+		return this.processopCod;
 	}
 
-	public void setId(ProcesosopPK id) {
-		this.id = id;
+	public void setProcessopCod(Integer processopCod) {
+		this.processopCod = processopCod;
 	}
 
 	public Date getFActual() {
@@ -114,6 +122,28 @@ public class Procesosop implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<Programturno> getProgramturnos() {
+		return this.programturnos;
+	}
+
+	public void setProgramturnos(List<Programturno> programturnos) {
+		this.programturnos = programturnos;
+	}
+
+	public Programturno addProgramturno(Programturno programturno) {
+		getProgramturnos().add(programturno);
+		programturno.setProcesosop(this);
+
+		return programturno;
+	}
+
+	public Programturno removeProgramturno(Programturno programturno) {
+		getProgramturnos().remove(programturno);
+		programturno.setProcesosop(null);
+
+		return programturno;
 	}
 
 }

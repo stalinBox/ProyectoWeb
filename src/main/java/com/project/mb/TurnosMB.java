@@ -28,6 +28,8 @@ public class TurnosMB implements Serializable {
 	private Turno selectedTurno;
 	private Date horaTurnosI;
 	private Date horaTurnosF;
+	private String turnosDesc;
+	private String nombTurno;
 
 	@PostConstruct
 	public void init() {
@@ -39,10 +41,27 @@ public class TurnosMB implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+
 	public List<Turno> getTurnos() {
 		TurnosDao turnoDao = new TurnosDaoImpl();
 		this.turnos = turnoDao.findAll();
 		return turnos;
+	}
+
+	public String getNombTurno() {
+		return nombTurno;
+	}
+
+	public void setNombTurno(String nombTurno) {
+		this.nombTurno = nombTurno;
+	}
+
+	public String getTurnosDesc() {
+		return turnosDesc;
+	}
+
+	public void setTurnosDesc(String turnosDesc) {
+		this.turnosDesc = turnosDesc;
 	}
 
 	public void setTurnos(List<Turno> turnos) {

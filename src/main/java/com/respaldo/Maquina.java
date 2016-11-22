@@ -1,30 +1,31 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 
 /**
  * The persistent class for the maquinas database table.
  * 
  */
 @Entity
-@Table(name = "maquinas")
-@NamedQuery(name = "Maquina.findAll", query = "SELECT m FROM Maquina m")
+@Table(name="maquinas")
+@NamedQuery(name="Maquina.findAll", query="SELECT m FROM Maquina m")
 public class Maquina implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "maq_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="maq_codigo")
 	private Integer maqCodigo;
 
 	private String marca;
 
 	private String nommaquina;
 
-	// bi-directional many-to-one association to Lineasprod
+	//bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name="lineapro_codigo")
 	private Lineasprod lineasprod;
 
 	public Maquina() {

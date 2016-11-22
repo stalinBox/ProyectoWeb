@@ -4,85 +4,78 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the procesos database table.
  * 
  */
 @Entity
-@Table(name = "procesos")
-@NamedQuery(name = "Proceso.findAll", query = "SELECT p FROM Proceso p")
+@Table(name="procesos")
+@NamedQuery(name="Proceso.findAll", query="SELECT p FROM Proceso p")
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "pro_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="pro_codigo")
 	private Integer proCodigo;
 
-	@Column(name = "pro_auto")
+	@Column(name="pro_auto")
 	private String proAuto;
 
-	@Column(name = "pro_cap")
+	@Column(name="pro_cap")
 	private Integer proCap;
 
-	@Column(name = "pro_descrip")
+	@Column(name="pro_descrip")
 	private String proDescrip;
 
-	@Column(name = "pro_duracion")
+	@Column(name="pro_duracion")
 	private double proDuracion;
 
-	@Column(name = "pro_manobra")
+	@Column(name="pro_manobra")
 	private double proManobra;
 
-	@Column(name = "pro_manreal")
+	@Column(name="pro_manreal")
 	private double proManreal;
 
-	@Column(name = "pro_tbase")
+	@Column(name="pro_tbase")
 	private double proTbase;
 
-	@Column(name = "pro_tmano")
+	@Column(name="pro_tmano")
 	private double proTmano;
 
-	@Column(name = "pro_tmaq")
+	@Column(name="pro_tmaq")
 	private double proTmaq;
 
-	@Column(name = "pro_ts")
+	@Column(name="pro_ts")
 	private double proTs;
 
-	// bi-directional many-to-one association to Lineasprod
-	@OneToMany(mappedBy = "proceso")
-	private List<Lineasprod> lineasprods;
-
-	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="proceso")
 	private List<Parametro> parametros;
 
-	// bi-directional many-to-one association to Modelo
+	//bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo")
+	@JoinColumn(name="mod_codigo")
 	private Modelo modelo;
 
-	// bi-directional many-to-one association to Proceso
+	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_padre")
+	@JoinColumn(name="pro_padre")
 	private Proceso proceso;
 
-	// bi-directional many-to-one association to Proceso
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Proceso
+	@OneToMany(mappedBy="proceso")
 	private List<Proceso> procesos;
 
-	// bi-directional many-to-one association to TipoProceso
+	//bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo")
+	@JoinColumn(name="tpr_codigo")
 	private TipoProceso tipoProceso;
 
-	// bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy="proceso")
 	private List<Procesosop> procesosops;
-
-	// bi-directional many-to-one association to Programturno
-	@OneToMany(mappedBy = "proceso")
-	private List<Programturno> programturnos;
 
 	public Proceso() {
 	}
@@ -175,28 +168,6 @@ public class Proceso implements Serializable {
 		this.proTs = proTs;
 	}
 
-	public List<Lineasprod> getLineasprods() {
-		return this.lineasprods;
-	}
-
-	public void setLineasprods(List<Lineasprod> lineasprods) {
-		this.lineasprods = lineasprods;
-	}
-
-	public Lineasprod addLineasprod(Lineasprod lineasprod) {
-		getLineasprods().add(lineasprod);
-		lineasprod.setProceso(this);
-
-		return lineasprod;
-	}
-
-	public Lineasprod removeLineasprod(Lineasprod lineasprod) {
-		getLineasprods().remove(lineasprod);
-		lineasprod.setProceso(null);
-
-		return lineasprod;
-	}
-
 	public List<Parametro> getParametros() {
 		return this.parametros;
 	}
@@ -285,28 +256,6 @@ public class Proceso implements Serializable {
 		procesosop.setProceso(null);
 
 		return procesosop;
-	}
-
-	public List<Programturno> getProgramturnos() {
-		return this.programturnos;
-	}
-
-	public void setProgramturnos(List<Programturno> programturnos) {
-		this.programturnos = programturnos;
-	}
-
-	public Programturno addProgramturno(Programturno programturno) {
-		getProgramturnos().add(programturno);
-		programturno.setProceso(this);
-
-		return programturno;
-	}
-
-	public Programturno removeProgramturno(Programturno programturno) {
-		getProgramturnos().remove(programturno);
-		programturno.setProceso(null);
-
-		return programturno;
 	}
 
 }

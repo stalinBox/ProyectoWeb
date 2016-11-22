@@ -5,7 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-
 <h:head></h:head>
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
@@ -20,42 +19,44 @@
 
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="turno" paginatorPosition="bottom"
-					value="#{turnosMB.turnos}" rows="10" paginator="true"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+					value="#{turnosMB.turnos}" rows="10" paginator="true">
 
 					<f:facet name="header">
-					TURNOS
+					Turnos
 					</f:facet>
 
-					<p:column headerText="Id">
-						<h:outputText value="#{turno.turnoCodigo}" />
+					<p:column headerText="Nombre Turno">
+						<h:outputText value="#{turnosMB.nombTurno}" />
 					</p:column>
 
-					<p:column headerText="Turno">
-						<h:outputText value="#{turno.nombturno}" />
+					<p:column headerText="Hora inicio">
+						<h:outputText value="#{turnosMB.horaTurnosI}" />
 					</p:column>
 
-					<p:column headerText="H. Inicio">
-						<h:outputText value="#{turno.HInicio}" />
+					<p:column headerText="Hora fin">
+						<h:outputText value="#{turnosMB.horaTurnosF}" />
 					</p:column>
 
-					<p:column headerText="H. Fin">
-						<h:outputText value="#{turno.HFin}" />
+					<p:column headerText="Descripción Turno">
+						<h:outputText value="#{turnosMB.turnosDesc}" />
+						<p:inputTextarea rows="5" cols="30" maxlength="10"
+							counterTemplate="{0} characters remaining." autoResize="false" />
+
 					</p:column>
 
 					<p:column headerText="Actualizar/Eliminar" style="width:10%">
 						<p:commandButton id="btnUpdate" update=":formUpdate"
-							oncomplete="PF('dialogTurnoUpdate').show()" icon="ui-icon-pencil"
-							title="Modificar">
-							<f:setPropertyActionListener value="#{turno}"
-								target="#{turnosMB.selectedTurno}" />
+							oncomplete="PF('dialogModeloUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{modelo}"
+								target="#{modelosBean.selectedModelos}" />
 						</p:commandButton>
 
 						<p:commandButton id="btnDelete" update="formDelete"
-							oncomplete="PF('dialogTurnoDelete').show()" icon="ui-icon-close"
+							oncomplete="PF('dialogModeloDelete').show()" icon="ui-icon-close"
 							title="Eliminar">
-							<f:setPropertyActionListener value="#{turno}"
-								target="#{turnosMB.selectedTurno}" />
+							<f:setPropertyActionListener value="#{modelo}"
+								target="#{modelosBean.selectedModelos}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
@@ -70,18 +71,28 @@
 						style="margin:0 auto;">
 
 						<h:outputText value="Nombre:" />
-						<p:inputText id="entrada"
-							value="#{turnosMB.selectedTurno.nombturno}"
+						<p:inputText value="#{turnosMB.selectedTurno.nombturno}"
 							onblur="aMayusculas(this.value,this.id)"
-							onkeypress="this.value=this.value.toUpperCase();" required="true" />
+							onkeypress="this.value=this.value.toUpperCase();" />
 
-						<p:outputLabel for="timeI" value="Hora Inicio:" />
-						<p:calendar id="timeI" value="#{turnosMB.horaTurnosI}"
-							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
+						<h:outputText value="Hora inicio:" />
+						<p:calendar id="timeInicio"
+							value="#{turnosMB.selectedTurno.HInicio}" pattern="HH:mm"
+							timeOnly="true" />
 
-						<p:outputLabel for="timeF" value="Hora Fin:" />
-						<p:calendar id="timeF" value="#{turnosMB.horaTurnosF}"
-							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
+						<h:outputText value="Hora fin:" />
+						<p:calendar id="timeFin" value="#{turnosMB.selectedTurno.HFin}"
+							pattern="HH:mm" timeOnly="true" />
+
+						<h:outputText value="Descripción:" />
+						<p:inputText value="#{turnosMB.selectedTurno.turnoDesc}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<p:inputTextarea rows="5" cols="30" counter="displayTextArea"
+							maxlength="10" counterTemplate="{0} characters remaining."
+							autoResize="false" />
+						<h:outputText id="displayTextArea" />
 
 						<f:facet name="footer">
 							<p:separator />
@@ -95,7 +106,6 @@
 								oncomplete="PF('dialogTurnoCreate').hide()"
 								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
 						</f:facet>
-
 					</p:panelGrid>
 				</p:dialog>
 			</h:form>
@@ -104,25 +114,33 @@
 				<p:dialog header="Modificar Turno" widgetVar="dialogTurnoUpdate"
 					modal="true" showEffect="fade" hideEffect="explode"
 					resizable="false" id="dlgTurnoUpdate">
-
 					<h:inputHidden value="#{turnosMB.selectedTurno.turnoCodigo}"></h:inputHidden>
-
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
 						<h:outputText value="Nombre:" />
-						<p:inputText id="entrada"
-							value="#{turnosMB.selectedTurno.nombturno}"
+						<p:inputText value="#{turnosMB.selectedTurno.nombturno}"
 							onblur="aMayusculas(this.value,this.id)"
-							onkeypress="this.value=this.value.toUpperCase();" required="true" />
+							onkeypress="this.value=this.value.toUpperCase();" />
 
-						<p:outputLabel for="timeI" value="Hora Inicio:" />
-						<p:calendar id="timeI" value="#{turnosMB.horaTurnosI}"
-							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
+						<h:outputText value="Hora inicio:" />
+						<p:calendar id="timeInicio"
+							value="#{turnosMB.selectedTurno.HInicio}" pattern="HH:mm"
+							timeOnly="true" />
 
-						<p:outputLabel for="timeF" value="Hora Fin:" />
-						<p:calendar id="timeF" value="#{turnosMB.horaTurnosF}"
-							pattern="HH:mm:ss" mask="true" timeOnly="true" required="true" />
+						<h:outputText value="Hora fin:" />
+						<p:calendar id="timeFin" value="#{turnosMB.selectedTurno.HFin}"
+							pattern="HH:mm" timeOnly="true" />
+
+						<h:outputText value="Descripción:" />
+						<p:inputText value="#{turnosMB.selectedTurno.turnoDesc}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<p:inputTextarea rows="5" cols="30" counter="displayArea"
+							maxlength="10" counterTemplate="{0} characters remaining."
+							autoResize="false" />
+						<h:outputText id="displayArea" />
 
 						<f:facet name="footer">
 							<p:separator />
@@ -136,13 +154,14 @@
 								oncomplete="PF('dialogTurnoUpdate').hide()"
 								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
 						</f:facet>
+
 					</p:panelGrid>
 				</p:dialog>
 			</h:form>
 
 			<h:form id="formDelete">
 				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade" header="Eliminar Turno"
+					showEffect="fade" hideEffect="fade" header="Eliminar Turno?"
 					severity="alert" widgetVar="dialogTurnoDelete">
 
 					<h:inputHidden value="#{turnosMB.selectedTurno.turnoCodigo}"></h:inputHidden>
@@ -156,7 +175,6 @@
 						oncomplete="PF('dialogTurnoDelete').hide()" />
 				</p:confirmDialog>
 			</h:form>
-
 		</ui:define>
 	</ui:composition>
 </body>

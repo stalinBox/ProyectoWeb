@@ -1,22 +1,23 @@
-package com.project.entities;
+package com.respaldo;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
+
 
 /**
  * The persistent class for the clientes database table.
  * 
  */
 @Entity
-@Table(name = "clientes")
-@NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")
+@Table(name="clientes")
+@NamedQuery(name="Cliente.findAll", query="SELECT c FROM Cliente c")
 public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cod_cliente")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="cod_cliente")
 	private Integer codCliente;
 
 	private String apellidocli;
@@ -29,8 +30,8 @@ public class Cliente implements Serializable {
 
 	private String telefono;
 
-	// bi-directional many-to-one association to Ordenprod
-	@OneToMany(mappedBy = "cliente")
+	//bi-directional many-to-one association to Ordenprod
+	@OneToMany(mappedBy="cliente")
 	private List<Ordenprod> ordenprods;
 
 	public Cliente() {

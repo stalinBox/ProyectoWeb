@@ -1,12 +1,7 @@
 package com.respaldo;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import java.util.Date;
 import java.util.List;
 
@@ -37,23 +32,27 @@ public class Ordenprod implements Serializable {
 	private Date fFinal;
 
 	// bi-directional many-to-one association to Detalleorden
-	@OneToMany(mappedBy = "ordenprod", fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "ordenprod")
 	private List<Detalleorden> detalleordens;
+
+	// bi-directional many-to-one association to Cliente
+	@ManyToOne
+	@JoinColumn(name = "user_id_soli", nullable = false, insertable = false, updatable = false)
+	private Cliente cliente;
 
 	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_dest")
+	@JoinColumn(name = "lugar_codigo_dest", nullable = false, insertable = false, updatable = false)
 	private Lugare lugare;
 
 	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_resp")
+	@JoinColumn(name = "user_id_resp", nullable = false, insertable = false, updatable = false)
 	private Usuario usuario1;
 
 	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_soli")
+	@JoinColumn(name = "user_id_soli", nullable = false, insertable = false, updatable = false)
 	private Usuario usuario2;
 
 	// bi-directional many-to-one association to Procesosop
@@ -115,6 +114,14 @@ public class Ordenprod implements Serializable {
 		detalleorden.setOrdenprod(null);
 
 		return detalleorden;
+	}
+
+	public Cliente getCliente() {
+		return this.cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Lugare getLugare() {

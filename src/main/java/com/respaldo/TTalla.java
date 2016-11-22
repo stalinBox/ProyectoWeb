@@ -1,9 +1,12 @@
 package com.respaldo;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
 
+/**
+ * The persistent class for the t_tallas database table.
+ * 
+ */
 @Entity
 @Table(name = "t_tallas")
 @NamedQuery(name = "TTalla.findAll", query = "SELECT t FROM TTalla t")
@@ -16,12 +19,12 @@ public class TTalla implements Serializable {
 	private Integer cantidad;
 
 	// bi-directional many-to-one association to Talla
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "tal_codigo", nullable = false, insertable = false, updatable = false)
 	private Talla talla;
 
 	// bi-directional many-to-one association to Troquele
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "trq_codigo", nullable = false, insertable = false, updatable = false)
 	private Troquele troquele;
 

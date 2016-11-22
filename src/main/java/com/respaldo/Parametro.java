@@ -1,60 +1,46 @@
 package com.respaldo;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import java.util.List;
+
 
 /**
  * The persistent class for the parametros database table.
  * 
  */
 @Entity
-@Table(name = "parametros")
-@NamedQuery(name = "Parametro.findAll", query = "SELECT p FROM Parametro p")
+@Table(name="parametros")
+@NamedQuery(name="Parametro.findAll", query="SELECT p FROM Parametro p")
 public class Parametro implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "param_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="param_codigo")
 	private Integer paramCodigo;
-
-	private Integer diaslab;
-
-	private Integer numeromaq;
 
 	private Integer standauto;
 
 	private Integer standconv;
 
-	// bi-directional many-to-one association to Lineasprod
+	//bi-directional many-to-one association to Lineasturno
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo")
-	private Lineasprod lineasprod;
+	@JoinColumn(name="ltcodigo")
+	private Lineasturno lineasturno;
 
-	// bi-directional many-to-one association to Proceso
+	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo")
+	@JoinColumn(name="pro_codigo")
 	private Proceso proceso;
 
-	// bi-directional many-to-one association to Turno
+	//bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "turno_codigo")
-	private Turno turno;
-
-	// bi-directional many-to-one association to Usuario
-	@ManyToOne
-	@JoinColumn(name = "user_id_resp")
+	@JoinColumn(name="user_id_resp")
 	private Usuario usuario;
 
-	// bi-directional many-to-one association to Programdia
-	@OneToMany(mappedBy = "parametro", fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
+	//bi-directional many-to-one association to Programdia
+	@OneToMany(mappedBy="parametro")
 	private List<Programdia> programdias;
 
 	public Parametro() {
@@ -66,22 +52,6 @@ public class Parametro implements Serializable {
 
 	public void setParamCodigo(Integer paramCodigo) {
 		this.paramCodigo = paramCodigo;
-	}
-
-	public Integer getDiaslab() {
-		return this.diaslab;
-	}
-
-	public void setDiaslab(Integer diaslab) {
-		this.diaslab = diaslab;
-	}
-
-	public Integer getNumeromaq() {
-		return this.numeromaq;
-	}
-
-	public void setNumeromaq(Integer numeromaq) {
-		this.numeromaq = numeromaq;
 	}
 
 	public Integer getStandauto() {
@@ -100,12 +70,12 @@ public class Parametro implements Serializable {
 		this.standconv = standconv;
 	}
 
-	public Lineasprod getLineasprod() {
-		return this.lineasprod;
+	public Lineasturno getLineasturno() {
+		return this.lineasturno;
 	}
 
-	public void setLineasprod(Lineasprod lineasprod) {
-		this.lineasprod = lineasprod;
+	public void setLineasturno(Lineasturno lineasturno) {
+		this.lineasturno = lineasturno;
 	}
 
 	public Proceso getProceso() {
@@ -114,14 +84,6 @@ public class Parametro implements Serializable {
 
 	public void setProceso(Proceso proceso) {
 		this.proceso = proceso;
-	}
-
-	public Turno getTurno() {
-		return this.turno;
-	}
-
-	public void setTurno(Turno turno) {
-		this.turno = turno;
 	}
 
 	public Usuario getUsuario() {
