@@ -19,6 +19,7 @@ import com.project.entities.Troquele;
 @RequestScoped
 public class TroquelBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	private List<Troquele> torqueles;
 	private Troquele selectedTroquel;
 

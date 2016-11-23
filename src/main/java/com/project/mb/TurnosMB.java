@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -26,6 +27,7 @@ public class TurnosMB implements Serializable {
 	// VARIABLES
 	private List<Turno> turnos;
 	private Turno selectedTurno;
+
 	private Date horaTurnosI;
 	private Date horaTurnosF;
 	private String turnosDesc;
@@ -40,60 +42,9 @@ public class TurnosMB implements Serializable {
 		this.turnos = new ArrayList<Turno>();
 	}
 
-	// SETTERS AND GETTERS
-
-	public List<Turno> getTurnos() {
-		TurnosDao turnoDao = new TurnosDaoImpl();
-		this.turnos = turnoDao.findAll();
-		return turnos;
-	}
-
-	public String getNombTurno() {
-		return nombTurno;
-	}
-
-	public void setNombTurno(String nombTurno) {
-		this.nombTurno = nombTurno;
-	}
-
-	public String getTurnosDesc() {
-		return turnosDesc;
-	}
-
-	public void setTurnosDesc(String turnosDesc) {
-		this.turnosDesc = turnosDesc;
-	}
-
-	public void setTurnos(List<Turno> turnos) {
-		this.turnos = turnos;
-	}
-
-	public Turno getSelectedTurno() {
-		return selectedTurno;
-	}
-
-	public void setSelectedTurno(Turno selectedTurno) {
-		this.selectedTurno = selectedTurno;
-	}
-
-	public Date getHoraTurnosI() {
-		return horaTurnosI;
-	}
-
-	public void setHoraTurnosI(Date horaTurnosI) {
-		this.horaTurnosI = horaTurnosI;
-	}
-
-	public Date getHoraTurnosF() {
-		return horaTurnosF;
-	}
-
-	public void setHoraTurnosF(Date horaTurnosF) {
-		this.horaTurnosF = horaTurnosF;
-	}
-
 	// METODOS
 	public void btnCreateTurno(ActionEvent actionEvent) throws ParseException {
+		System.out.println("Entro al crear");
 		String msg = "";
 		TurnosDao turnoDao = new TurnosDaoImpl();
 
@@ -111,6 +62,7 @@ public class TurnosMB implements Serializable {
 
 			this.selectedTurno.setHInicio(ppstime1);
 			this.selectedTurno.setHFin(ppstime2);
+			this.selectedTurno.setTurnoDesc(this.turnosDesc);
 
 			if (turnoDao.create(this.selectedTurno)) {
 				msg = "Se ha añadido un nuevo turno";
@@ -181,5 +133,56 @@ public class TurnosMB implements Serializable {
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+
+	// SETTERS AND GETTERS
+	public List<Turno> getTurnos() {
+		TurnosDao turnoDao = new TurnosDaoImpl();
+		this.turnos = turnoDao.findAll();
+		return turnos;
+	}
+
+	public String getNombTurno() {
+		return nombTurno;
+	}
+
+	public void setNombTurno(String nombTurno) {
+		this.nombTurno = nombTurno;
+	}
+
+	public String getTurnosDesc() {
+		return turnosDesc;
+	}
+
+	public void setTurnosDesc(String turnosDesc) {
+		this.turnosDesc = turnosDesc;
+	}
+
+	public void setTurnos(List<Turno> turnos) {
+		this.turnos = turnos;
+	}
+
+	public Turno getSelectedTurno() {
+		return selectedTurno;
+	}
+
+	public void setSelectedTurno(Turno selectedTurno) {
+		this.selectedTurno = selectedTurno;
+	}
+
+	public Date getHoraTurnosI() {
+		return horaTurnosI;
+	}
+
+	public void setHoraTurnosI(Date horaTurnosI) {
+		this.horaTurnosI = horaTurnosI;
+	}
+
+	public Date getHoraTurnosF() {
+		return horaTurnosF;
+	}
+
+	public void setHoraTurnosF(Date horaTurnosF) {
+		this.horaTurnosF = horaTurnosF;
 	}
 }
