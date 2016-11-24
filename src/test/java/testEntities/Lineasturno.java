@@ -1,36 +1,35 @@
-package com.respaldo;
+package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
-
 
 /**
  * The persistent class for the lineasturnos database table.
  * 
  */
 @Entity
-@Table(name="lineasturnos")
-@NamedQuery(name="Lineasturno.findAll", query="SELECT l FROM Lineasturno l")
+@Table(name = "lineasturnos")
+@NamedQuery(name = "Lineasturno.findAll", query = "SELECT l FROM Lineasturno l")
 public class Lineasturno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ltcodigo;
 
-	//bi-directional many-to-one association to Lineasprod
+	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name="lineapro_codigo")
+	@JoinColumn(name = "lineapro_codigo", nullable = false, insertable = false, updatable = false)
 	private Lineasprod lineasprod;
 
-	//bi-directional many-to-one association to Turno
+	// bi-directional many-to-one association to Turno
 	@ManyToOne
-	@JoinColumn(name="turno_codigo")
+	@JoinColumn(name = "turno_codigo", nullable = false, insertable = false, updatable = false)
 	private Turno turno;
 
-	//bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy="lineasturno")
+	// bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy = "lineasturno")
 	private List<Parametro> parametros;
 
 	public Lineasturno() {

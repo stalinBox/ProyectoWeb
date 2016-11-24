@@ -40,6 +40,9 @@ public class Proceso implements Serializable {
 	@Column(name = "pro_manreal")
 	private double proManreal;
 
+	@Column(name = "pro_num_trab")
+	private Integer proNumTrab;
+
 	@Column(name = "pro_tbase")
 	private double proTbase;
 
@@ -78,6 +81,14 @@ public class Proceso implements Serializable {
 	// bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy = "proceso")
 	private List<Procesosop> procesosops;
+
+	// bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy = "proceso")
+	private List<Dispositivo> dispositivos;
+
+	// bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy = "proceso")
+	private List<ProcAlerta> procAlertas;
 
 	public Proceso() {
 	}
@@ -144,6 +155,14 @@ public class Proceso implements Serializable {
 
 	public void setProManreal(double proManreal) {
 		this.proManreal = proManreal;
+	}
+
+	public Integer getProNumTrab() {
+		return this.proNumTrab;
+	}
+
+	public void setProNumTrab(Integer proNumTrab) {
+		this.proNumTrab = proNumTrab;
 	}
 
 	public double getProTbase() {
@@ -266,6 +285,50 @@ public class Proceso implements Serializable {
 		procesosop.setProceso(null);
 
 		return procesosop;
+	}
+
+	public List<Dispositivo> getDispositivos() {
+		return this.dispositivos;
+	}
+
+	public void setDispositivos(List<Dispositivo> dispositivos) {
+		this.dispositivos = dispositivos;
+	}
+
+	public Dispositivo addDispositivo(Dispositivo dispositivo) {
+		getDispositivos().add(dispositivo);
+		dispositivo.setProceso(this);
+
+		return dispositivo;
+	}
+
+	public Dispositivo removeDispositivo(Dispositivo dispositivo) {
+		getDispositivos().remove(dispositivo);
+		dispositivo.setProceso(null);
+
+		return dispositivo;
+	}
+
+	public List<ProcAlerta> getProcAlertas() {
+		return this.procAlertas;
+	}
+
+	public void setProcAlertas(List<ProcAlerta> procAlertas) {
+		this.procAlertas = procAlertas;
+	}
+
+	public ProcAlerta addProcAlerta(ProcAlerta procAlerta) {
+		getProcAlertas().add(procAlerta);
+		procAlerta.setProceso(this);
+
+		return procAlerta;
+	}
+
+	public ProcAlerta removeProcAlerta(ProcAlerta procAlerta) {
+		getProcAlertas().remove(procAlerta);
+		procAlerta.setProceso(null);
+
+		return procAlerta;
 	}
 
 }

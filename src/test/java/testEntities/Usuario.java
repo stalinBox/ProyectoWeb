@@ -1,4 +1,4 @@
-package com.respaldo;
+package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -70,6 +70,7 @@ public class Usuario implements Serializable {
 
 	public Usuario() {
 		this.rol1 = new Rol();
+		this.rol2 = new Rol();
 	}
 
 	public Integer getUserId() {

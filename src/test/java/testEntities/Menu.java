@@ -1,4 +1,4 @@
-package com.respaldo;
+package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;

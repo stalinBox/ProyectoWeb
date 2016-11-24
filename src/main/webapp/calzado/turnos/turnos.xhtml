@@ -124,11 +124,12 @@
 							onkeypress="this.value=this.value.toUpperCase();" />
 
 						<h:outputText value="Hora inicio:" />
-						<p:calendar id="timeInicio" value="#{turnosMB.horaTurnosI}"
-							pattern="HH:mm" timeOnly="true" />
+						<p:calendar id="timeInicio"
+							value="#{turnosMB.selectedTurno.HInicio}" pattern="HH:mm"
+							timeOnly="true" />
 
 						<h:outputText value="Hora fin:" />
-						<p:calendar id="timeFin" value="#{turnosMB.horaTurnosF}"
+						<p:calendar id="timeFin" value="#{turnosMB.selectedTurno.HFin}"
 							pattern="HH:mm" timeOnly="true" />
 
 						<h:outputText value="Descripción:" />

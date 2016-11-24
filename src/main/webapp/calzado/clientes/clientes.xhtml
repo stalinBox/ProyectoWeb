@@ -9,9 +9,185 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<h:form id="clientes">
-				<p:growl id="msgs" showDetail="true" />
+
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateCliente" update=":formCreate"
+					oncomplete="PF('dialogClienteCreate').show()" title="Nuevo Cliente"
+					icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
 			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="cliente" paginatorPosition="bottom"
+					value="#{clienteBean.clientes}" rows="10" paginator="true">
+
+					<f:facet name="header">
+					Clientes
+					</f:facet>
+
+					<p:column headerText="id">
+						<h:outputText value="#{cliente.codCliente}" />
+					</p:column>
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{cliente.nombrecli}" />
+					</p:column>
+
+					<p:column headerText="Apellido">
+						<h:outputText value="#{cliente.apellidocli}" />
+					</p:column>
+
+					<p:column headerText="Teléfono">
+						<h:outputText value="#{cliente.telefono}" />
+					</p:column>
+
+					<p:column headerText="Dirección">
+						<h:outputText value="#{cliente.direccion}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{cliente.descripcioncli}" />
+					</p:column>
+
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogClienteUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{cliente}"
+								target="#{clienteBean.selectedCliente}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update=":formDelete"
+							oncomplete="PF('dialogClienteDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{cliente}"
+								target="#{clienteBean.selectedCliente}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nuevo Cliente" widgetVar="dialogClienteCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgClienteCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre: " />
+						<p:inputText value="#{clienteBean.selectedCliente.nombrecli}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Apellido: " />
+						<p:inputText value="#{clienteBean.selectedCliente.apellidocli}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Teléfono: " />
+						<p:inputText value="#{clienteBean.selectedCliente.telefono}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Dirección: " />
+						<p:inputText value="#{clienteBean.selectedCliente.direccion}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Descripción: " />
+						<p:inputText value="#{clienteBean.selectedCliente.descripcioncli}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogClienteCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{clienteBean.btnCreateCliente(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogClienteCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Cliente" widgetVar="dialogClienteUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgClienteUpdate">
+
+					<h:inputHidden value="#{clienteBean.selectedCliente.codCliente}" />
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre: " />
+						<p:inputText value="#{clienteBean.selectedCliente.nombrecli}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Apellido: " />
+						<p:inputText value="#{clienteBean.selectedCliente.apellidocli}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Teléfono: " />
+						<p:inputText value="#{clienteBean.selectedCliente.telefono}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Dirección: " />
+						<p:inputText value="#{clienteBean.selectedCliente.direccion}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Descripción: " />
+						<p:inputText value="#{clienteBean.selectedCliente.descripcioncli}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogClienteUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{clienteBean.btnUpdateCliente(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogClienteUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Cliente"
+					severity="alert" widgetVar="dialogClienteDelete">
+
+					<h:inputHidden value="#{clienteBean.selectedCliente.codCliente}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogClienteDelete').hide()"
+						actionListener="#{clienteBean.btnDeleteCliente(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogClienteDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+
 		</ui:define>
 	</ui:composition>
 </body>

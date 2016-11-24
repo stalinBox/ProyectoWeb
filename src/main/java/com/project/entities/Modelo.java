@@ -20,6 +20,9 @@ public class Modelo implements Serializable {
 	@Column(name="mod_codigo")
 	private Integer modCodigo;
 
+	@Column(name="mod_cod_mod")
+	private String modCodMod;
+
 	@Column(name="mod_nombre")
 	private String modNombre;
 
@@ -51,6 +54,14 @@ public class Modelo implements Serializable {
 
 	public void setModCodigo(Integer modCodigo) {
 		this.modCodigo = modCodigo;
+	}
+
+	public String getModCodMod() {
+		return this.modCodMod;
+	}
+
+	public void setModCodMod(String modCodMod) {
+		this.modCodMod = modCodMod;
 	}
 
 	public String getModNombre() {

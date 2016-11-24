@@ -4,36 +4,17 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import com.project.entities.Talla;
+import com.project.entities.Cliente;
 import com.project.utils.HibernateUtil;
 
-public class TallasDaoImpl implements TallasDao {
-
-	@Override
-	public Talla findByTalla(Talla talla) {
-		Talla entities = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Talla WHERE talNumero='" + talla.getTalNumero()
-				+ "'";
-		System.out.println(sql);
-
-		try {
-			sesion.beginTransaction();
-			entities = (Talla) sesion.createQuery(sql).uniqueResult();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERRORRR FINDBYTALLA: " + e.toString());
-		}
-		return entities;
-	}
+public class ClientesDaoImpl implements ClientesDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Talla> findAll() {
-		List<Talla> listado = null;
+	public List<Cliente> findAll() {
+		List<Cliente> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Talla order by talNumero";
+		String sql = "FROM Cliente ORDER BY nombrecli";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -47,41 +28,45 @@ public class TallasDaoImpl implements TallasDao {
 	}
 
 	@Override
-	public boolean create(Talla talla) {
+	public boolean create(Cliente cliente) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(talla);
+			sesion.save(cliente);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR CREATE TALLA: "
+			System.out.println("ERRORRRRR CREATE CLIENTE: "
 					+ e.getMessage().toString());
 		}
 		return flag;
 	}
 
 	@Override
-	public boolean update(Talla talla) {
+	public boolean update(Cliente cliente) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Talla talladb = (Talla) sesion.load(Talla.class,
-					talla.getTalCodigo());
+			Cliente clientedb = (Cliente) sesion.load(Cliente.class,
+					cliente.getCodCliente());
 			// Parametros a cambiar
-			talladb.setTalNumero(talla.getTalNumero());
+			clientedb.setNombrecli(cliente.getNombrecli());
+			clientedb.setApellidocli(cliente.getApellidocli());
+			clientedb.setTelefono(cliente.getTelefono());
+			clientedb.setDireccion(cliente.getDireccion());
+			clientedb.setDescripcioncli(cliente.getDescripcioncli());
 			// fin de parametros
-			sesion.update(talladb);
+			sesion.update(clientedb);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR UPDATE TALLA: "
+			System.out.println("ERRORRRRR UPDATE CLIENTE: "
 					+ e.getMessage().toString());
 		}
 		return flag;
@@ -93,16 +78,17 @@ public class TallasDaoImpl implements TallasDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Talla talla = (Talla) sesion.load(Talla.class, id);
-			sesion.delete(talla);
+			Cliente cliente = (Cliente) sesion.load(Cliente.class, id);
+			sesion.delete(cliente);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE TALLA: "
+			System.out.println("ERRORRRRR DELETE CLIENTE: "
 					+ e.getMessage().toString());
 		}
 		return flag;
 	}
+
 }

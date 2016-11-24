@@ -41,5 +41,9 @@
 		<mapping class="com.project.entities.Cliente" />
 		<mapping class="com.project.entities.Lineasturno" />
 		<mapping class="com.project.entities.Maquina" />
+
+		<mapping class="com.project.entities.Alerta" />
+		<mapping class="com.project.entities.Dispositivo" />
+		<mapping class="com.project.entities.ProcAlerta" />
 	</session-factory>
 </hibernate-configuration>

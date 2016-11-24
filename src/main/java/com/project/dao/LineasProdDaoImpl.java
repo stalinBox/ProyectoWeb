@@ -4,36 +4,17 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import com.project.entities.Talla;
+import com.project.entities.Lineasprod;
 import com.project.utils.HibernateUtil;
 
-public class TallasDaoImpl implements TallasDao {
-
-	@Override
-	public Talla findByTalla(Talla talla) {
-		Talla entities = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Talla WHERE talNumero='" + talla.getTalNumero()
-				+ "'";
-		System.out.println(sql);
-
-		try {
-			sesion.beginTransaction();
-			entities = (Talla) sesion.createQuery(sql).uniqueResult();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERRORRR FINDBYTALLA: " + e.toString());
-		}
-		return entities;
-	}
+public class LineasProdDaoImpl implements LineasProdDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Talla> findAll() {
-		List<Talla> listado = null;
+	public List<Lineasprod> findAll() {
+		List<Lineasprod> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Talla order by talNumero";
+		String sql = "FROM Lineasprod order by nomlinea";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -41,47 +22,53 @@ public class TallasDaoImpl implements TallasDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALLTALLA: " + e.toString());
+			System.out.println("ERRORRRRR FINDALL LINEAS PRODUCCION: "
+					+ e.toString());
 		}
 		return listado;
 	}
 
 	@Override
-	public boolean create(Talla talla) {
+	public boolean create(Lineasprod lineaP) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(talla);
+			sesion.save(lineaP);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR CREATE TALLA: "
+			System.out.println("ERRORRRRR CREATE LINEA DE PRODUCCION: "
 					+ e.getMessage().toString());
 		}
 		return flag;
 	}
 
 	@Override
-	public boolean update(Talla talla) {
+	public boolean update(Lineasprod lineaP) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Talla talladb = (Talla) sesion.load(Talla.class,
-					talla.getTalCodigo());
+			Lineasprod lienaPdb = (Lineasprod) sesion.load(Lineasprod.class,
+					lineaP.getLineaproCodigo());
+
 			// Parametros a cambiar
-			talladb.setTalNumero(talla.getTalNumero());
+			lienaPdb.setNomlinea(lineaP.getNomlinea());
+			lienaPdb.setNummaq(lineaP.getNummaq());
+			lienaPdb.setLineaaut(lineaP.getLineaaut());
+			lienaPdb.setLineaDesc(lineaP.getLineaDesc());
 			// fin de parametros
-			sesion.update(talladb);
+
+			sesion.update(lienaPdb);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR UPDATE TALLA: "
+			System.out.println("ERRORRRRR UPDATE MODELO: "
 					+ e.getMessage().toString());
 		}
 		return flag;
@@ -93,14 +80,14 @@ public class TallasDaoImpl implements TallasDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Talla talla = (Talla) sesion.load(Talla.class, id);
-			sesion.delete(talla);
+			Lineasprod lineaP = (Lineasprod) sesion.load(Lineasprod.class, id);
+			sesion.delete(lineaP);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE TALLA: "
+			System.out.println("ERRORRRRR DELETE LINEA DE PRODUCCION: "
 					+ e.getMessage().toString());
 		}
 		return flag;

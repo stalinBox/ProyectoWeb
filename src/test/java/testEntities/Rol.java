@@ -1,47 +1,48 @@
-package com.respaldo;
+package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+
 /**
  * The persistent class for the rol database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Rol.findAll", query = "SELECT r FROM Rol r")
+@NamedQuery(name="Rol.findAll", query="SELECT r FROM Rol r")
 public class Rol implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rol_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="rol_id")
 	private Integer rolId;
 
-	@Column(name = "rol_descripcion")
+	@Column(name="rol_descripcion")
 	private String rolDescripcion;
 
-	@Column(name = "rol_nombre")
+	@Column(name="rol_nombre")
 	private String rolNombre;
 
-	@Column(name = "rol_stado")
+	@Column(name="rol_stado")
 	private BigDecimal rolStado;
 
-	// bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy = "rol1")
+	//bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy="rol1")
 	private List<Rolmenu> rolmenus1;
 
-	// bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy = "rol2")
+	//bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy="rol2")
 	private List<Rolmenu> rolmenus2;
 
-	// bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy = "rol1")
+	//bi-directional many-to-one association to Usuario
+	@OneToMany(mappedBy="rol1")
 	private List<Usuario> usuarios1;
 
-	// bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy = "rol2")
+	//bi-directional many-to-one association to Usuario
+	@OneToMany(mappedBy="rol2")
 	private List<Usuario> usuarios2;
 
 	public Rol() {

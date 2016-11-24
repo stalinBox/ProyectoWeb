@@ -26,12 +26,11 @@
 					Modelos
 					</f:facet>
 
-					<p:column headerText="Id">
-						<h:outputText value="#{modelo.modCodigo}" />
+					<p:column headerText="Codigo Modelo">
+						<h:outputText value="#{modelo.modCodMod}" />
 					</p:column>
 
-					<p:column headerText="Modelo" filterBy="#{modelo.modNombre}"
-						footerText="contains" filterMatchMode="contains">
+					<p:column headerText="Modelo">
 						<h:outputText value="#{modelo.modNombre}" />
 					</p:column>
 
@@ -64,6 +63,12 @@
 
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
+
+						<h:outputText value="Codigo Modelo" />
+						<p:inputText value="#{modelosBean.selectedModelos.modCodMod}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
 
 						<h:outputText value="Nombre:" />
 						<p:inputText id="entrada"
@@ -100,6 +105,12 @@
 					<h:inputHidden value="#{modelosBean.selectedModelos.modCodigo}"></h:inputHidden>
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
+
+						<h:outputText value="Código" />
+						<p:inputText value="#{modelosBean.selectedModelos.modCodMod}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
 						<h:outputText value="Nombre:" />
 						<p:inputText value="#{modelosBean.selectedModelos.modNombre}"
 							onblur="aMayusculas(this.value,this.id)"

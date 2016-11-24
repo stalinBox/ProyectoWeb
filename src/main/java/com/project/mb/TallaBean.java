@@ -24,7 +24,6 @@ public class TallaBean implements Serializable {
 	private Talla selectedTalla;
 
 	// private List<SelectItem> selectItemsTallas;
-	// private List<SelectItem> selectItemsExcludeByTallas;
 	// private Troquele troquel;
 
 	@PostConstruct
@@ -36,33 +35,7 @@ public class TallaBean implements Serializable {
 		this.tallas = new ArrayList<Talla>();
 	}
 
-	/*
-	 * public List<SelectItem> getSelectItemsExcludeByTallas() {
-	 * this.selectItemsExcludeByTallas = new ArrayList<SelectItem>(); TallasDao
-	 * tallaExDao = new TallasDaoImpl(); List<Talla> talla =
-	 * tallaExDao.excludeByTalla(this.troquel); for (Talla tal : talla) {
-	 * SelectItem selectItem = new SelectItem(tal.getTalCodigo(),
-	 * tal.getTalNumero().toString());
-	 * this.selectItemsExcludeByTallas.add(selectItem); } return
-	 * selectItemsExcludeByTallas; } public void setSelectItemsExcludeByTallas(
-	 * List<SelectItem> selectItemsExcludeByTallas) {
-	 * this.selectItemsExcludeByTallas = selectItemsExcludeByTallas; }
-	 */
-	/*
-	 * public List<SelectItem> getSelectItemsTallas() { this.selectItemsTallas =
-	 * new ArrayList<SelectItem>(); TallasDao tallaDao = new TallasDaoImpl();
-	 * List<Talla> talla = tallaDao.selectItems(); for (Talla tal : talla) {
-	 * SelectItem selectItem = new SelectItem(tal.getTalCodigo(),
-	 * tal.getTalNumero().toString()); this.selectItemsTallas.add(selectItem); }
-	 * return selectItemsTallas; }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * public void setSelectItemsTallas(List<SelectItem> selectItemsTallas) {
-	 * this.selectItemsTallas = selectItemsTallas; }
-	 */
-
+	// SETTERS AND GETTERS
 	public List<Talla> getTallas() {
 		TallasDao tallasDao = new TallasDaoImpl();
 		this.tallas = tallasDao.findAll();

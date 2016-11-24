@@ -9,9 +9,173 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<h:form id="lienasProd">
-				<p:growl id="msgs" showDetail="true" />
+
+
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateLinea" update=":formCreate"
+					oncomplete="PF('dialogLineaCreate').show()"
+					title="Nueva Línea de Producción" icon="fa fa-plus"
+					value="Nueva Línea">
+				</p:commandButton>
 			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="lineaP" paginatorPosition="bottom"
+					value="#{lineasProduccionBean.lineasProd}" rows="10"
+					paginator="true">
+
+					<f:facet name="header">
+					Lineas de Producción
+					</f:facet>
+
+					<p:column headerText="línea de producción">
+						<h:outputText value="#{lineaP.nomlinea}" />
+					</p:column>
+
+					<p:column headerText="Número de máquinas">
+						<h:outputText value="#{lineaP.nummaq}" />
+					</p:column>
+
+					<p:column headerText="Automática?">
+						<h:outputText value="#{lineaP.lineaaut}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{lineaP.lineaDesc}" />
+					</p:column>
+
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogLineaUpdate').show()" icon="ui-icon-pencil"
+							title="Modificar">
+							<f:setPropertyActionListener value="#{lineaP}"
+								target="#{lineasProduccionBean.selectedLineasProd}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update=":formDelete"
+							oncomplete="PF('dialogLineaDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{lineaP}"
+								target="#{lineasProduccionBean.selectedLineasProd}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nueva Línea de Producción"
+					widgetVar="dialogLineaCreate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgLineaCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre de Línea: " />
+						<p:inputText
+							value="#{lineasProduccionBean.selectedLineasProd.nomlinea}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Numero de Maquinas" />
+						<p:inputText
+							value="#{lineasProduccionBean.selectedLineasProd.nummaq}" />
+
+						<h:outputText value="Automática?" />
+						<p:selectBooleanButton value="#{lineasProduccionBean.lAutomatico}"
+							onLabel="Si" offLabel="No" style="width:60px" />
+
+						<h:outputText value="Descripción" />
+						<p:inputText
+							value="#{lineasProduccionBean.selectedLineasProd.lineaDesc}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogLineaCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{lineasProduccionBean.btnCreateLineaProd(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogLineaCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Línea de Producción"
+					widgetVar="dialogLineaUpdate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgLineaUpdate">
+
+					<h:inputHidden
+						value="#{lineasProduccionBean.selectedLineasProd.lineaproCodigo}" />
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre de Línea: " />
+						<p:inputText
+							value="#{lineasProduccionBean.selectedLineasProd.nomlinea}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Numero de Maquinas" />
+						<p:inputText
+							value="#{lineasProduccionBean.selectedLineasProd.nummaq}" />
+
+						<h:outputText value="Automática?" />
+						<p:selectBooleanButton value="#{lineasProduccionBean.lAutomatico}"
+							onLabel="Si" offLabel="No" style="width:60px" />
+
+						<h:outputText value="Descripción" />
+						<p:inputText
+							value="#{lineasProduccionBean.selectedLineasProd.lineaDesc}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogLineaUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{lineasProduccionBean.btnUpdateLineaProd(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogTurnoUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade"
+					header="Eliminar Línea de Producción" severity="alert"
+					widgetVar="dialogLineaDelete">
+
+					<h:inputHidden
+						value="#{lineasProduccionBean.selectedLineasProd.lineaproCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogLineaDelete').hide()"
+						actionListener="#{lineasProduccionBean.btnDeleteLineaProd(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogLineaDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+
 		</ui:define>
 	</ui:composition>
 </body>

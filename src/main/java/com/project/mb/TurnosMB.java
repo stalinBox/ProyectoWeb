@@ -87,6 +87,7 @@ public class TurnosMB implements Serializable {
 		TurnosDao turnoDao = new TurnosDaoImpl();
 
 		SimpleDateFormat simpDate = new SimpleDateFormat("HH:mm:ss");
+
 		String hi = simpDate.format(this.horaTurnosI);
 		String hf = simpDate.format(this.horaTurnosF);
 
@@ -100,6 +101,7 @@ public class TurnosMB implements Serializable {
 
 			this.selectedTurno.setHInicio(ppstime1);
 			this.selectedTurno.setHFin(ppstime2);
+			this.selectedTurno.setTurnoDesc(this.turnosDesc);
 
 			if (turnoDao.update(this.selectedTurno)) {
 				msg = "Se ha modificado el turno";

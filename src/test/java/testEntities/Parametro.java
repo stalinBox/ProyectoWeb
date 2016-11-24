@@ -1,4 +1,4 @@
-package com.respaldo;
+package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -26,17 +26,17 @@ public class Parametro implements Serializable {
 
 	//bi-directional many-to-one association to Lineasturno
 	@ManyToOne
-	@JoinColumn(name="ltcodigo")
+	@JoinColumn(name="ltcodigo", nullable = false, insertable = false, updatable = false)
 	private Lineasturno lineasturno;
 
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name="pro_codigo", nullable = false, insertable = false, updatable = false)
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Usuario
+	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name="user_id_resp")
+	@JoinColumn(name="user_id_resp", nullable = false, insertable = false, updatable = false)
 	private Usuario usuario;
 
 	//bi-directional many-to-one association to Programdia
