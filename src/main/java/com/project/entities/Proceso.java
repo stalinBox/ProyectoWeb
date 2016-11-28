@@ -55,9 +55,17 @@ public class Proceso implements Serializable {
 	@Column(name = "pro_ts")
 	private double proTs;
 
+	// bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy = "proceso")
+	private List<Dispositivo> dispositivos;
+
 	// bi-directional many-to-one association to Parametro
 	@OneToMany(mappedBy = "proceso")
 	private List<Parametro> parametros;
+
+	// bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy = "proceso")
+	private List<ProcAlerta> procAlertas;
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
@@ -81,14 +89,6 @@ public class Proceso implements Serializable {
 	// bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy = "proceso")
 	private List<Procesosop> procesosops;
-
-	// bi-directional many-to-one association to Dispositivo
-	@OneToMany(mappedBy = "proceso")
-	private List<Dispositivo> dispositivos;
-
-	// bi-directional many-to-one association to ProcAlerta
-	@OneToMany(mappedBy = "proceso")
-	private List<ProcAlerta> procAlertas;
 
 	public Proceso() {
 	}
@@ -197,6 +197,28 @@ public class Proceso implements Serializable {
 		this.proTs = proTs;
 	}
 
+	public List<Dispositivo> getDispositivos() {
+		return this.dispositivos;
+	}
+
+	public void setDispositivos(List<Dispositivo> dispositivos) {
+		this.dispositivos = dispositivos;
+	}
+
+	public Dispositivo addDispositivo(Dispositivo dispositivo) {
+		getDispositivos().add(dispositivo);
+		dispositivo.setProceso(this);
+
+		return dispositivo;
+	}
+
+	public Dispositivo removeDispositivo(Dispositivo dispositivo) {
+		getDispositivos().remove(dispositivo);
+		dispositivo.setProceso(null);
+
+		return dispositivo;
+	}
+
 	public List<Parametro> getParametros() {
 		return this.parametros;
 	}
@@ -217,6 +239,28 @@ public class Proceso implements Serializable {
 		parametro.setProceso(null);
 
 		return parametro;
+	}
+
+	public List<ProcAlerta> getProcAlertas() {
+		return this.procAlertas;
+	}
+
+	public void setProcAlertas(List<ProcAlerta> procAlertas) {
+		this.procAlertas = procAlertas;
+	}
+
+	public ProcAlerta addProcAlerta(ProcAlerta procAlerta) {
+		getProcAlertas().add(procAlerta);
+		procAlerta.setProceso(this);
+
+		return procAlerta;
+	}
+
+	public ProcAlerta removeProcAlerta(ProcAlerta procAlerta) {
+		getProcAlertas().remove(procAlerta);
+		procAlerta.setProceso(null);
+
+		return procAlerta;
 	}
 
 	public Modelo getModelo() {
@@ -285,50 +329,6 @@ public class Proceso implements Serializable {
 		procesosop.setProceso(null);
 
 		return procesosop;
-	}
-
-	public List<Dispositivo> getDispositivos() {
-		return this.dispositivos;
-	}
-
-	public void setDispositivos(List<Dispositivo> dispositivos) {
-		this.dispositivos = dispositivos;
-	}
-
-	public Dispositivo addDispositivo(Dispositivo dispositivo) {
-		getDispositivos().add(dispositivo);
-		dispositivo.setProceso(this);
-
-		return dispositivo;
-	}
-
-	public Dispositivo removeDispositivo(Dispositivo dispositivo) {
-		getDispositivos().remove(dispositivo);
-		dispositivo.setProceso(null);
-
-		return dispositivo;
-	}
-
-	public List<ProcAlerta> getProcAlertas() {
-		return this.procAlertas;
-	}
-
-	public void setProcAlertas(List<ProcAlerta> procAlertas) {
-		this.procAlertas = procAlertas;
-	}
-
-	public ProcAlerta addProcAlerta(ProcAlerta procAlerta) {
-		getProcAlertas().add(procAlerta);
-		procAlerta.setProceso(this);
-
-		return procAlerta;
-	}
-
-	public ProcAlerta removeProcAlerta(ProcAlerta procAlerta) {
-		getProcAlertas().remove(procAlerta);
-		procAlerta.setProceso(null);
-
-		return procAlerta;
 	}
 
 }

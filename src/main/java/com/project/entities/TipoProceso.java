@@ -23,6 +23,10 @@ public class TipoProceso implements Serializable {
 	@Column(name="tpr_nombre")
 	private String tprNombre;
 
+	//bi-directional many-to-one association to Lineasprod
+	@OneToMany(mappedBy="tipoProceso")
+	private List<Lineasprod> lineasprods;
+
 	//bi-directional many-to-one association to Proceso
 	@OneToMany(mappedBy="tipoProceso")
 	private List<Proceso> procesos;
@@ -44,6 +48,28 @@ public class TipoProceso implements Serializable {
 
 	public void setTprNombre(String tprNombre) {
 		this.tprNombre = tprNombre;
+	}
+
+	public List<Lineasprod> getLineasprods() {
+		return this.lineasprods;
+	}
+
+	public void setLineasprods(List<Lineasprod> lineasprods) {
+		this.lineasprods = lineasprods;
+	}
+
+	public Lineasprod addLineasprod(Lineasprod lineasprod) {
+		getLineasprods().add(lineasprod);
+		lineasprod.setTipoProceso(this);
+
+		return lineasprod;
+	}
+
+	public Lineasprod removeLineasprod(Lineasprod lineasprod) {
+		getLineasprods().remove(lineasprod);
+		lineasprod.setTipoProceso(null);
+
+		return lineasprod;
 	}
 
 	public List<Proceso> getProcesos() {

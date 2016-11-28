@@ -14,6 +14,7 @@ import javax.faces.event.ActionEvent;
 import com.project.dao.LineasProdDao;
 import com.project.dao.LineasProdDaoImpl;
 import com.project.entities.Lineasprod;
+import com.project.entities.TipoProceso;
 
 @ManagedBean
 @RequestScoped
@@ -46,6 +47,10 @@ public class LineasProduccionBean implements Serializable {
 		} else {
 			bol = "0";
 		}
+
+		TipoProceso pp = new TipoProceso();
+		pp.setTprCodigo(2);
+		this.selectedLineasProd.setTipoProceso(pp);
 		this.selectedLineasProd.setLineaaut(bol);
 
 		if (lineasDao.create(this.selectedLineasProd)) {

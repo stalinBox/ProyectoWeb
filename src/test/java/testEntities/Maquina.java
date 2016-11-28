@@ -2,6 +2,7 @@ package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * The persistent class for the maquinas database table.
@@ -18,6 +19,8 @@ public class Maquina implements Serializable {
 	@Column(name = "maq_codigo")
 	private Integer maqCodigo;
 
+	private String descmaq;
+
 	private String marca;
 
 	private String nommaquina;
@@ -26,6 +29,10 @@ public class Maquina implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "lineapro_codigo", nullable = false, insertable = false, updatable = false)
 	private Lineasprod lineasprod;
+
+	// bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy = "maquina")
+	private List<Dispositivo> dispositivos;
 
 	public Maquina() {
 	}
@@ -36,6 +43,14 @@ public class Maquina implements Serializable {
 
 	public void setMaqCodigo(Integer maqCodigo) {
 		this.maqCodigo = maqCodigo;
+	}
+
+	public String getDescmaq() {
+		return this.descmaq;
+	}
+
+	public void setDescmaq(String descmaq) {
+		this.descmaq = descmaq;
 	}
 
 	public String getMarca() {
@@ -60,6 +75,28 @@ public class Maquina implements Serializable {
 
 	public void setLineasprod(Lineasprod lineasprod) {
 		this.lineasprod = lineasprod;
+	}
+
+	public List<Dispositivo> getDispositivos() {
+		return this.dispositivos;
+	}
+
+	public void setDispositivos(List<Dispositivo> dispositivos) {
+		this.dispositivos = dispositivos;
+	}
+
+	public Dispositivo addDispositivo(Dispositivo dispositivo) {
+		getDispositivos().add(dispositivo);
+		dispositivo.setMaquina(this);
+
+		return dispositivo;
+	}
+
+	public Dispositivo removeDispositivo(Dispositivo dispositivo) {
+		getDispositivos().remove(dispositivo);
+		dispositivo.setMaquina(null);
+
+		return dispositivo;
 	}
 
 }

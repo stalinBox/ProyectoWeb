@@ -32,6 +32,13 @@ public class LineasProdDaoImpl implements LineasProdDao {
 	public boolean create(Lineasprod lineaP) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+
+		System.out.println(lineaP.getNomlinea());
+		System.out.println(lineaP.getTipoProceso().getTprCodigo());
+		System.out.println(lineaP.getNummaq());
+		System.out.println(lineaP.getLineaaut());
+		System.out.println(lineaP.getLineaDesc());
+
 		try {
 			sesion.beginTransaction();
 			sesion.save(lineaP);
