@@ -20,12 +20,12 @@ public class Lineasturno implements Serializable {
 
 	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false)
 	private Lineasprod lineasprod;
 
 	// bi-directional many-to-one association to Turno
 	@ManyToOne
-	@JoinColumn(name = "turno_codigo", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "turno_codigo", insertable = false, updatable = false)
 	private Turno turno;
 
 	// bi-directional many-to-one association to Parametro

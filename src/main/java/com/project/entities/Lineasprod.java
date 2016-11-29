@@ -21,7 +21,7 @@ public class Lineasprod implements Serializable {
 	@Column(name = "linea_desc")
 	private String lineaDesc;
 
-	private String lineaaut;
+	private Boolean lineaaut;
 
 	private String nomlinea;
 
@@ -29,7 +29,7 @@ public class Lineasprod implements Serializable {
 
 	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
 	private TipoProceso tipoProceso;
 
 	// bi-directional many-to-one association to Lineasturno
@@ -59,11 +59,11 @@ public class Lineasprod implements Serializable {
 		this.lineaDesc = lineaDesc;
 	}
 
-	public String getLineaaut() {
+	public Boolean getLineaaut() {
 		return this.lineaaut;
 	}
 
-	public void setLineaaut(String lineaaut) {
+	public void setLineaaut(Boolean lineaaut) {
 		this.lineaaut = lineaaut;
 	}
 

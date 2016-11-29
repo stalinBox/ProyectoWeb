@@ -32,13 +32,6 @@ public class LineasProdDaoImpl implements LineasProdDao {
 	public boolean create(Lineasprod lineaP) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-
-		System.out.println(lineaP.getNomlinea());
-		System.out.println(lineaP.getTipoProceso().getTprCodigo());
-		System.out.println(lineaP.getNummaq());
-		System.out.println(lineaP.getLineaaut());
-		System.out.println(lineaP.getLineaDesc());
-
 		try {
 			sesion.beginTransaction();
 			sesion.save(lineaP);
@@ -99,4 +92,92 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		}
 		return flag;
 	}
+
+	@Override
+	public Lineasprod selectedByMontaje(Lineasprod lineasLP) {
+		Lineasprod entities = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
+				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
+				+ lineasLP.getLineaaut() + "'";
+		System.out.println(sql);
+
+		try {
+			sesion.beginTransaction();
+			entities = (Lineasprod) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out
+					.println("ERRORRR FINDBYUSUARIO LINEAS DE PRODUCCION BY TIPO DE PROCESO: "
+							+ e.toString());
+			throw e;
+		}
+		return entities;
+	}
+
+	@Override
+	public Lineasprod selectedByAparado(Lineasprod lineasLP) {
+		Lineasprod entities = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
+				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
+				+ lineasLP.getLineaaut() + "'";
+		System.out.println(sql);
+
+		try {
+			sesion.beginTransaction();
+			entities = (Lineasprod) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out
+					.println("ERRORRR FINDBYUSUARIO LINEAS DE PRODUCCION BY TIPO DE PROCESO: "
+							+ e.toString());
+			throw e;
+		}
+		return entities;
+	}
+
+	@Override
+	public Lineasprod selectedByTroquelado(Lineasprod lineasLP) {
+		Lineasprod entities = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
+				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
+				+ lineasLP.getLineaaut() + "'";
+		System.out.println(sql);
+
+		try {
+			sesion.beginTransaction();
+			entities = (Lineasprod) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out
+					.println("ERRORRR FINDBYUSUARIO LINEAS DE PRODUCCION BY TIPO DE PROCESO: "
+							+ e.toString());
+			throw e;
+		}
+		return entities;
+	}
+
+	@Override
+	public List<Lineasprod> findByMontaje() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Lineasprod> findByAparado() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Lineasprod> findByTroquelado() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

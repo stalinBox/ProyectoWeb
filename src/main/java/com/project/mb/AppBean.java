@@ -1,6 +1,5 @@
 package com.project.mb;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 
@@ -36,5 +35,9 @@ public class AppBean {
 
 	public String nextPath() {
 		return MyUtil.next();
+	}
+
+	public String andonPath() {
+		return MyUtil.andonPath();
 	}
 }

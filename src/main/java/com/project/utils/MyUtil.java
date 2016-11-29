@@ -36,4 +36,8 @@ public class MyUtil {
 		return "http://localhost:8080/ProyectoWeb/TextExcel/";
 	}
 
+	public static String andonPath() {
+		return "http://localhost:8080/ProyectoWeb/andon/";
+	}
+
 }

@@ -15,6 +15,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -24,6 +25,12 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import com.project.dao.LineasProdDao;
+import com.project.dao.LineasProdDaoImpl;
+import com.project.dao.TurnosDao;
+import com.project.dao.TurnosDaoImpl;
+import com.project.entities.Lineasprod;
+import com.project.entities.Turno;
 import com.project.utils.ConvertArrayToMatriz;
 import com.project.utils.ConvertMatrizTranspuesta;
 import com.project.utils.MyUtil;
@@ -104,9 +111,27 @@ public class ParametrizacionBean implements Serializable {
 	private float dias;
 	private String d;
 
+	// INTERFAZ PARAMETRIZACION SELECCION LINEAS PRODUCCION
+	private String[] selectedLP;
+	private List<SelectItem> selectItemsLPMontaje;
+	private List<SelectItem> selectItemsLPAparado;
+	private List<SelectItem> selectItemsLPTroquelado;
+	private Lineasprod selectLineasP;
+
+	// INTERFAZ PARAMETRIZACION SELECCION TURNOS
+	private String[] selectedTurnos;
+	private List<SelectItem> selectItemsTurnos;
+	private Turno selectTurno;
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
+
+		// INICIAR LAS CONSULTAS PARA LOS SELECTCHECKBOXMENU
+		LineasProdDao lineasDao = new LineasProdDaoImpl();
+		this.selectLineasP.setLineaaut(null);
+		this.selectLineasP.setTipoProceso(null);
+		lineasDao.selectedByMontaje(this.selectLineasP);
 
 		// PARA NO PRUEBAS
 		// DetaOrdenBean nb = new DetaOrdenBean();
@@ -634,6 +659,91 @@ public class ParametrizacionBean implements Serializable {
 
 	public ArrayList<String> getLblMonConv() {
 		return lblMonConv;
+	}
+
+	public List<SelectItem> getSelectItemsLPMontaje() {
+		this.selectItemsLPMontaje = new ArrayList<SelectItem>();
+		LineasProdDao lpDao = new LineasProdDaoImpl();
+		List<Lineasprod> lineap = lpDao.findByMontaje();
+		this.selectItemsLPMontaje.clear();
+		for (Lineasprod lp : lineap) {
+			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+					lp.getNomlinea());
+			this.selectItemsLPMontaje.add(selectItem);
+		}
+
+		return selectItemsLPMontaje;
+	}
+
+	public void setSelectItemsLPMontaje(List<SelectItem> selectItemsLPMontaje) {
+		this.selectItemsLPMontaje = selectItemsLPMontaje;
+	}
+
+	public List<SelectItem> getSelectItemsLPAparado() {
+		return selectItemsLPAparado;
+	}
+
+	public void setSelectItemsLPAparado(List<SelectItem> selectItemsLPAparado) {
+		this.selectItemsLPAparado = selectItemsLPAparado;
+	}
+
+	public List<SelectItem> getSelectItemsLPTroquelado() {
+		return selectItemsLPTroquelado;
+	}
+
+	public void setSelectItemsLPTroquelado(
+			List<SelectItem> selectItemsLPTroquelado) {
+		this.selectItemsLPTroquelado = selectItemsLPTroquelado;
+	}
+
+	public Lineasprod getSelectLineasP() {
+		return selectLineasP;
+	}
+
+	public void setSelectLineasP(Lineasprod selectLineasP) {
+		this.selectLineasP = selectLineasP;
+	}
+
+	public Turno getSelectTurno() {
+		return selectTurno;
+	}
+
+	public void setSelectTurno(Turno selectTurno) {
+		this.selectTurno = selectTurno;
+	}
+
+	public String[] getSelectedLP() {
+		return selectedLP;
+	}
+
+	public void setSelectedLP(String[] selectedLP) {
+		this.selectedLP = selectedLP;
+	}
+
+	public String[] getSelectedTurnos() {
+		return selectedTurnos;
+	}
+
+	public void setSelectedTurnos(String[] selectedTurnos) {
+		this.selectedTurnos = selectedTurnos;
+	}
+
+	public List<SelectItem> getSelectItemsTurnos() {
+		this.selectItemsTurnos = new ArrayList<SelectItem>();
+		TurnosDao turnoDao = new TurnosDaoImpl();
+		List<Turno> turnos = turnoDao.findAll();
+		this.selectItemsTurnos.clear();
+		for (Turno turn : turnos) {
+			SelectItem selectItem = new SelectItem(turn.getTurnoCodigo(),
+					turn.getNombturno());
+			this.selectItemsTurnos.add(selectItem);
+		}
+
+		return selectItemsTurnos;
+	}
+
+	public void setSelectItemsTurnos(List<SelectItem> selectItemsTurnos) {
+		this.selectItemsTurnos = selectItemsTurnos;
 	}
 
 	public ArrayList<Integer> getAddNumTurnosConvApa() {

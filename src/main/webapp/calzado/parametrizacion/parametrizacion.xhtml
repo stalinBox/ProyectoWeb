@@ -74,8 +74,13 @@
 												value="#{parametrizacionBean.numLineasConvMont}" size="1">
 											</p:inputText>
 
-											<h:outputText
-												value="#{parametrizacionBean.numLineasConvMont}" />
+											<p:selectCheckboxMenu id="scbmLineasP"
+												value="#{parametrizacionBean.selectItemsLP}"
+												label="Líneas de producción" filter="true"
+												filterMatchMode="startsWith" panelStyle="width:250px">
+												<f:selectItems value="#{parametrizacionBean.selectItemsLP}"></f:selectItems>
+											</p:selectCheckboxMenu>
+
 											<br />
 											<p:commandButton value="Turnos" id="btnGenerateTurnosMtn"
 												action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"

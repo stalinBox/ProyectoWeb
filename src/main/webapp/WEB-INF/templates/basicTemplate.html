@@ -95,17 +95,14 @@
 						</p:submenu>
 					</p:submenu>
 
-					<p:submenu label="Actions" icon="ui-icon-gear">
-						<p:submenu label="Ajax" icon="ui-icon-refresh">
-							<p:menuitem value="Save" actionListener="#{menuView.save}"
-								icon="ui-icon-disk" />
-							<p:menuitem value="Update" actionListener="#{menuView.update}"
-								icon="ui-icon-arrowrefresh-1-w" />
-						</p:submenu>
-						<p:submenu label="Non-Ajax" icon="ui-icon-newwin">
-							<p:menuitem value="Delete" actionListener="#{menuView.delete}"
-								icon="ui-icon-close" ajax="false" />
-						</p:submenu>
+					<p:submenu label="Andon" icon="ui-icon-gear">
+						<p:menuitem value="Alertas"
+							url="#{appBean.andonPath()}alertas.jsf" icon="ui-icon-disk" />
+						<p:menuitem value="Dispositivos"
+							url="#{appBean.andonPath()}dispositivos.jsf"
+							icon="ui-icon-arrowrefresh-1-w" />
+						<p:menuitem value="Maquinas"
+							url="#{appBean.andonPath()}maquinas.jsf" icon="ui-icon-close" />
 					</p:submenu>
 
 					<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"

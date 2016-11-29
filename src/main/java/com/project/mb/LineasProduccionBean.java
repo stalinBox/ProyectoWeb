@@ -40,18 +40,12 @@ public class LineasProduccionBean implements Serializable {
 	// METODOS
 	public void btnCreateLineaProd(ActionEvent actionEvent) {
 		String msg = "";
-		String bol = "";
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
-		if (this.lAutomatico == true) {
-			bol = "1";
-		} else {
-			bol = "0";
-		}
 
 		TipoProceso pp = new TipoProceso();
 		pp.setTprCodigo(2);
 		this.selectedLineasProd.setTipoProceso(pp);
-		this.selectedLineasProd.setLineaaut(bol);
+		this.selectedLineasProd.setLineaaut(null);
 
 		if (lineasDao.create(this.selectedLineasProd)) {
 			msg = "Se ha añadido una nueva linea de producción";
@@ -68,14 +62,9 @@ public class LineasProduccionBean implements Serializable {
 
 	public void btnUpdateLineaProd(ActionEvent actionEvent) {
 		String msg = "";
-		String bol = "";
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
-		if (this.lAutomatico == true) {
-			bol = "1";
-		} else {
-			bol = "0";
-		}
-		this.selectedLineasProd.setLineaaut(bol);
+
+		this.selectedLineasProd.setLineaaut(null);
 		if (lineasDao.update(this.selectedLineasProd)) {
 			msg = "Se ha modificado una linea de producción";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
