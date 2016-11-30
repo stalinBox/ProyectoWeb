@@ -30,6 +30,7 @@ import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.TurnosDao;
 import com.project.dao.TurnosDaoImpl;
 import com.project.entities.Lineasprod;
+import com.project.entities.TipoProceso;
 import com.project.entities.Turno;
 import com.project.utils.ConvertArrayToMatriz;
 import com.project.utils.ConvertMatrizTranspuesta;
@@ -112,26 +113,27 @@ public class ParametrizacionBean implements Serializable {
 	private String d;
 
 	// INTERFAZ PARAMETRIZACION SELECCION LINEAS PRODUCCION
-	private String[] selectedLP;
+	private String[] selectedLPM;
+	private String[] selectedLPA;
+	private String[] selectedLPT;
 	private List<SelectItem> selectItemsLPMontaje;
 	private List<SelectItem> selectItemsLPAparado;
 	private List<SelectItem> selectItemsLPTroquelado;
-	private Lineasprod selectLineasP;
 
-	// INTERFAZ PARAMETRIZACION SELECCION TURNOS
-	private String[] selectedTurnos;
+	// INTERFAZ PARAMETRIZACION SELECCION TURNOS PROCESOS CONVENCIONALES
 	private List<SelectItem> selectItemsTurnos;
-	private Turno selectTurno;
+	private String[] selectedTurnosMntConv;
+	private String[] selectedTurnosTrqConv;
+	private String[] selectedTurnosApaConv;
+
+	// INTERFAZ PARAMETRIZACION SELECCION TURNOS PROCESOS AUTOMATICOS
+	private String[] selectedTurnosMntAut;
+	private String[] selectedTurnosTrqAut;
+	private String[] selectedTurnosApaAut;
 
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
-
-		// INICIAR LAS CONSULTAS PARA LOS SELECTCHECKBOXMENU
-		LineasProdDao lineasDao = new LineasProdDaoImpl();
-		this.selectLineasP.setLineaaut(null);
-		this.selectLineasP.setTipoProceso(null);
-		lineasDao.selectedByMontaje(this.selectLineasP);
 
 		// PARA NO PRUEBAS
 		// DetaOrdenBean nb = new DetaOrdenBean();
@@ -179,6 +181,31 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public void ExecuteParams() {
+		// MOSTRAR PARAMETROS
+		for (String a : this.selectedLPM) {
+			// GET COUNT THIS VARIABLE
+			System.out.println("****selectedLPM: " + a);
+		}
+		for (String a : this.selectedTurnosMntConv) {
+			System.out.println("***selectedTurnosMntConv: " + a);
+		}
+
+		for (String a : this.selectedLPT) {
+			// GET COUNT THIS VARIABLE
+			System.out.println("++++selectedLPT: " + a);
+		}
+		for (String c : this.selectedTurnosTrqConv) {
+			System.out.println("++++SelectedTrunosTroquelado: " + c);
+		}
+
+		for (String a : this.selectedLPA) {
+			// GET COUNT THIS VARIABLE
+			System.out.println("---SelectedAparado: " + a);
+		}
+		for (String b : this.selectedTurnosApaConv) {
+			System.out.println("---SelectedTrunosAparado: " + b);
+		}
+
 		// ARRAYS FOR MONTAJE
 		ArrayList<ArrayList<Object>> array0 = new ArrayList<ArrayList<Object>>();
 		ArrayList<ArrayList<Object>> array00 = new ArrayList<ArrayList<Object>>();
@@ -661,73 +688,6 @@ public class ParametrizacionBean implements Serializable {
 		return lblMonConv;
 	}
 
-	public List<SelectItem> getSelectItemsLPMontaje() {
-		this.selectItemsLPMontaje = new ArrayList<SelectItem>();
-		LineasProdDao lpDao = new LineasProdDaoImpl();
-		List<Lineasprod> lineap = lpDao.findByMontaje();
-		this.selectItemsLPMontaje.clear();
-		for (Lineasprod lp : lineap) {
-			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
-					lp.getNomlinea());
-			this.selectItemsLPMontaje.add(selectItem);
-		}
-
-		return selectItemsLPMontaje;
-	}
-
-	public void setSelectItemsLPMontaje(List<SelectItem> selectItemsLPMontaje) {
-		this.selectItemsLPMontaje = selectItemsLPMontaje;
-	}
-
-	public List<SelectItem> getSelectItemsLPAparado() {
-		return selectItemsLPAparado;
-	}
-
-	public void setSelectItemsLPAparado(List<SelectItem> selectItemsLPAparado) {
-		this.selectItemsLPAparado = selectItemsLPAparado;
-	}
-
-	public List<SelectItem> getSelectItemsLPTroquelado() {
-		return selectItemsLPTroquelado;
-	}
-
-	public void setSelectItemsLPTroquelado(
-			List<SelectItem> selectItemsLPTroquelado) {
-		this.selectItemsLPTroquelado = selectItemsLPTroquelado;
-	}
-
-	public Lineasprod getSelectLineasP() {
-		return selectLineasP;
-	}
-
-	public void setSelectLineasP(Lineasprod selectLineasP) {
-		this.selectLineasP = selectLineasP;
-	}
-
-	public Turno getSelectTurno() {
-		return selectTurno;
-	}
-
-	public void setSelectTurno(Turno selectTurno) {
-		this.selectTurno = selectTurno;
-	}
-
-	public String[] getSelectedLP() {
-		return selectedLP;
-	}
-
-	public void setSelectedLP(String[] selectedLP) {
-		this.selectedLP = selectedLP;
-	}
-
-	public String[] getSelectedTurnos() {
-		return selectedTurnos;
-	}
-
-	public void setSelectedTurnos(String[] selectedTurnos) {
-		this.selectedTurnos = selectedTurnos;
-	}
-
 	public List<SelectItem> getSelectItemsTurnos() {
 		this.selectItemsTurnos = new ArrayList<SelectItem>();
 		TurnosDao turnoDao = new TurnosDaoImpl();
@@ -738,12 +698,162 @@ public class ParametrizacionBean implements Serializable {
 					turn.getNombturno());
 			this.selectItemsTurnos.add(selectItem);
 		}
-
 		return selectItemsTurnos;
 	}
 
 	public void setSelectItemsTurnos(List<SelectItem> selectItemsTurnos) {
 		this.selectItemsTurnos = selectItemsTurnos;
+	}
+
+	public String[] getSelectedTurnosMntConv() {
+		return selectedTurnosMntConv;
+	}
+
+	public void setSelectedTurnosMntConv(String[] selectedTurnosMntConv) {
+		this.selectedTurnosMntConv = selectedTurnosMntConv;
+	}
+
+	public String[] getSelectedTurnosTrqConv() {
+		return selectedTurnosTrqConv;
+	}
+
+	public void setSelectedTurnosTrqConv(String[] selectedTurnosTrqConv) {
+		this.selectedTurnosTrqConv = selectedTurnosTrqConv;
+	}
+
+	public String[] getSelectedTurnosApaConv() {
+		return selectedTurnosApaConv;
+	}
+
+	public void setSelectedTurnosApaConv(String[] selectedTurnosApaConv) {
+		this.selectedTurnosApaConv = selectedTurnosApaConv;
+	}
+
+	public String[] getSelectedTurnosMntAut() {
+		return selectedTurnosMntAut;
+	}
+
+	public void setSelectedTurnosMntAut(String[] selectedTurnosMntAut) {
+		this.selectedTurnosMntAut = selectedTurnosMntAut;
+	}
+
+	public String[] getSelectedTurnosTrqAut() {
+		return selectedTurnosTrqAut;
+	}
+
+	public void setSelectedTurnosTrqAut(String[] selectedTurnosTrqAut) {
+		this.selectedTurnosTrqAut = selectedTurnosTrqAut;
+	}
+
+	public String[] getSelectedTurnosApaAut() {
+		return selectedTurnosApaAut;
+	}
+
+	public void setSelectedTurnosApaAut(String[] selectedTurnosApaAut) {
+		this.selectedTurnosApaAut = selectedTurnosApaAut;
+	}
+
+	public List<SelectItem> getSelectItemsLPMontaje() {
+		Lineasprod lineasLP = new Lineasprod();
+		TipoProceso tipPro = new TipoProceso();
+		tipPro.setTprCodigo(1);
+		boolean a = false;
+		lineasLP.setLineaaut(a);
+		lineasLP.setTipoProceso(tipPro);
+
+		this.selectItemsLPMontaje = new ArrayList<SelectItem>();
+		LineasProdDao lpDao = new LineasProdDaoImpl();
+		List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
+				.selectedByMontaje(lineasLP);
+
+		this.selectItemsLPMontaje.clear();
+		for (Lineasprod lp : lproduccion) {
+			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+					lp.getNomlinea());
+			this.selectItemsLPMontaje.add(selectItem);
+		}
+		return selectItemsLPMontaje;
+	}
+
+	public void setSelectItemsLPMontaje(List<SelectItem> selectItemsLPMontaje) {
+		this.selectItemsLPMontaje = selectItemsLPMontaje;
+	}
+
+	public List<SelectItem> getSelectItemsLPAparado() {
+		Lineasprod lineasLP = new Lineasprod();
+		TipoProceso tipPro = new TipoProceso();
+		tipPro.setTprCodigo(2);
+		boolean a = false;
+		lineasLP.setLineaaut(a);
+		lineasLP.setTipoProceso(tipPro);
+
+		this.selectItemsLPAparado = new ArrayList<SelectItem>();
+		LineasProdDao lpDao = new LineasProdDaoImpl();
+		List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
+				.selectedByAparado(lineasLP);
+
+		this.selectItemsLPAparado.clear();
+		for (Lineasprod lp : lproduccion) {
+			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+					lp.getNomlinea());
+			this.selectItemsLPAparado.add(selectItem);
+		}
+		return selectItemsLPAparado;
+	}
+
+	public void setSelectItemsLPAparado(List<SelectItem> selectItemsLPAparado) {
+		this.selectItemsLPAparado = selectItemsLPAparado;
+	}
+
+	public List<SelectItem> getSelectItemsLPTroquelado() {
+		Lineasprod lineasLP = new Lineasprod();
+		TipoProceso tipPro = new TipoProceso();
+		tipPro.setTprCodigo(3);
+		boolean a = false;
+		lineasLP.setLineaaut(a);
+		lineasLP.setTipoProceso(tipPro);
+
+		this.selectItemsLPTroquelado = new ArrayList<SelectItem>();
+		LineasProdDao lpDao = new LineasProdDaoImpl();
+		List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
+				.selectedByTroquelado(lineasLP);
+
+		this.selectItemsLPTroquelado.clear();
+		for (Lineasprod lp : lproduccion) {
+			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+					lp.getNomlinea());
+			this.selectItemsLPTroquelado.add(selectItem);
+		}
+		return selectItemsLPTroquelado;
+	}
+
+	public void setSelectItemsLPTroquelado(
+			List<SelectItem> selectItemsLPTroquelado) {
+		this.selectItemsLPTroquelado = selectItemsLPTroquelado;
+	}
+
+	public String[] getSelectedLPM() {
+		return selectedLPM;
+	}
+
+	public void setSelectedLPM(String[] selectedLPM) {
+		this.selectedLPM = selectedLPM;
+	}
+
+	public String[] getSelectedLPA() {
+		return selectedLPA;
+	}
+
+	public void setSelectedLPA(String[] selectedLPA) {
+		this.selectedLPA = selectedLPA;
+	}
+
+	public String[] getSelectedLPT() {
+		return selectedLPT;
+	}
+
+	public void setSelectedLPT(String[] selectedLPT) {
+		this.selectedLPT = selectedLPT;
 	}
 
 	public ArrayList<Integer> getAddNumTurnosConvApa() {

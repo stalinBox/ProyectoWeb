@@ -73,12 +73,12 @@
 											<p:inputText id="txtNumber"
 												value="#{parametrizacionBean.numLineasConvMont}" size="1">
 											</p:inputText>
-
-											<p:selectCheckboxMenu id="scbmLineasP"
-												value="#{parametrizacionBean.selectItemsLP}"
-												label="Líneas de producción" filter="true"
-												filterMatchMode="startsWith" panelStyle="width:250px">
-												<f:selectItems value="#{parametrizacionBean.selectItemsLP}"></f:selectItems>
+											<p:selectCheckboxMenu id="scbLM"
+												value="#{parametrizacionBean.selectedLPM}"
+												label="Líneas a trabajar" panelStyle="width:250px">
+												<f:selectItems
+													value="#{parametrizacionBean.selectItemsLPMontaje}">
+												</f:selectItems>
 											</p:selectCheckboxMenu>
 
 											<br />
@@ -97,6 +97,13 @@
 													<p:inputText
 														value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
 														size="1" />
+
+													<p:selectCheckboxMenu id="scbM"
+														value="#{parametrizacionBean.selectedTurnosMntConv}"
+														label="Turnos a trabajar" panelStyle="width:250px">
+														<f:selectItems
+															value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
+													</p:selectCheckboxMenu>
 													<br />
 												</ui:repeat>
 												<br />
@@ -206,6 +213,12 @@
 											<p:outputLabel value="Número de Líneas: " />
 											<p:inputText id="txtNumber"
 												value="#{parametrizacionBean.numLineasConvTroq}" size="1" />
+											<p:selectCheckboxMenu id="scbLTC"
+												value="#{parametrizacionBean.selectedLPT}"
+												label="Líneas a trabajar" panelStyle="width:250px">
+												<f:selectItems
+													value="#{parametrizacionBean.selectItemsLPTroquelado}"></f:selectItems>
+											</p:selectCheckboxMenu>
 											<br />
 											<p:commandButton value="Turnos" id="btnGenerateTurnosTrq"
 												action="#{parametrizacionBean.GenerateTurnsDaysConvTrqt()}"
@@ -222,6 +235,13 @@
 													<p:inputText
 														value="#{parametrizacionBean.numTurnosConvTroq[loop.index]}"
 														size="1" />
+
+													<p:selectCheckboxMenu id="scbA"
+														value="#{parametrizacionBean.selectedTurnosApaConv}"
+														label="Turnos a trabajar" panelStyle="width:250px">
+														<f:selectItems
+															value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
+													</p:selectCheckboxMenu>
 													<br />
 												</ui:repeat>
 												<br />
@@ -320,15 +340,21 @@
 											<h:outputText value="LINEAS CONVENCIONALES" />
 										</f:facet>
 										<h:form id="cc">
-											<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
-
-											<p:inputText id="txtNumberAuto"
+											<p:outputLabel for="txtNumber" value="Número de Líneas: " />
+											<p:inputText id="txtNumber"
 												value="#{parametrizacionBean.numLineasConvApa}" size="1" />
+
+											<p:selectCheckboxMenu id="scbLAC"
+												value="#{parametrizacionBean.selectedLPA}"
+												label="Líneas a trabajar" panelStyle="width:250px">
+												<f:selectItems
+													value="#{parametrizacionBean.selectItemsLPAparado}"></f:selectItems>
+											</p:selectCheckboxMenu>
 											<br />
 											<p:commandButton value="Turnos"
 												action="#{parametrizacionBean.GenerateTurnsDaysConvApa()}"
 												update="formParamGeneral:tabSubGen:apa:guestsConvApa"
-												process="@this,txtNumberAuto" />
+												process="@this,txtNumber" />
 										</h:form>
 										<h:panelGroup id="guestsConvApa">
 											<h:form id="paramApa"
@@ -340,6 +366,12 @@
 													<p:inputText
 														value="#{parametrizacionBean.numTurnosConvApa[loop.index]}"
 														size="1" />
+													<p:selectCheckboxMenu id="scbM"
+														value="#{parametrizacionBean.selectedTurnosTrqConv}"
+														label="Turnos a trabajar" panelStyle="width:250px">
+														<f:selectItems
+															value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
+													</p:selectCheckboxMenu>
 													<br />
 												</ui:repeat>
 												<br />
@@ -404,11 +436,18 @@
 				<p:commandButton id="btnGenerateDistrib"
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
-					process="@this, :sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, 
-					:formParamGeneral:tabSubGen:mtn:aa:txtNumber, :formParamGeneral:tabSubGen:mtn:paramMontaje, 
-					:formParamGeneral:tabSubGen:mtn:paramMontaje:bol, 
-					:formParamGeneral:tabSubGen:mtn:paramMontaje:btnFechaMtn
-					:formParamGeneral:tabSubGen:trq:paramTrq
+					process="@this, :sendParamsGene, 
+					:formParamGeneral:tabSubGen:mtn:idRespMontaje,
+					:formParamGeneral:tabSubGen:mtn:aa:scbLM,
+					:formParamGeneral:tabSubGen:mtn:aa:txtNumber,
+					:formParamGeneral:tabSubGen:trq:bb:txtNumber,
+					:formParamGeneral:tabSubGen:trq:bb:scbLTC,
+					:formParamGeneral:tabSubGen:apa:cc:txtNumber,
+					:formParamGeneral:tabSubGen:apa:cc:scbLAC,
+					:formParamGeneral:tabSubGen:mtn:paramMontaje,
+					:formParamGeneral:tabSubGen:mtn:paramMontaje:bol,
+					:formParamGeneral:tabSubGen:mtn:paramMontaje:btnFechaMtn,
+					:formParamGeneral:tabSubGen:trq:paramTrq,
 					:formParamGeneral:tabSubGen:apa:paramApa"
 					update=":sendParamsGene:msgs, :idTblFechas:schedule" ajax="true"
 					partialSubmit="true" />

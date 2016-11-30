@@ -8,17 +8,11 @@ public interface LineasProdDao {
 
 	public List<Lineasprod> findAll();
 
-	public Lineasprod selectedByMontaje(Lineasprod lineasLP);
+	public List<Lineasprod> selectedByMontaje(Lineasprod lineasLP);
 
-	public List<Lineasprod> findByMontaje();
+	public List<Lineasprod> selectedByAparado(Lineasprod lineasLP);
 
-	public Lineasprod selectedByAparado(Lineasprod lineasLP);
-
-	public List<Lineasprod> findByAparado();
-
-	public Lineasprod selectedByTroquelado(Lineasprod lineasLP);
-
-	public List<Lineasprod> findByTroquelado();
+	public List<Lineasprod> selectedByTroquelado(Lineasprod lineasLP);
 
 	public boolean create(Lineasprod lineaP);
 

@@ -5,28 +5,10 @@ import java.util.List;
 import org.hibernate.Session;
 
 import com.project.entities.Lineasprod;
+import com.project.entities.TipoProceso;
 import com.project.utils.HibernateUtil;
 
 public class LineasProdDaoImpl implements LineasProdDao {
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Lineasprod> findAll() {
-		List<Lineasprod> listado = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Lineasprod order by nomlinea";
-		System.out.println(sql);
-		try {
-			sesion.beginTransaction();
-			listado = sesion.createQuery(sql).list();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALL LINEAS PRODUCCION: "
-					+ e.toString());
-		}
-		return listado;
-	}
 
 	@Override
 	public boolean create(Lineasprod lineaP) {
@@ -93,9 +75,30 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Lineasprod selectedByMontaje(Lineasprod lineasLP) {
-		Lineasprod entities = null;
+	public List<Lineasprod> findAll() {
+		List<Lineasprod> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasprod order by nomlinea";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL LINEAS PRODUCCION: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasprod> selectedByMontaje(Lineasprod lineasLP) {
+		List<Lineasprod> entities = null;
+
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
 				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
@@ -104,7 +107,7 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 		try {
 			sesion.beginTransaction();
-			entities = (Lineasprod) sesion.createQuery(sql).uniqueResult();
+			entities = sesion.createQuery(sql).list();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
@@ -116,9 +119,15 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		return entities;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Lineasprod selectedByAparado(Lineasprod lineasLP) {
-		Lineasprod entities = null;
+	public List<Lineasprod> selectedByAparado(Lineasprod lineasLP) {
+		List<Lineasprod> entities = null;
+		boolean f = false;
+		TipoProceso tipPro = new TipoProceso();
+		tipPro.setTprCodigo(2);
+		lineasLP.setLineaaut(f);
+		lineasLP.setTipoProceso(tipPro);
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
 				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
@@ -127,7 +136,7 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 		try {
 			sesion.beginTransaction();
-			entities = (Lineasprod) sesion.createQuery(sql).uniqueResult();
+			entities = sesion.createQuery(sql).list();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
@@ -139,9 +148,15 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		return entities;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Lineasprod selectedByTroquelado(Lineasprod lineasLP) {
-		Lineasprod entities = null;
+	public List<Lineasprod> selectedByTroquelado(Lineasprod lineasLP) {
+		List<Lineasprod> entities = null;
+		boolean f = false;
+		TipoProceso tipPro = new TipoProceso();
+		tipPro.setTprCodigo(3);
+		lineasLP.setLineaaut(f);
+		lineasLP.setTipoProceso(tipPro);
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
 				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
@@ -150,7 +165,7 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 		try {
 			sesion.beginTransaction();
-			entities = (Lineasprod) sesion.createQuery(sql).uniqueResult();
+			entities = sesion.createQuery(sql).list();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
@@ -160,24 +175,6 @@ public class LineasProdDaoImpl implements LineasProdDao {
 			throw e;
 		}
 		return entities;
-	}
-
-	@Override
-	public List<Lineasprod> findByMontaje() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Lineasprod> findByAparado() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Lineasprod> findByTroquelado() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
