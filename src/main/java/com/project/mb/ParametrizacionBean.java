@@ -584,10 +584,20 @@ public class ParametrizacionBean implements Serializable {
 
 	// ****************TURNOS CONV/AUT MONTAJE*******************
 	public void GenerateTurnsDaysConvMont() {
-		numTurnosConvMont = new Integer[numLineasConvMont];
+		/***************/
+		// MOSTRAR PARAMETROS
 		this.lblMonConv.clear();
-		for (int i = 1; i <= this.numLineasConvMont; i++) {
-			this.lblMonConv.add("Turno/Día L" + i + " Convencional: ");
+		this.numLineasConvMont = null;
+		this.numLineasConvMont = this.selectedLPM.length;
+		numTurnosConvMont = new Integer[numLineasConvMont];
+		for (SelectItem a : this.selectItemsLPMontaje) {
+			for (String b : this.selectedLPM) {
+				if (a.getValue().toString().equals(b.toString())) {
+					this.lblMonConv.add("Turno/Día " + a.getLabel());
+				} else {
+					System.out.println("Nada **");
+				}
+			}
 		}
 	}
 

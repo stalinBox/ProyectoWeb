@@ -70,9 +70,9 @@
 										<h:form id="aa">
 											<p:messages autoUpdate="true" />
 											<p:outputLabel value="Número de Líneas: " />
-											<p:inputText id="txtNumber"
+											<!-- <p:inputText id="txtNumber"
 												value="#{parametrizacionBean.numLineasConvMont}" size="1">
-											</p:inputText>
+											</p:inputText> -->
 											<p:selectCheckboxMenu id="scbLM"
 												value="#{parametrizacionBean.selectedLPM}"
 												label="Líneas a trabajar" panelStyle="width:250px">
@@ -85,15 +85,17 @@
 											<p:commandButton value="Turnos" id="btnGenerateTurnosMtn"
 												action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"
 												update="formParamGeneral:tabSubGen:mtn:guests"
-												process="@this,txtNumber" />
+												process="@this, @form" />
 										</h:form>
 										<h:panelGroup id="guests">
 											<h:form id="paramMontaje"
 												rendered="#{not empty parametrizacionBean.numTurnosConvMont}">
+
 												<ui:repeat value="#{parametrizacionBean.numTurnosConvMont}"
 													varStatus="loop">
 													<p:outputLabel
 														value="#{parametrizacionBean.lblMonConv[loop.index]}" />
+													<p:spacer width="10" height="10" />
 													<p:inputText
 														value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
 														size="1" />
@@ -101,11 +103,14 @@
 													<p:selectCheckboxMenu id="scbM"
 														value="#{parametrizacionBean.selectedTurnosMntConv}"
 														label="Turnos a trabajar" panelStyle="width:250px">
+
 														<f:selectItems
-															value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
+															value="#{parametrizacionBean.selectItemsTurnos}" />
 													</p:selectCheckboxMenu>
+
 													<br />
 												</ui:repeat>
+
 												<br />
 												<br />
 												<p:outputLabel for="bol" value="Horas extras Montaje:" />
@@ -439,7 +444,6 @@
 					process="@this, :sendParamsGene, 
 					:formParamGeneral:tabSubGen:mtn:idRespMontaje,
 					:formParamGeneral:tabSubGen:mtn:aa:scbLM,
-					:formParamGeneral:tabSubGen:mtn:aa:txtNumber,
 					:formParamGeneral:tabSubGen:trq:bb:txtNumber,
 					:formParamGeneral:tabSubGen:trq:bb:scbLTC,
 					:formParamGeneral:tabSubGen:apa:cc:txtNumber,

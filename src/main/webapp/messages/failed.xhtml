@@ -9,120 +9,37 @@
 <h:body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<p:ajaxStatus onstart="PF('statusDialog').show()"
-				onsuccess="PF('statusDialog').hide()" />
 
-			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
-				closable="false" resizable="false" showHeader="false">
-				<p:graphicImage value="/images/loadingProgress.gif" />
-			</p:dialog>
+			<h:form>
+				<div>
+					<ui:repeat var="checkbox" value="#{CheckboxTestBean.list}"
+						varStatus="status">
+						<h:selectBooleanCheckbox value="#{checkbox}" />
+					</ui:repeat>
+				</div>
 
-			<h:form id="form1">
-				<p:growl id="messages" showDetail="true" />
-				<p:outputLabel value="Horas extras:" />
-				<p:selectBooleanButton id="bol" value="#{beanPrueba.hExtras}"
-					onLabel="Si" offLabel="No" style="width:60px" />
-				<br />
-				<br />
-				<br />
-				<p:commandButton value="Generar"
-					actionListener="#{beanPrueba.generateSchedule()}"
-					process="@this, :form1:bol, :form1:button"
-					update=":form1:schedule, :form1:messages" />
-				<br />
-				<p:outputLabel for="button" value="Fecha para montar: " />
-				<p:calendar id="button" value="#{beanPrueba.fMontaje}"
-					showOn="button" required="true"
-					requiredMessage="Es necesaria la fecha para montar" size="4"
-					locale="es" />
-				<br />
-				<br />
-				<h:panelGrid columnClasses="value">
-					<h3 style="margin-top: 0">SCHEDULE EDITABLES</h3>
-					<p:schedule id="schedule" value="#{beanPrueba.eventModel}"
-						widgetVar="myschedule" timeZone="GMT-5" locale="es"
-						rightHeaderTemplate="" showWeekends="true" styleClass="custom">
+				<div>
 
-						<p:ajax event="dateSelect" listener="#{beanPrueba.onDateSelect}"
-							update="eventDetails" oncomplete="PF('eventDialog').show();" />
-						<p:ajax event="eventSelect" listener="#{beanPrueba.onEventSelect}"
-							update="eventDetails" oncomplete="PF('eventDialog').show();" />
-						<p:ajax event="eventMove" listener="#{beanPrueba.onEventMove}"
-							update="messages" />
-						<p:ajax event="eventResize" listener="#{beanPrueba.onEventResize}"
-							update="messages" />
 
-					</p:schedule>
-				</h:panelGrid>
 
-				<p:dialog widgetVar="eventDialog" header="Detalle" showEffect="clip"
-					hideEffect="clip">
-					<h:panelGrid id="eventDetails" columns="2">
-						<p:outputLabel for="title" value="Título:" />
-						<p:inputText id="title" value="#{beanPrueba.event.title}"
-							required="true" />
 
-						<p:outputLabel for="from" value="Desde:" />
-						<p:calendar id="from" value="#{beanPrueba.event.startDate}"
-							timeZone="GMT-5" pattern="dd/MM/yyyy HH:mm" />
 
-						<p:outputLabel for="to" value="Hasta:" />
-						<p:calendar id="to" value="#{beanPrueba.event.endDate}"
-							timeZone="GMT-5" pattern="dd/MM/yyyy HH:mm" />
 
-						<p:outputLabel for="allDay" value="Todo el día:" />
-						<h:selectBooleanCheckbox id="allDay"
-							value="#{beanPrueba.event.allDay}" />
 
-						<p:commandButton type="reset" value="Restaurar" />
-						<p:commandButton id="addButton" value="Guardar"
-							actionListener="#{beanPrueba.addEvent}"
-							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
-					</h:panelGrid>
-				</p:dialog>
+
+
+
+					º
+					<ui:repeat var="checkbox" value="#{checkboxTestBean.list}"
+						varStatus="status">
+						<h:selectBooleanCheckbox
+							value="#{checkboxTestBean.list[status.index]}" />
+					</ui:repeat>
+				</div>
+				<h:commandLink actionListener="#{checkboxTestBean.actionListener}">PROCESS FORM  
+				<f:ajax execute="@form" render="@form" />
+				</h:commandLink>
 			</h:form>
-
-			<script type="text/javascript">
-    PrimeFaces.locales['es'] = {
-        closeText: 'Cerrar',
-        prevText: 'Anterioooooooooooooooorr',
-        nextText: 'Aiguienteeeeeeeeeeeeeee',
-        currentText: 'Hoy',
-        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
-            'Jul','Ago','Sep','Oct','Nov','Dic'],
-        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-        dayNamesShort: ['Dom','Lun','Mar','Mie','Juv','Vie','Sáb'],
-        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-        weekHeader: 'Semana',
-        dateFormat:'dd/mm/yy',
-        firstDay: 1,
-        isRTL: false,
-        showMonthAfterYear: false,
-        yearSuffix: '',
-        month: 'Mes',
-        week: 'Semana',
-        day: 'Día',
-        allDayText : 'Todo el día'
-    };
-</script>
-			<style type="text/css">
-.value {
-	width: 1000px;
-}
-
-/* .custom .ui-state-highlight { */
-/* 	background: red !important; */
-/* } */
-.fc-sat {
-	background: Aquamarine !important;
-}
-
-.fc-sun {
-	background: Aqua !important;
-}
-</style>
 
 		</ui:define>
 	</ui:composition>
