@@ -1,5 +1,7 @@
 package com.project.dao;
 
+import java.util.List;
+
 import com.project.entities.Ordenprod;
 
 public interface OrdenesProdDao {
@@ -7,6 +9,7 @@ public interface OrdenesProdDao {
 
 	public boolean update(Ordenprod ordenProd);
 
-	public boolean delete(Ordenprod ordenProd);
+	public boolean delete(Integer id);
 
+	public List<Ordenprod> findAll();
 }

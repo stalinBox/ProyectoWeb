@@ -70,9 +70,7 @@
 										<h:form id="aa">
 											<p:messages autoUpdate="true" />
 											<p:outputLabel value="Número de Líneas: " />
-											<!-- <p:inputText id="txtNumber"
-												value="#{parametrizacionBean.numLineasConvMont}" size="1">
-											</p:inputText> -->
+
 											<p:selectCheckboxMenu id="scbLM"
 												value="#{parametrizacionBean.selectedLPM}"
 												label="Líneas a trabajar" panelStyle="width:250px">
@@ -456,10 +454,13 @@
 					update=":sendParamsGene:msgs, :idTblFechas:schedule" ajax="true"
 					partialSubmit="true" />
 
-				<p:commandButton value="REPROCESAR"
+				<p:commandButton id="btnReprocesar" value="REPROCESAR"
 					actionListener="#{parametrizacionBean.reprocesar()}" />
 
-				<p:commandButton value="CONTINUAR" />
+				<p:commandButton id="btnContinuar" value="CONTINUAR"
+					actionListener="#{parametrizacionBean.prueba()}"
+					process="formParamGeneral:tabSubGen:mtn:paramMontaje"
+					partialSubmit="true" />
 				<!--  **********************************************************************  -->
 			</h:form>
 			<p:separator />

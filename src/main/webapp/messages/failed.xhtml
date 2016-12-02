@@ -9,38 +9,9 @@
 <h:body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-
 			<h:form>
-				<div>
-					<ui:repeat var="checkbox" value="#{CheckboxTestBean.list}"
-						varStatus="status">
-						<h:selectBooleanCheckbox value="#{checkbox}" />
-					</ui:repeat>
-				</div>
 
-				<div>
-
-
-
-
-
-
-
-
-
-
-					º
-					<ui:repeat var="checkbox" value="#{checkboxTestBean.list}"
-						varStatus="status">
-						<h:selectBooleanCheckbox
-							value="#{checkboxTestBean.list[status.index]}" />
-					</ui:repeat>
-				</div>
-				<h:commandLink actionListener="#{checkboxTestBean.actionListener}">PROCESS FORM  
-				<f:ajax execute="@form" render="@form" />
-				</h:commandLink>
 			</h:form>
-
 		</ui:define>
 	</ui:composition>
 </h:body>

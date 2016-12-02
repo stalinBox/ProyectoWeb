@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import com.project.entities.Parametro;
+import com.project.entities.Lineasturno;
 import com.project.utils.HibernateUtil;
 
-public class ParametrizacionDaoImpl implements ParametrizacionDao {
+public class LineasTurnosDaoImpl implements LineasTurnosDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Parametro> findAll() {
-		List<Parametro> listado = null;
+	public List<Lineasturno> findAll() {
+		List<Lineasturno> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Parametro";
+		String sql = "FROM Lineasturno";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -22,47 +22,48 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALLMODELOS: " + e.toString());
+			System.out.println("ERRORRRRR FINDALL LINEASTURNOS: "
+					+ e.toString());
 		}
 		return listado;
 	}
 
 	@Override
-	public boolean create(Parametro parametrizacion) {
+	public boolean create(Lineasturno lienasTurnos) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(parametrizacion);
+			sesion.save(lienasTurnos);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR CREATE PARAMETRIZACION: "
+			System.out.println("ERRORRRRR CREATE LINEAS TURNOS: "
 					+ e.getMessage().toString());
 		}
 		return flag;
 	}
 
 	@Override
-	public boolean update(Parametro parametrizacion) {
+	public boolean update(Lineasturno lienasTurnos) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Parametro parametrizaciondb = (Parametro) sesion.load(
-					Parametro.class, parametrizacion.getParamCodigo());
+			Lineasturno lineasTurnosdb = (Lineasturno) sesion.load(
+					Lineasturno.class, lienasTurnos.getLtcodigo());
 			// Parametros a cambiar
-			// PARAMETROS A CAMBIAR *********************
+			// parametros a cambiar ****************
 			// fin de parametros
-			sesion.update(parametrizaciondb);
+			sesion.update(lineasTurnosdb);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR UPDATE PARAMETRIZACION: "
+			System.out.println("ERRORRRRR UPDATE MODELO: "
 					+ e.getMessage().toString());
 		}
 		return flag;
@@ -74,15 +75,15 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Parametro parametrizacion = (Parametro) sesion.load(
-					Parametro.class, id);
-			sesion.delete(parametrizacion);
+			Lineasturno lineasTurnos = (Lineasturno) sesion.load(
+					Lineasturno.class, id);
+			sesion.delete(lineasTurnos);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE PARAMETRIZACION: "
+			System.out.println("ERRORRRRR DELETE MODELO: "
 					+ e.getMessage().toString());
 		}
 		return flag;

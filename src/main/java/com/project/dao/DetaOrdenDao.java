@@ -1,5 +1,7 @@
 package com.project.dao;
 
+import java.util.List;
+
 import com.project.entities.Detalleorden;
 
 public interface DetaOrdenDao {
@@ -9,4 +11,5 @@ public interface DetaOrdenDao {
 
 	public boolean delete(Integer id);
 
+	public List<Detalleorden> findAll();
 }

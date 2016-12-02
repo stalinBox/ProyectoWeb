@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.component.selectcheckboxmenu.SelectCheckboxMenu;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -180,30 +181,14 @@ public class ParametrizacionBean implements Serializable {
 
 	}
 
+	// METODOS
+	public void prueba() {
+		System.out.println("HOLA MUNDO");
+	}
+
 	public void ExecuteParams() {
-		// MOSTRAR PARAMETROS
-		for (String a : this.selectedLPM) {
-			// GET COUNT THIS VARIABLE
-			System.out.println("****selectedLPM: " + a);
-		}
 		for (String a : this.selectedTurnosMntConv) {
 			System.out.println("***selectedTurnosMntConv: " + a);
-		}
-
-		for (String a : this.selectedLPT) {
-			// GET COUNT THIS VARIABLE
-			System.out.println("++++selectedLPT: " + a);
-		}
-		for (String c : this.selectedTurnosTrqConv) {
-			System.out.println("++++SelectedTrunosTroquelado: " + c);
-		}
-
-		for (String a : this.selectedLPA) {
-			// GET COUNT THIS VARIABLE
-			System.out.println("---SelectedAparado: " + a);
-		}
-		for (String b : this.selectedTurnosApaConv) {
-			System.out.println("---SelectedTrunosAparado: " + b);
 		}
 
 		// ARRAYS FOR MONTAJE
