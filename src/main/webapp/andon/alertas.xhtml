@@ -10,6 +10,152 @@
 		<ui:define name="content">
 
 
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateAlertas" update=":formCreate"
+					oncomplete="PF('dialogAlertasCreate').show()" title="Nueva Alerta"
+					icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="alerta" paginatorPosition="bottom"
+					value="#{alertasBean.alertas}" rows="10" paginator="true">
+
+					<f:facet name="header">
+					Alertas
+					</f:facet>
+
+					<p:column headerText="Color">
+						<h:outputText value="#{alerta.color}" />
+					</p:column>
+
+					<p:column headerText="Activo">
+						<h:outputText value="#{alerta.activo}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{alerta.descripcion}" />
+					</p:column>
+
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogAlertasUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{alerta}"
+								target="#{alertasBean.selectedAlerta}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogAlertasDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{alerta}"
+								target="#{alertasBean.selectedAlerta}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nueva Alerta" widgetVar="dialogAlertasCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgAlertasCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Color" />
+						<p:inputText value="#{alertasBean.selectedAlerta.color}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Activo:" />
+						<p:inputText id="entrada"
+							value="#{alertasBean.selectedAlerta.activo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Descripción:" />
+						<p:inputText value="#{alertasBean.selectedAlerta.descripcion}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogAlertasCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{alertasBean.btnCreateAlerta(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogAlertasCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Alerta" widgetVar="dialogAlertasUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgAlertasUpdate">
+					<h:inputHidden value="#{alertasBean.selectedAlerta.alertaCodigo}" />
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Color" />
+						<p:inputText value="#{alertasBean.selectedAlerta.color}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Activo:" />
+						<p:inputText id="entrada"
+							value="#{alertasBean.selectedAlerta.activo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Descripción:" />
+						<p:inputText value="#{alertasBean.selectedAlerta.descripcion}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogAlertasUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{alertasBean.btnUpdateAlerta(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogAlertasUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Alerta?"
+					severity="alert" widgetVar="dialogAlertasDelete">
+
+					<h:inputHidden value="#{alertasBean.selectedAlerta.alertaCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogAlertasDelete').hide()"
+						actionListener="#{alertasBean.btnDeleteAlerta(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogAlertasDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+
 		</ui:define>
 	</ui:composition>
 </body>

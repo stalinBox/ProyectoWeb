@@ -9,6 +9,168 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateMaquinas" update=":formCreate"
+					oncomplete="PF('dialogMaquinasCreate').show()"
+					title="Asignar nueva maquina" icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="maquina" paginatorPosition="bottom"
+					value="#{maquinasBean.maquinas}" rows="10" paginator="true">
+
+					<f:facet name="header">
+					Máquinas
+					</f:facet>
+
+					<p:column headerText="NOMBRE">
+						<h:outputText value="#{maquina.nommaquina}" />
+					</p:column>
+
+					<p:column headerText="MARCA">
+						<h:outputText value="#{maquina.marca}" />
+					</p:column>
+
+					<p:column headerText="LINEA">
+						<h:outputText value="#{maquina.lineasprod.lineaproCodigo}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{maquina.descmaq}" />
+					</p:column>
+
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogMaquinasUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{maquina}"
+								target="#{maquinasBean.selectedMaquinas}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogMaquinasDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{maquina}"
+								target="#{maquinasBean.selectedMaquinas}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nueva Maquina" widgetVar="dialogMaquinasCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgMaquinasCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="NOMBRE: " />
+						<p:inputText value="#{maquinasBean.selectedMaquinas.nommaquina}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="MARCA: " />
+						<p:inputText id="entrada"
+							value="#{maquinasBean.selectedMaquinas.marca}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="MARCA: " />
+						<p:inputText
+							value="#{maquinasBean.selectedMaquinas.lineasprod.lineaproCodigo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Descripción:" />
+						<p:inputText value="#{maquinasBean.selectedMaquinas.descmaq}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogMaquinasCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{maquinasBean.btnCreateMaquina(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogMaquinasCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Alerta" widgetVar="dialogAlertasUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgAlertasUpdate">
+					<h:inputHidden value="#{alertasBean.selectedAlerta.alertaCodigo}" />
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="NOMBRE: " />
+						<p:inputText value="#{maquinasBean.selectedMaquinas.nommaquina}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="MARCA: " />
+						<p:inputText id="entrada"
+							value="#{maquinasBean.selectedMaquinas.marca}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="MARCA: " />
+						<p:inputText
+							value="#{maquinasBean.selectedMaquinas.lineasprod.lineaproCodigo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="Descripción:" />
+						<p:inputText value="#{maquinasBean.selectedMaquinas.descmaq}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogMaquinasUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{maquinasBean.btnUpdateMaquina(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogMaquinasUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Maquina?"
+					severity="alert" widgetVar="dialogMaquinasDelete">
+
+					<h:inputHidden value="#{maquinasBean.selectedMaquinas.maqCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogMaquinasDelete').hide()"
+						actionListener="#{maquinasBean.btnDeleteMaquina(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogMaquinaDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+
 		</ui:define>
 	</ui:composition>
 </body>

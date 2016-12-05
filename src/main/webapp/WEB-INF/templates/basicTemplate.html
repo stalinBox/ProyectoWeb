@@ -69,7 +69,7 @@
 						<p:menuitem value="Parametrización"
 							url="#{appBean.calzadoPath()}parametrizacion/parametrizacion.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Program Turnos"
+						<p:menuitem value="Program Días"
 							url="#{appBean.calzadoPath()}programacionTurnos/programturnos.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
 						<p:menuitem value="Lugares"
@@ -97,12 +97,11 @@
 
 					<p:submenu label="Andon" icon="ui-icon-gear">
 						<p:menuitem value="Alertas"
-							url="#{appBean.andonPath()}alertas.jsf" icon="ui-icon-disk" />
+							url="#{appBean.andonPath()}alertas.jsf" icon="fa fa-bell-o" />
 						<p:menuitem value="Dispositivos"
-							url="#{appBean.andonPath()}dispositivos.jsf"
-							icon="ui-icon-arrowrefresh-1-w" />
+							url="#{appBean.andonPath()}dispositivos.jsf" icon="fa fa-android" />
 						<p:menuitem value="Maquinas"
-							url="#{appBean.andonPath()}maquinas.jsf" icon="ui-icon-close" />
+							url="#{appBean.andonPath()}maquinas.jsf" icon="fa fa-steam" />
 					</p:submenu>
 
 					<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"

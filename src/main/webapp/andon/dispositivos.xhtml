@@ -9,6 +9,161 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 
+
+			<p:growl id="msgs" showDetail="true" />
+			<h:form>
+				<p:commandButton id="btnCreateDispositivos" update=":formCreate"
+					oncomplete="PF('dialogDispositivosCreate').show()"
+					title="Nuevo Dispositivo" icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="dispositivo"
+					paginatorPosition="bottom" value="#{dispositivosBean.dispositivos}"
+					rows="10" paginator="true">
+
+					<f:facet name="header">
+					Dispositivos
+					</f:facet>
+
+					<p:column headerText="MAC">
+						<h:outputText value="#{dispositivo.macDispositivo}" />
+					</p:column>
+
+					<p:column headerText="Proceso dispositivo">
+						<h:outputText value="#{dispositivo.proceso}" />
+					</p:column>
+
+					<p:column headerText="Maquinas">
+						<h:outputText value="#{dispositivo.maquina.nommaquina}" />
+					</p:column>
+
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogDispositivosUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{alerta}"
+								target="#{dispositivosBean.selectedDispositivo}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogDispositivosDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{dispositivo}"
+								target="#{dispositivosBean.selectedDispositivo}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nuevo Dispositivo"
+					widgetVar="dialogDispositivosCreate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgDispositivoCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="MAC DISPOSITIVO: " />
+						<p:inputText
+							value="#{dispositivosBean.selectedDispositivo.macDispositivo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="PROCESO DISPOSITIVO: " />
+						<p:inputText id="entrada"
+							value="#{dispositivosBean.selectedDispositivo.proceso.proCodigo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="MAQUINAS:" />
+						<p:inputText
+							value="#{dispositivosBean.selectedDispositivo.maquina.maqCodigo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogDispositivosCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{dispositivosBean.btnCreateDispositivo(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogDispositivosCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Dispositivo"
+					widgetVar="dialogDispositivosUpdate" modal="true" showEffect="fade"
+					hideEffect="explode" resizable="false" id="dlgDispositivosUpdate">
+					<h:inputHidden
+						value="#{dispositivosBean.selectedDispositivo.idDispositivo}" />
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="MAC DISPOSITIVO: " />
+						<p:inputText
+							value="#{dispositivosBean.selectedDispositivo.macDispositivo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="PROCESO DISPOSITIVO: " />
+						<p:inputText id="entrada"
+							value="#{dispositivosBean.selectedDispositivo.proceso.proCodigo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<h:outputText value="MAQUINAS:" />
+						<p:inputText
+							value="#{dispositivosBean.selectedDispositivo.maquina.maqCodigo}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogDispositivosUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{dispositivosBean.btnUpdateDispositivo(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogDispositivosUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Dispositivo?"
+					severity="alert" widgetVar="dialogDispositivosDelete">
+
+					<h:inputHidden
+						value="#{dispositivosBean.selectedDispositivo.idDispositivo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogDispositivosDelete').hide()"
+						actionListener="#{dispositivosBean.btnDeleteDispositivo(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogDispositivosDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+
+
 		</ui:define>
 	</ui:composition>
 </body>
