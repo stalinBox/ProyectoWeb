@@ -4,91 +4,90 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the procesos database table.
  * 
  */
 @Entity
-@Table(name="procesos")
-@NamedQuery(name="Proceso.findAll", query="SELECT p FROM Proceso p")
+@Table(name = "procesos")
+@NamedQuery(name = "Proceso.findAll", query = "SELECT p FROM Proceso p")
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="pro_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "pro_codigo")
 	private Integer proCodigo;
 
-	@Column(name="pro_activo")
+	@Column(name = "pro_activo")
 	private String proActivo;
 
-	@Column(name="pro_auto")
+	@Column(name = "pro_auto")
 	private String proAuto;
 
-	@Column(name="pro_cap")
+	@Column(name = "pro_cap")
 	private Integer proCap;
 
-	@Column(name="pro_descrip")
+	@Column(name = "pro_descrip")
 	private String proDescrip;
 
-	@Column(name="pro_duracion")
+	@Column(name = "pro_duracion")
 	private double proDuracion;
 
-	@Column(name="pro_manobra")
+	@Column(name = "pro_manobra")
 	private double proManobra;
 
-	@Column(name="pro_manreal")
+	@Column(name = "pro_manreal")
 	private double proManreal;
 
-	@Column(name="pro_num_trab")
+	@Column(name = "pro_num_trab")
 	private Integer proNumTrab;
 
-	@Column(name="pro_tbase")
+	@Column(name = "pro_tbase")
 	private double proTbase;
 
-	@Column(name="pro_tmano")
+	@Column(name = "pro_tmano")
 	private double proTmano;
 
-	@Column(name="pro_tmaq")
+	@Column(name = "pro_tmaq")
 	private double proTmaq;
 
-	@Column(name="pro_ts")
+	@Column(name = "pro_ts")
 	private double proTs;
 
-	//bi-directional many-to-one association to Dispositivo
-	@OneToMany(mappedBy="proceso")
+	// bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy = "proceso")
 	private List<Dispositivo> dispositivos;
 
-	//bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy="proceso")
+	// bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy = "proceso")
 	private List<Parametro> parametros;
 
-	//bi-directional many-to-one association to ProcAlerta
-	@OneToMany(mappedBy="proceso")
+	// bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy = "proceso")
 	private List<ProcAlerta> procAlertas;
 
-	//bi-directional many-to-one association to Modelo
+	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name="mod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
 	private Modelo modelo;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_padre", insertable = false, updatable = false)
+	@JoinColumn(name = "pro_padre", insertable = false, updatable = false)
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Proceso
-	@OneToMany(mappedBy="proceso")
+	// bi-directional many-to-one association to Proceso
+	@OneToMany(mappedBy = "proceso")
 	private List<Proceso> procesos;
 
-	//bi-directional many-to-one association to TipoProceso
+	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name="tpr_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
 	private TipoProceso tipoProceso;
 
-	//bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy="proceso")
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "proceso")
 	private List<Procesosop> procesosops;
 
 	public Proceso() {

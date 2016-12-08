@@ -60,12 +60,12 @@ public class Usuario implements Serializable {
 
 	// bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "rol_id", insertable = false, updatable = false)
 	private Rol rol1;
 
 	// bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "rol_id", insertable = false, updatable = false)
 	private Rol rol2;
 
 	public Usuario() {

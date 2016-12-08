@@ -3,38 +3,39 @@ package testEntities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+
 /**
  * The persistent class for the rolmenu database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Rolmenu.findAll", query = "SELECT r FROM Rolmenu r")
+@NamedQuery(name="Rolmenu.findAll", query="SELECT r FROM Rolmenu r")
 public class Rolmenu implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rolmenu_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="rolmenu_id")
 	private Integer rolmenuId;
 
-	// bi-directional many-to-one association to Menu
+	//bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "menu_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name="menu_id", insertable = false, updatable = false)
 	private Menu menu1;
 
-	// bi-directional many-to-one association to Menu
+	//bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "menu_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name="menu_id", insertable = false, updatable = false)
 	private Menu menu2;
 
-	// bi-directional many-to-one association to Rol
+	//bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name="rol_id", insertable = false, updatable = false)
 	private Rol rol1;
 
-	// bi-directional many-to-one association to Rol
+	//bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name="rol_id", insertable = false, updatable = false)
 	private Rol rol2;
 
 	public Rolmenu() {

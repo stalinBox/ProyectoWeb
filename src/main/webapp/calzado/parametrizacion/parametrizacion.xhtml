@@ -67,8 +67,43 @@
 										<f:facet name="header">
 											<h:outputText value="LINEAS CONVENCIONALES" />
 										</f:facet>
+										<p:messages autoUpdate="true" />
 										<h:form id="aa">
-											<p:messages autoUpdate="true" />
+											<p:commandButton id="btnCreateLP" update=":formCreate"
+												oncomplete="PF('dialogLCCreate').show()" title="Nuevo LP"
+												icon="fa fa-plus" value="Nuevo" ajax="true"
+												partialSubmit="true">
+											</p:commandButton>
+											<h:form id="formLP">
+												<p:dataTable id="basicDT" var="lineaP"
+													value="#{lineasTurnosBean.lineaTurno}">
+
+													<f:facet name="header">***LINEAS LP***</f:facet>
+													<p:column headerText="Línea de Producción">
+														<h:outputText value="#{lineaP.lineasprod.nomlinea}" />
+													</p:column>
+													<p:column headerText="Turno">
+														<h:outputText value="#{lineaP.turno.nombturno}" />
+													</p:column>
+
+													<p:column headerText="**" style="width:10%">
+														<p:commandButton id="btnUpdate" update=":formUpdate"
+															oncomplete="PF('dialogModeloUpdate').show()"
+															icon="ui-icon-pencil" title="Modificar">
+															<f:setPropertyActionListener value="#{modelo}"
+																target="#{modelosBean.selectedModelos}" />
+														</p:commandButton>
+
+														<p:commandButton id="btnDelete" update="formDelete"
+															oncomplete="PF('dialogModeloDelete').show()"
+															icon="ui-icon-close" title="Eliminar">
+															<f:setPropertyActionListener value="#{modelo}"
+																target="#{modelosBean.selectedModelos}" />
+														</p:commandButton>
+													</p:column>
+												</p:dataTable>
+											</h:form>
+
 											<p:outputLabel value="Número de Líneas: " />
 
 											<p:selectCheckboxMenu id="scbLM"
@@ -458,7 +493,6 @@
 					actionListener="#{parametrizacionBean.reprocesar()}" />
 
 				<p:commandButton id="btnContinuar" value="CONTINUAR"
-					actionListener="#{parametrizacionBean.prueba()}"
 					process="formParamGeneral:tabSubGen:mtn:paramMontaje"
 					partialSubmit="true" />
 				<!--  **********************************************************************  -->
@@ -509,6 +543,99 @@
 							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
 					</h:panelGrid>
 				</p:dialog>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Lineas Convencionales" widgetVar="dialogLCCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgLCCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Linea de Produccion: " />
+						<p:selectOneMenu value="#{parametrizacionBean.selectedLPM}">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
+							<f:selectItems
+								value="#{parametrizacionBean.selectItemsLPMontaje}"></f:selectItems>
+						</p:selectOneMenu>
+
+						<h:outputText value="Turno: " />
+						<p:selectOneMenu
+							value="#{parametrizacionBean.selectedTurnosMntConv}">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
+							<f:selectItems value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update=":formParamGeneral:tabSubGen:mtn:aa:formLP, msgs"
+								oncomplete="PF('dialogLCCreate').hide()" icon="fa fa-fw fa-save"
+								title="Guardar" value="Guardar"
+								actionListener="#{parametrizacionBean.SaveLp()}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogLCCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Lineas Convencionales" widgetVar="dialogLCUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgLCUpdate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+						<h:outputText value="Linea de Produccion: " />
+
+						<p:selectOneMenu value="#{parametrizacionBean.selectedLPM}">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
+							<f:selectItems
+								value="#{parametrizacionBean.selectItemsLPMontaje}"></f:selectItems>
+						</p:selectOneMenu>
+
+						<h:outputText value="Turno: " />
+						<p:selectOneMenu
+							value="#{parametrizacionBean.selectedTurnosMntConv}">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
+							<f:selectItems value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update=":formParamGeneral:tabSubGen:mtn:aa:formLP, msgs"
+								oncomplete="PF('dialogLCCreate').hide()" icon="fa fa-fw fa-save"
+								title="Guardar" value="Guardar"
+								actionListener="#{parametrizacionBean.SaveLp()}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogLCCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade"
+					header="Eliminar Modelo de Calzado" severity="alert"
+					widgetVar="dialogLTDelete">
+
+					<h:inputHidden value="#{modelosBean.selectedModelos.modCodigo}"></h:inputHidden>
+
+					<p:commandButton id="confirm" value="Si"
+						update=":formParamGeneral:tabSubGen:mtn:aa:formLP, msgs"
+						icon="ui-icon-check" oncomplete="PF('dialogModeloDelete').hide()"
+						actionListener="#{modelosBean.btnDeleteModelo(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogLTDelete').hide()" />
+				</p:confirmDialog>
 			</h:form>
 		</ui:define>
 	</ui:composition>

@@ -181,8 +181,13 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	// METODOS
-	public void prueba() {
-		System.out.println("HOLA MUNDO");
+	public void SaveLp() {
+		String msg = "Guardado las lienas convencionales";
+		System.out.println("Guardado las lienas convencionales");
+		msg = "Guardado las lienas convencionales";
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+				msg, null);
+		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	public void ExecuteParams() {

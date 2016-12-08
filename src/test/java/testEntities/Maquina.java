@@ -25,14 +25,14 @@ public class Maquina implements Serializable {
 
 	private String nommaquina;
 
-	// bi-directional many-to-one association to Lineasprod
-	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo", nullable = false, insertable = false, updatable = false)
-	private Lineasprod lineasprod;
-
 	// bi-directional many-to-one association to Dispositivo
 	@OneToMany(mappedBy = "maquina")
 	private List<Dispositivo> dispositivos;
+
+	// bi-directional many-to-one association to Lineasprod
+	@ManyToOne
+	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false)
+	private Lineasprod lineasprod;
 
 	public Maquina() {
 	}
@@ -69,14 +69,6 @@ public class Maquina implements Serializable {
 		this.nommaquina = nommaquina;
 	}
 
-	public Lineasprod getLineasprod() {
-		return this.lineasprod;
-	}
-
-	public void setLineasprod(Lineasprod lineasprod) {
-		this.lineasprod = lineasprod;
-	}
-
 	public List<Dispositivo> getDispositivos() {
 		return this.dispositivos;
 	}
@@ -97,6 +89,14 @@ public class Maquina implements Serializable {
 		dispositivo.setMaquina(null);
 
 		return dispositivo;
+	}
+
+	public Lineasprod getLineasprod() {
+		return this.lineasprod;
+	}
+
+	public void setLineasprod(Lineasprod lineasprod) {
+		this.lineasprod = lineasprod;
 	}
 
 }

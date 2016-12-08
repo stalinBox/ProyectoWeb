@@ -2,7 +2,6 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * The persistent class for the lineasturnos database table.
@@ -23,14 +22,15 @@ public class Lineasturno implements Serializable {
 	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false)
 	private Lineasprod lineasprod;
 
+	// bi-directional many-to-one association to Parametro
+	@ManyToOne
+	@JoinColumn(name = "param_codigo", insertable = false, updatable = false)
+	private Parametro parametro;
+
 	// bi-directional many-to-one association to Turno
 	@ManyToOne
 	@JoinColumn(name = "turno_codigo", insertable = false, updatable = false)
 	private Turno turno;
-
-	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "lineasturno")
-	private List<Parametro> parametros;
 
 	public Lineasturno() {
 	}
@@ -51,34 +51,20 @@ public class Lineasturno implements Serializable {
 		this.lineasprod = lineasprod;
 	}
 
+	public Parametro getParametro() {
+		return this.parametro;
+	}
+
+	public void setParametro(Parametro parametro) {
+		this.parametro = parametro;
+	}
+
 	public Turno getTurno() {
 		return this.turno;
 	}
 
 	public void setTurno(Turno turno) {
 		this.turno = turno;
-	}
-
-	public List<Parametro> getParametros() {
-		return this.parametros;
-	}
-
-	public void setParametros(List<Parametro> parametros) {
-		this.parametros = parametros;
-	}
-
-	public Parametro addParametro(Parametro parametro) {
-		getParametros().add(parametro);
-		parametro.setLineasturno(this);
-
-		return parametro;
-	}
-
-	public Parametro removeParametro(Parametro parametro) {
-		getParametros().remove(parametro);
-		parametro.setLineasturno(null);
-
-		return parametro;
 	}
 
 }

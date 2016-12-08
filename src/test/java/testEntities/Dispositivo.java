@@ -23,12 +23,12 @@ public class Dispositivo implements Serializable {
 
 	// bi-directional many-to-one association to Maquina
 	@ManyToOne
-	@JoinColumn(name = "id_maquinas_ref", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "id_maquinas_ref", insertable = false, updatable = false)
 	private Maquina maquina;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo_ref", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "pro_codigo_ref", insertable = false, updatable = false)
 	private Proceso proceso;
 
 	public Dispositivo() {
