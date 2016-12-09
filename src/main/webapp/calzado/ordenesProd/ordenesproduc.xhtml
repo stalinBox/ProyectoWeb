@@ -17,157 +17,155 @@
 				closable="false" resizable="false" showHeader="false">
 				<p:graphicImage value="/images/loadingProgress.gif" />
 			</p:dialog>
+			<p:panel header="ORDEN DE PRODUCCIÓN" style="text-align:center">
 
-			<div id="div0">
-				<h:form id="formOrdenProd" style="width: 100%; margin: 0 auto;">
-					<p:growl id="msgs" showDetail="true" />
-					<center>
-						<h1>ORDEN DE PRODUCCIÓN</h1>
-					</center>
-					<center>
-						<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
-							<p:outputLabel for="idSol" value="Cliente: " />
-							<p:selectOneMenu id="idSol"
-								value="#{ordenesProdBean.selectedOp.usuario1.userId}"
-								required="true" style="width:150px">
+				<div id="div0">
+					<h:form id="formOrdenProd" style="width: 100%; margin: 0 auto;">
+						<p:growl id="msgs" showDetail="true" />
 
-								<f:selectItem itemLabel="- Seleccione -" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-							</p:selectOneMenu>
+						<center>
+							<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
+								<p:outputLabel for="idSol" value="Cliente: " />
+								<p:selectOneMenu id="idSol"
+									value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+									required="true" style="width:150px">
 
-							<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
-							<p:outputLabel id="idFechaAct"
-								value="#{ordenesProdBean.currentDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</p:outputLabel>
+									<f:selectItem itemLabel="- Seleccione -" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+								</p:selectOneMenu>
 
-							<p:outputLabel for="idResp" value="Responsable: " />
-							<p:selectOneMenu id="idResp"
-								value="#{ordenesProdBean.selectedOp.usuario1.userId}"
-								required="true" style="width:150px">
+								<p:outputLabel for="idFechaAct" value="Fecha Actual: " />
+								<p:outputLabel id="idFechaAct"
+									value="#{ordenesProdBean.currentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:outputLabel>
 
-								<f:selectItem itemLabel="- Seleccione -" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-							</p:selectOneMenu>
+								<p:outputLabel for="idResp" value="Responsable: " />
+								<p:selectOneMenu id="idResp"
+									value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+									required="true" style="width:150px">
 
-							<!-- <p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
+									<f:selectItem itemLabel="- Seleccione -" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+								</p:selectOneMenu>
+
+								<!-- <p:outputLabel for="idFechaEntr" value="Fecha de Entrega: " />
 						<p:calendar id="idFechaEntr" value="#{ordenesProdBean.fEntrega}"
 							pattern="dd-MM-yyyy" mask="true" locale="de" navigator="true"
 							showOn="button" size="6" required="true" /> -->
-						</h:panelGrid>
+							</h:panelGrid>
+						</center>
+					</h:form>
+				</div>
+
+				<p:separator />
+
+				<h:form id="basicUpload" enctype="multipart/form-data">
+					<p:growl showDetail="true" />
+					<center>
+						<p:outputLabel value="**** En Construcción:  " />
+						<p:fileUpload id="fileUp" value="#{uploadFileBean.file}"
+							mode="simple" />
+						<p:spacer width="10" />
+						<p:commandButton value="Importar"
+							actionListener="#{uploadFileBean.upload()}"
+							process="@form :basicUpload:fileUp" partialSubmit="true"
+							ajax="false" />
 					</center>
 				</h:form>
-			</div>
 
-			<p:separator />
+				<p:separator />
+				<div id="div1">
+					<h:form id="formDetaProd" style="width: 300px; margin: 0 auto;">
+						<p:growl id="messages" showDetail="true" />
+						<p:panel id="panel" header="Detalle de producción"
+							style="width: 400px;">
+							<p:panelGrid columns="2" style="width: 100%; margin: 0 auto;">
 
-			<h:form id="basicUpload" enctype="multipart/form-data">
-				<p:growl showDetail="true" />
-				<center>
-					<p:outputLabel value="**** En Construcción:  " />
-					<p:fileUpload id="fileUp" value="#{uploadFileBean.file}"
-						mode="simple" />
-					<p:spacer width="10" />
-					<p:commandButton value="Importar"
-						actionListener="#{uploadFileBean.upload()}"
-						process="@form :basicUpload:fileUp" partialSubmit="true"
-						ajax="false" />
-				</center>
-			</h:form>
+								<p:outputLabel value="Modelo: " />
+								<p:selectOneMenu value="#{detaOrdenBean.modelo}" required="true"
+									style="width:150px">
 
-			<p:separator />
-			<div id="div1">
-				<h:form id="formDetaProd" style="width: 300px; margin: 0 auto;">
-					<p:growl id="messages" showDetail="true" />
-					<p:panel id="panel" header="Detalle de producción"
-						style="width: 400px;">
-						<p:panelGrid columns="2" style="width: 100%; margin: 0 auto;">
+									<f:selectItem itemLabel="- Seleccione -"
+										noSelectionOption="true" itemValue="0" />
+									<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}" />
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Modelo: " />
-							<p:selectOneMenu value="#{detaOrdenBean.modelo}" required="true"
-								style="width:150px">
+								<p:outputLabel value="Talla: " />
+								<p:selectOneMenu id="idTalla" value="#{detaOrdenBean.talla}"
+									required="true" style="width:150px">
 
-								<f:selectItem itemLabel="- Seleccione -"
-									noSelectionOption="true" itemValue="0" />
-								<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}" />
-							</p:selectOneMenu>
+									<f:selectItem itemLabel="- Seleccione -" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
+								</p:selectOneMenu>
 
-							<p:outputLabel value="Talla: " />
-							<p:selectOneMenu id="idTalla" value="#{detaOrdenBean.talla}"
-								required="true" style="width:150px">
+								<p:outputLabel value="Cantidad: " />
+								<p:inputText value="#{detaOrdenBean.cantidad}" />
 
-								<f:selectItem itemLabel="- Seleccione -" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
-							</p:selectOneMenu>
-
-							<p:outputLabel value="Cantidad: " />
-							<p:inputText value="#{detaOrdenBean.cantidad}" />
-
-							<f:facet name="footer">
-								<p:commandButton value="Añadir"
-									actionListener="#{detaOrdenBean.addAction()}" ajax="true"
-									update="formDetaProd" />
-							</f:facet>
-						</p:panelGrid>
-
-						<p:spacer height="5px;" />
-
-						<p:dataTable id="tblDO" value="#{detaOrdenBean.orderlist}" var="i"
-							style="width: auto;"
-							emptyMessage="No se ha agredado nada a la lista">
-
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="Modelo" />
+								<f:facet name="footer">
+									<p:commandButton value="Añadir"
+										actionListener="#{detaOrdenBean.addAction()}" ajax="true"
+										update="formDetaProd" />
 								</f:facet>
-								<p:outputLabel value="#{i.modelo}" />
-							</p:column>
+							</p:panelGrid>
 
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="Talla" />
-								</f:facet>
-								<p:outputLabel value="#{i.talla}" />
-							</p:column>
+							<p:spacer height="5px;" />
 
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="Cantidad" />
-								</f:facet>
-								<p:outputLabel value="#{i.cantidad}" style="width:100%"></p:outputLabel>
-							</p:column>
+							<p:dataTable id="tblDO" value="#{detaOrdenBean.orderlist}"
+								var="i" style="width: auto;"
+								emptyMessage="No se ha agredado nada a la lista">
 
-							<p:column headerText="Eliminar?" style="width:50px">
-								<p:commandButton
-									actionListener="#{detaOrdenBean.deleteAction(i)}" ajax="true"
-									update="tblDO, formDetaProd:tblDO, :formDetaProd:messages"
-									process="@this" icon="fa fa-close" title="Eliminar" />
-							</p:column>
+								<p:column>
+									<f:facet name="header">
+										<p:outputLabel value="Modelo" />
+									</f:facet>
+									<p:outputLabel value="#{i.modelo}" />
+								</p:column>
 
-							<p:columnGroup type="footer">
-								<p:row>
-									<p:column colspan="2" style="text-align:right"
-										footerText="Total:" />
+								<p:column>
+									<f:facet name="header">
+										<p:outputLabel value="Talla" />
+									</f:facet>
+									<p:outputLabel value="#{i.talla}" />
+								</p:column>
 
-									<p:column colspan="2" footerText="#{detaOrdenBean.total}" />
+								<p:column>
+									<f:facet name="header">
+										<p:outputLabel value="Cantidad" />
+									</f:facet>
+									<p:outputLabel value="#{i.cantidad}" style="width:100%"></p:outputLabel>
+								</p:column>
 
-								</p:row>
-							</p:columnGroup>
-						</p:dataTable>
-					</p:panel>
-					<p:resizable for="panel" />
-				</h:form>
-			</div>
+								<p:column headerText="Eliminar?" style="width:50px">
+									<p:commandButton
+										actionListener="#{detaOrdenBean.deleteAction(i)}" ajax="true"
+										update="tblDO, formDetaProd:tblDO, :formDetaProd:messages"
+										process="@this" icon="fa fa-close" title="Eliminar" />
+								</p:column>
 
-			<p:spacer height="5px;" />
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="2" style="text-align:right"
+											footerText="Total:" />
+
+										<p:column colspan="2" footerText="#{detaOrdenBean.total}" />
+
+									</p:row>
+								</p:columnGroup>
+							</p:dataTable>
+						</p:panel>
+						<p:resizable for="panel" />
+					</h:form>
+				</div>
+
+			</p:panel>
 			<div id="div2" style="width: 300px; margin: 0 auto;">
 				<p:commandButton value="PROCESAR ORDEN"
 					actionListener="#{detaOrdenBean.displayOrden()}"></p:commandButton>
 			</div>
-
 		</ui:define>
 	</ui:composition>
 </body>

@@ -4,10 +4,8 @@ import java.util.List;
 
 import com.project.entities.Parametro;
 
-;
-
 public interface ParametrizacionDao {
-	public List<Parametro> findAll();
+	public List<Parametro> findByOrden();
 
 	public boolean create(Parametro parametrizacion);
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<f:loadBundle basename="messages.properties" var="msg" />
+		<ui:define name="content">
+			<p:panel header="Asignar Turnos" style="text-align:center">
+
+				<h:panelGrid columns="2" columnClasses="label, value">
+					<h:outputText value="Linea/Celula" />
+					<h:outputText value="Turno" />
+				</h:panelGrid>
+
+				<p:commandButton value="Insertar" />
+
+				<p:dataTable id="basicDT" var="lineTurn">
+					<h:outputText value="Linea" />
+					<h:outputText value="Turno" />
+				</p:dataTable>
+			</p:panel>
+			<p:commandButton value="Visualizar Algo" />
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

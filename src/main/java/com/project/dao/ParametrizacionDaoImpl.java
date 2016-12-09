@@ -11,7 +11,7 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Parametro> findAll() {
+	public List<Parametro> findByOrden() {
 		List<Parametro> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Parametro";
