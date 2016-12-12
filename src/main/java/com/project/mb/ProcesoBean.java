@@ -1,47 +1,104 @@
 package com.project.mb;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
-import com.project.dao.ModelosDao;
-import com.project.dao.ModelosDaoImpl;
-import com.project.dao.TipprocesoDaoImpl;
-import com.project.dao.TipprocesosDao;
-import com.project.entities.Modelo;
+import org.primefaces.event.FlowEvent;
+
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.entities.Proceso;
-import com.project.entities.TipoProceso;
 
 @ManagedBean(name = "procesoBean")
 @ViewScoped
 public class ProcesoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	// VARIABLES
-	private List<ColProcesos> proList = new ArrayList<ColProcesos>();
-	private List<SelectItem> selectedItemsModelo;
-	private List<SelectItem> selectedItemsProcesos;
-	private float duracion;
-	private Integer capacidad;
-	private float tBase;
-	private float tMaq;
-	private float tMano;
-	private float tStandar;
-	private float manObra;
-	private float manReal;
-	private String descripcion;
-	private String automatico;
+	private List<Proceso> procesos;
 	private Proceso selectedProceso;
+	private boolean skip;
+	private Process process = new Process();
 
 	// CONSTRUCTOR
-	public ProcesoBean() {
+	@PostConstruct
+	public void init() {
 
 	}
 
+	// METODOS
+	public void refresh() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		Application application = context.getApplication();
+		ViewHandler viewHandler = application.getViewHandler();
+		UIViewRoot viewRoot = viewHandler.createView(context, context
+				.getViewRoot().getViewId());
+		context.setViewRoot(viewRoot);
+		context.renderResponse();
+	}
+
+	public void save() {
+		FacesMessage msg = new FacesMessage("Exitoso", "Guardado");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		refresh();
+	}
+
+	public String onFlowProcess(FlowEvent event) {
+		if (skip) {
+			skip = false;
+			return "Guardado...!!";
+		} else {
+			return event.getNewStep();
+		}
+	}
+
+	public void btnCreateProceso(ActionEvent actionEvent) {
+	}
+
+	public void btnUpdateProceso(ActionEvent actionEvent) {
+	}
+
+	public void btnDeleteProceso(ActionEvent actionEvent) {
+	}
+
 	// SETTERS AND GETTERS
+
+	public List<Proceso> getProcesos() {
+		ProcesoDao procesosDao = new ProcesoDaoImpl();
+		this.procesos = procesosDao.findAll();
+
+		return procesos;
+	}
+
+	public Process getProcess() {
+		return process;
+	}
+
+	public void setProcess(Process process) {
+		this.process = process;
+	}
+
+	public boolean isSkip() {
+		return skip;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
+	}
+
+	public void setProcesos(List<Proceso> procesos) {
+		this.procesos = procesos;
+	}
 
 	public Proceso getSelectedProceso() {
 		return selectedProceso;
@@ -51,136 +108,110 @@ public class ProcesoBean implements Serializable {
 		this.selectedProceso = selectedProceso;
 	}
 
-	public List<ColProcesos> getProList() {
-		return proList;
-	}
+	// HELP CLASS
+	public class Process implements Serializable {
 
-	public void setProList(List<ColProcesos> proList) {
-		this.proList = proList;
-	}
+		private static final long serialVersionUID = 1L;
 
-	public List<SelectItem> getSelectedItemsModelo() {
-		this.selectedItemsModelo = new ArrayList<SelectItem>();
-		ModelosDao modeloDao = new ModelosDaoImpl();
-		List<Modelo> modelo = modeloDao.findAll();
-		selectedItemsModelo.clear();
+		private Integer TipProceso;
 
-		for (Modelo mod : modelo) {
-			SelectItem selectItem = new SelectItem(mod.getModCodigo(),
-					mod.getModNombre());
-			this.selectedItemsModelo.add(selectItem);
+		private Integer ProcesoPadre;
+
+		private Integer Modelo;
+
+		private Integer CapModelo;
+
+		private float CifRef;
+
+		private float CifPresupuestado;
+
+		private float ManoReal;
+
+		private float ManObra;
+
+		private Integer NumTrabajadores;
+
+		private String ProDescp;
+
+		public Integer getTipProceso() {
+			return TipProceso;
 		}
-		return selectedItemsModelo;
-	}
 
-	public void setSelectedItemsModelo(List<SelectItem> selectedItemsModelo) {
-		this.selectedItemsModelo = selectedItemsModelo;
-	}
-
-	public List<SelectItem> getSelectedItemsProcesos() {
-		this.selectedItemsProcesos = new ArrayList<SelectItem>();
-		TipprocesosDao tpDao = new TipprocesoDaoImpl();
-		List<TipoProceso> tp = tpDao.findAll();
-		selectedItemsProcesos.clear();
-		for (TipoProceso tipoPro : tp) {
-			SelectItem selectItem = new SelectItem(tipoPro.getTprCodigo(),
-					tipoPro.getTprNombre());
-			this.selectedItemsProcesos.add(selectItem);
+		public void setTipProceso(Integer tipProceso) {
+			TipProceso = tipProceso;
 		}
-		return selectedItemsProcesos;
-	}
 
-	public void setSelectedItemsProcesos(List<SelectItem> selectedItemsProcesos) {
-		this.selectedItemsProcesos = selectedItemsProcesos;
-	}
+		public Integer getProcesoPadre() {
+			return ProcesoPadre;
+		}
 
-	public float getDuracion() {
-		return duracion;
-	}
+		public void setProcesoPadre(Integer procesoPadre) {
+			ProcesoPadre = procesoPadre;
+		}
 
-	public void setDuracion(float duracion) {
-		this.duracion = duracion;
-	}
+		public Integer getModelo() {
+			return Modelo;
+		}
 
-	public Integer getCapacidad() {
-		return capacidad;
-	}
+		public void setModelo(Integer modelo) {
+			Modelo = modelo;
+		}
 
-	public void setCapacidad(Integer capacidad) {
-		this.capacidad = capacidad;
-	}
+		public Integer getCapModelo() {
+			return CapModelo;
+		}
 
-	public float gettBase() {
-		return tBase;
-	}
+		public void setCapModelo(Integer capModelo) {
+			CapModelo = capModelo;
+		}
 
-	public void settBase(float tBase) {
-		this.tBase = tBase;
-	}
+		public float getCifRef() {
+			return CifRef;
+		}
 
-	public float gettMaq() {
-		return tMaq;
-	}
+		public void setCifRef(float cifRef) {
+			CifRef = cifRef;
+		}
 
-	public void settMaq(float tMaq) {
-		this.tMaq = tMaq;
-	}
+		public float getCifPresupuestado() {
+			return CifPresupuestado;
+		}
 
-	public float gettMano() {
-		return tMano;
-	}
+		public void setCifPresupuestado(float cifPresupuestado) {
+			CifPresupuestado = cifPresupuestado;
+		}
 
-	public void settMano(float tMano) {
-		this.tMano = tMano;
-	}
+		public float getManoReal() {
+			return ManoReal;
+		}
 
-	public float gettStandar() {
-		return tStandar;
-	}
+		public void setManoReal(float manoReal) {
+			ManoReal = manoReal;
+		}
 
-	public void settStandar(float tStandar) {
-		this.tStandar = tStandar;
-	}
+		public float getManObra() {
+			return ManObra;
+		}
 
-	public float getManObra() {
-		return manObra;
-	}
+		public void setManObra(float manObra) {
+			ManObra = manObra;
+		}
 
-	public void setManObra(float manObra) {
-		this.manObra = manObra;
-	}
+		public Integer getNumTrabajadores() {
+			return NumTrabajadores;
+		}
 
-	public float getManReal() {
-		return manReal;
-	}
+		public void setNumTrabajadores(Integer numTrabajadores) {
+			NumTrabajadores = numTrabajadores;
+		}
 
-	public void setManReal(float manReal) {
-		this.manReal = manReal;
-	}
+		public String getProDescp() {
+			return ProDescp;
+		}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+		public void setProDescp(String proDescp) {
+			ProDescp = proDescp;
+		}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public String getAutomatico() {
-		return automatico;
-	}
-
-	public void setAutomatico(String automatico) {
-		this.automatico = automatico;
-	}
-
-	// METODOS
-	public void addProList() {
-		ColProcesos newPro = new ColProcesos();
-		proList.add(newPro);
-	}
-
-	public void removeProList(ColProcesos proce) {
-		proList.remove(proce);
 	}
 }

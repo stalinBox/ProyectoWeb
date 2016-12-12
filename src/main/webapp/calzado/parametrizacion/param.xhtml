@@ -16,7 +16,8 @@
 				<h:panelGrid columns="2" columnClasses="label, value">
 
 					<h:outputText value="Proceso: *" />
-					<p:selectOneMenu id="idCbxProcesos" value="#{paramBean.selectedParametrizacion.}" required="true"
+					<p:selectOneMenu id="idCbxProcesos"
+						value="#{paramBean.selectedParametrizacion}" required="true"
 						style="width:150px">
 
 						<f:selectItem itemLabel="- Seleccione -" itemValue=""

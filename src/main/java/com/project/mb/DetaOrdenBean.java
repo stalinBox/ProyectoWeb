@@ -91,6 +91,7 @@ public class DetaOrdenBean implements Serializable {
 		return null;
 	}
 
+	@SuppressWarnings("static-access")
 	public void displayOrden() throws InvalidFormatException, IOException {
 		// MATANDO PROCESO EN EXCEL
 		KillProcessEXCEL a = new KillProcessEXCEL();
@@ -161,6 +162,7 @@ public class DetaOrdenBean implements Serializable {
 		DetaOrdenBean.cp = cp;
 	}
 
+	@SuppressWarnings("static-access")
 	public void setTotal(Integer total) {
 		this.total = total;
 	}

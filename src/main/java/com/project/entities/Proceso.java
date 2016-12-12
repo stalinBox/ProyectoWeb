@@ -31,7 +31,7 @@ public class Proceso implements Serializable {
 	@Column(name = "pro_descrip")
 	private String proDescrip;
 
-	@Column(name = "pro_duracion")
+	@Column(nullable = false, name = "pro_duracion")
 	private double proDuracion;
 
 	@Column(name = "pro_manobra")
@@ -69,12 +69,12 @@ public class Proceso implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_padre", insertable = false, updatable = false)
+	@JoinColumn(name = "pro_padre", insertable = false, updatable = false, nullable = false)
 	private Proceso proceso;
 
 	// bi-directional many-to-one association to Proceso
@@ -83,7 +83,7 @@ public class Proceso implements Serializable {
 
 	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false, nullable = false)
 	private TipoProceso tipoProceso;
 
 	// bi-directional many-to-one association to Procesosop
