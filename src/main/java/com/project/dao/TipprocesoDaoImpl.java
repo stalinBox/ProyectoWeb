@@ -9,25 +9,6 @@ import com.project.utils.HibernateUtil;
 
 public class TipprocesoDaoImpl implements TipprocesosDao {
 
-	@Override
-	public TipoProceso findByTipProcesos(TipoProceso tipProceso) {
-		TipoProceso entities = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM TipoProceso WHERE tpr_nombre='"
-				+ tipProceso.getTprNombre() + "'";
-		System.out.println(sql);
-
-		try {
-			sesion.beginTransaction();
-			entities = (TipoProceso) sesion.createQuery(sql).uniqueResult();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERRORRR FINDBYTIPOPROCESO: " + e.toString());
-		}
-		return entities;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TipoProceso> findAll() {
@@ -70,8 +51,8 @@ public class TipprocesoDaoImpl implements TipprocesosDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			TipoProceso tipoProcesodb = (TipoProceso) sesion.load(TipoProceso.class,
-					tipProceso.getTprCodigo());
+			TipoProceso tipoProcesodb = (TipoProceso) sesion.load(
+					TipoProceso.class, tipProceso.getTprCodigo());
 			// Parametros a cambiar
 			tipoProcesodb.setTprNombre(tipProceso.getTprNombre());
 			// fin de parametros
@@ -93,7 +74,8 @@ public class TipprocesoDaoImpl implements TipprocesosDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			TipoProceso tipProceso = (TipoProceso) sesion.load(TipoProceso.class, id);
+			TipoProceso tipProceso = (TipoProceso) sesion.load(
+					TipoProceso.class, id);
 			sesion.delete(tipProceso);
 			sesion.getTransaction().commit();
 			flag = true;

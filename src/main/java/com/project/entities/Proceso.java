@@ -28,29 +28,29 @@ public class Proceso implements Serializable {
 	@Column(name = "pro_cap")
 	private Integer proCap;
 
+	@Column(name = "pro_cifpre")
+	private double proCifpre;
+
+	@Column(name = "pro_cifref")
+	private double proCifref;
+
+	@Column(name = "pro_costmanobra")
+	private double proCostmanobra;
+
+	@Column(name = "pro_costmanreal")
+	private double proCostmanreal;
+
 	@Column(name = "pro_descrip")
 	private String proDescrip;
 
-	@Column(nullable = false, name = "pro_duracion")
+	@Column(name = "pro_duracion")
 	private double proDuracion;
-
-	@Column(name = "pro_manobra")
-	private double proManobra;
-
-	@Column(name = "pro_manreal")
-	private double proManreal;
 
 	@Column(name = "pro_num_trab")
 	private Integer proNumTrab;
 
-	@Column(name = "pro_tbase")
-	private double proTbase;
-
 	@Column(name = "pro_tmano")
 	private double proTmano;
-
-	@Column(name = "pro_tmaq")
-	private double proTmaq;
 
 	@Column(name = "pro_ts")
 	private double proTs;
@@ -69,12 +69,12 @@ public class Proceso implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_padre", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "pro_padre", insertable = false, updatable = false)
 	private Proceso proceso;
 
 	// bi-directional many-to-one association to Proceso
@@ -83,7 +83,7 @@ public class Proceso implements Serializable {
 
 	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
 	private TipoProceso tipoProceso;
 
 	// bi-directional many-to-one association to Procesosop
@@ -125,6 +125,38 @@ public class Proceso implements Serializable {
 		this.proCap = proCap;
 	}
 
+	public double getProCifpre() {
+		return this.proCifpre;
+	}
+
+	public void setProCifpre(double proCifpre) {
+		this.proCifpre = proCifpre;
+	}
+
+	public double getProCifref() {
+		return this.proCifref;
+	}
+
+	public void setProCifref(double proCifref) {
+		this.proCifref = proCifref;
+	}
+
+	public double getProCostmanobra() {
+		return this.proCostmanobra;
+	}
+
+	public void setProCostmanobra(double proCostmanobra) {
+		this.proCostmanobra = proCostmanobra;
+	}
+
+	public double getProCostmanreal() {
+		return this.proCostmanreal;
+	}
+
+	public void setProCostmanreal(double proCostmanreal) {
+		this.proCostmanreal = proCostmanreal;
+	}
+
 	public String getProDescrip() {
 		return this.proDescrip;
 	}
@@ -141,22 +173,6 @@ public class Proceso implements Serializable {
 		this.proDuracion = proDuracion;
 	}
 
-	public double getProManobra() {
-		return this.proManobra;
-	}
-
-	public void setProManobra(double proManobra) {
-		this.proManobra = proManobra;
-	}
-
-	public double getProManreal() {
-		return this.proManreal;
-	}
-
-	public void setProManreal(double proManreal) {
-		this.proManreal = proManreal;
-	}
-
 	public Integer getProNumTrab() {
 		return this.proNumTrab;
 	}
@@ -165,28 +181,12 @@ public class Proceso implements Serializable {
 		this.proNumTrab = proNumTrab;
 	}
 
-	public double getProTbase() {
-		return this.proTbase;
-	}
-
-	public void setProTbase(double proTbase) {
-		this.proTbase = proTbase;
-	}
-
 	public double getProTmano() {
 		return this.proTmano;
 	}
 
 	public void setProTmano(double proTmano) {
 		this.proTmano = proTmano;
-	}
-
-	public double getProTmaq() {
-		return this.proTmaq;
-	}
-
-	public void setProTmaq(double proTmaq) {
-		this.proTmaq = proTmaq;
 	}
 
 	public double getProTs() {
