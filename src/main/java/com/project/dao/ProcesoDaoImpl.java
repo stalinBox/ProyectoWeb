@@ -9,6 +9,24 @@ import com.project.utils.HibernateUtil;
 
 public class ProcesoDaoImpl implements ProcesoDao {
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findAll() {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Proceso order by proCodigo";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
+		}
+		return listado;
+	}
+
 	@Override
 	public boolean create(Proceso proceso) {
 		boolean flag;
@@ -68,24 +86,6 @@ public class ProcesoDaoImpl implements ProcesoDao {
 					+ e.getMessage().toString());
 		}
 		return flag;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Proceso> findAll() {
-		List<Proceso> listado = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Proceso order by proCodigo";
-		System.out.println(sql);
-		try {
-			sesion.beginTransaction();
-			listado = sesion.createQuery(sql).list();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
-		}
-		return listado;
 	}
 
 }

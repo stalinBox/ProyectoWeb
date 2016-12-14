@@ -11,7 +11,7 @@ public class ProcesoMapeo implements Serializable {
 	private Integer padrePro;
 	private Integer capacidadPro;
 	private double duracionPro;
-	private String autoPro;
+	private boolean autoPro;
 	private double cifRefPro;
 	private double cifPro;
 	private double tManoPro;
@@ -19,7 +19,7 @@ public class ProcesoMapeo implements Serializable {
 	private double costObraPro;
 	private double costRealPro;
 	private Integer numTrabPro;
-	private String activoPro;
+	private boolean activoPro;
 	private String descPro;
 
 	public Integer getModeloPro() {
@@ -55,19 +55,12 @@ public class ProcesoMapeo implements Serializable {
 	}
 
 	public double getDuracionPro() {
+		this.duracionPro = 0;
 		return duracionPro;
 	}
 
 	public void setDuracionPro(double duracionPro) {
 		this.duracionPro = duracionPro;
-	}
-
-	public String getAutoPro() {
-		return autoPro;
-	}
-
-	public void setAutoPro(String autoPro) {
-		this.autoPro = autoPro;
 	}
 
 	public double getCifRefPro() {
@@ -95,6 +88,7 @@ public class ProcesoMapeo implements Serializable {
 	}
 
 	public double getTsPro() {
+		this.tsPro = 0;
 		return tsPro;
 	}
 
@@ -126,11 +120,21 @@ public class ProcesoMapeo implements Serializable {
 		this.numTrabPro = numTrabPro;
 	}
 
-	public String getActivoPro() {
+	public boolean isAutoPro() {
+		this.autoPro = false;
+		return autoPro;
+	}
+
+	public void setAutoPro(boolean autoPro) {
+		this.autoPro = autoPro;
+	}
+
+	public boolean isActivoPro() {
+		this.activoPro = false;
 		return activoPro;
 	}
 
-	public void setActivoPro(String activoPro) {
+	public void setActivoPro(boolean activoPro) {
 		this.activoPro = activoPro;
 	}
 

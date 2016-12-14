@@ -14,7 +14,7 @@ public class ModelosDaoImpl implements ModelosDao {
 	public List<Modelo> findAll() {
 		List<Modelo> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Modelo";
+		String sql = "FROM Modelo order by modNombre";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

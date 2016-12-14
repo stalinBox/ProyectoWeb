@@ -22,17 +22,17 @@ public class ModTrqTal implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false, nullable = false)
 	private Talla talla;
 
 	// bi-directional many-to-one association to Troquele
 	@ManyToOne
-	@JoinColumn(name = "trq_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "trq_codigo", insertable = false, updatable = false, nullable = false)
 	private Troquele troquele;
 
 	public ModTrqTal() {

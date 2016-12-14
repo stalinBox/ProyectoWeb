@@ -9,94 +9,112 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 
-			<h:form>
+			<h:form id="menuStep">
 				<p:growl id="growl" sticky="true" showDetail="true" />
-				<p:wizard flowListener="#{procesoBean.onFlowProcess}">
+				<p:wizard flowListener="#{procesoBean.onFlowProcess}"
+					nextLabel="Siguiente" backLabel="Atras" style="width:auto">
 
 					<p:tab id="personal" title="PROCESO">
-						<p:panel header="Personal Details">
+						<p:panel header="Proceso Detalle">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText value="Tipo de proceso: *" />
+
 								<p:selectOneMenu id="idTipoProceso"
-									value="#{procesoBean.selectedProceso.tipoProceso.tprNombre}"
+									value="#{procesoBean.procesoMapeo.tprProcesoPro}"
 									required="true" style="width:150px">
 
 									<f:selectItem itemLabel="- Seleccione -" itemValue=""
 										noSelectionOption="true" />
-									<f:selectItems value=""></f:selectItems>
+									<f:selectItems value="#{procesoBean.selectedTprProceso}"
+										label="tipoProceso" />
 								</p:selectOneMenu>
 
-								<p:inputText
-									value="#{procesoBean.selectedProceso.tipoProceso.tprNombre}"
-									required="true" label="tipoProceso" />
-
 								<h:outputText value="Proceso Padre: " />
-								<p:inputText
-									value="#{procesoBean.selectedProceso.proceso.proCodigo}"
-									label="padre" />
+								<p:selectOneMenu id="idTipoProcesoPadre"
+									value="#{procesoBean.procesoMapeo.padrePro}"
+									style="width:150px">
+
+									<f:selectItem itemLabel="- Seleccione -" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{procesoBean.selectedListProceso}"
+										label="tipoProcesoPadre" />
+								</p:selectOneMenu>
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
 
 					<p:tab id="address" title="Modelos">
-						<p:panel header="Capacidad del modelo">
+						<p:panel header="Capacidad de producción por modelo">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText value="Modelo: " />
-								<p:inputText
-									value="#{procesoBean.selectedProceso.modelo.modCodigo}" />
+								<p:selectOneMenu id="idModeloProceso"
+									value="#{procesoBean.procesoMapeo.modeloPro}"
+									style="width:150px">
+
+									<f:selectItem itemLabel="- Seleccione -" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{procesoBean.selectedModelo}"
+										label="tipoProcesoPadre" />
+								</p:selectOneMenu>
 
 								<h:outputText value="Capacidad(pares): " />
-								<p:inputText value="#{procesoBean.selectedProceso.proCap}" />
-
+								<p:spinner id="idCapValue"
+									value="#{procesoBean.procesoMapeo.capacidadPro}" />
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
 
 					<p:tab id="contact3" title="Presupuestos">
-						<p:panel header="Presupuestos Information">
+						<p:panel header="Presupuestos por proceso">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText value="CIF Ref: " />
-								<p:inputText value="#{procesoBean.selectedProceso.proCifref}"
-									label="Email" />
+								<p:spinner id="idValueCifRef"
+									value="#{procesoBean.procesoMapeo.cifRefPro}" prefix="$"
+									min="0" label="cifRef" stepFactor="0.01" />
 
 								<h:outputText value="CIF Presupuestado: " />
-								<p:inputText value="#{procesoBean.selectedProceso.proCifpre}" />
+								<p:spinner id="idValueCifPre"
+									value="#{procesoBean.procesoMapeo.cifPro}" prefix="$" min="0"
+									label="cifPresupuestado" stepFactor="0.01" />
 
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
 
 					<p:tab id="contact2" title="Mano de Obra">
-						<p:panel header="Mano de obra Information">
+						<p:panel header="Presupuesto por Mano de obra">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText value="Costo obra: " />
-								<p:inputText
-									value="#{procesoBean.selectedProceso.proCostmanobra}"
-									label="Email" />
+								<p:spinner id="idValueCostObra"
+									value="#{procesoBean.procesoMapeo.costObraPro}" prefix="$"
+									min="0" label="CostoManoObra" stepFactor="0.01" />
+
 
 								<h:outputText value="Costo Real: " />
-								<p:inputText
-									value="#{procesoBean.selectedProceso.proCostmanreal}" />
+								<p:spinner id="idValueCostReal"
+									value="#{procesoBean.procesoMapeo.costRealPro}" prefix="$"
+									min="0" label="CostoManoReal" stepFactor="0.01" />
 
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
 
-					<p:tab id="contact1" title="Paso Ultimo">
-						<p:panel header="Mano de obra Information">
+					<p:tab id="contact1" title="Personal">
+						<p:panel header="Número de trabajadores">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText value="Numero de trabajadores: " />
-								<p:inputText value="#{procesoBean.selectedProceso.proNumTrab}"
-									label="Email" />
+								<p:spinner id="idNumTrab"
+									value="#{procesoBean.procesoMapeo.numTrabPro}"
+									label="numeroTrabajadores" />
 
 								<h:outputText value="Descripcion: " />
-								<p:inputText value="#{procesoBean.selectedProceso.proDescrip}" />
-
+								<p:inputTextarea rows="6" cols="33"
+									value="#{procesoBean.procesoMapeo.descPro}" label="descripcion" />
 							</h:panelGrid>
 
 						</p:panel>
@@ -109,66 +127,60 @@
 
 								<h:panelGrid columns="2" columnClasses="label, value">
 									<h:outputText value="Tipo de proceso: " />
-									<h:outputText
-										value="#{procesoBean.selectedProceso.tipoProceso.tprNombre}"
+									<h:outputText value="#{procesoBean.procesoMapeo.tprProcesoPro}"
 										styleClass="outputLabel" />
 
 									<h:outputText value="Proceso Padre: " />
-									<h:outputText
-										value="#{procesoBean.selectedProceso.proceso.proCodigo}"
+									<h:outputText value="#{procesoBean.procesoMapeo.padrePro}"
 										styleClass="outputLabel" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="2" columnClasses="label, value">
 									<h:outputText value="Modelo: " />
-									<h:outputText
-										value="#{procesoBean.selectedProceso.modelo.modCodigo}"
+									<h:outputText value="#{procesoBean.procesoMapeo.modeloPro}"
 										styleClass="outputLabel" />
 
 									<h:outputText value="Capacidad(pares): " />
-									<h:outputText value="#{procesoBean.selectedProceso.proCap}"
+									<h:outputText value="#{procesoBean.procesoMapeo.capacidadPro}"
 										styleClass="outputLabel" />
-
 								</h:panelGrid>
 
 								<h:panelGrid columns="2" columnClasses="label, value">
 									<h:outputText value="CIF Ref: " />
-									<h:outputText value="#{procesoBean.selectedProceso.proCifref}"
+									<h:outputText value="#{procesoBean.procesoMapeo.cifRefPro}"
 										styleClass="outputLabel" />
 
 									<h:outputText value="CIF Presupuestado: " />
-									<h:outputText value="#{procesoBean.selectedProceso.proCifpre}"
+									<h:outputText value="#{procesoBean.procesoMapeo.cifPro}"
 										styleClass="outputLabel" />
 
 								</h:panelGrid>
 
 								<h:panelGrid columns="2" columnClasses="label, value">
 									<h:outputText value="Costo obra: " />
-									<h:outputText
-										value="#{procesoBean.selectedProceso.proCostmanobra}"
+									<h:outputText value="#{procesoBean.procesoMapeo.costObraPro}"
 										styleClass="outputLabel" />
 
 									<h:outputText value="Costo Real: " />
-									<h:outputText
-										value="#{procesoBean.selectedProceso.proCostmanreal}"
+									<h:outputText value="#{procesoBean.procesoMapeo.costRealPro}"
 										styleClass="outputLabel" />
 
 								</h:panelGrid>
 
 								<h:panelGrid columns="2" columnClasses="label, value">
 									<h:outputText value="Numero de trabajadores: " />
-									<h:outputText value="#{procesoBean.selectedProceso.proNumTrab}"
+									<h:outputText value="#{procesoBean.procesoMapeo.numTrabPro}"
 										styleClass="outputLabel" />
 
 									<h:outputText value="Descripcion: " />
-									<h:outputText value="#{procesoBean.selectedProceso.proDescrip}"
+									<h:outputText value="#{procesoBean.procesoMapeo.descPro}"
 										styleClass="outputLabel" />
 
 								</h:panelGrid>
 							</h:panelGrid>
 
 							<p:commandButton value="Submit"
-								actionListener="#{procesoBean.save()}" update="growl"
+								actionListener="#{procesoBean.save()}" update="growl, :menuStep"
 								process="@this" />
 						</p:panel>
 					</p:tab>

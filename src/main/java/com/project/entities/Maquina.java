@@ -31,7 +31,7 @@ public class Maquina implements Serializable {
 
 	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false, nullable = false)
 	private Lineasprod lineasprod;
 
 	public Maquina() {

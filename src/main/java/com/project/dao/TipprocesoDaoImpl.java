@@ -14,7 +14,7 @@ public class TipprocesoDaoImpl implements TipprocesosDao {
 	public List<TipoProceso> findAll() {
 		List<TipoProceso> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM TipoProceso";
+		String sql = "FROM TipoProceso order by tprNombre";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

@@ -32,7 +32,7 @@ public class Programdia implements Serializable {
 
 	// bi-directional many-to-one association to Parametro
 	@ManyToOne
-	@JoinColumn(name = "param_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "param_codigo", insertable = false, updatable = false, nullable = false)
 	private Parametro parametro;
 
 	// bi-directional many-to-one association to Programturno

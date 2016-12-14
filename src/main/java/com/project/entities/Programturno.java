@@ -43,22 +43,22 @@ public class Programturno implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Procesosop
 	@ManyToOne
-	@JoinColumn(name = "processop_cod", insertable = false, updatable = false)
+	@JoinColumn(name = "processop_cod", insertable = false, updatable = false, nullable = false)
 	private Procesosop procesosop;
 
 	// bi-directional many-to-one association to Programdia
 	@ManyToOne
-	@JoinColumn(name = "progdias_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "progdias_codigo", insertable = false, updatable = false, nullable = false)
 	private Programdia programdia;
 
 	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false, nullable = false)
 	private Talla talla;
 
 	public Programturno() {

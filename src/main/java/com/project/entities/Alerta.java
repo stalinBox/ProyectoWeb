@@ -4,19 +4,20 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the alertas database table.
  * 
  */
 @Entity
-@Table(name = "alertas")
-@NamedQuery(name = "Alerta.findAll", query = "SELECT a FROM Alerta a")
+@Table(name="alertas")
+@NamedQuery(name="Alerta.findAll", query="SELECT a FROM Alerta a")
 public class Alerta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "alerta_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="alerta_codigo")
 	private Integer alertaCodigo;
 
 	private String activo;
@@ -25,8 +26,8 @@ public class Alerta implements Serializable {
 
 	private String descripcion;
 
-	// bi-directional many-to-one association to ProcAlerta
-	@OneToMany(mappedBy = "alerta")
+	//bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy="alerta")
 	private List<ProcAlerta> procAlertas;
 
 	public Alerta() {

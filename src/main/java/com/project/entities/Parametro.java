@@ -29,17 +29,17 @@ public class Parametro implements Serializable {
 
 	// bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name = "ordenprod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "ordenprod_codigo", insertable = false, updatable = false, nullable = false)
 	private Ordenprod ordenprod;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false, nullable = false)
 	private Proceso proceso;
 
 	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_resp", insertable = false, updatable = false)
+	@JoinColumn(name = "user_id_resp", insertable = false, updatable = false, nullable = false)
 	private Usuario usuario;
 
 	// bi-directional many-to-one association to Programdia

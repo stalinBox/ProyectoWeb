@@ -21,7 +21,7 @@ public class Detalleorden implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Ordenprod

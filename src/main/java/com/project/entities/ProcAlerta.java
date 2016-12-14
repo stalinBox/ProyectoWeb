@@ -26,12 +26,12 @@ public class ProcAlerta implements Serializable {
 
 	// bi-directional many-to-one association to Alerta
 	@ManyToOne
-	@JoinColumn(name = "alerta_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "alerta_codigo", insertable = false, updatable = false, nullable = false)
 	private Alerta alerta;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false, nullable = false)
 	private Proceso proceso;
 
 	public ProcAlerta() {

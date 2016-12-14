@@ -20,10 +20,10 @@ public class Proceso implements Serializable {
 	private Integer proCodigo;
 
 	@Column(name = "pro_activo")
-	private String proActivo;
+	private Boolean proActivo;
 
 	@Column(name = "pro_auto")
-	private String proAuto;
+	private Boolean proAuto;
 
 	@Column(name = "pro_cap")
 	private Integer proCap;
@@ -69,12 +69,12 @@ public class Proceso implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_padre", insertable = false, updatable = false)
+	@JoinColumn(name = "pro_padre", insertable = false, updatable = false, nullable = false)
 	private Proceso proceso;
 
 	// bi-directional many-to-one association to Proceso
@@ -83,7 +83,7 @@ public class Proceso implements Serializable {
 
 	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false, nullable = false)
 	private TipoProceso tipoProceso;
 
 	// bi-directional many-to-one association to Procesosop
@@ -101,19 +101,19 @@ public class Proceso implements Serializable {
 		this.proCodigo = proCodigo;
 	}
 
-	public String getProActivo() {
+	public Boolean getProActivo() {
 		return this.proActivo;
 	}
 
-	public void setProActivo(String proActivo) {
+	public void setProActivo(Boolean proActivo) {
 		this.proActivo = proActivo;
 	}
 
-	public String getProAuto() {
+	public Boolean getProAuto() {
 		return this.proAuto;
 	}
 
-	public void setProAuto(String proAuto) {
+	public void setProAuto(Boolean proAuto) {
 		this.proAuto = proAuto;
 	}
 

@@ -29,7 +29,7 @@ public class Lineasprod implements Serializable {
 
 	// bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false, nullable = false)
 	private TipoProceso tipoProceso;
 
 	// bi-directional many-to-one association to Lineasturno
