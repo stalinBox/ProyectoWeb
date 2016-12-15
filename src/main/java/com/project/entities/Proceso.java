@@ -4,90 +4,91 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the procesos database table.
  * 
  */
 @Entity
-@Table(name = "procesos")
-@NamedQuery(name = "Proceso.findAll", query = "SELECT p FROM Proceso p")
+@Table(name="procesos")
+@NamedQuery(name="Proceso.findAll", query="SELECT p FROM Proceso p")
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "pro_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="pro_codigo")
 	private Integer proCodigo;
 
-	@Column(name = "pro_activo")
+	@Column(name="pro_activo")
 	private Boolean proActivo;
 
-	@Column(name = "pro_auto")
+	@Column(name="pro_auto")
 	private Boolean proAuto;
 
-	@Column(name = "pro_cap")
+	@Column(name="pro_cap")
 	private Integer proCap;
 
-	@Column(name = "pro_cifpre")
-	private double proCifpre;
+	@Column(name="pro_cifpresu")
+	private double proCifpresu;
 
-	@Column(name = "pro_cifref")
-	private double proCifref;
+	@Column(name="pro_cifreal")
+	private double proCifreal;
 
-	@Column(name = "pro_costmanobra")
+	@Column(name="pro_costmanobra")
 	private double proCostmanobra;
 
-	@Column(name = "pro_costmanreal")
+	@Column(name="pro_costmanreal")
 	private double proCostmanreal;
 
-	@Column(name = "pro_descrip")
+	@Column(name="pro_descrip")
 	private String proDescrip;
 
-	@Column(name = "pro_duracion")
+	@Column(name="pro_duracion")
 	private double proDuracion;
 
-	@Column(name = "pro_num_trab")
+	@Column(name="pro_num_trab")
 	private Integer proNumTrab;
 
-	@Column(name = "pro_tmano")
+	@Column(name="pro_tmano")
 	private double proTmano;
 
-	@Column(name = "pro_ts")
+	@Column(name="pro_ts")
 	private double proTs;
 
-	// bi-directional many-to-one association to Dispositivo
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy="proceso")
 	private List<Dispositivo> dispositivos;
 
-	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="proceso")
 	private List<Parametro> parametros;
 
-	// bi-directional many-to-one association to ProcAlerta
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy="proceso")
 	private List<ProcAlerta> procAlertas;
 
-	// bi-directional many-to-one association to Modelo
+	//bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name="mod_codigo")
 	private Modelo modelo;
 
-	// bi-directional many-to-one association to Proceso
+	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_padre", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name="pro_padre")
 	private Proceso proceso;
 
-	// bi-directional many-to-one association to Proceso
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Proceso
+	@OneToMany(mappedBy="proceso")
 	private List<Proceso> procesos;
 
-	// bi-directional many-to-one association to TipoProceso
+	//bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name="tpr_codigo")
 	private TipoProceso tipoProceso;
 
-	// bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy="proceso")
 	private List<Procesosop> procesosops;
 
 	public Proceso() {
@@ -125,20 +126,20 @@ public class Proceso implements Serializable {
 		this.proCap = proCap;
 	}
 
-	public double getProCifpre() {
-		return this.proCifpre;
+	public double getProCifpresu() {
+		return this.proCifpresu;
 	}
 
-	public void setProCifpre(double proCifpre) {
-		this.proCifpre = proCifpre;
+	public void setProCifpresu(double proCifpresu) {
+		this.proCifpresu = proCifpresu;
 	}
 
-	public double getProCifref() {
-		return this.proCifref;
+	public double getProCifreal() {
+		return this.proCifreal;
 	}
 
-	public void setProCifref(double proCifref) {
-		this.proCifref = proCifref;
+	public void setProCifreal(double proCifreal) {
+		this.proCifreal = proCifreal;
 	}
 
 	public double getProCostmanobra() {

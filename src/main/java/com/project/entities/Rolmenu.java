@@ -19,22 +19,22 @@ public class Rolmenu implements Serializable {
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "menu_id", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "menu_id", insertable = false, updatable = false)
 	private Menu menu1;
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "menu_id", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "menu_id", insertable = false, updatable = false)
 	private Menu menu2;
 
 	// bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "rol_id", insertable = false, updatable = false)
 	private Rol rol1;
 
 	// bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "rol_id", insertable = false, updatable = false)
 	private Rol rol2;
 
 	public Rolmenu() {

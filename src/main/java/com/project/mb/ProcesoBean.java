@@ -49,28 +49,6 @@ public class ProcesoBean implements Serializable {
 	}
 
 	// METODOS
-	public void save() {
-		FacesMessage msg = new FacesMessage("Exitoso", "Guardado");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-
-		System.out.println(this.procesoMapeo.getModeloPro());
-		System.out.println(this.procesoMapeo.getTprProcesoPro());
-		System.out.println(this.procesoMapeo.getPadrePro());
-		System.out.println(this.procesoMapeo.getCapacidadPro());
-		System.out.println(this.procesoMapeo.getDuracionPro());
-		System.out.println(this.procesoMapeo.isAutoPro());
-		System.out.println(this.procesoMapeo.getCifRefPro());
-		System.out.println(this.procesoMapeo.getCifPro());
-		System.out.println(this.procesoMapeo.gettManoPro());
-		System.out.println(this.procesoMapeo.getTsPro());
-		System.out.println(this.procesoMapeo.getCostObraPro());
-		System.out.println(this.procesoMapeo.getCostRealPro());
-		System.out.println(this.procesoMapeo.getNumTrabPro());
-		System.out.println(this.procesoMapeo.isActivoPro());
-		System.out.println(this.procesoMapeo.getDescPro());
-		refresh.refresh();
-	}
-
 	public String onFlowProcess(FlowEvent event) {
 		if (skip) {
 			skip = true;
@@ -86,24 +64,27 @@ public class ProcesoBean implements Serializable {
 
 		Modelo modelo = new Modelo();
 		modelo.setModCodigo(this.procesoMapeo.getModeloPro());
+
 		TipoProceso tprProceso = new TipoProceso();
 		tprProceso.setTprCodigo(this.procesoMapeo.getTprProcesoPro());
+
 		Proceso proceso = new Proceso();
 		proceso.setProCodigo(this.procesoMapeo.getPadrePro());
+
+		if (this.procesoMapeo.getPadrePro() == 0) {
+			this.selectedProceso.setProceso(null);
+		} else {
+			this.selectedProceso.setProceso(proceso);
+		}
 
 		// MAPEO DE OBJETO SELECTEDPROCESO
 		this.selectedProceso.setModelo(modelo);
 		this.selectedProceso.setTipoProceso(tprProceso);
-		this.selectedProceso.setProceso(proceso);
 		this.selectedProceso.setProCap(this.procesoMapeo.getCapacidadPro());
 		this.selectedProceso.setProDuracion(this.procesoMapeo.getDuracionPro());
 		this.selectedProceso.setProAuto(this.procesoMapeo.isAutoPro());
-		this.selectedProceso.setProCifref(this.procesoMapeo.getCifRefPro());
-		this.selectedProceso.setProCifpre(this.procesoMapeo.getCifPro());
-		this.selectedProceso.setProCostmanobra(this.procesoMapeo
-				.getCostObraPro());
-		this.selectedProceso.setProCostmanreal(this.procesoMapeo
-				.getCostRealPro());
+		this.selectedProceso.setProCifreal(this.procesoMapeo.getCifRefPro());
+		this.selectedProceso.setProCifpresu(this.procesoMapeo.getCifPro());
 		this.selectedProceso.setProTmano(this.procesoMapeo.gettManoPro());
 		this.selectedProceso.setProTs(this.procesoMapeo.getTsPro());
 		this.selectedProceso.setProCostmanobra(this.procesoMapeo

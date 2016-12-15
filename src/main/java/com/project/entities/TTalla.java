@@ -20,12 +20,12 @@ public class TTalla implements Serializable {
 
 	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false)
 	private Talla talla;
 
 	// bi-directional many-to-one association to Troquele
 	@ManyToOne
-	@JoinColumn(name = "trq_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "trq_codigo", insertable = false, updatable = false)
 	private Troquele troquele;
 
 	public TTalla() {

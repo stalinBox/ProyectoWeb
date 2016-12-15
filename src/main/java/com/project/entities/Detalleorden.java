@@ -3,35 +3,36 @@ package com.project.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+
 /**
  * The persistent class for the detalleorden database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Detalleorden.findAll", query = "SELECT d FROM Detalleorden d")
+@NamedQuery(name="Detalleorden.findAll", query="SELECT d FROM Detalleorden d")
 public class Detalleorden implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "detaorden_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="detaorden_codigo")
 	private Integer detaordenCodigo;
 
 	private Integer cantidad;
 
-	// bi-directional many-to-one association to Modelo
+	//bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name="mod_codigo")
 	private Modelo modelo;
 
-	// bi-directional many-to-one association to Ordenprod
+	//bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name = "ordenprod_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name="ordenprod_codigo")
 	private Ordenprod ordenprod;
 
-	// bi-directional many-to-one association to Talla
+	//bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name="tal_codigo")
 	private Talla talla;
 
 	public Detalleorden() {

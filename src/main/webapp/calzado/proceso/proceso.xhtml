@@ -66,11 +66,11 @@
 						</p:panel>
 					</p:tab>
 
-					<p:tab id="contact3" title="Presupuestos">
+					<p:tab id="contact3" title="Costos indirectos">
 						<p:panel header="Presupuestos por proceso">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="CIF Ref: " />
+								<h:outputText value="CIF Real: " />
 								<p:spinner id="idValueCifRef"
 									value="#{procesoBean.procesoMapeo.cifRefPro}" prefix="$"
 									min="0" label="cifRef" stepFactor="0.01" />
@@ -88,13 +88,13 @@
 						<p:panel header="Presupuesto por Mano de obra">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="Costo obra: " />
+								<h:outputText value="Mano de obra presupuestado: " />
 								<p:spinner id="idValueCostObra"
 									value="#{procesoBean.procesoMapeo.costObraPro}" prefix="$"
 									min="0" label="CostoManoObra" stepFactor="0.01" />
 
 
-								<h:outputText value="Costo Real: " />
+								<h:outputText value="Mano de obra Real: " />
 								<p:spinner id="idValueCostReal"
 									value="#{procesoBean.procesoMapeo.costRealPro}" prefix="$"
 									min="0" label="CostoManoReal" stepFactor="0.01" />
@@ -179,9 +179,9 @@
 								</h:panelGrid>
 							</h:panelGrid>
 
-							<p:commandButton value="Submit"
-								actionListener="#{procesoBean.save()}" update="growl, :menuStep"
-								process="@this" />
+							<p:commandButton value="Guardar"
+								actionListener="#{procesoBean.btnCreateProceso(actionEvent)}"
+								update="growl, :menuStep, :dataTablePrcesos" process="@this" />
 						</p:panel>
 					</p:tab>
 				</p:wizard>

@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class Menu implements Serializable {
 	private Integer menuId;
 
 	@Column(name = "menu_estado")
-	private String menuEstado;
+	private BigDecimal menuEstado;
 
 	@Column(name = "menu_icono")
 	private String menuIcono;
@@ -35,7 +36,7 @@ public class Menu implements Serializable {
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "m_id", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "m_id")
 	private Menu menu1;
 
 	// bi-directional many-to-one association to Menu
@@ -44,7 +45,7 @@ public class Menu implements Serializable {
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "m_id", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "m_id", insertable = false, updatable = false)
 	private Menu menu2;
 
 	// bi-directional many-to-one association to Menu
@@ -53,7 +54,7 @@ public class Menu implements Serializable {
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "menu_nivel", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "menu_nivel")
 	private Menu menu3;
 
 	// bi-directional many-to-one association to Menu
@@ -79,11 +80,11 @@ public class Menu implements Serializable {
 		this.menuId = menuId;
 	}
 
-	public String getMenuEstado() {
+	public BigDecimal getMenuEstado() {
 		return this.menuEstado;
 	}
 
-	public void setMenuEstado(String menuEstado) {
+	public void setMenuEstado(BigDecimal menuEstado) {
 		this.menuEstado = menuEstado;
 	}
 
