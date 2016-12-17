@@ -23,38 +23,8 @@ public class Proceso implements Serializable {
 	@Column(name="pro_activo")
 	private Boolean proActivo;
 
-	@Column(name="pro_auto")
-	private Boolean proAuto;
-
-	@Column(name="pro_cap")
-	private Integer proCap;
-
-	@Column(name="pro_cifpresu")
-	private double proCifpresu;
-
-	@Column(name="pro_cifreal")
-	private double proCifreal;
-
-	@Column(name="pro_costmanobra")
-	private double proCostmanobra;
-
-	@Column(name="pro_costmanreal")
-	private double proCostmanreal;
-
 	@Column(name="pro_descrip")
 	private String proDescrip;
-
-	@Column(name="pro_duracion")
-	private double proDuracion;
-
-	@Column(name="pro_num_trab")
-	private Integer proNumTrab;
-
-	@Column(name="pro_tmano")
-	private double proTmano;
-
-	@Column(name="pro_ts")
-	private double proTs;
 
 	//bi-directional many-to-one association to Dispositivo
 	@OneToMany(mappedBy="proceso")
@@ -67,11 +37,6 @@ public class Proceso implements Serializable {
 	//bi-directional many-to-one association to ProcAlerta
 	@OneToMany(mappedBy="proceso")
 	private List<ProcAlerta> procAlertas;
-
-	//bi-directional many-to-one association to Modelo
-	@ManyToOne
-	@JoinColumn(name="mod_codigo")
-	private Modelo modelo;
 
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
@@ -90,6 +55,18 @@ public class Proceso implements Serializable {
 	//bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy="proceso")
 	private List<Procesosop> procesosops;
+
+	//bi-directional many-to-one association to Confproceso
+	@OneToMany(mappedBy="proceso1")
+	private List<Confproceso> confprocesos1;
+
+	//bi-directional many-to-one association to Confproceso
+	@OneToMany(mappedBy="proceso2")
+	private List<Confproceso> confprocesos2;
+
+	//bi-directional many-to-one association to Costosindi
+	@OneToMany(mappedBy="proceso")
+	private List<Costosindi> costosindis;
 
 	public Proceso() {
 	}
@@ -110,92 +87,12 @@ public class Proceso implements Serializable {
 		this.proActivo = proActivo;
 	}
 
-	public Boolean getProAuto() {
-		return this.proAuto;
-	}
-
-	public void setProAuto(Boolean proAuto) {
-		this.proAuto = proAuto;
-	}
-
-	public Integer getProCap() {
-		return this.proCap;
-	}
-
-	public void setProCap(Integer proCap) {
-		this.proCap = proCap;
-	}
-
-	public double getProCifpresu() {
-		return this.proCifpresu;
-	}
-
-	public void setProCifpresu(double proCifpresu) {
-		this.proCifpresu = proCifpresu;
-	}
-
-	public double getProCifreal() {
-		return this.proCifreal;
-	}
-
-	public void setProCifreal(double proCifreal) {
-		this.proCifreal = proCifreal;
-	}
-
-	public double getProCostmanobra() {
-		return this.proCostmanobra;
-	}
-
-	public void setProCostmanobra(double proCostmanobra) {
-		this.proCostmanobra = proCostmanobra;
-	}
-
-	public double getProCostmanreal() {
-		return this.proCostmanreal;
-	}
-
-	public void setProCostmanreal(double proCostmanreal) {
-		this.proCostmanreal = proCostmanreal;
-	}
-
 	public String getProDescrip() {
 		return this.proDescrip;
 	}
 
 	public void setProDescrip(String proDescrip) {
 		this.proDescrip = proDescrip;
-	}
-
-	public double getProDuracion() {
-		return this.proDuracion;
-	}
-
-	public void setProDuracion(double proDuracion) {
-		this.proDuracion = proDuracion;
-	}
-
-	public Integer getProNumTrab() {
-		return this.proNumTrab;
-	}
-
-	public void setProNumTrab(Integer proNumTrab) {
-		this.proNumTrab = proNumTrab;
-	}
-
-	public double getProTmano() {
-		return this.proTmano;
-	}
-
-	public void setProTmano(double proTmano) {
-		this.proTmano = proTmano;
-	}
-
-	public double getProTs() {
-		return this.proTs;
-	}
-
-	public void setProTs(double proTs) {
-		this.proTs = proTs;
 	}
 
 	public List<Dispositivo> getDispositivos() {
@@ -264,14 +161,6 @@ public class Proceso implements Serializable {
 		return procAlerta;
 	}
 
-	public Modelo getModelo() {
-		return this.modelo;
-	}
-
-	public void setModelo(Modelo modelo) {
-		this.modelo = modelo;
-	}
-
 	public Proceso getProceso() {
 		return this.proceso;
 	}
@@ -330,6 +219,72 @@ public class Proceso implements Serializable {
 		procesosop.setProceso(null);
 
 		return procesosop;
+	}
+
+	public List<Confproceso> getConfprocesos1() {
+		return this.confprocesos1;
+	}
+
+	public void setConfprocesos1(List<Confproceso> confprocesos1) {
+		this.confprocesos1 = confprocesos1;
+	}
+
+	public Confproceso addConfprocesos1(Confproceso confprocesos1) {
+		getConfprocesos1().add(confprocesos1);
+		confprocesos1.setProceso1(this);
+
+		return confprocesos1;
+	}
+
+	public Confproceso removeConfprocesos1(Confproceso confprocesos1) {
+		getConfprocesos1().remove(confprocesos1);
+		confprocesos1.setProceso1(null);
+
+		return confprocesos1;
+	}
+
+	public List<Confproceso> getConfprocesos2() {
+		return this.confprocesos2;
+	}
+
+	public void setConfprocesos2(List<Confproceso> confprocesos2) {
+		this.confprocesos2 = confprocesos2;
+	}
+
+	public Confproceso addConfprocesos2(Confproceso confprocesos2) {
+		getConfprocesos2().add(confprocesos2);
+		confprocesos2.setProceso2(this);
+
+		return confprocesos2;
+	}
+
+	public Confproceso removeConfprocesos2(Confproceso confprocesos2) {
+		getConfprocesos2().remove(confprocesos2);
+		confprocesos2.setProceso2(null);
+
+		return confprocesos2;
+	}
+
+	public List<Costosindi> getCostosindis() {
+		return this.costosindis;
+	}
+
+	public void setCostosindis(List<Costosindi> costosindis) {
+		this.costosindis = costosindis;
+	}
+
+	public Costosindi addCostosindi(Costosindi costosindi) {
+		getCostosindis().add(costosindi);
+		costosindi.setProceso(this);
+
+		return costosindi;
+	}
+
+	public Costosindi removeCostosindi(Costosindi costosindi) {
+		getCostosindis().remove(costosindi);
+		costosindi.setProceso(null);
+
+		return costosindi;
 	}
 
 }

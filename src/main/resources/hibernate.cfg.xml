@@ -45,5 +45,8 @@
 		<mapping class="com.project.entities.Alerta" />
 		<mapping class="com.project.entities.Dispositivo" />
 		<mapping class="com.project.entities.ProcAlerta" />
+
+		<mapping class="com.project.entities.Confproceso" />
+		<mapping class="com.project.entities.Costosindi" />
 	</session-factory>
 </hibernate-configuration>

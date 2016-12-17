@@ -63,6 +63,10 @@ public class Ordenprod implements Serializable {
 	@OneToMany(mappedBy = "ordenprod")
 	private List<Procesosop> procesosops;
 
+	// bi-directional many-to-one association to Costosindi
+	@OneToMany(mappedBy = "ordenprod")
+	private List<Costosindi> costosindis;
+
 	public Ordenprod() {
 	}
 
@@ -194,6 +198,28 @@ public class Ordenprod implements Serializable {
 		procesosop.setOrdenprod(null);
 
 		return procesosop;
+	}
+
+	public List<Costosindi> getCostosindis() {
+		return this.costosindis;
+	}
+
+	public void setCostosindis(List<Costosindi> costosindis) {
+		this.costosindis = costosindis;
+	}
+
+	public Costosindi addCostosindi(Costosindi costosindi) {
+		getCostosindis().add(costosindi);
+		costosindi.setOrdenprod(this);
+
+		return costosindi;
+	}
+
+	public Costosindi removeCostosindi(Costosindi costosindi) {
+		getCostosindis().remove(costosindi);
+		costosindi.setOrdenprod(null);
+
+		return costosindi;
 	}
 
 }

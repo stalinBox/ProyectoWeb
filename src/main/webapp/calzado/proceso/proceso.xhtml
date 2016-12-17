@@ -9,228 +9,148 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 
-			<h:form id="menuStep">
-				<p:growl id="growl" sticky="true" showDetail="true" />
-				<p:wizard flowListener="#{procesoBean.onFlowProcess}"
-					nextLabel="Siguiente" backLabel="Atras" style="width:auto">
+			<p:growl id="msgs" showDetail="true" />
 
-					<p:tab id="personal" title="PROCESO">
-						<p:panel header="Proceso Detalle">
-							<p:messages />
-							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="Tipo de proceso: *" />
+			<h:form id="idProcesos">
+				<p:panel header="PROCESOS" id="panel">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid id="idProc" columns="2">
 
-								<p:selectOneMenu id="idTipoProceso"
-									value="#{procesoBean.procesoMapeo.tprProcesoPro}"
-									required="true" style="width:150px">
+						<p:outputLabel value="Proceso: " />
+						<p:selectOneMenu id="idCbTrpProcesos"
+							value="#{procesoBean.proTrp}" style="width:150px" required="true"
+							label="Proceso">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
+						</p:selectOneMenu>
 
-									<f:selectItem itemLabel="- Seleccione -" itemValue=""
-										noSelectionOption="true" />
-									<f:selectItems value="#{procesoBean.selectedTprProceso}"
-										label="tipoProceso" />
-								</p:selectOneMenu>
+						<p:outputLabel value="Padre: " />
+						<p:selectOneMenu id="idCboProPadre"
+							value="#{procesoBean.proPadre}" style="width:150px">
 
-								<h:outputText value="Proceso Padre: " />
-								<p:selectOneMenu id="idTipoProcesoPadre"
-									value="#{procesoBean.procesoMapeo.padrePro}"
-									style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="" />
+						</p:selectOneMenu>
 
-									<f:selectItem itemLabel="- Seleccione -" itemValue=""
-										noSelectionOption="true" />
-									<f:selectItems value="#{procesoBean.selectedListProceso}"
-										label="tipoProcesoPadre" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-						</p:panel>
-					</p:tab>
+						<p:outputLabel value="Activo: " />
+						<p:selectBooleanButton id="idCboActivo"
+							value="#{procesoBean.proActivo}" onLabel="Si" offLabel="No"
+							style="width:60px" />
 
-					<p:tab id="address" title="Modelos">
-						<p:panel header="Capacidad de producción por modelo">
-							<p:messages />
-							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="Modelo: " />
-								<p:selectOneMenu id="idModeloProceso"
-									value="#{procesoBean.procesoMapeo.modeloPro}"
-									style="width:150px">
+						<p:outputLabel value="Descripción: " />
+						<p:inputTextarea rows="6" cols="33" value="#{procesoBean.proDesc}" />
 
-									<f:selectItem itemLabel="- Seleccione -" itemValue=""
-										noSelectionOption="true" />
-									<f:selectItems value="#{procesoBean.selectedModelo}"
-										label="tipoProcesoPadre" />
-								</p:selectOneMenu>
-
-								<h:outputText value="Capacidad(pares): " />
-								<p:spinner id="idCapValue"
-									value="#{procesoBean.procesoMapeo.capacidadPro}" />
-							</h:panelGrid>
-						</p:panel>
-					</p:tab>
-
-					<p:tab id="contact3" title="Costos indirectos">
-						<p:panel header="Presupuestos por proceso">
-							<p:messages />
-							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="CIF Real: " />
-								<p:spinner id="idValueCifRef"
-									value="#{procesoBean.procesoMapeo.cifRefPro}" prefix="$"
-									min="0" label="cifRef" stepFactor="0.01" />
-
-								<h:outputText value="CIF Presupuestado: " />
-								<p:spinner id="idValueCifPre"
-									value="#{procesoBean.procesoMapeo.cifPro}" prefix="$" min="0"
-									label="cifPresupuestado" stepFactor="0.01" />
-
-							</h:panelGrid>
-						</p:panel>
-					</p:tab>
-
-					<p:tab id="contact2" title="Mano de Obra">
-						<p:panel header="Presupuesto por Mano de obra">
-							<p:messages />
-							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="Mano de obra presupuestado: " />
-								<p:spinner id="idValueCostObra"
-									value="#{procesoBean.procesoMapeo.costObraPro}" prefix="$"
-									min="0" label="CostoManoObra" stepFactor="0.01" />
-
-
-								<h:outputText value="Mano de obra Real: " />
-								<p:spinner id="idValueCostReal"
-									value="#{procesoBean.procesoMapeo.costRealPro}" prefix="$"
-									min="0" label="CostoManoReal" stepFactor="0.01" />
-
-							</h:panelGrid>
-						</p:panel>
-					</p:tab>
-
-					<p:tab id="contact1" title="Personal">
-						<p:panel header="Número de trabajadores">
-							<p:messages />
-							<h:panelGrid columns="2" columnClasses="label, value">
-								<h:outputText value="Numero de trabajadores: " />
-								<p:spinner id="idNumTrab"
-									value="#{procesoBean.procesoMapeo.numTrabPro}"
-									label="numeroTrabajadores" />
-
-								<h:outputText value="Descripcion: " />
-								<p:inputTextarea rows="6" cols="33"
-									value="#{procesoBean.procesoMapeo.descPro}" label="descripcion" />
-							</h:panelGrid>
-
-						</p:panel>
-					</p:tab>
-
-					<p:tab id="confirm" title="Confirmation">
-						<p:panel header="Confirmation">
-							<h:panelGrid id="confirmation" columns="3"
-								columnClasses="grid,grid,grid,grid,grid">
-
-								<h:panelGrid columns="2" columnClasses="label, value">
-									<h:outputText value="Tipo de proceso: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.tprProcesoPro}"
-										styleClass="outputLabel" />
-
-									<h:outputText value="Proceso Padre: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.padrePro}"
-										styleClass="outputLabel" />
-								</h:panelGrid>
-
-								<h:panelGrid columns="2" columnClasses="label, value">
-									<h:outputText value="Modelo: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.modeloPro}"
-										styleClass="outputLabel" />
-
-									<h:outputText value="Capacidad(pares): " />
-									<h:outputText value="#{procesoBean.procesoMapeo.capacidadPro}"
-										styleClass="outputLabel" />
-								</h:panelGrid>
-
-								<h:panelGrid columns="2" columnClasses="label, value">
-									<h:outputText value="CIF Ref: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.cifRefPro}"
-										styleClass="outputLabel" />
-
-									<h:outputText value="CIF Presupuestado: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.cifPro}"
-										styleClass="outputLabel" />
-
-								</h:panelGrid>
-
-								<h:panelGrid columns="2" columnClasses="label, value">
-									<h:outputText value="Costo obra: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.costObraPro}"
-										styleClass="outputLabel" />
-
-									<h:outputText value="Costo Real: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.costRealPro}"
-										styleClass="outputLabel" />
-
-								</h:panelGrid>
-
-								<h:panelGrid columns="2" columnClasses="label, value">
-									<h:outputText value="Numero de trabajadores: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.numTrabPro}"
-										styleClass="outputLabel" />
-
-									<h:outputText value="Descripcion: " />
-									<h:outputText value="#{procesoBean.procesoMapeo.descPro}"
-										styleClass="outputLabel" />
-
-								</h:panelGrid>
-							</h:panelGrid>
-
+						<f:facet name="footer">
 							<p:commandButton value="Guardar"
-								actionListener="#{procesoBean.btnCreateProceso(actionEvent)}"
-								update="growl, :menuStep, :dataTablePrcesos" process="@this" />
-						</p:panel>
-					</p:tab>
-				</p:wizard>
-
+								actionListener="#{procesoBean.btnCreateProceso()}" />
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
 			</h:form>
 
-			<h:form id="dataTablePrcesos">
-				<p:dataTable var="pro" value="#{procesoBean.procesos}">
-					<f:facet name="header">Tabla procesos</f:facet>
-					<p:column style="width:16px">
-						<p:rowToggler />
-					</p:column>
-					<p:column headerText="Id">
-						<h:outputText value="#{pro.proCodigo}" />
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="pro" value="#{procesoBean.procesos}">
+
+					<p:column headerText="Proceso">
+						<h:outputText value="#{pro.tipoProceso.tprNombre}" />
 					</p:column>
 
-					<p:rowExpansion>
-						<p:panelGrid columns="2" style="width:300px">
+					<p:column headerText="Padre">
+						<h:outputText value="#{pro.proceso.tipoProceso.tprNombre}" />
+					</p:column>
 
-							<h:outputText value="Proceso:" />
-							<h:outputText value="#{pro.tipoProceso.tprNombre}" />
+					<p:column headerText="Activo">
+						<h:outputText value="#{pro.proActivo}" />
+					</p:column>
 
-							<h:outputText value="Padre Proceso:" />
-							<h:outputText value="#{pro.proceso.tipoProceso.tprNombre}" />
+					<p:column headerText="Descripcion">
+						<h:outputText value="#{pro.proDescrip}" />
+					</p:column>
 
-							<h:outputText value="Modelo:" />
-							<h:outputText value="#{pro.modelo.modNombre}" />
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogProcesoUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{pro}"
+								target="#{procesoBean.selectedProceso}" />
+						</p:commandButton>
 
-							<h:outputText value="Capacidad Produccion:" />
-							<h:outputText value="#{pro.proTs} " />
-
-							<h:outputText value="CIF REF:" />
-							<h:outputText value="$#{pro.proCifref}" />
-
-							<h:outputText value="CIF PRESUPUESTADO:" />
-							<h:outputText value="$#{pro.proCifpre}" />
-
-							<h:outputText value="Mano de Obra:" />
-							<h:outputText value="$#{pro.proCostmanobra}" />
-
-							<h:outputText value="Mano de Obra Real:" />
-							<h:outputText value="$#{pro.proCostmanreal}" />
-
-							<h:outputText value="Numero de trabajadores:" />
-							<h:outputText value="#{pro.proNumTrab}" />
-
-						</p:panelGrid>
-					</p:rowExpansion>
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogProcesoDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{pro}"
+								target="#{procesoBean.selectedProceso}" />
+						</p:commandButton>
+					</p:column>
 				</p:dataTable>
+
+			</h:form>
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Proceso" widgetVar="dialogProcesoUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgProcesoUpdate">
+					<h:inputHidden value="#{procesoBean.selectedProceso.proCodigo}" />
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Proceso:" />
+						<p:selectOneMenu value="" style="width:150px" required="true"
+							label="Proceso">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
+						</p:selectOneMenu>
+
+
+						<h:outputText value="Padre:" />
+						<p:selectOneMenu value="" style="width:150px" required="true"
+							label="Proceso">
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Activo:" />
+						<p:selectBooleanButton
+							value="#{procesoBean.selectedProceso.proActivo}" onLabel="Si"
+							offLabel="No" style="width:60px" />
+
+						<h:outputText value="Descripcion:" />
+						<p:inputTextarea rows="6" cols="33"
+							value="#{procesoBean.selectedProceso.proDescrip}" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogProcesoUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{procesoBean.btnUpdateProceso(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogProcesoUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Proceso"
+					severity="alert" widgetVar="dialogProcesoDelete">
+					<h:inputHidden value="#{procesoBean.selectedProceso.proCodigo}" />
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogProcesoDelete').hide()"
+						actionListener="#{procesoBean.btnDeleteProceso(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogProcesoDelete').hide()" />
+				</p:confirmDialog>
 			</h:form>
 
 		</ui:define>

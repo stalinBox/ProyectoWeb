@@ -37,13 +37,13 @@ public class Modelo implements Serializable {
 	@OneToMany(mappedBy="modelo")
 	private List<ModTrqTal> modTrqTals;
 
-	//bi-directional many-to-one association to Proceso
-	@OneToMany(mappedBy="modelo")
-	private List<Proceso> procesos;
-
 	//bi-directional many-to-one association to Programturno
 	@OneToMany(mappedBy="modelo")
 	private List<Programturno> programturnos;
+
+	//bi-directional many-to-one association to Confproceso
+	@OneToMany(mappedBy="modelo")
+	private List<Confproceso> confprocesos;
 
 	public Modelo() {
 	}
@@ -124,28 +124,6 @@ public class Modelo implements Serializable {
 		return modTrqTal;
 	}
 
-	public List<Proceso> getProcesos() {
-		return this.procesos;
-	}
-
-	public void setProcesos(List<Proceso> procesos) {
-		this.procesos = procesos;
-	}
-
-	public Proceso addProceso(Proceso proceso) {
-		getProcesos().add(proceso);
-		proceso.setModelo(this);
-
-		return proceso;
-	}
-
-	public Proceso removeProceso(Proceso proceso) {
-		getProcesos().remove(proceso);
-		proceso.setModelo(null);
-
-		return proceso;
-	}
-
 	public List<Programturno> getProgramturnos() {
 		return this.programturnos;
 	}
@@ -166,6 +144,28 @@ public class Modelo implements Serializable {
 		programturno.setModelo(null);
 
 		return programturno;
+	}
+
+	public List<Confproceso> getConfprocesos() {
+		return this.confprocesos;
+	}
+
+	public void setConfprocesos(List<Confproceso> confprocesos) {
+		this.confprocesos = confprocesos;
+	}
+
+	public Confproceso addConfproceso(Confproceso confproceso) {
+		getConfprocesos().add(confproceso);
+		confproceso.setModelo(this);
+
+		return confproceso;
+	}
+
+	public Confproceso removeConfproceso(Confproceso confproceso) {
+		getConfprocesos().remove(confproceso);
+		confproceso.setModelo(null);
+
+		return confproceso;
 	}
 
 }
