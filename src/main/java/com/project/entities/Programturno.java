@@ -4,62 +4,61 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
 /**
  * The persistent class for the programturnos database table.
  * 
  */
 @Entity
-@Table(name="programturnos")
-@NamedQuery(name="Programturno.findAll", query="SELECT p FROM Programturno p")
+@Table(name = "programturnos")
+@NamedQuery(name = "Programturno.findAll", query = "SELECT p FROM Programturno p")
 public class Programturno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="program_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "program_codigo")
 	private Integer programCodigo;
 
-	@Column(name="cant_estim")
+	@Column(name = "cant_estim")
 	private Integer cantEstim;
 
-	@Column(name="cant_real")
+	@Column(name = "cant_real")
 	private Integer cantReal;
 
 	private String dia;
 
-	@Column(name="estado_tur")
+	@Column(name = "estado_tur")
 	private String estadoTur;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_final")
+	@Column(name = "f_final")
 	private Date fFinal;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="f_inicio")
+	@Column(name = "f_inicio")
 	private Date fInicio;
 
 	@Temporal(TemporalType.DATE)
 	private Date hora;
 
-	//bi-directional many-to-one association to Modelo
+	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name="mod_codigo")
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
 	private Modelo modelo;
 
-	//bi-directional many-to-one association to Procesosop
+	// bi-directional many-to-one association to Procesosop
 	@ManyToOne
-	@JoinColumn(name="processop_cod")
+	@JoinColumn(name = "processop_cod", insertable = false, updatable = false)
 	private Procesosop procesosop;
 
-	//bi-directional many-to-one association to Programdia
+	// bi-directional many-to-one association to Programdia
 	@ManyToOne
-	@JoinColumn(name="progdias_codigo")
+	@JoinColumn(name = "progdias_codigo", insertable = false, updatable = false)
 	private Programdia programdia;
 
-	//bi-directional many-to-one association to Talla
+	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name="tal_codigo")
+	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false)
 	private Talla talla;
 
 	public Programturno() {

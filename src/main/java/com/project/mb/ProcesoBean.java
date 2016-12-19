@@ -20,9 +20,10 @@ import com.project.entities.Proceso;
 import com.project.entities.TipoProceso;
 import com.project.utils.RefreshPage;
 
-@ManagedBean(name = "procesoBean")
+@ManagedBean
 @ViewScoped
 public class ProcesoBean implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	// VARIABLES
@@ -30,83 +31,102 @@ public class ProcesoBean implements Serializable {
 	private Proceso selectedProceso;
 
 	private List<SelectItem> selectedTprProceso;
-	private List<SelectItem> selectedListProceso;
-
-	private Integer proTrp;
-	private Integer proPadre;
+	private List<SelectItem> selectedItemsProceso;
 	private boolean proActivo;
 	private String proDesc;
+	private Integer proPadre;
+	private Integer proTrp;
 
-	RefreshPage refresh = new RefreshPage();
-
-	// CONSTRUCTOR
+	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
+		selectedProceso = new Proceso();
 	}
 
 	// METODOS
-	public void btnCreateProceso() {
-		System.out.println("Proceso: " + this.proTrp);
-		System.out.println("Padre: " + this.proPadre);
-		System.out.println("Activo: " + this.proActivo);
-		System.out.println("Descripcion: " + this.proDesc);
+	public void btnCreateProceso(ActionEvent actionEvent) {
+		TipoProceso tprProceso = new TipoProceso();
+		tprProceso.setTprCodigo(this.proTrp);
+
+		if (this.proPadre == 0) {
+			this.proPadre = null;
+		}
+		Proceso proce = new Proceso();
+		proce.setProCodigo(this.proPadre);
+
+		this.selectedProceso.setTipoProceso(tprProceso);
+		this.selectedProceso.setProceso(proce);
+		this.selectedProceso.setProActivo(this.proActivo);
+		this.selectedProceso.setProDescrip(this.proDesc);
 
 		String msg = "";
-		ProcesoDao procesoDao = new ProcesoDaoImpl();
-
-		// TipoProceso tprProceso = new TipoProceso();
-		// tprProceso.setTprCodigo(this.proTrp);
-		//
-		// Proceso pro = new Proceso();
-		// pro.setProCodigo(this.proPadre);
-
-		// this.selectedProceso.setTipoProceso(tprProceso);
-		// this.selectedProceso.setProceso(pro);
-		this.selectedProceso.setProActivo(this.proActivo);
-		// this.selectedProceso.setProDescrip(this.proDesc);
-
-		// if (procesoDao.create(this.selectedProceso)) {
-		// msg = "Se ha añadido un nuevo proceso";
-		// FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-		// msg, null);
-		// FacesContext.getCurrentInstance().addMessage(null, message);
-		// refresh.refresh();
-		// } else {
-		// msg = "Error al momento de añadir un proceso";
-		// FacesMessage message = new FacesMessage(
-		// FacesMessage.SEVERITY_ERROR, msg, null);
-		// FacesContext.getCurrentInstance().addMessage(null, message);
-		// }
-	}
-
-	public void btnUpdateProceso(ActionEvent actionEvent) {
-		System.out.println("Update..");
-	}
-
-	public void btnDeleteProceso(ActionEvent actionEvent) {
-		System.out.println("Delete..");
+		ProcesoDao procDao = new ProcesoDaoImpl();
+		if (procDao.create(this.selectedProceso)) {
+			msg = "Se ha añadido un nuevo proceso";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			RefreshPage ref = new RefreshPage();
+			ref.refresh();
+		} else {
+			msg = "Error al añadir un proceso";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	// SETTERS AND GETTERS
-
 	public List<Proceso> getProcesos() {
+		ProcesoDao procesDao = new ProcesoDaoImpl();
+		this.procesos = procesDao.findAll();
 		return procesos;
 	}
 
-	public Integer getProTrp() {
-		return proTrp;
+	public void setProcesos(List<Proceso> procesos) {
+		this.procesos = procesos;
 	}
 
-	public void setProTrp(Integer proTrp) {
-		this.proTrp = proTrp;
+	public Proceso getSelectedProceso() {
+		return selectedProceso;
 	}
 
-	public Integer getProPadre() {
-		return proPadre;
+	public void setSelectedProceso(Proceso selectedProceso) {
+		this.selectedProceso = selectedProceso;
 	}
 
-	public void setProPadre(Integer proPadre) {
-		this.proPadre = proPadre;
+	public List<SelectItem> getSelectedTprProceso() {
+		this.selectedTprProceso = new ArrayList<SelectItem>();
+		TipprocesosDao tprDao = new TipprocesoDaoImpl();
+		List<TipoProceso> tipoPro = tprDao.findAll();
+		this.selectedTprProceso.clear();
+		for (TipoProceso tpr : tipoPro) {
+			SelectItem selectItem = new SelectItem(tpr.getTprCodigo(),
+					tpr.getTprNombre());
+			this.selectedTprProceso.add(selectItem);
+		}
+		return selectedTprProceso;
+	}
+
+	public void setSelectedTprProceso(List<SelectItem> selectedTprProceso) {
+		this.selectedTprProceso = selectedTprProceso;
+	}
+
+	public List<SelectItem> getSelectedItemsProceso() {
+		this.selectedItemsProceso = new ArrayList<SelectItem>();
+		ProcesoDao procesoDao = new ProcesoDaoImpl();
+		List<Proceso> process = procesoDao.findAll();
+		this.selectedItemsProceso.clear();
+		for (Proceso pro : process) {
+			SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro
+					.getTipoProceso().getTprNombre());
+			this.selectedItemsProceso.add(selectItem);
+		}
+		return selectedItemsProceso;
+	}
+
+	public void setSelectedItemsProceso(List<SelectItem> selectedItemsProceso) {
+		this.selectedItemsProceso = selectedItemsProceso;
 	}
 
 	public boolean isProActivo() {
@@ -125,50 +145,20 @@ public class ProcesoBean implements Serializable {
 		this.proDesc = proDesc;
 	}
 
-	public void setProcesos(List<Proceso> procesos) {
-		this.procesos = procesos;
+	public Integer getProPadre() {
+		return proPadre;
 	}
 
-	public Proceso getSelectedProceso() {
-		return selectedProceso;
+	public void setProPadre(Integer proPadre) {
+		this.proPadre = proPadre;
 	}
 
-	public void setSelectedProceso(Proceso selectedProceso) {
-		this.selectedProceso = selectedProceso;
+	public Integer getProTrp() {
+		return proTrp;
 	}
 
-	public List<SelectItem> getSelectedTprProceso() {
-		this.selectedTprProceso = new ArrayList<SelectItem>();
-		TipprocesosDao tprDao = new TipprocesoDaoImpl();
-		List<TipoProceso> tipoProceso = tprDao.findAll();
-		this.selectedTprProceso.clear();
-		for (TipoProceso tip : tipoProceso) {
-			SelectItem selectItem = new SelectItem(tip.getTprCodigo(),
-					tip.getTprNombre());
-			this.selectedTprProceso.add(selectItem);
-		}
-		return selectedTprProceso;
-	}
-
-	public void setSelectedTprProceso(List<SelectItem> selectedTprProceso) {
-		this.selectedTprProceso = selectedTprProceso;
-	}
-
-	public List<SelectItem> getSelectedListProceso() {
-		this.selectedListProceso = new ArrayList<SelectItem>();
-		ProcesoDao procesoDao = new ProcesoDaoImpl();
-		List<Proceso> proceso = procesoDao.findAll();
-		this.selectedListProceso.clear();
-		for (Proceso pro : proceso) {
-			SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro
-					.getTipoProceso().getTprNombre());
-			this.selectedTprProceso.add(selectItem);
-		}
-		return selectedListProceso;
-	}
-
-	public void setSelectedListProceso(List<SelectItem> selectedListProceso) {
-		this.selectedListProceso = selectedListProceso;
+	public void setProTrp(Integer proTrp) {
+		this.proTrp = proTrp;
 	}
 
 }

@@ -3,33 +3,32 @@ package com.project.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the dispositivos database table.
  * 
  */
 @Entity
-@Table(name="dispositivos")
-@NamedQuery(name="Dispositivo.findAll", query="SELECT d FROM Dispositivo d")
+@Table(name = "dispositivos")
+@NamedQuery(name = "Dispositivo.findAll", query = "SELECT d FROM Dispositivo d")
 public class Dispositivo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_dispositivo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_dispositivo")
 	private Integer idDispositivo;
 
-	@Column(name="mac_dispositivo")
+	@Column(name = "mac_dispositivo")
 	private String macDispositivo;
 
-	//bi-directional many-to-one association to Maquina
+	// bi-directional many-to-one association to Maquina
 	@ManyToOne
-	@JoinColumn(name="id_maquinas_ref")
+	@JoinColumn(name = "id_maquinas_ref", insertable = false, updatable = false)
 	private Maquina maquina;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo_ref")
+	@JoinColumn(name = "pro_codigo_ref", insertable = false, updatable = false)
 	private Proceso proceso;
 
 	public Dispositivo() {

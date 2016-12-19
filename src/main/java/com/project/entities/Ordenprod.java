@@ -31,6 +31,10 @@ public class Ordenprod implements Serializable {
 	@Column(name = "f_final")
 	private Date fFinal;
 
+	// bi-directional many-to-one association to Costosindi
+	@OneToMany(mappedBy = "ordenprod")
+	private List<Costosindi> costosindis;
+
 	// bi-directional many-to-one association to Detalleorden
 	@OneToMany(mappedBy = "ordenprod")
 	private List<Detalleorden> detalleordens;
@@ -42,17 +46,17 @@ public class Ordenprod implements Serializable {
 
 	// bi-directional many-to-one association to Lugare
 	@ManyToOne
-	@JoinColumn(name = "lugar_codigo_dest")
+	@JoinColumn(name = "lugar_codigo_dest", insertable = false, updatable = false)
 	private Lugare lugare;
 
 	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_resp")
+	@JoinColumn(name = "user_id_resp", insertable = false, updatable = false)
 	private Usuario usuario1;
 
 	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_soli")
+	@JoinColumn(name = "user_id_soli", insertable = false, updatable = false)
 	private Usuario usuario2;
 
 	// bi-directional many-to-one association to Parametro
@@ -62,10 +66,6 @@ public class Ordenprod implements Serializable {
 	// bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy = "ordenprod")
 	private List<Procesosop> procesosops;
-
-	// bi-directional many-to-one association to Costosindi
-	@OneToMany(mappedBy = "ordenprod")
-	private List<Costosindi> costosindis;
 
 	public Ordenprod() {
 	}
@@ -100,6 +100,28 @@ public class Ordenprod implements Serializable {
 
 	public void setFFinal(Date fFinal) {
 		this.fFinal = fFinal;
+	}
+
+	public List<Costosindi> getCostosindis() {
+		return this.costosindis;
+	}
+
+	public void setCostosindis(List<Costosindi> costosindis) {
+		this.costosindis = costosindis;
+	}
+
+	public Costosindi addCostosindi(Costosindi costosindi) {
+		getCostosindis().add(costosindi);
+		costosindi.setOrdenprod(this);
+
+		return costosindi;
+	}
+
+	public Costosindi removeCostosindi(Costosindi costosindi) {
+		getCostosindis().remove(costosindi);
+		costosindi.setOrdenprod(null);
+
+		return costosindi;
 	}
 
 	public List<Detalleorden> getDetalleordens() {
@@ -198,28 +220,6 @@ public class Ordenprod implements Serializable {
 		procesosop.setOrdenprod(null);
 
 		return procesosop;
-	}
-
-	public List<Costosindi> getCostosindis() {
-		return this.costosindis;
-	}
-
-	public void setCostosindis(List<Costosindi> costosindis) {
-		this.costosindis = costosindis;
-	}
-
-	public Costosindi addCostosindi(Costosindi costosindi) {
-		getCostosindis().add(costosindi);
-		costosindi.setOrdenprod(this);
-
-		return costosindi;
-	}
-
-	public Costosindi removeCostosindi(Costosindi costosindi) {
-		getCostosindis().remove(costosindi);
-		costosindi.setOrdenprod(null);
-
-		return costosindi;
 	}
 
 }

@@ -4,31 +4,30 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the troqueles database table.
  * 
  */
 @Entity
-@Table(name="troqueles")
-@NamedQuery(name="Troquele.findAll", query="SELECT t FROM Troquele t")
+@Table(name = "troqueles")
+@NamedQuery(name = "Troquele.findAll", query = "SELECT t FROM Troquele t")
 public class Troquele implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="trq_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "trq_codigo")
 	private Integer trqCodigo;
 
-	@Column(name="trq_nombre")
+	@Column(name = "trq_nombre")
 	private String trqNombre;
 
-	//bi-directional many-to-one association to ModTrqTal
-	@OneToMany(mappedBy="troquele")
+	// bi-directional many-to-one association to ModTrqTal
+	@OneToMany(mappedBy = "troquele")
 	private List<ModTrqTal> modTrqTals;
 
-	//bi-directional many-to-one association to TTalla
-	@OneToMany(mappedBy="troquele")
+	// bi-directional many-to-one association to TTalla
+	@OneToMany(mappedBy = "troquele")
 	private List<TTalla> TTallas;
 
 	public Troquele() {

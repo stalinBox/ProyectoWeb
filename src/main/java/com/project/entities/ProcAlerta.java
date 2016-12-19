@@ -4,20 +4,19 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
 /**
  * The persistent class for the proc_alerta database table.
  * 
  */
 @Entity
-@Table(name="proc_alerta")
-@NamedQuery(name="ProcAlerta.findAll", query="SELECT p FROM ProcAlerta p")
+@Table(name = "proc_alerta")
+@NamedQuery(name = "ProcAlerta.findAll", query = "SELECT p FROM ProcAlerta p")
 public class ProcAlerta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="proc_ale_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "proc_ale_codigo")
 	private Integer procAleCodigo;
 
 	@Temporal(TemporalType.DATE)
@@ -25,14 +24,14 @@ public class ProcAlerta implements Serializable {
 
 	private String observacion;
 
-	//bi-directional many-to-one association to Alerta
+	// bi-directional many-to-one association to Alerta
 	@ManyToOne
-	@JoinColumn(name="alerta_codigo")
+	@JoinColumn(name = "alerta_codigo", insertable = false, updatable = false)
 	private Alerta alerta;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
 	private Proceso proceso;
 
 	public ProcAlerta() {

@@ -16,7 +16,7 @@
 					<p:messages autoUpdate="true" />
 					<h:panelGrid id="idProc" columns="2">
 
-						<p:outputLabel value="Proceso: " />
+						<p:outputLabel for="idCbTrpProcesos" value="Proceso: " />
 						<p:selectOneMenu id="idCbTrpProcesos"
 							value="#{procesoBean.proTrp}" style="width:150px" required="true"
 							label="Proceso">
@@ -25,133 +25,57 @@
 							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
 						</p:selectOneMenu>
 
-						<p:outputLabel value="Padre: " />
+						<p:outputLabel for="idCboProPadre" value="Padre: " />
 						<p:selectOneMenu id="idCboProPadre"
 							value="#{procesoBean.proPadre}" style="width:150px">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
-							<f:selectItems value="" />
+							<f:selectItems value="#{procesoBean.selectedItemsProceso}" />
 						</p:selectOneMenu>
 
-						<p:outputLabel value="Activo: " />
+						<p:outputLabel for="idCboActivo" value="Activo: " />
 						<p:selectBooleanButton id="idCboActivo"
 							value="#{procesoBean.proActivo}" onLabel="Si" offLabel="No"
 							style="width:60px" />
 
-						<p:outputLabel value="Descripción: " />
-						<p:inputTextarea rows="6" cols="33" value="#{procesoBean.proDesc}" />
+						<p:outputLabel for="proDescrip" value="Descripción: " />
+						<p:inputTextarea id="proDescrip" rows="6" cols="33"
+							value="#{procesoBean.proDesc}" />
+
+						<p:outputLabel value="Numero de trabajadores: " />
 
 						<f:facet name="footer">
-							<p:commandButton value="Guardar"
-								actionListener="#{procesoBean.btnCreateProceso()}" />
+							<p:commandButton id="btnGuardarProceso" value="Guardar"
+								actionListener="#{procesoBean.btnCreateProceso(actionEvent)}"
+								update=":formDataTable:basicDT, :idProcesos:idCboProPadre, :idProcesos" />
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
 
 			<h:form id="formDataTable">
-				<p:dataTable id="basicDT" var="pro" value="#{procesoBean.procesos}">
+				<p:dataTable id="basicDT" var="process"
+					value="#{procesoBean.procesos}">
 
-					<p:column headerText="Proceso">
-						<h:outputText value="#{pro.tipoProceso.tprNombre}" />
+					<p:column headerText="proceso">
+						<h:outputText value="#{process.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Padre">
-						<h:outputText value="#{pro.proceso.tipoProceso.tprNombre}" />
+						<h:outputText value="#{process.proceso.proCodigo}" />
 					</p:column>
 
 					<p:column headerText="Activo">
-						<h:outputText value="#{pro.proActivo}" />
+						<h:outputText value="#{process.proActivo}" />
+					</p:column>
+					<p:column headerText="Desc">
+						<h:outputText value="#{process.proDescrip}" />
 					</p:column>
 
-					<p:column headerText="Descripcion">
-						<h:outputText value="#{pro.proDescrip}" />
-					</p:column>
-
-					<p:column headerText="Actualizar/Eliminar" style="width:10%">
-						<p:commandButton id="btnUpdate" update=":formUpdate"
-							oncomplete="PF('dialogProcesoUpdate').show()"
-							icon="ui-icon-pencil" title="Modificar">
-							<f:setPropertyActionListener value="#{pro}"
-								target="#{procesoBean.selectedProceso}" />
-						</p:commandButton>
-
-						<p:commandButton id="btnDelete" update="formDelete"
-							oncomplete="PF('dialogProcesoDelete').show()"
-							icon="ui-icon-close" title="Eliminar">
-							<f:setPropertyActionListener value="#{pro}"
-								target="#{procesoBean.selectedProceso}" />
-						</p:commandButton>
-					</p:column>
 				</p:dataTable>
-
-			</h:form>
-			<h:form id="formUpdate">
-				<p:dialog header="Modificar Proceso" widgetVar="dialogProcesoUpdate"
-					modal="true" showEffect="fade" hideEffect="explode"
-					resizable="false" id="dlgProcesoUpdate">
-					<h:inputHidden value="#{procesoBean.selectedProceso.proCodigo}" />
-					<p:panelGrid id="display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
-
-						<h:outputText value="Proceso:" />
-						<p:selectOneMenu value="" style="width:150px" required="true"
-							label="Proceso">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
-						</p:selectOneMenu>
-
-
-						<h:outputText value="Padre:" />
-						<p:selectOneMenu value="" style="width:150px" required="true"
-							label="Proceso">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
-						</p:selectOneMenu>
-
-						<h:outputText value="Activo:" />
-						<p:selectBooleanButton
-							value="#{procesoBean.selectedProceso.proActivo}" onLabel="Si"
-							offLabel="No" style="width:60px" />
-
-						<h:outputText value="Descripcion:" />
-						<p:inputTextarea rows="6" cols="33"
-							value="#{procesoBean.selectedProceso.proDescrip}" />
-
-						<f:facet name="footer">
-							<p:separator />
-							<p:commandButton id="btnUpdateAceptar"
-								update="formDataTable, msgs"
-								oncomplete="PF('dialogProcesoUpdate').hide()"
-								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
-								actionListener="#{procesoBean.btnUpdateProceso(actionEvent)}" />
-
-							<p:commandButton id="btnUpdateCancelar"
-								oncomplete="PF('dialogProcesoUpdate').hide()"
-								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
-						</f:facet>
-
-					</p:panelGrid>
-				</p:dialog>
 			</h:form>
 
-			<h:form id="formDelete">
-				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade" header="Eliminar Proceso"
-					severity="alert" widgetVar="dialogProcesoDelete">
-					<h:inputHidden value="#{procesoBean.selectedProceso.proCodigo}" />
-					<p:commandButton id="confirm" value="Si"
-						update="formDataTable, msgs" icon="ui-icon-check"
-						oncomplete="PF('dialogProcesoDelete').hide()"
-						actionListener="#{procesoBean.btnDeleteProceso(actionEvent)}" />
-
-					<p:commandButton id="decline" value="No" icon="ui-icon-close"
-						oncomplete="PF('dialogProcesoDelete').hide()" />
-				</p:confirmDialog>
-			</h:form>
 
 		</ui:define>
 	</ui:composition>

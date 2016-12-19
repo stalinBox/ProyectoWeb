@@ -25,17 +25,17 @@ public class Confproceso implements Serializable {
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
-	@JoinColumn(name = "mod_codigo")
+	@JoinColumn(name = "mod_codigo", insertable = false, updatable = false)
 	private Modelo modelo;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo")
+	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
 	private Proceso proceso1;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "sub_pro")
+	@JoinColumn(name = "sub_pro", insertable = false, updatable = false)
 	private Proceso proceso2;
 
 	public Confproceso() {

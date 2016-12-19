@@ -2,7 +2,9 @@ package com.project.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.project.entities.Proceso;
 import com.project.utils.HibernateUtil;
@@ -30,10 +32,22 @@ public class ProcesoDaoImpl implements ProcesoDao {
 	@Override
 	public boolean create(Proceso proceso) {
 		boolean flag;
+
+		System.out.println("Hola1: " + proceso.getProceso().getProCodigo());
+		proceso.getProceso().getProCodigo();
+
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(proceso);
+			String hql = "INSERT INTO PROCESOS(PRO_CODIGO, TPR_CODIGO, PRO_PADRE,PRO_ACTIVO,PRO_DESCRIP) "
+					+ "VALUES(DEFAULT,:val1,:val2,:val3,:val4)";
+			Query query = sesion.createSQLQuery(hql);
+			query.setParameter("val1", proceso.getTipoProceso().getTprCodigo());
+			query.setParameter("val2", proceso.getProceso().getProCodigo(),
+					StandardBasicTypes.INTEGER);
+			query.setParameter("val3", proceso.getProActivo());
+			query.setParameter("val4", proceso.getProDescrip());
+			query.executeUpdate();
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
@@ -42,6 +56,17 @@ public class ProcesoDaoImpl implements ProcesoDao {
 			System.out.println("ERRORRRRR CREATE PROCESO: "
 					+ e.getMessage().toString());
 		}
+		// try {
+		// sesion.beginTransaction();
+		// sesion.save(proceso);
+		// sesion.getTransaction().commit();
+		// flag = true;
+		// } catch (Exception e) {
+		// flag = false;
+		// sesion.getTransaction().rollback();
+		// System.out.println("ERRORRRRR CREATE PROCESO: "
+		// + e.getMessage().toString());
+		// }
 		return flag;
 	}
 
