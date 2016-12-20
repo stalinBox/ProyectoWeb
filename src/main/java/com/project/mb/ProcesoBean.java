@@ -76,6 +76,24 @@ public class ProcesoBean implements Serializable {
 		}
 	}
 
+	public void btnDeleteProceso(ActionEvent actionEvent) {
+		String msg;
+		ProcesoDao procesoDao = new ProcesoDaoImpl();
+		if (procesoDao.delete(this.selectedProceso.getProCodigo())) {
+			msg = "Se eliminó el proceso de calzado exitosamente";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			RefreshPage ref = new RefreshPage();
+			ref.refresh();
+		} else {
+			msg = "Error al eliminar el proceso de calzado";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+
 	// SETTERS AND GETTERS
 	public List<Proceso> getProcesos() {
 		ProcesoDao procesDao = new ProcesoDaoImpl();
@@ -98,7 +116,7 @@ public class ProcesoBean implements Serializable {
 	public List<SelectItem> getSelectedTprProceso() {
 		this.selectedTprProceso = new ArrayList<SelectItem>();
 		TipprocesosDao tprDao = new TipprocesoDaoImpl();
-		List<TipoProceso> tipoPro = tprDao.findAll();
+		List<TipoProceso> tipoPro = tprDao.findExcludebyProceso();
 		this.selectedTprProceso.clear();
 		for (TipoProceso tpr : tipoPro) {
 			SelectItem selectItem = new SelectItem(tpr.getTprCodigo(),
@@ -115,7 +133,7 @@ public class ProcesoBean implements Serializable {
 	public List<SelectItem> getSelectedItemsProceso() {
 		this.selectedItemsProceso = new ArrayList<SelectItem>();
 		ProcesoDao procesoDao = new ProcesoDaoImpl();
-		List<Proceso> process = procesoDao.findAll();
+		List<Proceso> process = procesoDao.findPadre();
 		this.selectedItemsProceso.clear();
 		for (Proceso pro : process) {
 			SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro

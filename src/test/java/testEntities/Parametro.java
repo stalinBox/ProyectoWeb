@@ -4,43 +4,46 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the parametros database table.
  * 
  */
 @Entity
-@Table(name="parametros")
-@NamedQuery(name="Parametro.findAll", query="SELECT p FROM Parametro p")
+@Table(name = "parametros")
+@NamedQuery(name = "Parametro.findAll", query = "SELECT p FROM Parametro p")
 public class Parametro implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="param_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "param_codigo")
 	private Integer paramCodigo;
 
 	private Integer standauto;
 
 	private Integer standconv;
 
-	//bi-directional many-to-one association to Lineasturno
-	@ManyToOne
-	@JoinColumn(name="ltcodigo", insertable = false, updatable = false)
-	private Lineasturno lineasturno;
+	// bi-directional many-to-one association to Lineasturno
+	@OneToMany(mappedBy = "parametro")
+	private List<Lineasturno> lineasturnos;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name="pro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "ordenprod_codigo", insertable = false, updatable = false)
+	private Ordenprod ordenprod;
+
+	// bi-directional many-to-one association to Proceso
+	@ManyToOne
+	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Usuario
+	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name="user_id_resp", insertable = false, updatable = false)
+	@JoinColumn(name = "user_id_resp", insertable = false, updatable = false)
 	private Usuario usuario;
 
-	//bi-directional many-to-one association to Programdia
-	@OneToMany(mappedBy="parametro")
+	// bi-directional many-to-one association to Programdia
+	@OneToMany(mappedBy = "parametro")
 	private List<Programdia> programdias;
 
 	public Parametro() {
@@ -70,12 +73,34 @@ public class Parametro implements Serializable {
 		this.standconv = standconv;
 	}
 
-	public Lineasturno getLineasturno() {
-		return this.lineasturno;
+	public List<Lineasturno> getLineasturnos() {
+		return this.lineasturnos;
 	}
 
-	public void setLineasturno(Lineasturno lineasturno) {
-		this.lineasturno = lineasturno;
+	public void setLineasturnos(List<Lineasturno> lineasturnos) {
+		this.lineasturnos = lineasturnos;
+	}
+
+	public Lineasturno addLineasturno(Lineasturno lineasturno) {
+		getLineasturnos().add(lineasturno);
+		lineasturno.setParametro(this);
+
+		return lineasturno;
+	}
+
+	public Lineasturno removeLineasturno(Lineasturno lineasturno) {
+		getLineasturnos().remove(lineasturno);
+		lineasturno.setParametro(null);
+
+		return lineasturno;
+	}
+
+	public Ordenprod getOrdenprod() {
+		return this.ordenprod;
+	}
+
+	public void setOrdenprod(Ordenprod ordenprod) {
+		this.ordenprod = ordenprod;
 	}
 
 	public Proceso getProceso() {

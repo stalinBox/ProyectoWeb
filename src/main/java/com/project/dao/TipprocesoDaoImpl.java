@@ -14,7 +14,7 @@ public class TipprocesoDaoImpl implements TipprocesosDao {
 	public List<TipoProceso> findAll() {
 		List<TipoProceso> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM TipoProceso order by tprNombre";
+		String sql = "FROM TipoProceso order by tprCodigo asc";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -86,6 +86,24 @@ public class TipprocesoDaoImpl implements TipprocesosDao {
 					+ e.getMessage().toString());
 		}
 		return flag;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TipoProceso> findExcludebyProceso() {
+		List<TipoProceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from TipoProceso tpr where tpr.tprCodigo NOT IN(from Proceso p) order by tprCodigo asc ";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLTIPOPROCESO: " + e.toString());
+		}
+		return listado;
 	}
 
 }

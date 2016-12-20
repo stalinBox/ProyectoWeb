@@ -25,9 +25,6 @@ public class Menu implements Serializable {
 	@Column(name = "menu_icono")
 	private String menuIcono;
 
-	@Column(name = "menu_nivel")
-	private Integer menuNivel;
-
 	@Column(name = "menu_nombre")
 	private String menuNombre;
 
@@ -54,6 +51,15 @@ public class Menu implements Serializable {
 	// bi-directional many-to-one association to Menu
 	@OneToMany(mappedBy = "menu2")
 	private List<Menu> menus2;
+
+	// bi-directional many-to-one association to Menu
+	@ManyToOne
+	@JoinColumn(name = "menu_nivel", insertable = false, updatable = false)
+	private Menu menu3;
+
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu3")
+	private List<Menu> menus3;
 
 	// bi-directional many-to-one association to Rolmenu
 	@OneToMany(mappedBy = "menu1")
@@ -88,14 +94,6 @@ public class Menu implements Serializable {
 
 	public void setMenuIcono(String menuIcono) {
 		this.menuIcono = menuIcono;
-	}
-
-	public Integer getMenuNivel() {
-		return this.menuNivel;
-	}
-
-	public void setMenuNivel(Integer menuNivel) {
-		this.menuNivel = menuNivel;
 	}
 
 	public String getMenuNombre() {
@@ -180,6 +178,36 @@ public class Menu implements Serializable {
 		menus2.setMenu2(null);
 
 		return menus2;
+	}
+
+	public Menu getMenu3() {
+		return this.menu3;
+	}
+
+	public void setMenu3(Menu menu3) {
+		this.menu3 = menu3;
+	}
+
+	public List<Menu> getMenus3() {
+		return this.menus3;
+	}
+
+	public void setMenus3(List<Menu> menus3) {
+		this.menus3 = menus3;
+	}
+
+	public Menu addMenus3(Menu menus3) {
+		getMenus3().add(menus3);
+		menus3.setMenu3(this);
+
+		return menus3;
+	}
+
+	public Menu removeMenus3(Menu menus3) {
+		getMenus3().remove(menus3);
+		menus3.setMenu3(null);
+
+		return menus3;
 	}
 
 	public List<Rolmenu> getRolmenus1() {

@@ -3,14 +3,13 @@ package testEntities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the t_tallas database table.
  * 
  */
 @Entity
-@Table(name="t_tallas")
-@NamedQuery(name="TTalla.findAll", query="SELECT t FROM TTalla t")
+@Table(name = "t_tallas")
+@NamedQuery(name = "TTalla.findAll", query = "SELECT t FROM TTalla t")
 public class TTalla implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -19,14 +18,14 @@ public class TTalla implements Serializable {
 
 	private Integer cantidad;
 
-	//bi-directional many-to-one association to Talla
+	// bi-directional many-to-one association to Talla
 	@ManyToOne
-	@JoinColumn(name="tal_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "tal_codigo", insertable = false, updatable = false)
 	private Talla talla;
 
-	//bi-directional many-to-one association to Troquele
+	// bi-directional many-to-one association to Troquele
 	@ManyToOne
-	@JoinColumn(name="trq_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "trq_codigo", insertable = false, updatable = false)
 	private Troquele troquele;
 
 	public TTalla() {

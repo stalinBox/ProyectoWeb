@@ -758,7 +758,7 @@ public class ParametrizacionBean implements Serializable {
 		tipPro.setTprCodigo(1);
 		boolean a = false;
 		lineasLP.setLineaaut(a);
-		lineasLP.setTipoProceso(tipPro);
+		// lineasLP.setTipoProceso(tipPro);
 
 		this.selectItemsLPMontaje = new ArrayList<SelectItem>();
 		LineasProdDao lpDao = new LineasProdDaoImpl();
@@ -784,7 +784,7 @@ public class ParametrizacionBean implements Serializable {
 		tipPro.setTprCodigo(2);
 		boolean a = false;
 		lineasLP.setLineaaut(a);
-		lineasLP.setTipoProceso(tipPro);
+		// lineasLP.setTipoProceso(tipPro);
 
 		this.selectItemsLPAparado = new ArrayList<SelectItem>();
 		LineasProdDao lpDao = new LineasProdDaoImpl();
@@ -810,7 +810,7 @@ public class ParametrizacionBean implements Serializable {
 		tipPro.setTprCodigo(3);
 		boolean a = false;
 		lineasLP.setLineaaut(a);
-		lineasLP.setTipoProceso(tipPro);
+		// lineasLP.setTipoProceso(tipPro);
 
 		this.selectItemsLPTroquelado = new ArrayList<SelectItem>();
 		LineasProdDao lpDao = new LineasProdDaoImpl();

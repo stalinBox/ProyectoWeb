@@ -16,7 +16,7 @@ public class ProcesoDaoImpl implements ProcesoDao {
 	public List<Proceso> findAll() {
 		List<Proceso> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Proceso order by proCodigo";
+		String sql = "FROM Proceso order by proCodigo ";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -33,9 +33,6 @@ public class ProcesoDaoImpl implements ProcesoDao {
 	public boolean create(Proceso proceso) {
 		boolean flag;
 
-		System.out.println("Hola1: " + proceso.getProceso().getProCodigo());
-		proceso.getProceso().getProCodigo();
-
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
@@ -49,6 +46,7 @@ public class ProcesoDaoImpl implements ProcesoDao {
 			query.setParameter("val4", proceso.getProDescrip());
 			query.executeUpdate();
 			sesion.getTransaction().commit();
+
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
@@ -56,17 +54,6 @@ public class ProcesoDaoImpl implements ProcesoDao {
 			System.out.println("ERRORRRRR CREATE PROCESO: "
 					+ e.getMessage().toString());
 		}
-		// try {
-		// sesion.beginTransaction();
-		// sesion.save(proceso);
-		// sesion.getTransaction().commit();
-		// flag = true;
-		// } catch (Exception e) {
-		// flag = false;
-		// sesion.getTransaction().rollback();
-		// System.out.println("ERRORRRRR CREATE PROCESO: "
-		// + e.getMessage().toString());
-		// }
 		return flag;
 	}
 
@@ -111,6 +98,44 @@ public class ProcesoDaoImpl implements ProcesoDao {
 					+ e.getMessage().toString());
 		}
 		return flag;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findPadre() {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Proceso p WHERE p.proceso.proCodigo is null";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findSubProcesos() {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Proceso p WHERE p.proceso.proCodigo is not null";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
+		}
+		return listado;
 	}
 
 }

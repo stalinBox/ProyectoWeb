@@ -7,6 +7,10 @@ import com.project.entities.Proceso;
 public interface ProcesoDao {
 	public List<Proceso> findAll();
 
+	public List<Proceso> findPadre();
+
+	public List<Proceso> findSubProcesos();
+
 	public boolean create(Proceso proceso);
 
 	public boolean update(Proceso proceso);

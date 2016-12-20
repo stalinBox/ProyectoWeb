@@ -4,34 +4,33 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the lugares database table.
  * 
  */
 @Entity
-@Table(name="lugares")
-@NamedQuery(name="Lugare.findAll", query="SELECT l FROM Lugare l")
+@Table(name = "lugares")
+@NamedQuery(name = "Lugare.findAll", query = "SELECT l FROM Lugare l")
 public class Lugare implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="lugar_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "lugar_codigo")
 	private Integer lugarCodigo;
 
 	private String nomlugar;
 
-	//bi-directional many-to-one association to Ordenprod
-	@OneToMany(mappedBy="lugare")
+	// bi-directional many-to-one association to Ordenprod
+	@OneToMany(mappedBy = "lugare")
 	private List<Ordenprod> ordenprods;
 
-	//bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy="lugare1")
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "lugare1")
 	private List<Procesosop> procesosops1;
 
-	//bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy="lugare2")
+	// bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy = "lugare2")
 	private List<Procesosop> procesosops2;
 
 	public Lugare() {

@@ -44,7 +44,7 @@ public class LineasProduccionBean implements Serializable {
 
 		TipoProceso pp = new TipoProceso();
 		pp.setTprCodigo(2);
-		this.selectedLineasProd.setTipoProceso(pp);
+		// this.selectedLineasProd.setTipoProceso(pp);
 		this.selectedLineasProd.setLineaaut(null);
 
 		if (lineasDao.create(this.selectedLineasProd)) {

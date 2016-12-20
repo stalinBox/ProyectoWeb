@@ -1,21 +1,20 @@
-package com.project.entities;
+package testEntities;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
 
 /**
  * The persistent class for the costosindi database table.
  * 
  */
 @Entity
-@NamedQuery(name="Costosindi.findAll", query="SELECT c FROM Costosindi c")
+@NamedQuery(name = "Costosindi.findAll", query = "SELECT c FROM Costosindi c")
 public class Costosindi implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="costos_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "costos_codigo")
 	private Integer costosCodigo;
 
 	private double cifpresu;
@@ -26,14 +25,14 @@ public class Costosindi implements Serializable {
 
 	private double manobrareal;
 
-	//bi-directional many-to-one association to Ordenprod
+	// bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name="ordenprod_codigo")
+	@JoinColumn(name = "ordenprod_codigo", insertable = false, updatable = false)
 	private Ordenprod ordenprod;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
 	private Proceso proceso;
 
 	public Costosindi() {

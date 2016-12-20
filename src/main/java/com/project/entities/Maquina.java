@@ -4,19 +4,20 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the maquinas database table.
  * 
  */
 @Entity
-@Table(name = "maquinas")
-@NamedQuery(name = "Maquina.findAll", query = "SELECT m FROM Maquina m")
+@Table(name="maquinas")
+@NamedQuery(name="Maquina.findAll", query="SELECT m FROM Maquina m")
 public class Maquina implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "maq_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="maq_codigo")
 	private Integer maqCodigo;
 
 	private String descmaq;
@@ -25,13 +26,13 @@ public class Maquina implements Serializable {
 
 	private String nommaquina;
 
-	// bi-directional many-to-one association to Dispositivo
-	@OneToMany(mappedBy = "maquina")
+	//bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy="maquina")
 	private List<Dispositivo> dispositivos;
 
-	// bi-directional many-to-one association to Lineasprod
+	//bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name = "lineapro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name="lineapro_codigo")
 	private Lineasprod lineasprod;
 
 	public Maquina() {

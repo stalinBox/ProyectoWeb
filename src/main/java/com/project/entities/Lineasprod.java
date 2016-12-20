@@ -4,40 +4,42 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the lineasprod database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Lineasprod.findAll", query = "SELECT l FROM Lineasprod l")
+@NamedQuery(name="Lineasprod.findAll", query="SELECT l FROM Lineasprod l")
 public class Lineasprod implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "lineapro_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="lineapro_codigo")
 	private Integer lineaproCodigo;
 
-	@Column(name = "linea_desc")
+	@Column(name="linea_desc")
 	private String lineaDesc;
+
+	@Column(name="linea_numtrab")
+	private Integer lineaNumtrab;
 
 	private Boolean lineaaut;
 
 	private String nomlinea;
 
-	private Integer nummaq;
-
-	// bi-directional many-to-one association to TipoProceso
+	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo", insertable = false, updatable = false)
-	private TipoProceso tipoProceso;
+	@JoinColumn(name="pro_codigo")
+	private Proceso proceso;
 
-	// bi-directional many-to-one association to Lineasturno
-	@OneToMany(mappedBy = "lineasprod")
+	//bi-directional many-to-one association to Lineasturno
+	@OneToMany(mappedBy="lineasprod")
 	private List<Lineasturno> lineasturnos;
 
-	// bi-directional many-to-one association to Maquina
-	@OneToMany(mappedBy = "lineasprod")
+	//bi-directional many-to-one association to Maquina
+	@OneToMany(mappedBy="lineasprod")
 	private List<Maquina> maquinas;
 
 	public Lineasprod() {
@@ -59,6 +61,14 @@ public class Lineasprod implements Serializable {
 		this.lineaDesc = lineaDesc;
 	}
 
+	public Integer getLineaNumtrab() {
+		return this.lineaNumtrab;
+	}
+
+	public void setLineaNumtrab(Integer lineaNumtrab) {
+		this.lineaNumtrab = lineaNumtrab;
+	}
+
 	public Boolean getLineaaut() {
 		return this.lineaaut;
 	}
@@ -75,20 +85,12 @@ public class Lineasprod implements Serializable {
 		this.nomlinea = nomlinea;
 	}
 
-	public Integer getNummaq() {
-		return this.nummaq;
+	public Proceso getProceso() {
+		return this.proceso;
 	}
 
-	public void setNummaq(Integer nummaq) {
-		this.nummaq = nummaq;
-	}
-
-	public TipoProceso getTipoProceso() {
-		return this.tipoProceso;
-	}
-
-	public void setTipoProceso(TipoProceso tipoProceso) {
-		this.tipoProceso = tipoProceso;
+	public void setProceso(Proceso proceso) {
+		this.proceso = proceso;
 	}
 
 	public List<Lineasturno> getLineasturnos() {

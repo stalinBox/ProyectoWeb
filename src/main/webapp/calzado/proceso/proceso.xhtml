@@ -43,8 +43,6 @@
 						<p:inputTextarea id="proDescrip" rows="6" cols="33"
 							value="#{procesoBean.proDesc}" />
 
-						<p:outputLabel value="Numero de trabajadores: " />
-
 						<f:facet name="footer">
 							<p:commandButton id="btnGuardarProceso" value="Guardar"
 								actionListener="#{procesoBean.btnCreateProceso(actionEvent)}"
@@ -55,28 +53,53 @@
 			</h:form>
 
 			<h:form id="formDataTable">
-				<p:dataTable id="basicDT" var="process"
-					value="#{procesoBean.procesos}">
+				<p:growl id="msgs" showDetail="true" />
 
+				<p:dataTable id="basicDT" var="process"
+					value="#{procesoBean.procesos}" editable="true" editMode="cell">
+					<f:facet name="header">Procesos</f:facet>
 					<p:column headerText="proceso">
 						<h:outputText value="#{process.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Padre">
-						<h:outputText value="#{process.proceso.proCodigo}" />
+						<h:outputText value="#{process.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Activo">
 						<h:outputText value="#{process.proActivo}" />
 					</p:column>
+
 					<p:column headerText="Desc">
 						<h:outputText value="#{process.proDescrip}" />
 					</p:column>
 
+					<p:column headerText="Eliminar" style="width:10%">
+						<p:commandButton id="btnDelete" update=":formDelete"
+							oncomplete="PF('dialogProcesoDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{process}"
+								target="#{procesoBean.selectedProceso}" />
+						</p:commandButton>
+					</p:column>
 				</p:dataTable>
 			</h:form>
 
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade"
+					header="Eliminar Proceso de Calzado" severity="alert"
+					widgetVar="dialogProcesoDelete">
+					<h:inputHidden value="#{procesoBean.selectedProceso.proCodigo}" />
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs,:idProcesos:idCbTrpProcesos,:idProcesos"
+						icon="ui-icon-check" oncomplete="PF('dialogProcesoDelete').hide()"
+						actionListener="#{procesoBean.btnDeleteProceso(actionEvent)}" />
 
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogProcesoDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

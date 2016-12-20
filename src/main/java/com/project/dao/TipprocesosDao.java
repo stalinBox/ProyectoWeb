@@ -7,6 +7,8 @@ import com.project.entities.TipoProceso;
 public interface TipprocesosDao {
 	public List<TipoProceso> findAll();
 
+	public List<TipoProceso> findExcludebyProceso();
+
 	public boolean create(TipoProceso tipProceso);
 
 	public boolean update(TipoProceso tipProceso);

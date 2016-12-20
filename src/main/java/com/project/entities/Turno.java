@@ -5,34 +5,35 @@ import javax.persistence.*;
 import java.sql.Time;
 import java.util.List;
 
+
 /**
  * The persistent class for the turnos database table.
  * 
  */
 @Entity
-@Table(name = "turnos")
-@NamedQuery(name = "Turno.findAll", query = "SELECT t FROM Turno t")
+@Table(name="turnos")
+@NamedQuery(name="Turno.findAll", query="SELECT t FROM Turno t")
 public class Turno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "turno_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="turno_codigo")
 	private Integer turnoCodigo;
 
-	@Column(name = "h_fin")
+	@Column(name="h_fin")
 	private Time hFin;
 
-	@Column(name = "h_inicio")
+	@Column(name="h_inicio")
 	private Time hInicio;
 
 	private String nombturno;
 
-	@Column(name = "turno_desc")
+	@Column(name="turno_desc")
 	private String turnoDesc;
 
-	// bi-directional many-to-one association to Lineasturno
-	@OneToMany(mappedBy = "turno")
+	//bi-directional many-to-one association to Lineasturno
+	@OneToMany(mappedBy="turno")
 	private List<Lineasturno> lineasturnos;
 
 	public Turno() {

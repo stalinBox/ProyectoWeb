@@ -39,7 +39,7 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 			// Parametros a cambiar
 			lienaPdb.setNomlinea(lineaP.getNomlinea());
-			lienaPdb.setNummaq(lineaP.getNummaq());
+			// lienaPdb.setNummaq(lineaP.getNummaq());
 			lienaPdb.setLineaaut(lineaP.getLineaaut());
 			lienaPdb.setLineaDesc(lineaP.getLineaDesc());
 			// fin de parametros
@@ -101,7 +101,7 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
-				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
+		/* + lineasLP.getTipoProceso().getTprCodigo() */+ " AND lineaaut= '"
 				+ lineasLP.getLineaaut() + "'";
 		System.out.println(sql);
 
@@ -127,10 +127,10 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		TipoProceso tipPro = new TipoProceso();
 		tipPro.setTprCodigo(2);
 		lineasLP.setLineaaut(f);
-		lineasLP.setTipoProceso(tipPro);
+		// lineasLP.setTipoProceso(tipPro);
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
-				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
+		/* + lineasLP.getTipoProceso().getTprCodigo() */+ " AND lineaaut= '"
 				+ lineasLP.getLineaaut() + "'";
 		System.out.println(sql);
 
@@ -156,10 +156,10 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		TipoProceso tipPro = new TipoProceso();
 		tipPro.setTprCodigo(3);
 		lineasLP.setLineaaut(f);
-		lineasLP.setTipoProceso(tipPro);
+		// lineasLP.setTipoProceso(tipPro);
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasprod WHERE tipoProceso.tprCodigo="
-				+ lineasLP.getTipoProceso().getTprCodigo() + " AND lineaaut= '"
+		/* + lineasLP.getTipoProceso().getTprCodigo() */+ " AND lineaaut= '"
 				+ lineasLP.getLineaaut() + "'";
 		System.out.println(sql);
 
