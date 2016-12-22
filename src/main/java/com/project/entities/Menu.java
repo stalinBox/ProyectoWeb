@@ -5,69 +5,68 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 /**
  * The persistent class for the menu database table.
  * 
  */
 @Entity
-@NamedQuery(name="Menu.findAll", query="SELECT m FROM Menu m")
+@NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")
 public class Menu implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="menu_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "menu_id")
 	private Integer menuId;
 
-	@Column(name="menu_estado")
+	@Column(name = "menu_estado")
 	private BigDecimal menuEstado;
 
-	@Column(name="menu_icono")
+	@Column(name = "menu_icono")
 	private String menuIcono;
 
-	@Column(name="menu_nombre")
+	@Column(name = "menu_nombre")
 	private String menuNombre;
 
-	@Column(name="menu_orden")
+	@Column(name = "menu_orden")
 	private Integer menuOrden;
 
-	@Column(name="menu_url")
+	@Column(name = "menu_url")
 	private String menuUrl;
 
-	//bi-directional many-to-one association to Menu
+	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name="m_id")
+	@JoinColumn(name = "m_id", insertable = false, updatable = false)
 	private Menu menu1;
 
-	//bi-directional many-to-one association to Menu
-	@OneToMany(mappedBy="menu1")
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu1")
 	private List<Menu> menus1;
 
-	//bi-directional many-to-one association to Menu
+	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name="m_id", insertable = false, updatable = false)
+	@JoinColumn(name = "m_id")
 	private Menu menu2;
 
-	//bi-directional many-to-one association to Menu
-	@OneToMany(mappedBy="menu2")
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu2")
 	private List<Menu> menus2;
 
-	//bi-directional many-to-one association to Menu
+	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name="menu_nivel")
+	@JoinColumn(name = "menu_nivel")
 	private Menu menu3;
 
-	//bi-directional many-to-one association to Menu
-	@OneToMany(mappedBy="menu3")
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu3")
 	private List<Menu> menus3;
 
-	//bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy="menu1")
+	// bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy = "menu1")
 	private List<Rolmenu> rolmenus1;
 
-	//bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy="menu2")
+	// bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy = "menu2")
 	private List<Rolmenu> rolmenus2;
 
 	public Menu() {

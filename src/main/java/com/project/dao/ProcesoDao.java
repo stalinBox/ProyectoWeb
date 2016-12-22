@@ -11,6 +11,8 @@ public interface ProcesoDao {
 
 	public List<Proceso> findSubProcesos();
 
+	public List<Proceso> findByProceso(Integer a);
+
 	public boolean create(Proceso proceso);
 
 	public boolean update(Proceso proceso);

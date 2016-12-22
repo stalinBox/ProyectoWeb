@@ -138,4 +138,22 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findByProceso(Integer a) {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Proceso p where p.proceso = '" + a + "'";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
+		}
+		return listado;
+	}
+
 }

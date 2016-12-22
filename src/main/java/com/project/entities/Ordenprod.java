@@ -41,7 +41,7 @@ public class Ordenprod implements Serializable {
 
 	// bi-directional many-to-one association to Cliente
 	@ManyToOne
-	@JoinColumn(name = "user_id_soli", insertable = false, updatable = false)
+	@JoinColumn(name = "user_id_soli")
 	private Cliente cliente;
 
 	// bi-directional many-to-one association to Lugare
@@ -56,7 +56,7 @@ public class Ordenprod implements Serializable {
 
 	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name = "user_id_soli")
+	@JoinColumn(name = "user_id_soli", insertable = false, updatable = false)
 	private Usuario usuario2;
 
 	// bi-directional many-to-one association to Parametro

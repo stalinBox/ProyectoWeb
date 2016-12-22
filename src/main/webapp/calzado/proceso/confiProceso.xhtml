@@ -8,6 +8,7 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+
 			<p:growl id="msgs" showDetail="true" />
 
 			<h:form id="idConfProcesos">
@@ -18,28 +19,28 @@
 
 						<p:outputLabel for="idSettModelos" value="Modelos: " />
 						<p:selectOneMenu id="idSettModelos"
-							value="#{settingsConfProcesoBean.confProceso}" required="true"
-							style="width:150px">
+							value="#{settingsConfProcesoBean.selectedConfProceso.modelo.modCodigo}"
+							required="true" style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
-							<f:selectItems
-								value="#{settingsConfProcesoBean.selectedItemsModelos}" />
+							<f:selectItems value="#{modelosBean.selectItemsModelo}" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="idSettProceso" value="Proceso: " />
 						<p:selectOneMenu id="idSettProceso"
-							value="#{settingsConfProcesoBean.confProceso}" required="true"
-							style="width:150px">
+							value="#{settingsConfProcesoBean.selectedConfProceso.proceso1.proCodigo}"
+							required="true" style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems
 								value="#{settingsConfProcesoBean.selectedItemsProcesos}" />
+							<p:ajax update=":idConfProcesos:idSubProceso" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="idSubProceso" value="SubProceso: " />
 						<p:selectOneMenu id="idSubProceso"
-							value="#{settingsConfProcesoBean.confProceso}" required="true"
-							style="width:150px">
+							value="#{settingsConfProcesoBean.selectedConfProceso.proceso2.proCodigo}"
+							required="true" style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems
@@ -48,14 +49,14 @@
 
 						<p:outputLabel for="idSettTs" value="Tiempo(m/par): " />
 						<p:inputNumber id="idSettTs"
-							value="#{settingsConfProcesoBean.confProceso}" />
-
+							value="#{settingsConfProcesoBean.selectedConfProceso.tiempoTs}" />
 						<f:facet name="footer">
 							<p:commandButton id="btnGuardarTS" value="Guardar"
 								actionListener="#{settingsConfProcesoBean.btnCreateConfTimes(actionEvent)}"
 								update=":formDataTable:basicDT, :idConfProcesos" />
 						</f:facet>
 					</h:panelGrid>
+
 				</p:panel>
 			</h:form>
 
@@ -99,7 +100,8 @@
 					<h:inputHidden
 						value="#{settingsConfProcesoBean.selectedConfProceso.confproCodigo}" />
 					<p:commandButton id="confirm" value="Si"
-						update="formDataTable, msgs,:idConfProcesos" icon="ui-icon-check"
+						update=":formDataTable, :msgs,:idConfProcesos:panel"
+						icon="ui-icon-check"
 						oncomplete="PF('dialogConfProcesoDelete').hide()"
 						actionListener="#{settingsConfProcesoBean.btnDeleteConfTimes(actionEvent)}" />
 

@@ -40,4 +40,9 @@ public class AppBean {
 	public String andonPath() {
 		return MyUtil.andonPath();
 	}
+
+	public String costosPath() {
+		return MyUtil.costosIndirestos();
+	}
+
 }

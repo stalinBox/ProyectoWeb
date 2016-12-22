@@ -2,7 +2,9 @@ package com.project.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.project.entities.Ordenprod;
 import com.project.utils.HibernateUtil;
@@ -11,12 +13,39 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 
 	@Override
 	public boolean create(Ordenprod ordenProd) {
+		System.out
+				.println("Cliente: " + ordenProd.getCliente().getCodCliente());
+		System.out.println("Responsable: "
+				+ ordenProd.getUsuario1().getUserId());
+		System.out.println("Fecha Actual: " + ordenProd.getFActual());
+
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(ordenProd);
+
+			String hql = "INSERT INTO ORDENPROD(ORDENPROD_CODIGO,USER_ID_SOLI,USER_ID_RESP,LUGAR_CODIGO_DEST,F_ACTUAL,F_ESTIM,F_FINAL) "
+					+ "VALUES(DEFAULT,:val1,:val2,:val3,:val4,:val5,:val6)";
+			Query query = sesion.createSQLQuery(hql);
+
+			query.setParameter("val1", ordenProd.getUsuario1().getUserId(),
+					StandardBasicTypes.INTEGER);
+
+			query.setParameter("val2", ordenProd.getCliente().getCodCliente(),
+					StandardBasicTypes.INTEGER);
+
+			query.setParameter("val3", ordenProd.getLugare().getLugarCodigo(),
+					StandardBasicTypes.INTEGER);
+
+			query.setParameter("val4", ordenProd.getFActual(),
+					StandardBasicTypes.DATE);
+			query.setParameter("val5", ordenProd.getFEstim(),
+					StandardBasicTypes.DATE);
+			query.setParameter("val6", ordenProd.getFFinal(),
+					StandardBasicTypes.DATE);
+			query.executeUpdate();
 			sesion.getTransaction().commit();
+
 			flag = true;
 		} catch (Exception e) {
 			flag = false;

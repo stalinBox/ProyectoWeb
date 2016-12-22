@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+			<h:form id="idFrmOrderProd">
+				<p:commandButton value="Crear Orden"
+					oncomplete="PF('dialogDetaProCreate').show()" title="Crear Orden"
+					icon="fa fa-plus" />
+				<br />
+				<p:commandButton value="Eliminar Orden"
+					oncomplete="PF('dialogDetaProCreate').show()"
+					title="Eliminar Orden" icon="ui-icon-close" />
+
+				<h:panelGrid id="idPGridOrder" columns="2">
+					<p:outputLabel value="Responsable: " />
+					<h:inputText value="" disabled="true" />
+					<p:outputLabel value="Cliente: " />
+					<h:inputText value="" disabled="true" />
+				</h:panelGrid>
+			</h:form>
+
+			<h:form id="idFrmIngresosDetalle">
+				<p:panel id="idPanel">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid id="idProc" columns="2">
+						<p:outputLabel value="Modelo: " />
+						<h:inputText />
+						<p:outputLabel value="Talla: " />
+						<h:inputText />
+						<p:outputLabel value="Cantidad: " />
+						<h:inputText />
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="detaPro" value="">
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nueva Orden" widgetVar="dialogDetaProCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgDetaProCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText for="idTxtFechaOrden" value="Orden al día: " />
+						<p:calendar id="idTxtFechaOrden"
+							value="#{ordenProduccionBean.selectedOrden.FActual}"
+							disabled="true" pattern="dd-MM-yyyy" mask="true" />
+
+						<h:outputText for="idResponsable" value="Responsable: " />
+						<p:selectOneMenu id="idResponsable"
+							value="#{ordenProduccionBean.selectedOrden.usuario1.userId}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{ordenProduccionBean.selectedItemsUsuarios}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Cliente: " />
+						<p:selectOneMenu id="idCliente"
+							value="#{ordenProduccionBean.selectedOrden.cliente.codCliente}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{ordenProduccionBean.selectedItemsClientes}" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:commandButton id="btnCreateAceptar" icon="fa fa-fw fa-save"
+								title="Guardar" value="Guardar"
+								actionListener="#{ordenProduccionBean.btnCreateOrden(actionEvent)}"
+								oncomplete="PF('dialogDetaProCreate').hide()" />
+
+							<p:commandButton id="btnCreateCancelar" icon="fa fa-fw fa-close"
+								title="Cancelar" value="Cancelar"
+								oncomplete="PF('dialogDetaProCreate').hide()" />
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

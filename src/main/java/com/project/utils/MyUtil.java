@@ -40,4 +40,8 @@ public class MyUtil {
 		return "http://localhost:8080/ProyectoWeb/andon/";
 	}
 
+	public static String costosIndirestos() {
+		return "http://localhost:8080/ProyectoWeb/costos/";
+	}
+
 }

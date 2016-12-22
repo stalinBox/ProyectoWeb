@@ -44,7 +44,6 @@ public class OrdenesProdBean implements Serializable {
 
 		selectedOp = new Ordenprod();
 		selectedOp.setUsuario1(new Usuario());
-		selectedOp.setUsuario2(new Usuario());
 	}
 
 	public OrdenesProdBean() {

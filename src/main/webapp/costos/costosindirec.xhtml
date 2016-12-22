@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<p:growl id="msgs" showDetail="true" />
+
+			<h:form id="idCostos">
+				<p:panel header="COSTOS INDIRECTOS" id="panel">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid id="idCostosIndirectos" columns="2">
+
+						<p:outputLabel for="idTxtProceso" value="Proceso: " />
+						<h:inputText id="idTxtProceso" />
+
+						<p:outputLabel for="idTxtNumOrden" value="Orden: " />
+						<h:inputText id="idTxtNumOrden" />
+
+						<p:outputLabel for="idTxtCIFReal" value="CIF Real: " />
+						<h:inputText id="idTxtCIFReal" />
+
+						<p:outputLabel for="idTxtCIFPresu" value="CIF Presupuestado: " />
+						<h:inputText id="idTxtCIFPresu" />
+
+						<p:outputLabel for="idTxtMOR" value="Mano de Obra Real: " />
+						<h:inputText id="idTxtMOR" />
+
+						<p:outputLabel for="idTxtMOP" value="Mano de Obra Presupuestado: " />
+						<h:inputText id="idTxtMOP" />
+
+					</h:panelGrid>
+					<f:facet name="footer">
+						<p:commandButton id="btnGuardarProceso" value="Guardar" />
+					</f:facet>
+				</p:panel>
+			</h:form>
+
+
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

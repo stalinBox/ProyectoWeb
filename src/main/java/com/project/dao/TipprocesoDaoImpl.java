@@ -93,7 +93,7 @@ public class TipprocesoDaoImpl implements TipprocesosDao {
 	public List<TipoProceso> findExcludebyProceso() {
 		List<TipoProceso> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from TipoProceso tpr where tpr.tprCodigo NOT IN(from Proceso p) order by tprCodigo asc ";
+		String sql = "from TipoProceso tpr where tpr.tprCodigo NOT IN(select p.tipoProceso.tprCodigo from Proceso p) order by tprCodigo asc ";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

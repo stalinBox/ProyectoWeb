@@ -40,7 +40,7 @@ public class ProcesoBean implements Serializable {
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
-		selectedProceso = new Proceso();
+		this.selectedProceso = new Proceso();
 	}
 
 	// METODOS
