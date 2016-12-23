@@ -15,13 +15,18 @@ import javax.faces.model.SelectItem;
 
 import com.project.dao.ClientesDao;
 import com.project.dao.ClientesDaoImpl;
+import com.project.dao.DetaOrdenDao;
+import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
 import com.project.dao.UsuarioDao;
 import com.project.dao.UsuarioDaoImpl;
 import com.project.entities.Cliente;
+import com.project.entities.Detalleorden;
 import com.project.entities.Lugare;
+import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
+import com.project.entities.Talla;
 import com.project.entities.Usuario;
 
 @ManagedBean
@@ -34,6 +39,9 @@ public class OrdenProduccionBean implements Serializable {
 	private List<Ordenprod> ordenProduccion;
 	private Ordenprod selectedOrden;
 
+	private List<Detalleorden> detaOrden;
+	private Detalleorden selectedDetaOrden;
+
 	private List<SelectItem> selectedItemsClientes;
 	private List<SelectItem> selectedItemsUsuarios;
 
@@ -45,46 +53,54 @@ public class OrdenProduccionBean implements Serializable {
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
+		// Entidad Ordenprod
 		this.selectedOrden = new Ordenprod();
 		this.selectedOrden.setCliente(new Cliente());
 		this.selectedOrden.setUsuario1(new Usuario());
-		this.selectedOrden.setUsuario2(new Usuario());
 
 		this.currentDate = new Date();
 		this.selectedOrden.setFActual(this.currentDate);
+
+		// Entidad Detalleorden
+		this.selectedDetaOrden = new Detalleorden();
+		this.selectedDetaOrden.setModelo(new Modelo());
+		this.selectedDetaOrden.setTalla(new Talla());
+
 	}
 
 	// METODOS
-	public void btnCreateOrden(ActionEvent actionEvent) {
-		System.out.println("*Cliente:"
-				+ this.selectedOrden.getCliente().getCodCliente());
-		System.out.println("*Responsalbe1: "
-				+ this.selectedOrden.getUsuario1().getUserId());
 
-		System.out.println("*Responsalbe2: "
-				+ this.selectedOrden.getUsuario2().getUserId());
+	// DML ORDEN PRODUCCION
+	public void btnCreateOrden(ActionEvent actionEvent) {
+		this.Cliente = "cliente";
+		this.Responsable = "Reponsalbe";
 
 		this.selectedOrden.setFActual(new Date());
 		Lugare lugar = new Lugare();
 		lugar.setLugarCodigo(null);
+
+		Usuario usuario2 = new Usuario();
+		usuario2.setUserId(null);
+		this.selectedOrden.setUsuario2(usuario2);
+
 		this.selectedOrden.setLugare(lugar);
 		this.selectedOrden.setFEstim(null);
 		this.selectedOrden.setFFinal(null);
 
 		String msg = "";
 
-		// OrdenesProdDao ordenProDao = new OrdenesProdDaoImpl();
-		// if (ordenProDao.create(this.selectedOrden)) {
-		// msg = "Se ha añadido una orden";
-		// FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-		// msg, null);
-		// FacesContext.getCurrentInstance().addMessage(null, message);
-		// } else {
-		// msg = "Error al añadir una orden";
-		// FacesMessage message = new FacesMessage(
-		// FacesMessage.SEVERITY_ERROR, msg, null);
-		// FacesContext.getCurrentInstance().addMessage(null, message);
-		// }
+		OrdenesProdDao ordenProDao = new OrdenesProdDaoImpl();
+		if (ordenProDao.create(this.selectedOrden)) {
+			msg = "Se ha añadido una orden";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al añadir una orden";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	public void btnUpdateOrden(ActionEvent actionEvent) {
@@ -93,10 +109,49 @@ public class OrdenProduccionBean implements Serializable {
 	public void btnDeleteOrden(ActionEvent actionEvent) {
 	}
 
+	// DML DETALLE ORDEN
+	public void btnCreateDetaOrden(ActionEvent actionEvent) {
+		String msg = "";
+		DetaOrdenDao detaorden = new DetaOrdenDaoImpl();
+		if (detaorden.create(this.selectedDetaOrden)) {
+			msg = "Se ha añadido un item";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al añadir un item";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+
+	public void btnUpdateDetaOrden(ActionEvent actionEvent) {
+	}
+
+	public void btnDeleteDetaOrden(ActionEvent actionEvent) {
+	}
+
 	// SETTERS AND GETTERS
 
 	public List<Ordenprod> getOrdenProduccion() {
 		return ordenProduccion;
+	}
+
+	public List<Detalleorden> getDetaOrden() {
+		return detaOrden;
+	}
+
+	public void setDetaOrden(List<Detalleorden> detaOrden) {
+		this.detaOrden = detaOrden;
+	}
+
+	public Detalleorden getSelectedDetaOrden() {
+		return selectedDetaOrden;
+	}
+
+	public void setSelectedDetaOrden(Detalleorden selectedDetaOrden) {
+		this.selectedDetaOrden = selectedDetaOrden;
 	}
 
 	public Date getCurrentDate() {

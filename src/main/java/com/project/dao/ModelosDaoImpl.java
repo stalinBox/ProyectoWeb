@@ -27,24 +27,6 @@ public class ModelosDaoImpl implements ModelosDao {
 		return listado;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Modelo> selectItems() {
-		List<Modelo> listado = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Modelo";
-		try {
-			sesion.beginTransaction();
-			listado = sesion.createQuery(sql).list();
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			sesion.getTransaction().rollback();
-			System.out.println("ERROR IMPLEMENTS SELECTITEMS MODELO: "
-					+ e.toString());
-		}
-		return listado;
-	}
-
 	@Override
 	public boolean create(Modelo modelo) {
 		boolean flag;

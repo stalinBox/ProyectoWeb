@@ -13,11 +13,6 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 
 	@Override
 	public boolean create(Ordenprod ordenProd) {
-		System.out
-				.println("Cliente: " + ordenProd.getCliente().getCodCliente());
-		System.out.println("Responsable: "
-				+ ordenProd.getUsuario1().getUserId());
-		System.out.println("Fecha Actual: " + ordenProd.getFActual());
 
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -28,10 +23,10 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 					+ "VALUES(DEFAULT,:val1,:val2,:val3,:val4,:val5,:val6)";
 			Query query = sesion.createSQLQuery(hql);
 
-			query.setParameter("val1", ordenProd.getUsuario1().getUserId(),
+			query.setParameter("val1", ordenProd.getCliente().getCodCliente(),
 					StandardBasicTypes.INTEGER);
 
-			query.setParameter("val2", ordenProd.getCliente().getCodCliente(),
+			query.setParameter("val2", ordenProd.getUsuario1().getUserId(),
 					StandardBasicTypes.INTEGER);
 
 			query.setParameter("val3", ordenProd.getLugare().getLugarCodigo(),

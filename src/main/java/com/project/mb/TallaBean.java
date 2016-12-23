@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import com.project.dao.TallasDao;
 import com.project.dao.TallasDaoImpl;
@@ -23,7 +24,8 @@ public class TallaBean implements Serializable {
 	private List<Talla> tallas;
 	private Talla selectedTalla;
 
-	// private List<SelectItem> selectItemsTallas;
+	private List<SelectItem> selectItemsTallas;
+
 	// private Troquele troquel;
 
 	@PostConstruct
@@ -36,11 +38,29 @@ public class TallaBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+
 	public List<Talla> getTallas() {
 		TallasDao tallasDao = new TallasDaoImpl();
 		this.tallas = tallasDao.findAll();
 
 		return tallas;
+	}
+
+	public List<SelectItem> getSelectItemsTallas() {
+		this.selectItemsTallas = new ArrayList<SelectItem>();
+		TallasDao tallasDao = new TallasDaoImpl();
+		List<Talla> talla = tallasDao.findAll();
+		this.selectItemsTallas.clear();
+		for (Talla tal : talla) {
+			SelectItem selectItem = new SelectItem(tal.getTalCodigo(), tal
+					.getTalNumero().toString());
+			this.selectItemsTallas.add(selectItem);
+		}
+		return selectItemsTallas;
+	}
+
+	public void setSelectItemsTallas(List<SelectItem> selectItemsTallas) {
+		this.selectItemsTallas = selectItemsTallas;
 	}
 
 	public Talla getSelectedTalla() {

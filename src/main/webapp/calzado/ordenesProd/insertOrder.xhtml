@@ -9,20 +9,34 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+			<p:growl id="msgs" showDetail="true" />
 			<h:form id="idFrmOrderProd">
 				<p:commandButton value="Crear Orden"
 					oncomplete="PF('dialogDetaProCreate').show()" title="Crear Orden"
-					icon="fa fa-plus" />
+					update=":formCreate" icon="fa fa-plus" />
 				<br />
 				<p:commandButton value="Eliminar Orden"
 					oncomplete="PF('dialogDetaProCreate').show()"
 					title="Eliminar Orden" icon="ui-icon-close" />
-
-				<h:panelGrid id="idPGridOrder" columns="2">
+				<p:separator />
+				<p:outputLabel value="**** En Construcción:  " />
+				<p:fileUpload id="fileUp" value="#{uploadFileBean.file}"
+					mode="simple" />
+				<p:spacer width="10" />
+				<h:commandButton value="Importar"
+					actionListener="#{uploadFileBean.upload()}"
+					process="@form :basicUpload:fileUp" partialSubmit="true"
+					ajax="false" />
+				<p:separator />
+				<h:panelGrid id="idPGridOrder" columns="3">
 					<p:outputLabel value="Responsable: " />
-					<h:inputText value="" disabled="true" />
+					<h:inputText value="#{ordenProduccionBean.responsable}"
+						disabled="true" />
+
+					<h:inputText value="aqui va el cod" disabled="true" />
+
 					<p:outputLabel value="Cliente: " />
-					<h:inputText value="" disabled="true" />
+					<h:inputText value="#{ordenProduccionBean.cliente}" disabled="true" />
 				</h:panelGrid>
 			</h:form>
 
@@ -30,18 +44,70 @@
 				<p:panel id="idPanel">
 					<p:messages autoUpdate="true" />
 					<h:panelGrid id="idProc" columns="2">
-						<p:outputLabel value="Modelo: " />
-						<h:inputText />
-						<p:outputLabel value="Talla: " />
-						<h:inputText />
-						<p:outputLabel value="Cantidad: " />
-						<h:inputText />
+
+						<p:outputLabel for="idCbxModelo" value="Modelo: " />
+						<p:selectOneMenu id="idCbxModelo"
+							value="#{ordenProduccionBean.selectedDetaOrden.modelo.modCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{modelosBean.selectItemsModelo}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="idCbxTalla" value="Talla: " />
+						<p:selectOneMenu id="idCbxTalla"
+							value="#{ordenProduccionBean.selectedDetaOrden.talla.talCodigo}"
+							required="true" style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{tallaBean.selectItemsTallas}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="idTxtCantidad" value="Cantidad: " />
+						<h:inputText id="idTxtCantidad"
+							value="#{ordenProduccionBean.selectedDetaOrden.cantidad}"
+							converterMessage="Porfavor digite solo numeros en la casilla Cantidad"
+							converter="javax.faces.Integer" required="true">
+							<f:convertNumber integerOnly="true" type="number" />
+						</h:inputText>
+						<f:facet name="footer">
+							<p:commandButton id="btnAgregarDetalle" value="Agregar"
+								update=":formDataTable"
+								actionListener="#{ordenProduccionBean.btnCreateDetaOrden(actionEvent)}" />
+						</f:facet>
+
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
 
 			<h:form id="formDataTable">
-				<p:dataTable id="basicDT" var="detaPro" value="">
+				<p:dataTable id="basicDT" var="detaO"
+					value="#{ordenProduccionBean.detaOrden}">
+
+					<f:facet name="header">Detalle Orden</f:facet>
+
+					<p:column headerText="Modelo">
+						<h:outputText value="#{detaO.modelo.modNombre}" />
+					</p:column>
+
+					<p:column headerText="Talla">
+						<h:outputText value="#{detaO.talla.talNumero}" />
+					</p:column>
+
+					<p:column headerText="Cantidad">
+						<h:outputText value="#{detaO.cantidad}" />
+					</p:column>
+
+					<p:column headerText="Actualizar" style="width:10%">
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogDordenDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{detaO}"
+								target="#{ordenProduccionBean.selectedDetaOrden}" />
+						</p:commandButton>
+					</p:column>
 				</p:dataTable>
 			</h:form>
 
@@ -81,8 +147,13 @@
 						<f:facet name="footer">
 							<p:commandButton id="btnCreateAceptar" icon="fa fa-fw fa-save"
 								title="Guardar" value="Guardar"
+								upadate=":idFrmOrderProd:idPGridOrder"
 								actionListener="#{ordenProduccionBean.btnCreateOrden(actionEvent)}"
-								oncomplete="PF('dialogDetaProCreate').hide()" />
+								oncomplete="PF('dialogDetaProCreate').hide()">
+
+								<f:setPropertyActionListener value="#{modelo}"
+									target="#{modelosBean.selectedModelos}" />
+							</p:commandButton>
 
 							<p:commandButton id="btnCreateCancelar" icon="fa fa-fw fa-close"
 								title="Cancelar" value="Cancelar"
@@ -92,6 +163,23 @@
 				</p:dialog>
 			</h:form>
 
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Item"
+					severity="alert" widgetVar="dialogDordenDelete">
+
+					<h:inputHidden
+						value="#{ordenProduccionBean.selectedDetaOrden.detaordenCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogDordenDelete').hide()"
+						actionListener="#{ordenProduccionBean.btnDeleteDetaOrden(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogDordenDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

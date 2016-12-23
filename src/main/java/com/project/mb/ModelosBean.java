@@ -38,7 +38,7 @@ public class ModelosBean implements Serializable {
 	public List<SelectItem> getSelectItemsModelo() {
 		this.selectItemsModelo = new ArrayList<SelectItem>();
 		ModelosDao modDao = new ModelosDaoImpl();
-		List<Modelo> modelo = modDao.selectItems();
+		List<Modelo> modelo = modDao.findAll();
 		for (Modelo mod : modelo) {
 			SelectItem selectItem = new SelectItem(mod.getModCodigo(),
 					mod.getModNombre());

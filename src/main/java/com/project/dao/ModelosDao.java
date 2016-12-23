@@ -13,5 +13,4 @@ public interface ModelosDao {
 
 	public boolean delete(Integer id);
 
-	public List<Modelo> selectItems();
 }
