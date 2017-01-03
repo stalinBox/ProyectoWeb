@@ -6,8 +6,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 /**
- * @author Stalin Ramírez
- * Clase para la conexion a la BD
+ * @author Stalin Ramírez Clase para la conexion a la BD
  */
 public class HibernateUtil {
 	private static SessionFactory sessionFactory;

@@ -5,25 +5,24 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the programdias database table.
  * 
  */
 @Entity
-@Table(name="programdias")
-@NamedQuery(name="Programdia.findAll", query="SELECT p FROM Programdia p")
+@Table(name = "programdias")
+@NamedQuery(name = "Programdia.findAll", query = "SELECT p FROM Programdia p")
 public class Programdia implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="progdias_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "progdias_codigo")
 	private Integer progdiasCodigo;
 
 	private double canthoras;
 
-	private double cantpares;
+	private Integer cantpares;
 
 	@Temporal(TemporalType.DATE)
 	private Date ffin;
@@ -31,13 +30,13 @@ public class Programdia implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date finicio;
 
-	//bi-directional many-to-one association to Parametro
+	// bi-directional many-to-one association to Parametro
 	@ManyToOne
-	@JoinColumn(name="param_codigo")
+	@JoinColumn(name = "param_codigo")
 	private Parametro parametro;
 
-	//bi-directional many-to-one association to Programturno
-	@OneToMany(mappedBy="programdia")
+	// bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy = "programdia")
 	private List<Programturno> programturnos;
 
 	public Programdia() {
@@ -59,11 +58,11 @@ public class Programdia implements Serializable {
 		this.canthoras = canthoras;
 	}
 
-	public double getCantpares() {
+	public Integer getCantpares() {
 		return this.cantpares;
 	}
 
-	public void setCantpares(double cantpares) {
+	public void setCantpares(Integer cantpares) {
 		this.cantpares = cantpares;
 	}
 

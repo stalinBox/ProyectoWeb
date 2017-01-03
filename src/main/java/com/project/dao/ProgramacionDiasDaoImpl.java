@@ -14,7 +14,7 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 	public List<Programdia> findAll() {
 		List<Programdia> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Programdia";
+		String sql = "FROM Programdia ORDER BY progdiasCodigo";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

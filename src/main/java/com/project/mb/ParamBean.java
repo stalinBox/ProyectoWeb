@@ -1,17 +1,25 @@
 package com.project.mb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import com.project.dao.ParametrizacionDao;
 import com.project.dao.ParametrizacionDaoImpl;
+import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
+import com.project.entities.Proceso;
+import com.project.entities.Usuario;
+import com.project.utils.ContentParam;
+import com.project.utils.MyUtil;
 
 @ManagedBean
 @ViewScoped
@@ -21,16 +29,50 @@ public class ParamBean implements Serializable {
 	// VARIABLES
 	private List<Parametro> parametrizacion;
 	private Parametro selectedParametrizacion;
+	private List<SelectItem> selectItemsParamOrden;
+	private Integer stdConv;
+	private Integer stdAut;
+	private Integer totOrden;
+
+	ContentParam cparam = new ContentParam();
 
 	// INICIALIZADOR
+	@PostConstruct
 	public void init() {
+
+		this.selectedParametrizacion = new Parametro();
+		this.selectedParametrizacion.setProceso(new Proceso());
+		this.selectedParametrizacion.setUsuario(new Usuario());
+
+		// this.stdConv = ContentParam.getStandConvMontaje();
+		// this.stdAut = ContentParam.getStandAutMontaje();
+		this.totOrden = ContentParam.getTotalOrden();
 
 	}
 
 	// METODOS
+
+	public void btnConfLineas() {
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "parametrizacion/lineasTurns.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public void btnCreateParametrizacion(ActionEvent actionEvent) {
 		String msg = "";
 		ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
+
+		Ordenprod ordenpro = new Ordenprod();
+		ordenpro.setOrdenprodCodigo(ContentParam.getCodOrden());
+		this.selectedParametrizacion.setOrdenprod(ordenpro);
+		this.selectedParametrizacion.setStandconv(this.stdConv);
+		this.selectedParametrizacion.setStandauto(this.stdAut);
 
 		if (paramDao.create(this.selectedParametrizacion)) {
 			msg = "Se ha añadido un nuevo parametrizacion";
@@ -77,9 +119,70 @@ public class ParamBean implements Serializable {
 		}
 	}
 
+	public void onChangeProcesos(ActionEvent actionEvent) {
+		Integer a = null;
+		a = this.selectedParametrizacion.getProceso().getProCodigo();
+
+		if (a == 1) {
+			this.stdConv = ContentParam.getStandConvMontaje();
+			this.stdAut = ContentParam.getStandAutMontaje();
+		} else if (a == 2) {
+			this.stdConv = ContentParam.getStandConvAparado();
+			this.stdAut = ContentParam.getStandAutAparado();
+		} else {
+			this.stdConv = ContentParam.getStandConvTroquelado();
+			this.stdAut = ContentParam.getStandAutTroquelado();
+		}
+
+	}
+
 	// SETTERS AND GETTERS
+
 	public List<Parametro> getParametrizacion() {
+		ParametrizacionDao pDao = new ParametrizacionDaoImpl();
+		this.parametrizacion = pDao.findByOrdenProd(ContentParam.getCodOrden());
 		return parametrizacion;
+	}
+
+	public List<SelectItem> getSelectItemsParamOrden() {
+		this.selectItemsParamOrden = new ArrayList<SelectItem>();
+		ParametrizacionDao pDao = new ParametrizacionDaoImpl();
+		List<Parametro> param = pDao
+				.findByOrdenProd(ContentParam.getCodOrden());
+		for (Parametro p : param) {
+			SelectItem selectItem = new SelectItem(p.getParamCodigo(), p
+					.getProceso().getTipoProceso().getTprNombre());
+			this.selectItemsParamOrden.add(selectItem);
+		}
+		return selectItemsParamOrden;
+	}
+
+	public void setSelectItemsParamOrden(List<SelectItem> selectItemsParamOrden) {
+		this.selectItemsParamOrden = selectItemsParamOrden;
+	}
+
+	public Integer getStdConv() {
+		return stdConv;
+	}
+
+	public void setStdConv(Integer stdConv) {
+		this.stdConv = stdConv;
+	}
+
+	public Integer getStdAut() {
+		return stdAut;
+	}
+
+	public void setStdAut(Integer stdAut) {
+		this.stdAut = stdAut;
+	}
+
+	public Integer getTotOrden() {
+		return totOrden;
+	}
+
+	public void setTotOrden(Integer totOrden) {
+		this.totOrden = totOrden;
 	}
 
 	public void setParametrizacion(List<Parametro> parametrizacion) {

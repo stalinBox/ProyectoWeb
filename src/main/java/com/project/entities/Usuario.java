@@ -6,67 +6,59 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+
 /**
  * The persistent class for the usuario database table.
  * 
  */
 @Entity
-@NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+@NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="user_id")
 	private Integer userId;
 
-	@Column(name = "user_creation")
+	@Column(name="user_creation")
 	private String userCreation;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "user_date_creation")
+	@Column(name="user_date_creation")
 	private Date userDateCreation;
 
-	@Column(name = "user_email")
+	@Column(name="user_email")
 	private String userEmail;
 
-	@Column(name = "user_name")
+	@Column(name="user_name")
 	private String userName;
 
-	@Column(name = "user_passwd")
+	@Column(name="user_passwd")
 	private String userPasswd;
 
-	@Column(name = "user_state")
+	@Column(name="user_state")
 	private BigDecimal userState;
 
-	@Column(name = "user_theme")
+	@Column(name="user_theme")
 	private String userTheme;
 
-	// bi-directional many-to-one association to Ordenprod
-	@OneToMany(mappedBy = "usuario1")
-	private List<Ordenprod> ordenprods1;
+	//bi-directional many-to-one association to Ordenprod
+	@OneToMany(mappedBy="usuario")
+	private List<Ordenprod> ordenprods;
 
-	// bi-directional many-to-one association to Ordenprod
-	@OneToMany(mappedBy = "usuario2")
-	private List<Ordenprod> ordenprods2;
-
-	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "usuario")
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="usuario")
 	private List<Parametro> parametros;
 
-	// bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy = "usuario")
+	//bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy="usuario")
 	private List<Procesosop> procesosops;
 
-	// bi-directional many-to-one association to Rol
+	//bi-directional many-to-one association to Rol
 	@ManyToOne
-	@JoinColumn(name = "rol_id")
-	private Rol rol1;
-
-	// bi-directional many-to-one association to Rol
-	@ManyToOne
-	@JoinColumn(name = "rol_id", insertable = false, updatable = false)
-	private Rol rol2;
+	@JoinColumn(name="rol_id")
+	private Rol rol;
 
 	public Usuario() {
 	}
@@ -135,48 +127,26 @@ public class Usuario implements Serializable {
 		this.userTheme = userTheme;
 	}
 
-	public List<Ordenprod> getOrdenprods1() {
-		return this.ordenprods1;
+	public List<Ordenprod> getOrdenprods() {
+		return this.ordenprods;
 	}
 
-	public void setOrdenprods1(List<Ordenprod> ordenprods1) {
-		this.ordenprods1 = ordenprods1;
+	public void setOrdenprods(List<Ordenprod> ordenprods) {
+		this.ordenprods = ordenprods;
 	}
 
-	public Ordenprod addOrdenprods1(Ordenprod ordenprods1) {
-		getOrdenprods1().add(ordenprods1);
-		ordenprods1.setUsuario1(this);
+	public Ordenprod addOrdenprod(Ordenprod ordenprod) {
+		getOrdenprods().add(ordenprod);
+		ordenprod.setUsuario(this);
 
-		return ordenprods1;
+		return ordenprod;
 	}
 
-	public Ordenprod removeOrdenprods1(Ordenprod ordenprods1) {
-		getOrdenprods1().remove(ordenprods1);
-		ordenprods1.setUsuario1(null);
+	public Ordenprod removeOrdenprod(Ordenprod ordenprod) {
+		getOrdenprods().remove(ordenprod);
+		ordenprod.setUsuario(null);
 
-		return ordenprods1;
-	}
-
-	public List<Ordenprod> getOrdenprods2() {
-		return this.ordenprods2;
-	}
-
-	public void setOrdenprods2(List<Ordenprod> ordenprods2) {
-		this.ordenprods2 = ordenprods2;
-	}
-
-	public Ordenprod addOrdenprods2(Ordenprod ordenprods2) {
-		getOrdenprods2().add(ordenprods2);
-		ordenprods2.setUsuario2(this);
-
-		return ordenprods2;
-	}
-
-	public Ordenprod removeOrdenprods2(Ordenprod ordenprods2) {
-		getOrdenprods2().remove(ordenprods2);
-		ordenprods2.setUsuario2(null);
-
-		return ordenprods2;
+		return ordenprod;
 	}
 
 	public List<Parametro> getParametros() {
@@ -223,20 +193,12 @@ public class Usuario implements Serializable {
 		return procesosop;
 	}
 
-	public Rol getRol1() {
-		return this.rol1;
+	public Rol getRol() {
+		return this.rol;
 	}
 
-	public void setRol1(Rol rol1) {
-		this.rol1 = rol1;
-	}
-
-	public Rol getRol2() {
-		return this.rol2;
-	}
-
-	public void setRol2(Rol rol2) {
-		this.rol2 = rol2;
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 
 }

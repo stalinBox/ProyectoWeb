@@ -1,4 +1,4 @@
-package com.project.mb;
+package com.project.utils;
 
 import java.io.Serializable;
 import java.util.Map;

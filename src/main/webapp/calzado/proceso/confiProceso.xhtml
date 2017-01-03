@@ -24,6 +24,7 @@
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{modelosBean.selectItemsModelo}" />
+							<p:ajax update=":idConfProcesos:idSubProceso" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="idSettProceso" value="Proceso: " />

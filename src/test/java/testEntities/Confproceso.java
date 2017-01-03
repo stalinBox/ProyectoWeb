@@ -17,9 +17,6 @@ public class Confproceso implements Serializable {
 	@Column(name = "confpro_codigo")
 	private Integer confproCodigo;
 
-	@Column(name = "num_trab")
-	private Integer numTrab;
-
 	@Column(name = "tiempo_ts")
 	private double tiempoTs;
 
@@ -30,12 +27,12 @@ public class Confproceso implements Serializable {
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_codigo", insertable = false, updatable = false)
+	@JoinColumn(name = "pro_codigo")
 	private Proceso proceso1;
 
 	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "sub_pro", insertable = false, updatable = false)
+	@JoinColumn(name = "sub_pro")
 	private Proceso proceso2;
 
 	public Confproceso() {
@@ -47,14 +44,6 @@ public class Confproceso implements Serializable {
 
 	public void setConfproCodigo(Integer confproCodigo) {
 		this.confproCodigo = confproCodigo;
-	}
-
-	public Integer getNumTrab() {
-		return this.numTrab;
-	}
-
-	public void setNumTrab(Integer numTrab) {
-		this.numTrab = numTrab;
 	}
 
 	public double getTiempoTs() {

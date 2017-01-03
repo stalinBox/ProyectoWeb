@@ -1,72 +1,75 @@
 package testEntities;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.List;
+
 
 /**
  * The persistent class for the procesos database table.
  * 
  */
 @Entity
-@Table(name = "procesos")
-@NamedQuery(name = "Proceso.findAll", query = "SELECT p FROM Proceso p")
+@Table(name="procesos")
+@NamedQuery(name="Proceso.findAll", query="SELECT p FROM Proceso p")
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "pro_codigo")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="pro_codigo")
 	private Integer proCodigo;
 
-	@Column(name = "pro_activo")
+	@Column(name="pro_activo")
 	private Boolean proActivo;
 
-	@Column(name = "pro_descrip")
+	@Column(name="pro_descrip")
 	private String proDescrip;
 
-	// bi-directional many-to-one association to Confproceso
-	@OneToMany(mappedBy = "proceso1")
+	//bi-directional many-to-one association to Confproceso
+	@OneToMany(mappedBy="proceso1")
 	private List<Confproceso> confprocesos1;
 
-	// bi-directional many-to-one association to Confproceso
-	@OneToMany(mappedBy = "proceso2")
+	//bi-directional many-to-one association to Confproceso
+	@OneToMany(mappedBy="proceso2")
 	private List<Confproceso> confprocesos2;
 
-	// bi-directional many-to-one association to Costosindi
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Costosindi
+	@OneToMany(mappedBy="proceso")
 	private List<Costosindi> costosindis;
 
-	// bi-directional many-to-one association to Dispositivo
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Dispositivo
+	@OneToMany(mappedBy="proceso")
 	private List<Dispositivo> dispositivos;
 
-	// bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Lineasprod
+	@OneToMany(mappedBy="proceso")
+	private List<Lineasprod> lineasprods;
+
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="proceso")
 	private List<Parametro> parametros;
 
-	// bi-directional many-to-one association to ProcAlerta
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy="proceso")
 	private List<ProcAlerta> procAlertas;
 
-	// bi-directional many-to-one association to Proceso
+	//bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name = "pro_padre")
+	@JoinColumn(name="pro_padre")
 	private Proceso proceso;
 
-	// bi-directional many-to-one association to Proceso
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Proceso
+	@OneToMany(mappedBy="proceso")
 	private List<Proceso> procesos;
 
-	// bi-directional many-to-one association to TipoProceso
+	//bi-directional many-to-one association to TipoProceso
 	@ManyToOne
-	@JoinColumn(name = "tpr_codigo")
+	@JoinColumn(name="tpr_codigo")
 	private TipoProceso tipoProceso;
 
-	// bi-directional many-to-one association to Procesosop
-	@OneToMany(mappedBy = "proceso")
+	//bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy="proceso")
 	private List<Procesosop> procesosops;
 
 	public Proceso() {
@@ -182,6 +185,28 @@ public class Proceso implements Serializable {
 		dispositivo.setProceso(null);
 
 		return dispositivo;
+	}
+
+	public List<Lineasprod> getLineasprods() {
+		return this.lineasprods;
+	}
+
+	public void setLineasprods(List<Lineasprod> lineasprods) {
+		this.lineasprods = lineasprods;
+	}
+
+	public Lineasprod addLineasprod(Lineasprod lineasprod) {
+		getLineasprods().add(lineasprod);
+		lineasprod.setProceso(this);
+
+		return lineasprod;
+	}
+
+	public Lineasprod removeLineasprod(Lineasprod lineasprod) {
+		getLineasprods().remove(lineasprod);
+		lineasprod.setProceso(null);
+
+		return lineasprod;
 	}
 
 	public List<Parametro> getParametros() {

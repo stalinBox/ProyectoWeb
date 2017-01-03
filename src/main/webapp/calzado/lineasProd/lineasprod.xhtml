@@ -29,16 +29,20 @@
 					Lineas de Producción
 					</f:facet>
 
-					<p:column headerText="línea de producción">
+					<p:column headerText="Nombre">
 						<h:outputText value="#{lineaP.nomlinea}" />
 					</p:column>
 
-					<p:column headerText="Número de máquinas">
-						<h:outputText value="#{lineaP.nummaq}" />
+					<p:column headerText="Proceso">
+						<h:outputText value="#{lineaP.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Automática?">
 						<h:outputText value="#{lineaP.lineaaut}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{lineaP.lineaNumtrab}" />
 					</p:column>
 
 					<p:column headerText="Descripción">
@@ -71,19 +75,30 @@
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
+						<p:outputLabel for="idLineaProceso" value="Proceso: " />
+						<p:selectOneMenu id="idLineaProceso"
+							value="#{lineasProduccionBean.selectedLineasProd.proceso.proCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{lineasProduccionBean.selectedItemsProcesos}" />
+						</p:selectOneMenu>
+
 						<h:outputText value="Nombre de Línea: " />
 						<p:inputText
 							value="#{lineasProduccionBean.selectedLineasProd.nomlinea}"
 							onblur="aMayusculas(this.value,this.id)"
 							onkeypress="this.value=this.value.toUpperCase();" />
 
+						<h:outputText value="Automática?" />
+						<p:selectBooleanButton
+							value="#{lineasProduccionBean.selectedLineasProd.lineaaut}"
+							onLabel="Si" offLabel="No" style="width:60px" />
+
 						<h:outputText value="Numero de Maquinas" />
 						<p:inputText
-							value="#{lineasProduccionBean.selectedLineasProd.nummaq}" />
-
-						<h:outputText value="Automática?" />
-						<p:selectBooleanButton value="#{lineasProduccionBean.lAutomatico}"
-							onLabel="Si" offLabel="No" style="width:60px" />
+							value="#{lineasProduccionBean.selectedLineasProd.lineaNumtrab}" />
 
 						<h:outputText value="Descripción" />
 						<p:inputText
@@ -119,19 +134,30 @@
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
+						<p:outputLabel for="idLineaProceso" value="Proceso: " />
+						<p:selectOneMenu id="idLineaProceso"
+							value="#{lineasProduccionBean.selectedLineasProd.proceso.proCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{settingsConfProcesoBean.selectedItemsProcesos}" />
+						</p:selectOneMenu>
+
 						<h:outputText value="Nombre de Línea: " />
 						<p:inputText
 							value="#{lineasProduccionBean.selectedLineasProd.nomlinea}"
 							onblur="aMayusculas(this.value,this.id)"
 							onkeypress="this.value=this.value.toUpperCase();" />
 
+						<h:outputText value="Automática?" />
+						<p:selectBooleanButton
+							value="#{lineasProduccionBean.selectedLineasProd.lineaaut}"
+							onLabel="Si" offLabel="No" style="width:60px" />
+
 						<h:outputText value="Numero de Maquinas" />
 						<p:inputText
-							value="#{lineasProduccionBean.selectedLineasProd.nummaq}" />
-
-						<h:outputText value="Automática?" />
-						<p:selectBooleanButton value="#{lineasProduccionBean.lAutomatico}"
-							onLabel="Si" offLabel="No" style="width:60px" />
+							value="#{lineasProduccionBean.selectedLineasProd.lineaNumtrab}" />
 
 						<h:outputText value="Descripción" />
 						<p:inputText

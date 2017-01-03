@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -25,15 +24,12 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
-import com.project.dao.LineasProdDao;
-import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.TurnosDao;
 import com.project.dao.TurnosDaoImpl;
-import com.project.entities.Lineasprod;
-import com.project.entities.TipoProceso;
 import com.project.entities.Turno;
 import com.project.utils.ConvertArrayToMatriz;
 import com.project.utils.ConvertMatrizTranspuesta;
+import com.project.utils.DistribucionTables;
 import com.project.utils.MyUtil;
 
 /**
@@ -231,6 +227,7 @@ public class ParametrizacionBean implements Serializable {
 
 			// SEND AND GET ARRAYS
 			DistribucionTables nn = new DistribucionTables();
+
 			// MONTAJE
 			array0 = nn.receivParamsPares(this.totPedido, this.stdProdConvMont,
 					this.addNumTurnosConvMont);
@@ -753,24 +750,24 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectItemsLPMontaje() {
-		Lineasprod lineasLP = new Lineasprod();
-		TipoProceso tipPro = new TipoProceso();
-		tipPro.setTprCodigo(1);
-		boolean a = false;
-		lineasLP.setLineaaut(a);
-		// lineasLP.setTipoProceso(tipPro);
-
-		this.selectItemsLPMontaje = new ArrayList<SelectItem>();
-		LineasProdDao lpDao = new LineasProdDaoImpl();
-		List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
-				.selectedByMontaje(lineasLP);
-
-		this.selectItemsLPMontaje.clear();
-		for (Lineasprod lp : lproduccion) {
-			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
-					lp.getNomlinea());
-			this.selectItemsLPMontaje.add(selectItem);
-		}
+		// Lineasprod lineasLP = new Lineasprod();
+		// TipoProceso tipPro = new TipoProceso();
+		// tipPro.setTprCodigo(1);
+		// boolean a = false;
+		// lineasLP.setLineaaut(a);
+		// // lineasLP.setTipoProceso(tipPro);
+		//
+		// this.selectItemsLPMontaje = new ArrayList<SelectItem>();
+		// LineasProdDao lpDao = new LineasProdDaoImpl();
+		// List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
+		// .selectedByMontaje(lineasLP);
+		//
+		// this.selectItemsLPMontaje.clear();
+		// for (Lineasprod lp : lproduccion) {
+		// SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+		// lp.getNomlinea());
+		// this.selectItemsLPMontaje.add(selectItem);
+		// }
 		return selectItemsLPMontaje;
 	}
 
@@ -779,24 +776,24 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectItemsLPAparado() {
-		Lineasprod lineasLP = new Lineasprod();
-		TipoProceso tipPro = new TipoProceso();
-		tipPro.setTprCodigo(2);
-		boolean a = false;
-		lineasLP.setLineaaut(a);
-		// lineasLP.setTipoProceso(tipPro);
-
-		this.selectItemsLPAparado = new ArrayList<SelectItem>();
-		LineasProdDao lpDao = new LineasProdDaoImpl();
-		List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
-				.selectedByAparado(lineasLP);
-
-		this.selectItemsLPAparado.clear();
-		for (Lineasprod lp : lproduccion) {
-			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
-					lp.getNomlinea());
-			this.selectItemsLPAparado.add(selectItem);
-		}
+		// Lineasprod lineasLP = new Lineasprod();
+		// TipoProceso tipPro = new TipoProceso();
+		// tipPro.setTprCodigo(2);
+		// boolean a = false;
+		// lineasLP.setLineaaut(a);
+		// // lineasLP.setTipoProceso(tipPro);
+		//
+		// this.selectItemsLPAparado = new ArrayList<SelectItem>();
+		// LineasProdDao lpDao = new LineasProdDaoImpl();
+		// List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
+		// .selectedByAparado(lineasLP);
+		//
+		// this.selectItemsLPAparado.clear();
+		// for (Lineasprod lp : lproduccion) {
+		// SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+		// lp.getNomlinea());
+		// this.selectItemsLPAparado.add(selectItem);
+		// }
 		return selectItemsLPAparado;
 	}
 
@@ -805,24 +802,24 @@ public class ParametrizacionBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectItemsLPTroquelado() {
-		Lineasprod lineasLP = new Lineasprod();
-		TipoProceso tipPro = new TipoProceso();
-		tipPro.setTprCodigo(3);
-		boolean a = false;
-		lineasLP.setLineaaut(a);
-		// lineasLP.setTipoProceso(tipPro);
-
-		this.selectItemsLPTroquelado = new ArrayList<SelectItem>();
-		LineasProdDao lpDao = new LineasProdDaoImpl();
-		List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
-				.selectedByTroquelado(lineasLP);
-
-		this.selectItemsLPTroquelado.clear();
-		for (Lineasprod lp : lproduccion) {
-			SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
-					lp.getNomlinea());
-			this.selectItemsLPTroquelado.add(selectItem);
-		}
+		// Lineasprod lineasLP = new Lineasprod();
+		// TipoProceso tipPro = new TipoProceso();
+		// tipPro.setTprCodigo(3);
+		// boolean a = false;
+		// lineasLP.setLineaaut(a);
+		// // lineasLP.setTipoProceso(tipPro);
+		//
+		// this.selectItemsLPTroquelado = new ArrayList<SelectItem>();
+		// LineasProdDao lpDao = new LineasProdDaoImpl();
+		// List<Lineasprod> lproduccion = (List<Lineasprod>) lpDao
+		// .selectedByTroquelado(lineasLP);
+		//
+		// this.selectItemsLPTroquelado.clear();
+		// for (Lineasprod lp : lproduccion) {
+		// SelectItem selectItem = new SelectItem(lp.getLineaproCodigo(),
+		// lp.getNomlinea());
+		// this.selectItemsLPTroquelado.add(selectItem);
+		// }
 		return selectItemsLPTroquelado;
 	}
 

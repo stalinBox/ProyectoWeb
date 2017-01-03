@@ -91,7 +91,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 			// Parametros a cambiar
 			usuariodb.setUserEmail(usuario.getUserEmail());
 			usuariodb.setUserName(usuario.getUserName());
-			usuariodb.setRol1(usuario.getRol1());
+			usuariodb.setRol(usuario.getRol());
 			usuariodb.setUserState(usuario.getUserState());
 			// fin de parametros
 			sesion.update(usuariodb);

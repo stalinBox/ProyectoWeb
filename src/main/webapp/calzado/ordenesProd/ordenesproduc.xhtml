@@ -27,7 +27,7 @@
 							<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
 								<p:outputLabel for="idSol" value="Cliente: " />
 								<p:selectOneMenu id="idSol"
-									value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+									value="#{ordenesProdBean.selectedOp.usuario.userId}"
 									required="true" style="width:150px">
 
 									<f:selectItem itemLabel="- Seleccione -" itemValue=""
@@ -43,7 +43,7 @@
 
 								<p:outputLabel for="idResp" value="Responsable: " />
 								<p:selectOneMenu id="idResp"
-									value="#{ordenesProdBean.selectedOp.usuario1.userId}"
+									value="#{ordenesProdBean.selectedOp.usuario.userId}"
 									required="true" style="width:150px">
 
 									<f:selectItem itemLabel="- Seleccione -" itemValue=""

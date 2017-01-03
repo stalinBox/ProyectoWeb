@@ -1,4 +1,4 @@
-package com.project.mb;
+package com.project.utils;
 
 import java.io.File;
 import java.io.Serializable;

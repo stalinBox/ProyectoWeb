@@ -12,7 +12,6 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
-
 			<p:ajaxStatus onstart="PF('statusDialog').show()"
 				onsuccess="PF('statusDialog').hide()" />
 
@@ -33,21 +32,19 @@
 									<h:panelGrid id="gridMontaje" cellpadding="5" columns="1"
 										style="margin-bottom:10px">
 										<f:facet name="header">
+											<p:messages id="alertMtn" />
 											<h:outputText value="MONTAJE" />
 										</f:facet>
 										<p:outputLabel for="idRespMontaje" value="Responsable:" />
 										<p:selectOneMenu id="idRespMontaje"
 											value="#{parametrizacionBean.respMontaje}" required="true"
-											style="width:150px">
+											style="width:150px" requiredMessage="Campo requerido">
 											<f:selectItem itemLabel="- Seleccione -" itemValue=""
 												noSelectionOption="true" />
 											<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
 										</p:selectOneMenu>
-										<br />
 										<p:outputLabel for="idStdProdConvMont"
 											value="Estándar Producción Convencional" />
-										<p:outputLabel for="idStdProdConvMont"
-											value="Montaje(promedio calculado)" />
 										<p:inputText id="idStdProdConvMont"
 											value="#{parametrizacionBean.stdProdConvMont}"
 											disabled="true" />
@@ -55,9 +52,6 @@
 											value="Estándar Producción Automática" />
 										<p:inputText id="idStdProdAutMont"
 											value="#{parametrizacionBean.stdProdAutMont}" disabled="true" />
-										<p:outputLabel value="Producción Total:"></p:outputLabel>
-										<p:inputText id="idProdTotal"
-											value="#{parametrizacionBean.totPedido}" disabled="true" />
 									</h:panelGrid>
 
 								</p:layoutUnit>
@@ -65,88 +59,40 @@
 									<h:panelGrid id="gridLineasConvMont" cellpadding="5"
 										style="margin-bottom:10px" columns="1">
 										<f:facet name="header">
+											<p:messages id="alertMtnLines" />
 											<h:outputText value="LINEAS CONVENCIONALES" />
 										</f:facet>
-										<p:messages autoUpdate="true" />
 										<h:form id="aa">
-											<p:commandButton id="btnCreateLP" update=":formCreate"
-												oncomplete="PF('dialogLCCreate').show()" title="Nuevo LP"
-												icon="fa fa-plus" value="Nuevo" ajax="true"
-												partialSubmit="true">
-											</p:commandButton>
-											<h:form id="formLP">
-												<p:dataTable id="basicDT" var="lineaP"
-													value="#{lineasTurnosBean.lineaTurno}">
-
-													<f:facet name="header">***LINEAS LP***</f:facet>
-													<p:column headerText="Línea de Producción">
-														<h:outputText value="#{lineaP.lineasprod.nomlinea}" />
-													</p:column>
-													<p:column headerText="Turno">
-														<h:outputText value="#{lineaP.turno.nombturno}" />
-													</p:column>
-
-													<p:column headerText="**" style="width:10%">
-														<p:commandButton id="btnUpdate" update=":formUpdate"
-															oncomplete="PF('dialogModeloUpdate').show()"
-															icon="ui-icon-pencil" title="Modificar">
-															<f:setPropertyActionListener value="#{modelo}"
-																target="#{modelosBean.selectedModelos}" />
-														</p:commandButton>
-
-														<p:commandButton id="btnDelete" update="formDelete"
-															oncomplete="PF('dialogModeloDelete').show()"
-															icon="ui-icon-close" title="Eliminar">
-															<f:setPropertyActionListener value="#{modelo}"
-																target="#{modelosBean.selectedModelos}" />
-														</p:commandButton>
-													</p:column>
-												</p:dataTable>
-											</h:form>
-
+											<p:messages autoUpdate="true" />
 											<p:outputLabel value="Número de Líneas: " />
-
-											<p:selectCheckboxMenu id="scbLM"
-												value="#{parametrizacionBean.selectedLPM}"
-												label="Líneas a trabajar" panelStyle="width:250px">
-												<f:selectItems
-													value="#{parametrizacionBean.selectItemsLPMontaje}">
-												</f:selectItems>
-											</p:selectCheckboxMenu>
-
+											<p:inputText id="txtNumber"
+												value="#{parametrizacionBean.numLineasConvMont}" size="1">
+												<f:validateDoubleRange minimum="1" maximum="10" />
+											</p:inputText>
+											<p:message for="txtNumber" />
+											<h:outputText
+												value="#{parametrizacionBean.numLineasConvMont}" />
 											<br />
-											<p:commandButton value="Turnos" id="btnGenerateTurnosMtn"
+											<p:commandButton value="Turnos"
 												action="#{parametrizacionBean.GenerateTurnsDaysConvMont()}"
 												update="formParamGeneral:tabSubGen:mtn:guests"
-												process="@this, @form" />
+												process="@this,txtNumber" validateClient="true" />
 										</h:form>
 										<h:panelGroup id="guests">
 											<h:form id="paramMontaje"
 												rendered="#{not empty parametrizacionBean.numTurnosConvMont}">
-
 												<ui:repeat value="#{parametrizacionBean.numTurnosConvMont}"
 													varStatus="loop">
 													<p:outputLabel
 														value="#{parametrizacionBean.lblMonConv[loop.index]}" />
-													<p:spacer width="10" height="10" />
 													<p:inputText
 														value="#{parametrizacionBean.numTurnosConvMont[loop.index]}"
 														size="1" />
-
-													<p:selectCheckboxMenu id="scbM"
-														value="#{parametrizacionBean.selectedTurnosMntConv}"
-														label="Turnos a trabajar" panelStyle="width:250px">
-
-														<f:selectItems
-															value="#{parametrizacionBean.selectItemsTurnos}" />
-													</p:selectCheckboxMenu>
-
 													<br />
 												</ui:repeat>
-
 												<br />
 												<br />
-												<p:outputLabel for="bol" value="Horas extras Montaje:" />
+												<p:outputLabel for="bol" value="Horas extras:" />
 												<br />
 												<p:selectBooleanButton id="bol"
 													value="#{parametrizacionBean.hExtras}" onLabel="Si"
@@ -207,294 +153,240 @@
 
 
 					<p:tab title="TROQUELADO">
-						<h:form id="trq">
-							<p:layout style="min-width:400px;min-height:500px;">
-								<p:layoutUnit position="west" size="400" styleClass="west">
-									<h:panelGrid id="gridTroqueado" cellpadding="5" columns="1"
-										style="margin-bottom:10px">
-										<f:facet name="header">
-											<h:outputText value="TROQUELADO" />
-										</f:facet>
-										<p:outputLabel for="idRespTroquelado" value="Responsable:" />
-										<p:selectOneMenu id="idRespTroquelado"
-											value="#{parametrizacionBean.respTroquelado}"
-											style="width:150px">
-											<f:selectItem itemLabel="- Seleccione -" itemValue=""
-												noSelectionOption="true" />
-											<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-										</p:selectOneMenu>
+						<p:layout style="min-width:400px;min-height:500px;">
+							<p:layoutUnit position="west" size="400" styleClass="west">
+								<h:panelGrid id="gridTroqueado" cellpadding="5" columns="1"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="TROQUELADO" />
+									</f:facet>
+									<p:outputLabel for="idRespTroquelado" value="Responsable:" />
+									<p:selectOneMenu id="idRespTroquelado"
+										value="#{parametrizacionBean.respTroquelado}"
+										style="width:150px">
+										<f:selectItem itemLabel="- Seleccione -" itemValue=""
+											noSelectionOption="true" />
+										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel for="idStdProdConvTrq"
+										value="Estandar Produccion Convencional Troquelado" />
+									<p:inputText id="idStdProdConvTrq"
+										value="#{parametrizacionBean.stdProdConvTroq}" disabled="true" />
+									<p:outputLabel for="idStdProdAutTrq"
+										value="Estandar Produccion Automatica" />
+									<p:inputText id="idStdProdAutTrq"
+										value="#{parametrizacionBean.stdProdAutTroq}" disabled="true" />
+								</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="center" styleClass="center">
+								<h:panelGrid id="gridLineasConvTrq" cellpadding="5" columns="1"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS CONVENCIONALES" />
+									</f:facet>
+									<h:form>
+										<p:outputLabel value="Número de Líneas: " />
+										<p:inputText id="txtNumber"
+											value="#{parametrizacionBean.numLineasConvTroq}" size="1" />
 										<br />
-										<p:outputLabel for="idStdProdConvTrq"
-											value="Estandar Produccion Convencional" />
-										<p:outputLabel for="idStdProdConvTrq"
-											value="Troquelado(promedio calculado)" />
-
-										<p:inputText id="idStdProdConvTrq"
-											value="#{parametrizacionBean.stdProdConvTroq}"
-											disabled="true" />
-										<p:outputLabel for="idStdProdAutTrq"
-											value="Estandar Produccion Automatica" />
-										<p:inputText id="idStdProdAutTrq"
-											value="#{parametrizacionBean.stdProdAutTroq}" disabled="true" />
-										<p:outputLabel value="Producción Total:"></p:outputLabel>
-										<p:inputText value="#{parametrizacionBean.totPedido}"
-											disabled="true" />
-									</h:panelGrid>
-								</p:layoutUnit>
-								<p:layoutUnit position="center" styleClass="center">
-									<h:panelGrid id="gridLineasConvTrq" cellpadding="5" columns="1"
-										style="margin-bottom:10px">
-										<f:facet name="header">
-											<h:outputText value="LINEAS CONVENCIONALES" />
-										</f:facet>
-										<h:form id="bb">
-											<p:outputLabel value="Número de Líneas: " />
-											<p:inputText id="txtNumber"
-												value="#{parametrizacionBean.numLineasConvTroq}" size="1" />
-											<p:selectCheckboxMenu id="scbLTC"
-												value="#{parametrizacionBean.selectedLPT}"
-												label="Líneas a trabajar" panelStyle="width:250px">
-												<f:selectItems
-													value="#{parametrizacionBean.selectItemsLPTroquelado}"></f:selectItems>
-											</p:selectCheckboxMenu>
-											<br />
-											<p:commandButton value="Turnos" id="btnGenerateTurnosTrq"
-												action="#{parametrizacionBean.GenerateTurnsDaysConvTrqt()}"
-												update="formParamGeneral:tabSubGen:trq:guestsTrq"
-												process="@this,txtNumber" />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysConvTrqt()}"
+											update="formParamGeneral:tabSubGen:guestsTrq"
+											process="@this,txtNumber" />
+									</h:form>
+									<h:panelGroup id="guestsTrq">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosConvTroq}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosConvTroq}"
+												varStatus="loop">
+												<p:outputLabel
+													value="#{parametrizacionBean.lblTrqConv[loop.index]}" />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosConvTroq[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+											<p:commandButton value="Guardar"
+												action="#{parametrizacionBean.TestShowDataTrq()}"
+												process="@form" />
 										</h:form>
-										<h:panelGroup id="guestsTrq">
-											<h:form id="paramTrq"
-												rendered="#{not empty parametrizacionBean.numTurnosConvTroq}">
-												<ui:repeat value="#{parametrizacionBean.numTurnosConvTroq}"
-													varStatus="loop">
-													<p:outputLabel
-														value="#{parametrizacionBean.lblTrqConv[loop.index]}" />
-													<p:inputText
-														value="#{parametrizacionBean.numTurnosConvTroq[loop.index]}"
-														size="1" />
-
-													<p:selectCheckboxMenu id="scbA"
-														value="#{parametrizacionBean.selectedTurnosApaConv}"
-														label="Turnos a trabajar" panelStyle="width:250px">
-														<f:selectItems
-															value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
-													</p:selectCheckboxMenu>
-													<br />
-												</ui:repeat>
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:layoutUnit>
+							<p:layoutUnit position="east" size="400" styleClass="east">
+								<h:panelGrid id="gridLineasAutTrq" cellpadding="5" columns="1"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS AUTOMATICAS" />
+									</f:facet>
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasAutTroq}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysAutTrq()}"
+											update="formParamGeneral:tabSubGen:guestsAutoTrq"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsAutoTrq">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosAutTroq}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosAutTroq}"
+												varStatus="loop">
+												<p:outputLabel
+													value="#{parametrizacionBean.lblTrqAut[loop.index]}" />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosAutTroq[loop.index]}"
+													size="1" />
 												<br />
-												<br />
-												<p:outputLabel for="bolTrq" value="Horas extras Troquelado:" />
-												<br />
-												<p:selectBooleanButton id="bolTrq"
-													value="#{parametrizacionBean.hExtrasTrq}" onLabel="Si"
-													offLabel="No" style="width:60px" />
-											</h:form>
-										</h:panelGroup>
-									</h:panelGrid>
-								</p:layoutUnit>
-								<p:layoutUnit position="east" size="400" styleClass="east">
-									<h:panelGrid id="gridLineasAutTrq" cellpadding="5" columns="1"
-										style="margin-bottom:10px">
-										<f:facet name="header">
-											<h:outputText value="LINEAS AUTOMATICAS" />
-										</f:facet>
-										<h:form>
-											<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
-											<p:inputText id="txtNumberAuto"
-												value="#{parametrizacionBean.numLineasAutTroq}" size="1" />
-											<br />
-											<p:commandButton value="Turnos"
-												action="#{parametrizacionBean.GenerateTurnsDaysAutTrq()}"
-												update="formParamGeneral:tabSubGen:trq:guestsAutoTrq"
-												process="@this,txtNumberAuto" />
+											</ui:repeat>
+											<p:commandButton value="Guardar"
+												action="#{parametrizacionBean.TestShowDataAutTrq()}"
+												process="@form" />
 										</h:form>
-										<h:panelGroup id="guestsAutoTrq">
-											<h:form
-												rendered="#{not empty parametrizacionBean.numTurnosAutTroq}">
-												<ui:repeat value="#{parametrizacionBean.numTurnosAutTroq}"
-													varStatus="loop">
-													<p:outputLabel
-														value="#{parametrizacionBean.lblTrqAut[loop.index]}" />
-													<p:inputText
-														value="#{parametrizacionBean.numTurnosAutTroq[loop.index]}"
-														size="1" />
-													<br />
-												</ui:repeat>
-												<p:commandButton value="Guardar"
-													action="#{parametrizacionBean.TestShowDataAutTrq()}"
-													process="@form" />
-											</h:form>
-										</h:panelGroup>
-									</h:panelGrid>
-								</p:layoutUnit>
-							</p:layout>
-						</h:form>
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:layoutUnit>
+						</p:layout>
 					</p:tab>
 
 
 					<p:tab title="APARADO">
-						<h:form id="apa">
-							<p:layout style="min-width:400px;min-height:500px;">
-								<p:layoutUnit position="west" size="400" styleClass="west">
-									<h:panelGrid id="gridAparado" cellpadding="5" columns="1"
-										style="margin-bottom:10px">
-										<f:facet name="header">
-											<h:outputText value="APARADO" />
-										</f:facet>
+						<p:layout style="min-width:400px;min-height:500px;">
+							<p:layoutUnit position="west" size="400" styleClass="west">
+								<h:panelGrid id="gridAparado" cellpadding="5" columns="1"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="APARADO" />
+									</f:facet>
 
-										<p:outputLabel for="idRespAparado" value="Responsable:" />
-										<p:selectOneMenu id="idRespAparado"
-											value="#{parametrizacionBean.respAparado}"
-											style="width:150px">
+									<p:outputLabel for="idRespAparado" value="Responsable:" />
+									<p:selectOneMenu id="idRespAparado"
+										value="#{parametrizacionBean.respAparado}" style="width:150px">
 
-											<f:selectItem itemLabel="- Seleccione -" itemValue=""
-												noSelectionOption="true" />
-											<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
-										</p:selectOneMenu>
+										<f:selectItem itemLabel="- Seleccione -" itemValue=""
+											noSelectionOption="true" />
+										<f:selectItems value="#{ordenesProdBean.selectedUsuario}"></f:selectItems>
+									</p:selectOneMenu>
+
+									<p:outputLabel for="idStdProdConvApa"
+										value="Estandar Produccion Convencional" />
+									<p:inputText id="idStdProdConvApa"
+										value="#{parametrizacionBean.stdProdConvApa}" disabled="true" />
+
+									<p:outputLabel for="idStdProdAutApa"
+										value="Estandar Produccion Automatica" />
+									<p:inputText id="idStdProdAutApa"
+										value="#{parametrizacionBean.stdProdAutApa}" disabled="true" />
+								</h:panelGrid>
+
+							</p:layoutUnit>
+							<p:layoutUnit position="center" styleClass="center">
+								<h:panelGrid id="gridLineasConvApa" cellpadding="5" columns="1"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS CONVENCIONALES" />
+									</f:facet>
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasConvApa}" size="1" />
 										<br />
-										<p:outputLabel for="idStdProdConvApa"
-											value="Estandar Produccion Convencional" />
-										<p:outputLabel for="idStdProdConvApa"
-											value="Aparado(promedio calculado)" />
-										<p:inputText id="idStdProdConvApa"
-											value="#{parametrizacionBean.stdProdConvApa}" disabled="true" />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysConvApa()}"
+											update="formParamGeneral:tabSubGen:guestsConvApa"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsConvApa">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosConvApa}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosConvApa}"
+												varStatus="loop">
+												<p:outputLabel
+													value="#{parametrizacionBean.lblApaConv[loop.index]}" />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosConvApa[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
 
-										<p:outputLabel for="idStdProdAutApa"
-											value="Estandar Produccion Automatica" />
-										<p:inputText id="idStdProdAutApa"
-											value="#{parametrizacionBean.stdProdAutApa}" disabled="true" />
-
-										<p:outputLabel value="Producción Total:"></p:outputLabel>
-										<p:inputText value="#{parametrizacionBean.totPedido}"
-											disabled="true" />
-									</h:panelGrid>
-
-								</p:layoutUnit>
-								<p:layoutUnit position="center" styleClass="center">
-									<h:panelGrid id="gridLineasConvApa" cellpadding="5" columns="1"
-										style="margin-bottom:10px">
-										<f:facet name="header">
-											<h:outputText value="LINEAS CONVENCIONALES" />
-										</f:facet>
-										<h:form id="cc">
-											<p:outputLabel for="txtNumber" value="Número de Líneas: " />
-											<p:inputText id="txtNumber"
-												value="#{parametrizacionBean.numLineasConvApa}" size="1" />
-
-											<p:selectCheckboxMenu id="scbLAC"
-												value="#{parametrizacionBean.selectedLPA}"
-												label="Líneas a trabajar" panelStyle="width:250px">
-												<f:selectItems
-													value="#{parametrizacionBean.selectItemsLPAparado}"></f:selectItems>
-											</p:selectCheckboxMenu>
-											<br />
-											<p:commandButton value="Turnos"
-												action="#{parametrizacionBean.GenerateTurnsDaysConvApa()}"
-												update="formParamGeneral:tabSubGen:apa:guestsConvApa"
-												process="@this,txtNumber" />
+											<p:commandButton value="Guardar"
+												action="#{parametrizacionBean.TestShowDataApa()}"
+												process="@form" />
 										</h:form>
-										<h:panelGroup id="guestsConvApa">
-											<h:form id="paramApa"
-												rendered="#{not empty parametrizacionBean.numTurnosConvApa}">
-												<ui:repeat value="#{parametrizacionBean.numTurnosConvApa}"
-													varStatus="loop">
-													<p:outputLabel
-														value="#{parametrizacionBean.lblApaConv[loop.index]}" />
-													<p:inputText
-														value="#{parametrizacionBean.numTurnosConvApa[loop.index]}"
-														size="1" />
-													<p:selectCheckboxMenu id="scbM"
-														value="#{parametrizacionBean.selectedTurnosTrqConv}"
-														label="Turnos a trabajar" panelStyle="width:250px">
-														<f:selectItems
-															value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
-													</p:selectCheckboxMenu>
-													<br />
-												</ui:repeat>
-												<br />
-												<br />
-												<p:outputLabel for="bolApa" value="Horas extras Aparado:" />
-												<br />
-												<p:selectBooleanButton id="bolApa"
-													value="#{parametrizacionBean.hExtrasApa}" onLabel="Si"
-													offLabel="No" style="width:60px" />
-											</h:form>
-										</h:panelGroup>
-									</h:panelGrid>
-								</p:layoutUnit>
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:layoutUnit>
 
-								<p:layoutUnit position="east" size="400" styleClass="east">
-									<h:panelGrid id="gridLineasAutApa" cellpadding="5" columns="1"
-										style="margin-bottom:10px">
-										<f:facet name="header">
-											<h:outputText value="LINEAS AUTOMATICAS" />
-										</f:facet>
-										<h:form>
-											<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
+							<p:layoutUnit position="east" size="400" styleClass="east">
+								<h:panelGrid id="gridLineasAutApa" cellpadding="5" columns="1"
+									style="margin-bottom:10px">
+									<f:facet name="header">
+										<h:outputText value="LINEAS AUTOMATICAS" />
+									</f:facet>
+									<h:form>
+										<p:outputLabel for="txtNumberAuto" value="Número de Líneas: " />
 
-											<p:inputText id="txtNumberAuto"
-												value="#{parametrizacionBean.numLineasAutApa}" size="1" />
-											<br />
-											<p:commandButton value="Turnos"
-												action="#{parametrizacionBean.GenerateTurnsDaysAutApa()}"
-												update="formParamGeneral:tabSubGen:apa:guestsAutoApa"
-												process="@this,txtNumberAuto" />
+										<p:inputText id="txtNumberAuto"
+											value="#{parametrizacionBean.numLineasAutApa}" size="1" />
+										<br />
+										<p:commandButton value="Turnos"
+											action="#{parametrizacionBean.GenerateTurnsDaysAutApa()}"
+											update="formParamGeneral:tabSubGen:guestsAutoApa"
+											process="@this,txtNumberAuto" />
+									</h:form>
+									<h:panelGroup id="guestsAutoApa">
+										<h:form
+											rendered="#{not empty parametrizacionBean.numTurnosAutApa}">
+											<ui:repeat value="#{parametrizacionBean.numTurnosAutApa}"
+												varStatus="loop">
+												<p:outputLabel
+													value="#{parametrizacionBean.lblApaAut[loop.index]}" />
+												<p:inputText
+													value="#{parametrizacionBean.numTurnosAutApa[loop.index]}"
+													size="1" />
+												<br />
+											</ui:repeat>
+
+											<p:commandButton value="Guardar"
+												action="#{parametrizacionBean.TestShowDataAutApa()}"
+												process="@form" />
 										</h:form>
-										<h:panelGroup id="guestsAutoApa">
-											<h:form
-												rendered="#{not empty parametrizacionBean.numTurnosAutApa}">
-												<ui:repeat value="#{parametrizacionBean.numTurnosAutApa}"
-													varStatus="loop">
-													<p:outputLabel
-														value="#{parametrizacionBean.lblApaAut[loop.index]}" />
-													<p:inputText
-														value="#{parametrizacionBean.numTurnosAutApa[loop.index]}"
-														size="1" />
-													<br />
-												</ui:repeat>
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:layoutUnit>
 
-												<p:commandButton value="Guardar"
-													action="#{parametrizacionBean.TestShowDataAutApa()}"
-													process="@form" />
-											</h:form>
-										</h:panelGroup>
-									</h:panelGrid>
-								</p:layoutUnit>
-
-							</p:layout>
-						</h:form>
+						</p:layout>
 					</p:tab>
 				</p:tabView>
 			</h:form>
 			<h:form id="sendParamsGene">
-				<br />
-				<p:messages id="msgs" />
+				<h:panelGrid id="grid" style="margin-bottom:10px" columns="7"
+					cellpadding="5">
+					<f:facet name="header">
+						<p:messages id="msgs" />
+					</f:facet>
+					<p:outputLabel for="idDiasLaborables" value="Número de días:"
+						style="font-weight:bold" />
+					<p:inputText id="idDiasLaborables"
+						value="#{parametrizacionBean.diasLaborables}" size="1"
+						required="true" requiredMessage="Campo requerido" />
+
+				</h:panelGrid>
 				<!--  ********************** BOTON MOSTRAR (GENERAR)******************  -->
 				<p:commandButton id="btnGenerateDistrib"
 					actionListener="#{parametrizacionBean.ExecuteParams()}"
 					value="Generar Distribucion Dias"
-					process="@this, :sendParamsGene, 
-					:formParamGeneral:tabSubGen:mtn:idRespMontaje,
-					:formParamGeneral:tabSubGen:mtn:aa:scbLM,
-					:formParamGeneral:tabSubGen:trq:bb:txtNumber,
-					:formParamGeneral:tabSubGen:trq:bb:scbLTC,
-					:formParamGeneral:tabSubGen:apa:cc:txtNumber,
-					:formParamGeneral:tabSubGen:apa:cc:scbLAC,
-					:formParamGeneral:tabSubGen:mtn:paramMontaje,
-					:formParamGeneral:tabSubGen:mtn:paramMontaje:bol,
-					:formParamGeneral:tabSubGen:mtn:paramMontaje:btnFechaMtn,
-					:formParamGeneral:tabSubGen:trq:paramTrq,
-					:formParamGeneral:tabSubGen:apa:paramApa"
-					update=":sendParamsGene:msgs, :idTblFechas:schedule" ajax="true"
-					partialSubmit="true" />
+					process=":sendParamsGene, :formParamGeneral:tabSubGen:mtn:idRespMontaje, :formParamGeneral:tabSubGen:mtn:aa:txtNumber, :formParamGeneral:tabSubGen:mtn:paramMontaje, :formParamGeneral:tabSubGen:mtn:paramMontaje:bol, :formParamGeneral:tabSubGen:mtn:paramMontaje:btnFechaMtn"
+					update=":sendParamsGene:msgs, :formParamGeneral:tabSubGen:mtn:alertMtn, :idTblFechas:schedule"
+					ajax="true" partialSubmit="true" />
 
-				<p:commandButton id="btnReprocesar" value="REPROCESAR"
+				<p:commandButton value="REPROCESAR"
 					actionListener="#{parametrizacionBean.reprocesar()}" />
 
-				<p:commandButton id="btnContinuar" value="CONTINUAR"
-					process="formParamGeneral:tabSubGen:mtn:paramMontaje"
-					partialSubmit="true" />
+				<p:commandButton value="CONTINUAR" />
 				<!--  **********************************************************************  -->
 			</h:form>
 			<p:separator />
@@ -505,7 +397,7 @@
 					<p:schedule id="schedule" value="#{parametrizacionBean.eventModel}"
 						widgetVar="myschedule" timeZone="GMT-5" locale="es"
 						rightHeaderTemplate="" showWeekends="true" styleClass="custom">
-						<!-- <p:ajax event="dateSelect"
+						<p:ajax event="dateSelect"
 							listener="#{parametrizacionBean.onDateSelect()}"
 							update="eventDetails" oncomplete="PF('eventDialog').show();" />
 						<p:ajax event="eventSelect"
@@ -514,7 +406,7 @@
 						<p:ajax event="eventMove"
 							listener="#{parametrizacionBean.onEventMove}" update="messages" />
 						<p:ajax event="eventResize"
-							listener="#{parametrizacionBean.onEventResize}" update="messages" /> -->
+							listener="#{parametrizacionBean.onEventResize}" update="messages" />
 					</p:schedule>
 				</h:panelGrid>
 
@@ -543,99 +435,6 @@
 							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
 					</h:panelGrid>
 				</p:dialog>
-			</h:form>
-
-			<h:form id="formCreate">
-				<p:dialog header="Lineas Convencionales" widgetVar="dialogLCCreate"
-					modal="true" showEffect="fade" hideEffect="explode"
-					resizable="false" id="dlgLCCreate">
-
-					<p:panelGrid id="display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
-						<h:outputText value="Linea de Produccion: " />
-						<p:selectOneMenu value="#{parametrizacionBean.selectedLPM}">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
-							<f:selectItems
-								value="#{parametrizacionBean.selectItemsLPMontaje}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<h:outputText value="Turno: " />
-						<p:selectOneMenu
-							value="#{parametrizacionBean.selectedTurnosMntConv}">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
-							<f:selectItems value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<f:facet name="footer">
-							<p:separator />
-							<p:commandButton id="btnCreateAceptar"
-								update=":formParamGeneral:tabSubGen:mtn:aa:formLP, msgs"
-								oncomplete="PF('dialogLCCreate').hide()" icon="fa fa-fw fa-save"
-								title="Guardar" value="Guardar"
-								actionListener="#{parametrizacionBean.SaveLp()}" />
-
-							<p:commandButton id="btnCreateCancelar"
-								oncomplete="PF('dialogLCCreate').hide()"
-								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
-						</f:facet>
-					</p:panelGrid>
-				</p:dialog>
-			</h:form>
-
-			<h:form id="formUpdate">
-				<p:dialog header="Lineas Convencionales" widgetVar="dialogLCUpdate"
-					modal="true" showEffect="fade" hideEffect="explode"
-					resizable="false" id="dlgLCUpdate">
-
-					<p:panelGrid id="display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
-						<h:outputText value="Linea de Produccion: " />
-
-						<p:selectOneMenu value="#{parametrizacionBean.selectedLPM}">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
-							<f:selectItems
-								value="#{parametrizacionBean.selectItemsLPMontaje}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<h:outputText value="Turno: " />
-						<p:selectOneMenu
-							value="#{parametrizacionBean.selectedTurnosMntConv}">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=" " />
-							<f:selectItems value="#{parametrizacionBean.selectItemsTurnos}"></f:selectItems>
-						</p:selectOneMenu>
-
-						<f:facet name="footer">
-							<p:separator />
-							<p:commandButton id="btnCreateAceptar"
-								update=":formParamGeneral:tabSubGen:mtn:aa:formLP, msgs"
-								oncomplete="PF('dialogLCCreate').hide()" icon="fa fa-fw fa-save"
-								title="Guardar" value="Guardar"
-								actionListener="#{parametrizacionBean.SaveLp()}" />
-
-							<p:commandButton id="btnCreateCancelar"
-								oncomplete="PF('dialogLCCreate').hide()"
-								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
-						</f:facet>
-					</p:panelGrid>
-				</p:dialog>
-			</h:form>
-
-			<h:form id="formDelete">
-				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade"
-					header="Eliminar Modelo de Calzado" severity="alert"
-					widgetVar="dialogLTDelete">
-
-					<h:inputHidden value="#{modelosBean.selectedModelos.modCodigo}"></h:inputHidden>
-
-					<p:commandButton id="confirm" value="Si"
-						update=":formParamGeneral:tabSubGen:mtn:aa:formLP, msgs"
-						icon="ui-icon-check" oncomplete="PF('dialogModeloDelete').hide()"
-						actionListener="#{modelosBean.btnDeleteModelo(actionEvent)}" />
-
-					<p:commandButton id="decline" value="No" icon="ui-icon-close"
-						oncomplete="PF('dialogLTDelete').hide()" />
-				</p:confirmDialog>
 			</h:form>
 		</ui:define>
 	</ui:composition>

@@ -5,6 +5,7 @@ import java.util.List;
 import com.project.entities.Programdia;
 
 public interface ProgramacionDiasDao {
+
 	public List<Programdia> findAll();
 
 	public boolean create(Programdia programDia);

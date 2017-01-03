@@ -9,34 +9,52 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loader.gif" />
+			</p:dialog>
+
 			<p:growl id="msgs" showDetail="true" />
 			<h:form id="idFrmOrderProd">
+
 				<p:commandButton value="Crear Orden"
 					oncomplete="PF('dialogDetaProCreate').show()" title="Crear Orden"
-					update=":formCreate" icon="fa fa-plus" />
-				<br />
+					update=":formCreate:idResponsable, :formCreate:idCliente"
+					icon="fa fa-plus" />
+
 				<p:commandButton value="Eliminar Orden"
 					oncomplete="PF('dialogDetaProCreate').show()"
 					title="Eliminar Orden" icon="ui-icon-close" />
 				<p:separator />
+
 				<p:outputLabel value="**** En Construcción:  " />
 				<p:fileUpload id="fileUp" value="#{uploadFileBean.file}"
 					mode="simple" />
+
 				<p:spacer width="10" />
+
 				<h:commandButton value="Importar"
 					actionListener="#{uploadFileBean.upload()}"
 					process="@form :basicUpload:fileUp" partialSubmit="true"
 					ajax="false" />
+
 				<p:separator />
+
 				<h:panelGrid id="idPGridOrder" columns="3">
-					<p:outputLabel value="Responsable: " />
-					<h:inputText value="#{ordenProduccionBean.responsable}"
+					<p:outputLabel for="idTxtResponsable" value="Responsable: " />
+					<h:inputText id="idTxtResponsable"
+						value="#{ordenProduccionBean.responsable}" disabled="true" />
+
+					<h:inputText id="idTxtCodigo" value="#{ordenProduccionBean.codigo}"
 						disabled="true" />
 
-					<h:inputText value="aqui va el cod" disabled="true" />
-
-					<p:outputLabel value="Cliente: " />
-					<h:inputText value="#{ordenProduccionBean.cliente}" disabled="true" />
+					<p:outputLabel for="idTxtCliente" value="Cliente: " />
+					<h:inputText id="idTxtCliente"
+						value="#{ordenProduccionBean.cliente}" disabled="true" />
 				</h:panelGrid>
 			</h:form>
 
@@ -75,6 +93,9 @@
 							<p:commandButton id="btnAgregarDetalle" value="Agregar"
 								update=":formDataTable"
 								actionListener="#{ordenProduccionBean.btnCreateDetaOrden(actionEvent)}" />
+
+							<p:commandButton id="btnProcesarPedido" value="Procesar"
+								actionListener="#{ordenProduccionBean.ProcesarOrden()}" />
 						</f:facet>
 
 					</h:panelGrid>
@@ -126,7 +147,7 @@
 
 						<h:outputText for="idResponsable" value="Responsable: " />
 						<p:selectOneMenu id="idResponsable"
-							value="#{ordenProduccionBean.selectedOrden.usuario1.userId}"
+							value="#{ordenProduccionBean.selectedOrden.usuario.userId}"
 							required="true" style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
@@ -147,12 +168,12 @@
 						<f:facet name="footer">
 							<p:commandButton id="btnCreateAceptar" icon="fa fa-fw fa-save"
 								title="Guardar" value="Guardar"
-								upadate=":idFrmOrderProd:idPGridOrder"
+								update=":formCreate,
+								:idFrmOrderProd:idTxtResponsable,
+								:idFrmOrderProd:idTxtCliente,
+								:idFrmOrderProd:idTxtCodigo"
 								actionListener="#{ordenProduccionBean.btnCreateOrden(actionEvent)}"
 								oncomplete="PF('dialogDetaProCreate').hide()">
-
-								<f:setPropertyActionListener value="#{modelo}"
-									target="#{modelosBean.selectedModelos}" />
 							</p:commandButton>
 
 							<p:commandButton id="btnCreateCancelar" icon="fa fa-fw fa-close"

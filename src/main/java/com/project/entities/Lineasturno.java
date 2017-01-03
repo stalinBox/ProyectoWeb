@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -17,6 +18,11 @@ public class Lineasturno implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer ltcodigo;
+
+	@Temporal(TemporalType.DATE)
+	private Date finicio;
+
+	private Boolean hextras;
 
 	//bi-directional many-to-one association to Lineasprod
 	@ManyToOne
@@ -42,6 +48,22 @@ public class Lineasturno implements Serializable {
 
 	public void setLtcodigo(Integer ltcodigo) {
 		this.ltcodigo = ltcodigo;
+	}
+
+	public Date getFinicio() {
+		return this.finicio;
+	}
+
+	public void setFinicio(Date finicio) {
+		this.finicio = finicio;
+	}
+
+	public Boolean getHextras() {
+		return this.hextras;
+	}
+
+	public void setHextras(Boolean hextras) {
+		this.hextras = hextras;
 	}
 
 	public Lineasprod getLineasprod() {

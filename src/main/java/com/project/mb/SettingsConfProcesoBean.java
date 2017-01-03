@@ -146,16 +146,19 @@ public class SettingsConfProcesoBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectedItemsSubProcesos() {
+
 		if (this.selectedConfProceso.getProceso1().getProCodigo() != null
 				&& !this.selectedConfProceso.getProceso1().getProCodigo()
 						.equals("")
-				&& this.selectedConfProceso.getProceso1().getProCodigo() != 0) {
+				&& this.selectedConfProceso.getProceso1().getProCodigo() != 0
+				&& this.selectedConfProceso.getModelo().getModCodigo() != null
+				&& this.selectedConfProceso.getModelo().getModCodigo() != 0) {
 
 			this.selectedItemsSubProcesos = new ArrayList<SelectItem>();
 			ProcesoDao procesosDao = new ProcesoDaoImpl();
-			List<Proceso> proceso = procesosDao
-					.findByProceso(this.selectedConfProceso.getProceso1()
-							.getProCodigo());
+			List<Proceso> proceso = procesosDao.findByProcesoBySetting(
+					this.selectedConfProceso.getProceso1().getProCodigo(),
+					this.selectedConfProceso.getModelo().getModCodigo());
 			this.selectedItemsSubProcesos.clear();
 			for (Proceso pro : proceso) {
 				SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro

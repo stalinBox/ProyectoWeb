@@ -10,11 +10,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import com.project.dao.LineasProdDao;
 import com.project.dao.LineasProdDaoImpl;
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.entities.Lineasprod;
-import com.project.entities.TipoProceso;
+import com.project.entities.Proceso;
 
 @ManagedBean
 @RequestScoped
@@ -24,28 +27,20 @@ public class LineasProduccionBean implements Serializable {
 	// VARIABLES
 	private List<Lineasprod> lineasProd;
 	private Lineasprod selectedLineasProd;
-
+	private List<SelectItem> selectedItemsProcesos;
 	private boolean lAutomatico;
 
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
-		selectedLineasProd = new Lineasprod();
-	}
-
-	public LineasProduccionBean() {
-		this.lineasProd = new ArrayList<Lineasprod>();
+		this.selectedLineasProd = new Lineasprod();
+		this.selectedLineasProd.setProceso(new Proceso());
 	}
 
 	// METODOS
 	public void btnCreateLineaProd(ActionEvent actionEvent) {
 		String msg = "";
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
-
-		TipoProceso pp = new TipoProceso();
-		pp.setTprCodigo(2);
-		// this.selectedLineasProd.setTipoProceso(pp);
-		this.selectedLineasProd.setLineaaut(null);
 
 		if (lineasDao.create(this.selectedLineasProd)) {
 			msg = "Se ha añadido una nueva linea de producción";
@@ -95,10 +90,28 @@ public class LineasProduccionBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+
 	public List<Lineasprod> getLineasProd() {
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
 		this.lineasProd = lineasDao.findAll();
 		return lineasProd;
+	}
+
+	public List<SelectItem> getSelectedItemsProcesos() {
+		this.selectedItemsProcesos = new ArrayList<SelectItem>();
+		ProcesoDao procesosDao = new ProcesoDaoImpl();
+		List<Proceso> proceso = procesosDao.findPadre();
+		this.selectedItemsProcesos.clear();
+		for (Proceso pro : proceso) {
+			SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro
+					.getTipoProceso().getTprNombre());
+			this.selectedItemsProcesos.add(selectItem);
+		}
+		return selectedItemsProcesos;
+	}
+
+	public void setSelectedItemsProcesos(List<SelectItem> selectedItemsProcesos) {
+		this.selectedItemsProcesos = selectedItemsProcesos;
 	}
 
 	public void setLineasProd(List<Lineasprod> lineasProd) {

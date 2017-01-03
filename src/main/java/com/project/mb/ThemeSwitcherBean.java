@@ -6,6 +6,8 @@ import java.util.TreeMap;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import com.project.utils.GuestPreferences;
+
 @ManagedBean
 @SessionScoped
 public class ThemeSwitcherBean implements Serializable {

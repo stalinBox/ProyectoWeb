@@ -30,20 +30,12 @@ public class Rol implements Serializable {
 	private BigDecimal rolStado;
 
 	//bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy="rol1")
-	private List<Rolmenu> rolmenus1;
-
-	//bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy="rol2")
-	private List<Rolmenu> rolmenus2;
+	@OneToMany(mappedBy="rol")
+	private List<Rolmenu> rolmenus;
 
 	//bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy="rol1")
-	private List<Usuario> usuarios1;
-
-	//bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy="rol2")
-	private List<Usuario> usuarios2;
+	@OneToMany(mappedBy="rol")
+	private List<Usuario> usuarios;
 
 	public Rol() {
 	}
@@ -80,92 +72,48 @@ public class Rol implements Serializable {
 		this.rolStado = rolStado;
 	}
 
-	public List<Rolmenu> getRolmenus1() {
-		return this.rolmenus1;
+	public List<Rolmenu> getRolmenus() {
+		return this.rolmenus;
 	}
 
-	public void setRolmenus1(List<Rolmenu> rolmenus1) {
-		this.rolmenus1 = rolmenus1;
+	public void setRolmenus(List<Rolmenu> rolmenus) {
+		this.rolmenus = rolmenus;
 	}
 
-	public Rolmenu addRolmenus1(Rolmenu rolmenus1) {
-		getRolmenus1().add(rolmenus1);
-		rolmenus1.setRol1(this);
+	public Rolmenu addRolmenus(Rolmenu rolmenus) {
+		getRolmenus().add(rolmenus);
+		rolmenus.setRol(this);
 
-		return rolmenus1;
+		return rolmenus;
 	}
 
-	public Rolmenu removeRolmenus1(Rolmenu rolmenus1) {
-		getRolmenus1().remove(rolmenus1);
-		rolmenus1.setRol1(null);
+	public Rolmenu removeRolmenus(Rolmenu rolmenus) {
+		getRolmenus().remove(rolmenus);
+		rolmenus.setRol(null);
 
-		return rolmenus1;
+		return rolmenus;
 	}
 
-	public List<Rolmenu> getRolmenus2() {
-		return this.rolmenus2;
+	public List<Usuario> getUsuarios() {
+		return this.usuarios;
 	}
 
-	public void setRolmenus2(List<Rolmenu> rolmenus2) {
-		this.rolmenus2 = rolmenus2;
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
-	public Rolmenu addRolmenus2(Rolmenu rolmenus2) {
-		getRolmenus2().add(rolmenus2);
-		rolmenus2.setRol2(this);
+	public Usuario addUsuario(Usuario usuario) {
+		getUsuarios().add(usuario);
+		usuario.setRol(this);
 
-		return rolmenus2;
+		return usuario;
 	}
 
-	public Rolmenu removeRolmenus2(Rolmenu rolmenus2) {
-		getRolmenus2().remove(rolmenus2);
-		rolmenus2.setRol2(null);
+	public Usuario removeUsuario(Usuario usuario) {
+		getUsuarios().remove(usuario);
+		usuario.setRol(null);
 
-		return rolmenus2;
-	}
-
-	public List<Usuario> getUsuarios1() {
-		return this.usuarios1;
-	}
-
-	public void setUsuarios1(List<Usuario> usuarios1) {
-		this.usuarios1 = usuarios1;
-	}
-
-	public Usuario addUsuarios1(Usuario usuarios1) {
-		getUsuarios1().add(usuarios1);
-		usuarios1.setRol1(this);
-
-		return usuarios1;
-	}
-
-	public Usuario removeUsuarios1(Usuario usuarios1) {
-		getUsuarios1().remove(usuarios1);
-		usuarios1.setRol1(null);
-
-		return usuarios1;
-	}
-
-	public List<Usuario> getUsuarios2() {
-		return this.usuarios2;
-	}
-
-	public void setUsuarios2(List<Usuario> usuarios2) {
-		this.usuarios2 = usuarios2;
-	}
-
-	public Usuario addUsuarios2(Usuario usuarios2) {
-		getUsuarios2().add(usuarios2);
-		usuarios2.setRol2(this);
-
-		return usuarios2;
-	}
-
-	public Usuario removeUsuarios2(Usuario usuarios2) {
-		getUsuarios2().remove(usuarios2);
-		usuarios2.setRol2(null);
-
-		return usuarios2;
+		return usuario;
 	}
 
 }

@@ -12,127 +12,120 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
-			<p:panel header="Responsables" style="text-align:center">
-				<h:panelGrid columns="2" columnClasses="label, value">
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
 
-					<h:outputText value="Proceso: *" />
-					<p:selectOneMenu id="idCbxProcesos"
-						value="#{paramBean.selectedParametrizacion}" required="true"
-						style="width:150px">
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loader.gif" />
+			</p:dialog>
+			<p:growl id="msgs" showDetail="true" />
 
-						<f:selectItem itemLabel="- Seleccione -" itemValue=""
-							noSelectionOption="true" />
-						<f:selectItems value="" />
-					</p:selectOneMenu>
+			<h:form id="idFrmParametrizacion">
+				<p:panel id="idPanel">
+					<p:messages autoUpdate="true" />
+					<f:facet name="header">PARAMETRIZACION</f:facet>
+					<h:panelGrid id="idProc" columns="2">
 
-					<h:outputText value="Responsable: *" />
-					<p:selectOneMenu id="idCbxResponsable" value="" required="true"
-						style="width:150px">
+						<h:outputLabel value="Proceso:" />
+						<p:selectOneMenu id="idCboProPadre"
+							value="#{paramBean.selectedParametrizacion.proceso.proCodigo}"
+							style="width:150px" required="true">
 
-						<f:selectItem itemLabel="- Seleccione -" itemValue=""
-							noSelectionOption="true" />
-						<f:selectItems value="" />
-					</p:selectOneMenu>
+							<p:ajax listener="#{paramBean.onChangeProcesos(actionEvent)}"
+								update="idStdCon,idStdAut" />
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectedItemsProceso}" />
+						</p:selectOneMenu>
 
-					<h:outputText value="Produccion total orden: " />
-					<p:inputText value="#{userWizard.user.lastname}" required="true"
-						label="OrdenTotal" />
+						<h:outputLabel value="Responsable:" />
+						<p:selectOneMenu id="idResponsable"
+							value="#{paramBean.selectedParametrizacion.usuario.userId}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{ordenProduccionBean.selectedItemsUsuarios}" />
+						</p:selectOneMenu>
 
-					<h:outputText value="Estandar de producción convencional: " />
-					<p:inputText value="" required="true" label="stdConv" />
+						<h:outputLabel for="idStdCon" value="Estandar Conv:" />
+						<h:inputText id="idStdCon" value="#{paramBean.stdConv}"
+							disabled="true" required="true" />
 
-					<h:outputText value="Estandar de producción automática: " />
-					<p:inputText value="" label="stdAut" required="true" />
+						<h:outputLabel for="idStdAut" value="Estandar Aut:" />
+						<h:inputText id="idStdAut" value="#{paramBean.stdAut}"
+							disabled="true" required="true" />
 
-				</h:panelGrid>
+						<h:outputLabel for="idTotalOrden" value="Total Orden:" />
+						<h:inputText id="idTotalOrden" value="#{paramBean.totOrden}"
+							disabled="true" required="true" />
 
-				<p:commandButton value="Insertar" />
+						<f:facet name="footer">
+							<p:commandButton id="btnAgregarDetalle" value="Agregar"
+								update=":formDataTable"
+								actionListener="#{paramBean.btnCreateParametrizacion(actionEvent)}" />
 
-				<p:dataTable id="basicDT" var="parametrizacion">
+							<p:commandButton id="btnNext" value="Conf. Lineas"
+								actionListener="#{paramBean.btnConfLineas()}" />
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="p"
+					value="#{paramBean.parametrizacion}">
+
+					<f:facet name="header">Detalle Parametrizacion</f:facet>
 
 					<p:column headerText="Proceso">
-						<h:outputText value="#{cliente.codCliente}" />
+						<h:outputText value="#{p.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Responsable">
-						<h:outputText value="#{cliente.codCliente}" />
+						<h:outputText value="#{p.usuario.userName}" />
 					</p:column>
 
-					<p:column headerText="Total">
-						<h:outputText value="#{cliente.codCliente}" />
+					<p:column headerText="StandarConv">
+						<h:outputText value="#{p.standconv}" />
 					</p:column>
 
-					<p:column headerText="Estandar Convencional">
-						<h:outputText value="#{cliente.nombrecli}" />
-					</p:column>
-
-					<p:column headerText="Estandar Automatico">
-						<h:outputText value="#{cliente.apellidocli}" />
+					<p:column headerText="StandarAutomatico">
+						<h:outputText value="#{p.standauto}" />
 					</p:column>
 
 					<p:column headerText="Actualizar/Eliminar" style="width:10%">
 
-						<p:commandButton id="btnUpdate" update=":formUpdate"
-							oncomplete="PF('dialogClienteUpdate').show()"
-							icon="ui-icon-pencil" title="Modificar">
-							<f:setPropertyActionListener value="#{cliente}"
-								target="#{clienteBean.selectedCliente}" />
-						</p:commandButton>
-
-						<p:commandButton id="btnDelete" update=":formDelete"
-							oncomplete="PF('dialogClienteDelete').show()"
-							icon="ui-icon-close" title="Eliminar">
-							<f:setPropertyActionListener value="#{cliente}"
-								target="#{clienteBean.selectedCliente}" />
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogParamDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{paramBean.selectedParametrizacion}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
-			</p:panel>
-
-			<p:commandButton value="Siguiente" />
-
-			<h:form id="formUpdate">
-				<p:dialog header="Modificar Cliente" widgetVar="dialogClienteUpdate"
-					modal="true" showEffect="fade" hideEffect="explode"
-					resizable="false" id="dlgClienteUpdate">
-
-					<h:inputHidden value="#{clienteBean.selectedCliente.codCliente}" />
-					<p:panelGrid id="display" columns="2" cellpadding="4"
-						style="margin:0 auto;">
-
-						<f:facet name="footer">
-							<p:separator />
-							<p:commandButton id="btnUpdateAceptar"
-								update="formDataTable, msgs"
-								oncomplete="PF('dialogClienteUpdate').hide()"
-								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
-								actionListener="#{clienteBean.btnUpdateCliente(actionEvent)}" />
-
-							<p:commandButton id="btnUpdateCancelar"
-								oncomplete="PF('dialogClienteUpdate').hide()"
-								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
-						</f:facet>
-
-					</p:panelGrid>
-				</p:dialog>
 			</h:form>
+
 
 			<h:form id="formDelete">
 				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade" header="Eliminar Cliente"
-					severity="alert" widgetVar="dialogClienteDelete">
+					showEffect="fade" hideEffect="fade" header="Eliminar Item"
+					severity="alert" widgetVar="dialogParamDelete">
 
-					<h:inputHidden value="#{clienteBean.selectedCliente.codCliente}" />
+					<h:inputHidden
+						value="#{paramBean.selectedParametrizacion.paramCodigo}" />
 
 					<p:commandButton id="confirm" value="Si"
 						update="formDataTable, msgs" icon="ui-icon-check"
-						oncomplete="PF('dialogClienteDelete').hide()"
-						actionListener="#{clienteBean.btnDeleteCliente(actionEvent)}" />
+						oncomplete="PF('dialogParamDelete').hide()"
+						actionListener="#{paramBean.btnDeleteParametrizacion(actionEvent)}" />
 
 					<p:commandButton id="decline" value="No" icon="ui-icon-close"
-						oncomplete="PF('dialogClienteDelete').hide()" />
+						oncomplete="PF('dialogParamDelete').hide()" />
 				</p:confirmDialog>
 			</h:form>
+
 		</ui:define>
 	</ui:composition>
 </body>

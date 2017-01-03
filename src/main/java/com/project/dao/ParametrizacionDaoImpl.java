@@ -11,7 +11,7 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Parametro> findByOrden() {
+	public List<Parametro> findAll() {
 		List<Parametro> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Parametro";
@@ -22,7 +22,8 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALLMODELOS: " + e.toString());
+			System.out.println("ERRORRRRR FINDALLPARAMETIZACION: "
+					+ e.toString());
 		}
 		return listado;
 	}
@@ -86,6 +87,25 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 					+ e.getMessage().toString());
 		}
 		return flag;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> findByOrdenProd(Integer codOrden) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Parametro ptro WHERE ptro.ordenprod = " + codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETIZACION: "
+					+ e.toString());
+		}
+		return listado;
 	}
 
 }

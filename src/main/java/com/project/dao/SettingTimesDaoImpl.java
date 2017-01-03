@@ -2,7 +2,9 @@ package com.project.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.project.entities.Confproceso;
 import com.project.utils.HibernateUtil;
@@ -34,7 +36,19 @@ public class SettingTimesDaoImpl implements SettingTimesDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(confPro);
+			String sql = "INSERT INTO CONFPROCESO(CONFPRO_CODIGO,MOD_CODIGO,PRO_CODIGO,SUB_PRO,TIEMPO_TS) "
+					+ "VALUES(DEFAULT,:val1,:val2,:val3,:val4)";
+
+			Query query = sesion.createSQLQuery(sql);
+			query.setParameter("val1", confPro.getModelo().getModCodigo());
+			query.setParameter("val2", confPro.getProceso1().getProCodigo(),
+					StandardBasicTypes.INTEGER);
+			query.setParameter("val3", confPro.getProceso2().getProCodigo());
+			query.setParameter("val4", confPro.getTiempoTs());
+			query.executeUpdate();
+
+			// sesion.save(confPro);
+
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
@@ -72,4 +86,29 @@ public class SettingTimesDaoImpl implements SettingTimesDao {
 		return flag;
 	}
 
+	@Override
+	public double findByTs(String mNombre, String tNombre) {
+		double a = 0;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String hql = "SELECT ROUND((1/SUM(c.tiempoTs))*8*60)"
+				+ " FROM Confproceso c"
+				+ " WHERE c.modelo.modCodigo = (SELECT m.modCodigo"
+				+ " FROM Modelo m WHERE  m.modNombre = '" + mNombre + "')"
+				+ " AND c.proceso1.proCodigo =(SELECT p.proCodigo"
+				+ " FROM Proceso p"
+				+ " WHERE p.tipoProceso.tprCodigo =(SELECT tp.tprCodigo"
+				+ " FROM TipoProceso tp" + " WHERE tp.tprNombre = '" + tNombre
+				+ "'))";
+		try {
+			sesion.beginTransaction();
+			a = (Double) (sesion.createQuery(hql).uniqueResult());
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("Error en la consulta de tiempos: "
+					+ e.toString());
+			throw e;
+		}
+		return a;
+	}
 }

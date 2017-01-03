@@ -12,4 +12,9 @@ public interface OrdenesProdDao {
 	public boolean delete(Integer id);
 
 	public List<Ordenprod> findAll();
+
+	public Ordenprod LastRespOrden();
+
+	public Ordenprod findByLast(Integer id);
+
 }

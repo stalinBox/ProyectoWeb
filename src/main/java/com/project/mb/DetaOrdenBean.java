@@ -21,8 +21,10 @@ import com.project.dao.TallasDaoImpl;
 import com.project.entities.Detalleorden;
 import com.project.entities.Modelo;
 import com.project.entities.Talla;
+import com.project.utils.Items;
 import com.project.utils.KillProcessEXCEL;
 import com.project.utils.MyUtil;
+import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
 @ViewScoped
@@ -98,6 +100,7 @@ public class DetaOrdenBean implements Serializable {
 		a.main(null);
 
 		WriteAndReadExcel wr = new WriteAndReadExcel();
+		
 		// Store la capacidad de produccion
 		cp = wr.getOrder(orderList);
 

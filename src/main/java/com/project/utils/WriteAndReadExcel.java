@@ -1,4 +1,4 @@
-package com.project.mb;
+package com.project.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,8 +23,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-@ManagedBean(name = "WriteAndReadExcel")
-@ViewScoped
+import com.project.dao.SettingTimesDao;
+import com.project.dao.SettingTimesDaoImpl;
+
 public class WriteAndReadExcel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -75,11 +73,13 @@ public class WriteAndReadExcel implements Serializable {
 	public ArrayList<Integer> SendPathFile(ArrayList<Items> orderList)
 			throws IOException, InvalidFormatException {
 		ArrayList<Integer> cpStands = new ArrayList<Integer>();
+
 		// NOMBRE ESTATICO
 		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
 		String pathFile = "";
 		String pathLocationFile = "";
 		String dirNewLocationFile = "";
+
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		File configFile = new File(classLoader.getResource(fileName).getFile());
 		if (configFile.exists()) {
@@ -106,6 +106,7 @@ public class WriteAndReadExcel implements Serializable {
 
 		Workbook workbook;
 		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
+
 		// OBTENER EL SHEET(HOJA) EN LA QUE HAY QUE INSERTAR LA ORDEN
 		Sheet sheet = workbook.getSheetAt(0);
 
@@ -143,11 +144,18 @@ public class WriteAndReadExcel implements Serializable {
 			c.setCellValue(key);
 			p++;
 		}
+
 		// INGRESAR DE CAPACIDAD DE PRODUCCION MONTAJE
 		ArrayList<Integer> pp2 = new ArrayList<Integer>();
-		pp2.add(480);
-		pp2.add(650);
-		pp2.add(295);
+		for (String mNombre : pp) {
+			System.out.println("MODELOS A CONSULTAR: " + mNombre);
+			int ts = 0;
+			String tNombre = "MONTAJE";
+			SettingTimesDao sttDao = new SettingTimesDaoImpl();
+			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			System.out.println("Tiempo a ingresar en pp2: " + ts);
+			pp2.add(ts);
+		}
 		Integer m = 1;
 		for (Integer key : pp2) {
 			Row r = sheet.getRow(m);
@@ -167,9 +175,20 @@ public class WriteAndReadExcel implements Serializable {
 		// INGRESAR LA CAPACIDAD DE PRODUCCION APARADO
 		ArrayList<Integer> pp3 = new ArrayList<Integer>();
 		Sheet sheetApa = workbook.getSheetAt(1);
-		pp3.add(460);
-		pp3.add(510);
-		pp3.add(333);
+
+		for (String mNombre : pp) {
+			System.out.println("MODELOS A CONSULTAR: " + mNombre);
+			int ts = 0;
+			String tNombre = "APARADO";
+			SettingTimesDao sttDao = new SettingTimesDaoImpl();
+			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			System.out.println("Tiempo a ingresar en pp3: " + ts);
+			pp3.add(ts);
+		}
+
+		// pp3.add(460);
+		// pp3.add(510);
+		// pp3.add(333);
 		Integer m1 = 1;
 		for (Integer key : pp3) {
 			Row r = sheetApa.getRow(m1);
@@ -185,12 +204,20 @@ public class WriteAndReadExcel implements Serializable {
 			c.setCellValue(key);
 			m1++;
 		}
+
 		// INGRESAR LA CAPACIDAD DE PRODUCCION DE TROQUELADO
 		ArrayList<Integer> pp4 = new ArrayList<Integer>();
 		Sheet sheetTrq = workbook.getSheetAt(2);
-		pp4.add(334);
-		pp4.add(693);
-		pp4.add(265);
+		for (String mNombre : pp) {
+			System.out.println("MODELOS A CONSULTAR: " + mNombre);
+			int ts = 0;
+			String tNombre = "TROQUELADO";
+			SettingTimesDao sttDao = new SettingTimesDaoImpl();
+			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			System.out.println("Tiempo a ingresar en pp4: " + ts);
+			pp4.add(ts);
+		}
+
 		Integer m2 = 1;
 		for (Integer key : pp4) {
 			Row r = sheetTrq.getRow(m2);
@@ -296,50 +323,6 @@ public class WriteAndReadExcel implements Serializable {
 		System.out.println("Valor para ocupar en double TROQUELADO: "
 				+ cpDoubleTrq);
 		return standaresProcesos;
-	}
-
-	// **SIN UTILZAR** PONE EN BLANCO LAS CELDAS DE UNA HOJA EN EXCEL
-	public boolean deleteContentSheet(String pathFile, String pathLocationFile)
-			throws IOException, InvalidFormatException {
-
-		Workbook workbook;
-		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
-		boolean isRowEmpty = false;
-		Sheet sheet = workbook.getSheetAt(0);
-
-		for (int i = 0; i < sheet.getLastRowNum(); i++) {
-			if (sheet.getRow(i) == null) {
-				isRowEmpty = true;
-				sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-				i--;
-				continue;
-			}
-			for (int j = 0; j < sheet.getRow(i).getLastCellNum(); j++) {
-				if (sheet.getRow(i).getCell(j).toString().trim().equals("")) {
-					isRowEmpty = false;
-				} else {
-					isRowEmpty = true;
-					break;
-				}
-			}
-			if (isRowEmpty == true) {
-				sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-				i--;
-			}
-		}
-		try {
-			FileOutputStream out = new FileOutputStream(new File(
-					pathLocationFile + "\\caso2Real.xlsm"));
-			workbook.write(out);
-			out.close();
-			System.out.println("Contenido del sheet eliminado ... ");
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 	// RETORNA VALORES SIN REPETIR

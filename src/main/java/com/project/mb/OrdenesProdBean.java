@@ -43,7 +43,7 @@ public class OrdenesProdBean implements Serializable {
 		currentDate = new Date();
 
 		selectedOp = new Ordenprod();
-		selectedOp.setUsuario1(new Usuario());
+		selectedOp.setUsuario(new Usuario());
 	}
 
 	public OrdenesProdBean() {

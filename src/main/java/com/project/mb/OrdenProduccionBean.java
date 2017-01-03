@@ -1,5 +1,6 @@
 package com.project.mb;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.project.dao.ClientesDao;
 import com.project.dao.ClientesDaoImpl;
@@ -28,6 +31,11 @@ import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
 import com.project.entities.Talla;
 import com.project.entities.Usuario;
+import com.project.utils.ContentParam;
+import com.project.utils.Items;
+import com.project.utils.KillProcessEXCEL;
+import com.project.utils.MyUtil;
+import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
 @ViewScoped
@@ -45,10 +53,15 @@ public class OrdenProduccionBean implements Serializable {
 	private List<SelectItem> selectedItemsClientes;
 	private List<SelectItem> selectedItemsUsuarios;
 
-	private String Cliente;
-	private String Responsable;
+	private static String Cliente = null;
+	private static String Responsable = null;
+	private static Integer Codigo = null;
 
 	private Date currentDate;
+
+	private static final ArrayList<Items> orderList = new ArrayList<Items>();
+	private ArrayList<Integer> cp = new ArrayList<Integer>();
+	private Integer total;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -56,7 +69,7 @@ public class OrdenProduccionBean implements Serializable {
 		// Entidad Ordenprod
 		this.selectedOrden = new Ordenprod();
 		this.selectedOrden.setCliente(new Cliente());
-		this.selectedOrden.setUsuario1(new Usuario());
+		this.selectedOrden.setUsuario(new Usuario());
 
 		this.currentDate = new Date();
 		this.selectedOrden.setFActual(this.currentDate);
@@ -72,16 +85,10 @@ public class OrdenProduccionBean implements Serializable {
 
 	// DML ORDEN PRODUCCION
 	public void btnCreateOrden(ActionEvent actionEvent) {
-		this.Cliente = "cliente";
-		this.Responsable = "Reponsalbe";
 
 		this.selectedOrden.setFActual(new Date());
 		Lugare lugar = new Lugare();
 		lugar.setLugarCodigo(null);
-
-		Usuario usuario2 = new Usuario();
-		usuario2.setUserId(null);
-		this.selectedOrden.setUsuario2(usuario2);
 
 		this.selectedOrden.setLugare(lugar);
 		this.selectedOrden.setFEstim(null);
@@ -95,6 +102,8 @@ public class OrdenProduccionBean implements Serializable {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
+
+			lastOrden();
 		} else {
 			msg = "Error al añadir una orden";
 			FacesMessage message = new FacesMessage(
@@ -109,10 +118,30 @@ public class OrdenProduccionBean implements Serializable {
 	public void btnDeleteOrden(ActionEvent actionEvent) {
 	}
 
+	public void lastOrden() {
+		String msg = "";
+		OrdenesProdDao ordenProDao = new OrdenesProdDaoImpl();
+		Ordenprod op = ordenProDao.LastRespOrden();
+
+		if (op != null) {
+			Responsable = op.getUsuario().getUserName();
+			Cliente = op.getCliente().getNombrecli();
+			Codigo = op.getOrdenprodCodigo();
+		} else {
+			msg = "ERROR";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+
 	// DML DETALLE ORDEN
 	public void btnCreateDetaOrden(ActionEvent actionEvent) {
 		String msg = "";
 		DetaOrdenDao detaorden = new DetaOrdenDaoImpl();
+		Ordenprod ordenprod = new Ordenprod();
+		ordenprod.setOrdenprodCodigo(Codigo);
+		this.selectedDetaOrden.setOrdenprod(ordenprod);
 		if (detaorden.create(this.selectedDetaOrden)) {
 			msg = "Se ha añadido un item";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -132,13 +161,87 @@ public class OrdenProduccionBean implements Serializable {
 	public void btnDeleteDetaOrden(ActionEvent actionEvent) {
 	}
 
+	public void ProcesarOrden() throws InvalidFormatException, IOException {
+		int ab = 0;
+		List<SelectItem> oo = new ArrayList<SelectItem>();
+		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
+		List<Detalleorden> deta = detaOrdenDao.findByOrden(Codigo);
+		oo.clear();
+		for (Detalleorden d : deta) {
+			Items orderitem = new Items(d.getModelo().getModNombre(), d
+					.getTalla().getTalNumero(), d.getCantidad());
+			ab += d.getCantidad();
+			orderList.add(orderitem);
+		}
+		// MATANDO PROCESO EN EXCEL
+		KillProcessEXCEL.main(null);
+
+		WriteAndReadExcel wr = new WriteAndReadExcel();
+		// Store la capacidad de produccion
+		this.cp = wr.getOrder(orderList);
+		this.total = ab;
+		System.out.println("TOTAL DE LA ORDEN BEANDETA: " + total);
+		System.out.println("CAPACIDAD TOTAL BEANDETA : " + cp);
+
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "parametrizacion/param.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+
+			ContentParam.setCodOrden(Codigo);
+			ContentParam.setStandConvMontaje(this.cp.get(0));
+			ContentParam.setStandConvAparado(this.cp.get(1));
+			ContentParam.setStandConvTroquelado(this.cp.get(2));
+			ContentParam.setTotalOrden(this.total);
+
+			ContentParam.setRespGenOrden(0);
+			ContentParam.setStandAutMontaje(0);
+			ContentParam.setStandAutAparado(0);
+			ContentParam.setStandAutTroquelado(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	// SETTERS AND GETTERS
 
 	public List<Ordenprod> getOrdenProduccion() {
 		return ordenProduccion;
 	}
 
+	public ArrayList<Integer> getCp() {
+		return cp;
+	}
+
+	public void setCp(ArrayList<Integer> cp) {
+		this.cp = cp;
+	}
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+
+	public static ArrayList<Items> getOrderlist() {
+		return orderList;
+	}
+
+	public Integer getCodigo() {
+		return Codigo;
+	}
+
+	public void setCodigo(Integer codigo) {
+		Codigo = codigo;
+	}
+
 	public List<Detalleorden> getDetaOrden() {
+		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
+		this.detaOrden = detaOrdenDao.findByOrden(Codigo);
 		return detaOrden;
 	}
 
@@ -212,7 +315,7 @@ public class OrdenProduccionBean implements Serializable {
 		return Cliente;
 	}
 
-	public void setCliente(String cliente) {
+	public static void setCliente(String cliente) {
 		Cliente = cliente;
 	}
 

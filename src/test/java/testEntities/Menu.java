@@ -45,7 +45,7 @@ public class Menu implements Serializable {
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "m_id", insertable = false, updatable = false)
+	@JoinColumn(name = "m_id")
 	private Menu menu2;
 
 	// bi-directional many-to-one association to Menu
@@ -54,7 +54,7 @@ public class Menu implements Serializable {
 
 	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name = "menu_nivel", insertable = false, updatable = false)
+	@JoinColumn(name = "menu_nivel")
 	private Menu menu3;
 
 	// bi-directional many-to-one association to Menu

@@ -7,26 +7,155 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:rich="http://richfaces.org/rich">
 
-<h:head></h:head>
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
-			<p:panel header="Asignar Turnos" style="text-align:center">
 
-				<h:panelGrid columns="2" columnClasses="label, value">
-					<h:outputText value="Linea/Celula" />
-					<h:outputText value="Turno" />
-				</h:panelGrid>
+			<p:messages id="msgs" autoUpdate="true" />
 
-				<p:commandButton value="Insertar" />
+			<h:form id="idFrmConfLineas">
+				<p:panel id="idPanel">
+					<f:facet name="header">Configuracion Lineas</f:facet>
+					<h:panelGrid id="idPngConLineas" columns="2">
 
-				<p:dataTable id="basicDT" var="lineTurn">
-					<h:outputText value="Linea" />
-					<h:outputText value="Turno" />
+						<h:outputLabel for="idCboPrueba" value="Prueba: " />
+						<p:selectOneMenu id="idCboPrueba" value="" style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{programDiasBean.selectItemsProgramDias}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel for="idCboParam" value="Proceso:" />
+						<p:selectOneMenu id="idCboParam"
+							value="#{lineasTurnosBean.selectedLineaTurn.parametro.paramCodigo}"
+							style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{paramBean.selectItemsParamOrden}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel for="idCboLineas" value="Lineas:" />
+						<p:selectOneMenu id="idCboLineas"
+							value="#{lineasTurnosBean.selectedLineaTurn.lineasprod.lineaproCodigo}"
+							style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{lineasTurnosBean.selectItemsLineas}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Turnos:" />
+						<p:selectOneMenu id="idCboTurnos"
+							value="#{lineasTurnosBean.selectedLineaTurn.turno.turnoCodigo}"
+							style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{lineasTurnosBean.selectItemsTurnos}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="H. Extras:" />
+						<p:selectBooleanButton
+							value="#{lineasTurnosBean.selectedLineaTurn.hextras}"
+							onLabel="Si" offLabel="No" style="width:60px" />
+
+						<h:outputLabel value="F. Comienzo:" />
+						<p:calendar id="btnFechaMtn"
+							value="#{lineasTurnosBean.selectedLineaTurn.finicio}"
+							showOn="button" required="true"
+							requiredMessage="Es necesaria la fecha para montar" size="8"
+							locale="es" />
+
+						<f:facet name="footer">
+							<p:commandButton id="btnAgregarDetalleConfL" value="Agregar"
+								update=":formDataTable"
+								actionListener="#{lineasTurnosBean.btnCreateLT(actionListener)}" />
+						</f:facet>
+
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="l"
+					value="#{lineasTurnosBean.lineaTurno}"
+					emptyMessage="No se han ingresado datos">
+
+					<f:facet name="header">Detalle Conf Lineas</f:facet>
+
+					<p:column headerText="Linea">
+						<h:outputText value="#{l.lineasprod.nomlinea}" />
+					</p:column>
+
+					<p:column headerText="Turno">
+						<h:outputText value="#{l.turno.nombturno}" />
+					</p:column>
+
+					<p:column headerText="Horas Extras">
+						<h:outputText value="#{l.hextras}" />
+					</p:column>
+
+					<p:column headerText="Fecha Inicio">
+						<h:outputText value="#{l.finicio}" />
+					</p:column>
+
+					<p:column headerText="Eliminar?" style="width:10%">
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogLTDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{l}"
+								target="#{lineasTurnosBean.selectedLineaTurn}" />
+						</p:commandButton>
+					</p:column>
+
 				</p:dataTable>
-			</p:panel>
-			<p:commandButton value="Visualizar Algo" />
+			</h:form>
+
+			<h:form id="idFmrButtons">
+				<p:panel id="idPanel">
+					<h:panelGrid id="idPngConLineas" columns="2">
+						<f:facet name="footer">
+							<p:commandButton id="btnGenerarPedido" value="Procesar" />
+
+							<p:commandButton id="btnReProcesarPedido" value="Re-Procesar" />
+
+							<p:commandButton id="btnContinuar" value="Continuar" />
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+
+			<h:form id="idTblFechas">
+				<center>
+					<h:panelGrid columnClasses="value">
+						<p:schedule id="schedule" value="#{programDiasBean.eventModel}"
+							widgetVar="myschedule" timeZone="GMT-5" locale="es"
+							rightHeaderTemplate="" showWeekends="true" styleClass="custom">
+						</p:schedule>
+					</h:panelGrid>
+				</center>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Item"
+					severity="alert" widgetVar="dialogLTDelete">
+
+					<h:inputHidden
+						value="#{lineasTurnosBean.selectedLineaTurn.ltcodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogLTDelete').hide()"
+						actionListener="#{lineasTurnosBean.btnDeleteLT(actionListener)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogLTDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

@@ -27,7 +27,8 @@ public class UsuarioBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		selectedUsuario = new Usuario();
+		this.selectedUsuario = new Usuario();
+		this.selectedUsuario.setRol(new Rol());
 	}
 
 	public UsuarioBean() {
@@ -64,7 +65,7 @@ public class UsuarioBean implements Serializable {
 
 		System.out.println("El rol elegido Rol " + this.rolId);
 		rol.setRolId(this.rolId);
-		this.selectedUsuario.setRol1(rol);
+		this.selectedUsuario.setRol(rol);
 
 		Date hoy = new Date();
 		// String fecha = new SimpleDateFormat("yyyy-mm-dd").format(hoy);

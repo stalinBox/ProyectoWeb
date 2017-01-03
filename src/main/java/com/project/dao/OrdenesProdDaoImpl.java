@@ -21,12 +21,13 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 
 			String hql = "INSERT INTO ORDENPROD(ORDENPROD_CODIGO,USER_ID_SOLI,USER_ID_RESP,LUGAR_CODIGO_DEST,F_ACTUAL,F_ESTIM,F_FINAL) "
 					+ "VALUES(DEFAULT,:val1,:val2,:val3,:val4,:val5,:val6)";
+
 			Query query = sesion.createSQLQuery(hql);
 
 			query.setParameter("val1", ordenProd.getCliente().getCodCliente(),
 					StandardBasicTypes.INTEGER);
 
-			query.setParameter("val2", ordenProd.getUsuario1().getUserId(),
+			query.setParameter("val2", ordenProd.getUsuario().getUserId(),
 					StandardBasicTypes.INTEGER);
 
 			query.setParameter("val3", ordenProd.getLugare().getLugarCodigo(),
@@ -38,6 +39,7 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 					StandardBasicTypes.DATE);
 			query.setParameter("val6", ordenProd.getFFinal(),
 					StandardBasicTypes.DATE);
+
 			query.executeUpdate();
 			sesion.getTransaction().commit();
 
@@ -113,5 +115,42 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 					+ e.toString());
 		}
 		return listado;
+	}
+
+	@Override
+	public Ordenprod LastRespOrden() {
+		Ordenprod entities = null;
+		Integer ent = 0;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select max(op.ordenprodCodigo) from Ordenprod op";
+		System.out.println(sql);
+
+		try {
+			sesion.beginTransaction();
+			ent = (Integer) sesion.createQuery(sql).uniqueResult();
+			entities = this.findByLast(ent);
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRR LASTRESORDEN: " + e.toString());
+			throw e;
+		}
+		return entities;
+	}
+
+	@Override
+	public Ordenprod findByLast(Integer id) {
+		Ordenprod entities = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Ordenprod op where op.ordenprodCodigo = " + id;
+		System.out.println(sql);
+
+		try {
+			entities = (Ordenprod) sesion.createQuery(sql).uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return entities;
 	}
 }
