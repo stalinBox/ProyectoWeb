@@ -13,4 +13,6 @@ public interface ProgramacionDiasDao {
 	public boolean update(Programdia programDia);
 
 	public boolean delete(Integer id);
+
+	public List<Object[]> findByProceso(Integer proCod);
 }

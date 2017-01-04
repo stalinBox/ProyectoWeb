@@ -1,7 +1,6 @@
 package com.project.mb;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,8 +15,9 @@ import org.primefaces.model.ScheduleModel;
 
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
+import com.project.entities.Ordenprod;
+import com.project.entities.Parametro;
 import com.project.entities.Programdia;
-import com.project.utils.MapeoProgramacionDias;
 
 @ManagedBean
 @ViewScoped
@@ -28,7 +28,6 @@ public class ProgramDiasBean implements Serializable {
 	// VARIABLES
 	private List<Programdia> programDias;
 	private Programdia selectedDias;
-	private List<MapeoProgramacionDias> selectItemsProgramDias;
 
 	private ScheduleModel eventModel;
 	private ScheduleEvent event = new DefaultScheduleEvent();
@@ -38,19 +37,53 @@ public class ProgramDiasBean implements Serializable {
 	public void init() {
 		eventModel = new DefaultScheduleModel();
 
-		// CONSULTA A LA BD SOBRE TODOS LOS PROCESOS ACTIVOS
-		// HAY QUE CONSULTAR POR PROCESOS,POR ORDEN Y POR PARAMETRIZACION PARA
-		// LA VISUALIZACION
+		// *******************ENVIAR EL PARAMETRO findByProceso(1) CONSULTADO
+		// TODOS LOS PADRES ASI TAL COMO ESTA, ESTA MAL HECHO ***************
+
+		// LINEAS DE MONTAJE
 		ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
-		List<Programdia> proDias = programDiasDao.findAll();
-		for (Programdia program : proDias) {
-			MapeoProgramacionDias seleccion = new MapeoProgramacionDias(
-					program.getProgdiasCodigo(), program.getCanthoras(),
-					program.getCantpares(), program.getFinicio(),
-					program.getFfin());
-			eventModel.addEvent(new DefaultScheduleEvent(seleccion
-					.getCantPares().toString() + " MONTAJE", seleccion
-					.gethInicio(), seleccion.gethFin(), "montajeMTN"));
+		List<Object[]> proDias1 = programDiasDao.findByProceso(1);
+		for (Object[] result : proDias1) {
+			Ordenprod op = (Ordenprod) result[0];
+			Parametro pa = (Parametro) result[1];
+			Programdia pr = (Programdia) result[2];
+			eventModel.addEvent(new DefaultScheduleEvent(op
+					.getOrdenprodCodigo()
+					+ "-"
+					+ pa.getProceso().getTipoProceso().getTprNombre()
+					+ "-"
+					+ pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
+					"montajeMTN"));
+		}
+
+		// LINEAS DE APARADO
+		List<Object[]> proDias2 = programDiasDao.findByProceso(2);
+		for (Object[] result : proDias2) {
+			Ordenprod op = (Ordenprod) result[0];
+			Parametro pa = (Parametro) result[1];
+			Programdia pr = (Programdia) result[2];
+			eventModel.addEvent(new DefaultScheduleEvent(op
+					.getOrdenprodCodigo()
+					+ "-"
+					+ pa.getProceso().getTipoProceso().getTprNombre()
+					+ "-"
+					+ pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
+					"aparadoAPA"));
+		}
+
+		// LINEAS DE TROQUELADO
+		List<Object[]> proDias3 = programDiasDao.findByProceso(3);
+		for (Object[] result : proDias3) {
+			Ordenprod op = (Ordenprod) result[0];
+			Parametro pa = (Parametro) result[1];
+			Programdia pr = (Programdia) result[2];
+			eventModel.addEvent(new DefaultScheduleEvent(op
+					.getOrdenprodCodigo()
+					+ "-"
+					+ pa.getProceso().getTipoProceso().getTprNombre()
+					+ "-"
+					+ pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
+					"troqueladoTRQ"));
 		}
 
 	}
@@ -104,28 +137,6 @@ public class ProgramDiasBean implements Serializable {
 
 	public void setSelectedDias(Programdia selectedDias) {
 		this.selectedDias = selectedDias;
-	}
-
-	public List<MapeoProgramacionDias> getSelectItemsProgramDias() {
-		this.selectItemsProgramDias = new ArrayList<MapeoProgramacionDias>();
-		ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
-		List<Programdia> proDias = programDiasDao.findAll();
-		for (Programdia program : proDias) {
-			MapeoProgramacionDias seleccion = new MapeoProgramacionDias(
-					program.getProgdiasCodigo(), program.getCanthoras(),
-					program.getCantpares(), program.getFinicio(),
-					program.getFfin());
-			// Insertar aqui la consulta de todos los procesos
-			System.out.println("MAPEO: " + seleccion);
-			this.selectItemsProgramDias.add(seleccion);
-		}
-
-		return selectItemsProgramDias;
-	}
-
-	public void setSelectItemsProgramDias(
-			List<MapeoProgramacionDias> selectItemsProgramDias) {
-		this.selectItemsProgramDias = selectItemsProgramDias;
 	}
 
 }

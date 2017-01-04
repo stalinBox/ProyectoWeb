@@ -221,7 +221,9 @@ public class ParametrizacionBean implements Serializable {
 			System.out.println("Std Produccion: " + this.stdProdConvMont);
 			System.out.println("Total Pedido: " + this.totPedido);
 			System.out.println("Responsable: " + this.respMontaje);
+			
 			System.out.println("Numero de lineas: " + this.numLineasConvMont);
+			
 			System.out.println("Turnos por cada Linea: "
 					+ this.addNumTurnosConvMont);
 
@@ -313,6 +315,10 @@ public class ParametrizacionBean implements Serializable {
 			matrizTtroquelH = convertTranspuesta
 					.converMatrizTranspuesta(arrayTRQh);
 
+			/**
+			 * TODO (UNA VEZ OBTENIDAS LAS MATRICES ESTA ES LA FUNCION PARA
+			 * MOSTRAR EN EL SCHEDULE)
+			 **/
 			generateSchedule(matrizTPmontaje, matrizTaparadoP, matrizTtroquelP);
 
 		} catch (Exception e) {

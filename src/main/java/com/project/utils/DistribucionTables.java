@@ -19,6 +19,7 @@ public class DistribucionTables {
 
 	public ArrayList<ArrayList<Object>> receivParamsPares(Integer prodTotal,
 			Integer prodCap, ArrayList<Integer> ListaTurnos) {
+
 		ArrayList<ArrayList<Object>> array1 = new ArrayList<ArrayList<Object>>();
 		this.prodTotal = prodTotal;
 		this.prodCap = prodCap;
@@ -41,10 +42,12 @@ public class DistribucionTables {
 
 	// **** Distribution Dynamic **** //
 	public ArrayList<ArrayList<Object>> distribDynamic() {
+
 		ArrayList<ArrayList<Object>> array1 = new ArrayList<ArrayList<Object>>();
 		ArrayList<Object> array2 = new ArrayList<Object>();
 		ArrayList<ArrayList<Object>> array3 = new ArrayList<ArrayList<Object>>();
 		ArrayList<Object> array4 = new ArrayList<Object>();
+
 		int k = 0;
 		for (Integer o : this.numTurnos) {
 			array1.add(new ArrayList<Object>());

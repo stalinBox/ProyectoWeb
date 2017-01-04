@@ -90,4 +90,26 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> findByProceso(Integer proCod) {
+		List<Object[]> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Ordenprod op "
+				+ "INNER JOIN op.parametros as pa INNER JOIN pa.programdias as pr WHERE pa.proceso.proCodigo = "
+				+ proCod;
+
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDBYPROCESO PROGRAMDIAS: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
 }

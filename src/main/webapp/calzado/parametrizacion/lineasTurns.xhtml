@@ -19,14 +19,6 @@
 					<f:facet name="header">Configuracion Lineas</f:facet>
 					<h:panelGrid id="idPngConLineas" columns="2">
 
-						<h:outputLabel for="idCboPrueba" value="Prueba: " />
-						<p:selectOneMenu id="idCboPrueba" value="" style="width:150px">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{programDiasBean.selectItemsProgramDias}" />
-						</p:selectOneMenu>
-
 						<h:outputLabel for="idCboParam" value="Proceso:" />
 						<p:selectOneMenu id="idCboParam"
 							value="#{lineasTurnosBean.selectedLineaTurn.parametro.paramCodigo}"

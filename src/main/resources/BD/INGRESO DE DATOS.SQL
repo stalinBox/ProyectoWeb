@@ -237,14 +237,24 @@ FROM TipoProceso tp
 WHERE tp.tprNombre = 'MONTAJE'))
 
 
+/* inner join tres o mas tablas */
+select t1.name, t2.image_id, t3.path
+from table1 t1 inner join table2 t2 on t1.person_id = t2.person_id
+inner join table3 t3 on t2.image_id=t3.image_id
+
+/* SQL */
+select op.ordenprod_codigo,pa.pro_codigo, pr.cantpares, pr.finicio, pr.ffin
+from ordenprod op inner join parametros pa on op.ordenprod_codigo = pa.ordenprod_codigo
+inner join programdias pr on pr.param_codigo = pa.param_codigo
+where pa.pro_codigo = 1
 
 
-
-
-
-
-
-
+/* HQL */
+select op.ordenprodCodigo,pa.proceso.tipoProceso.tprNombre ,pr.cantpares,pr.finicio,pr.ffin 
+from Ordenprod op 
+inner join op.parametros as pa 
+inner join pa.programdias as pr 
+where pa.proceso.proCodigo = 1
 
 
 
