@@ -11,6 +11,8 @@ public interface DetaOrdenDao {
 
 	public boolean delete(Integer id);
 
+	public boolean deleleByOrden(Integer id);
+
 	public List<Detalleorden> findAll();
 
 	public List<Detalleorden> findByOrden(Integer idOrden);

@@ -110,7 +110,6 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		try {
 			sesion.beginTransaction();
 			listado = sesion.createQuery(sql).list();
-
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
@@ -129,7 +128,6 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		try {
 			sesion.beginTransaction();
 			listado = sesion.createQuery(sql).list();
-
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
@@ -165,6 +163,27 @@ public class ProcesoDaoImpl implements ProcesoDao {
 				+ codPro
 				+ " and p.proCodigo not in (select conf.proceso2.proCodigo from Confproceso conf where conf.modelo.modCodigo = "
 				+ codMod + ")";
+		System.out.println(hql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(hql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findByProcesoPadreByOrden(Integer codOrden) {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String hql = "FROM Proceso pro INNER JOIN pro.parametros as pa "
+				+ "INNER JOIN pa.lineasturnos as lt "
+				+ "WHERE pro.proceso.proCodigo IS NULL "
+				+ "AND pa.ordenprod.ordenprodCodigo = " + codOrden;
 		System.out.println(hql);
 		try {
 			sesion.beginTransaction();

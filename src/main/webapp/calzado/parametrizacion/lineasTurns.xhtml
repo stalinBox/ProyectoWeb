@@ -56,10 +56,8 @@
 
 						<h:outputLabel value="F. Comienzo:" />
 						<p:calendar id="btnFechaMtn"
-							value="#{lineasTurnosBean.selectedLineaTurn.finicio}"
-							showOn="button" required="true"
-							requiredMessage="Es necesaria la fecha para montar" size="8"
-							locale="es" />
+							value="#{lineasTurnosBean.fInicioMontaje}" showOn="button"
+							size="8" locale="es" />
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalleConfL" value="Agregar"
@@ -89,9 +87,6 @@
 						<h:outputText value="#{l.hextras}" />
 					</p:column>
 
-					<p:column headerText="Fecha Inicio">
-						<h:outputText value="#{l.finicio}" />
-					</p:column>
 
 					<p:column headerText="Eliminar?" style="width:10%">
 
@@ -110,7 +105,8 @@
 				<p:panel id="idPanel">
 					<h:panelGrid id="idPngConLineas" columns="2">
 						<f:facet name="footer">
-							<p:commandButton id="btnGenerarPedido" value="Procesar" />
+							<p:commandButton id="btnGenerarPedido" value="Procesar"
+								actionListener="#{programDiasBean.btnProcesar()}" />
 
 							<p:commandButton id="btnReProcesarPedido" value="Re-Procesar" />
 

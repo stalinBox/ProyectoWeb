@@ -2,7 +2,9 @@ package com.project.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.project.entities.Detalleorden;
 import com.project.utils.HibernateUtil;
@@ -96,7 +98,7 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 	public List<Detalleorden> findByOrden(Integer idOrden) {
 		List<Detalleorden> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Detalleorden do WHERE do.ordenprod.ordenprodCodigo = "
+		String sql = "FROM Detalleorden d WHERE d.ordenprod.ordenprodCodigo = "
 				+ idOrden;
 		System.out.println(sql);
 		try {
@@ -111,4 +113,23 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		return listado;
 	}
 
+	@Override
+	public boolean deleleByOrden(Integer id) {
+		boolean flag;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction transaction = sesion.beginTransaction();
+		try {
+			String hql = "DELETE FROM Detalleorden do WHERE do.ordenprod.ordenprodCodigo = "
+					+ id;
+			Query query = sesion.createQuery(hql);
+			query.executeUpdate();
+			transaction.commit();
+			flag = true;
+		} catch (Throwable t) {
+			flag = false;
+			transaction.rollback();
+			throw t;
+		}
+		return flag;
+	}
 }

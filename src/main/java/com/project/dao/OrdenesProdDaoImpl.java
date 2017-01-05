@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.type.StandardBasicTypes;
 
 import com.project.entities.Ordenprod;
@@ -83,17 +84,18 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 	public boolean delete(Integer id) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction transaction = sesion.beginTransaction();
 		try {
-			sesion.beginTransaction();
-			Ordenprod ordenprod = (Ordenprod) sesion.load(Ordenprod.class, id);
-			sesion.delete(ordenprod);
-			sesion.getTransaction().commit();
+			String hql = "DELETE FROM Ordenprod op WHERE op.ordenprodCodigo = "
+					+ id;
+			Query query = sesion.createQuery(hql);
+			query.executeUpdate();
+			transaction.commit();
 			flag = true;
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			flag = false;
-			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE ORDEN DE PRODUCCION: "
-					+ e.getMessage().toString());
+			transaction.rollback();
+			throw t;
 		}
 		return flag;
 	}
@@ -144,7 +146,6 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "from Ordenprod op where op.ordenprodCodigo = " + id;
 		System.out.println(sql);
-
 		try {
 			entities = (Ordenprod) sesion.createQuery(sql).uniqueResult();
 		} catch (Exception e) {

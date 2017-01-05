@@ -2,6 +2,7 @@ package com.project.mb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,8 +34,8 @@ import com.project.entities.Talla;
 import com.project.entities.Usuario;
 import com.project.utils.ContentParam;
 import com.project.utils.Items;
-import com.project.utils.KillProcessEXCEL;
 import com.project.utils.MyUtil;
+import com.project.utils.RefreshPage;
 import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
@@ -85,7 +86,6 @@ public class OrdenProduccionBean implements Serializable {
 
 	// DML ORDEN PRODUCCION
 	public void btnCreateOrden(ActionEvent actionEvent) {
-
 		this.selectedOrden.setFActual(new Date());
 		Lugare lugar = new Lugare();
 		lugar.setLugarCodigo(null);
@@ -116,6 +116,29 @@ public class OrdenProduccionBean implements Serializable {
 	}
 
 	public void btnDeleteOrden(ActionEvent actionEvent) {
+
+		String msg = "";
+		OrdenesProdDao ordenDao = new OrdenesProdDaoImpl();
+		DetaOrdenDao dd = new DetaOrdenDaoImpl();
+
+		if (dd.deleleByOrden(Codigo)) {
+			if (ordenDao.delete(Codigo)) {
+				msg = "Se ha eliminado la Orden de Produccion";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+				Codigo = null;
+				Cliente = null;
+				Responsable = null;
+			}
+			RefreshPage rf = new RefreshPage();
+			rf.refresh();
+		} else {
+			msg = "Error No se ha eliminado la orden de produccion";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	public void lastOrden() {
@@ -156,9 +179,23 @@ public class OrdenProduccionBean implements Serializable {
 	}
 
 	public void btnUpdateDetaOrden(ActionEvent actionEvent) {
+
 	}
 
 	public void btnDeleteDetaOrden(ActionEvent actionEvent) {
+		String msg = "";
+		DetaOrdenDao detaorden = new DetaOrdenDaoImpl();
+		if (detaorden.delete(this.selectedDetaOrden.getDetaordenCodigo())) {
+			msg = "Se ha eliminado un item";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al eliminado un item";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	public void ProcesarOrden() throws InvalidFormatException, IOException {
@@ -173,15 +210,13 @@ public class OrdenProduccionBean implements Serializable {
 			ab += d.getCantidad();
 			orderList.add(orderitem);
 		}
-		// MATANDO PROCESO EN EXCEL
-		KillProcessEXCEL.main(null);
 
 		WriteAndReadExcel wr = new WriteAndReadExcel();
 		// Store la capacidad de produccion
 		this.cp = wr.getOrder(orderList);
 		this.total = ab;
-		System.out.println("TOTAL DE LA ORDEN BEANDETA: " + total);
-		System.out.println("CAPACIDAD TOTAL BEANDETA : " + cp);
+		System.out.println("TOTAL DE LA ORDEN: " + total);
+		System.out.println("CAPACIDAD PROCESOS M,A,T : " + cp);
 
 		String ruta = "";
 		ruta = MyUtil.calzadoPath() + "parametrizacion/param.jsf";
@@ -206,6 +241,15 @@ public class OrdenProduccionBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+	public String getTotalsOrden() {
+		int total = 0;
+		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
+		this.detaOrden = detaOrdenDao.findByOrden(Codigo);
+		for (Detalleorden dt : detaOrden) {
+			total += dt.getCantidad();
+		}
+		return new DecimalFormat("###,###.###").format(total);
+	}
 
 	public List<Ordenprod> getOrdenProduccion() {
 		return ordenProduccion;

@@ -1,6 +1,7 @@
 package com.project.mb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,11 +14,17 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import com.project.dao.LineasTurnosDao;
+import com.project.dao.LineasTurnosDaoImpl;
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
+import com.project.entities.Proceso;
 import com.project.entities.Programdia;
+import com.project.utils.ContentParam;
 
 @ManagedBean
 @ViewScoped
@@ -88,8 +95,26 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
-	// INSERTAR EN EL MODELO SIN HORAS EXTRAS
-	public void withOutHextras() {
+	// METODOS BOTONES
+	public void btnProcesar() {
+		ProcesoDao proPadre = new ProcesoDaoImpl();
+		List<Proceso> proceso = proPadre.findByProcesoPadreByOrden(ContentParam
+				.getCodOrden());
+		for (Proceso pro : proceso) {
+			System.out.println("" + pro.getProCodigo());
+		}
+		//
+		LineasTurnosDao ltDao = new LineasTurnosDaoImpl();
+		ArrayList<Integer> lineaT = ltDao.findByOrdenProd(
+				ContentParam.getCodOrden(), 1);
+		System.out.println("Aqui: " + lineaT);
+	}
+
+	public void btnReProcesar() {
+
+	}
+
+	public void btnContinuar() {
 
 	}
 

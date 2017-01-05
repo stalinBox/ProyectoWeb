@@ -2,6 +2,7 @@ package com.project.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -22,17 +23,20 @@ import com.project.entities.Lineasprod;
 import com.project.entities.Lineasturno;
 import com.project.entities.Parametro;
 import com.project.entities.Turno;
+import com.project.utils.ContentParam;
 
 @ManagedBean
 @ViewScoped
 public class LineasTurnosBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	// VARIABLES
 	private List<Lineasturno> lineaTurno;
 	private Lineasturno selectedLineaTurn;
 	private List<SelectItem> selectItemsLineas;
 	private List<SelectItem> selectItemsTurnos;
+	private Date fInicioMontaje;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -86,8 +90,17 @@ public class LineasTurnosBean implements Serializable {
 
 	public List<Lineasturno> getLineaTurno() {
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
-		this.lineaTurno = lineasTurnosDao.findAll();
+		this.lineaTurno = lineasTurnosDao.findByOrden(ContentParam
+				.getCodOrden());
 		return lineaTurno;
+	}
+
+	public Date getfInicioMontaje() {
+		return fInicioMontaje;
+	}
+
+	public void setfInicioMontaje(Date fInicioMontaje) {
+		this.fInicioMontaje = fInicioMontaje;
 	}
 
 	public List<SelectItem> getSelectItemsLineas() {

@@ -15,6 +15,8 @@ public interface ProcesoDao {
 
 	public List<Proceso> findByProcesoBySetting(Integer codPro, Integer codMod);
 
+	public List<Proceso> findByProcesoPadreByOrden(Integer codOrden);
+
 	public boolean create(Proceso proceso);
 
 	public boolean update(Proceso proceso);

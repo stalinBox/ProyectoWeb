@@ -1,5 +1,6 @@
 package com.project.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -89,4 +90,46 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public ArrayList<Integer> findByOrdenProd(Integer codOrden, Integer codPro) {
+		ArrayList<Integer> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select count(lt) from Lineasturno lt  "
+				+ " inner join lt.parametro as pa  "
+				+ " where pa.ordenprod.ordenprodCodigo = " + codOrden
+				+ " and pa.proceso.proCodigo = " + codPro
+				+ " group by lt.lineasprod.lineaproCodigo";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (ArrayList<Integer>) sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR ENCONTRANDO EL ARRAY TURNOS: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasturno> findByOrden(Integer codOrden) {
+		List<Lineasturno> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasturno lt INNER JOIN lt.parametro as pa "
+				+ " WHERE pa.ordenprod.ordenprodCodigo = " + codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL LINEASTURNOS: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

@@ -222,10 +222,6 @@ WHERE TPR_CODIGO =(SELECT TPR_CODIGO
 FROM TIPO_PROCESOS
 WHERE TPR_NOMBRE = 'TROQUELADO'))
 
-
-
-
-
 SELECT ROUND((1/SUM(c.tiempoTs))*8*60)
 FROM Confproceso c
 WHERE c.modelo.modCodigo = (SELECT m.modCodigo
@@ -256,6 +252,11 @@ inner join op.parametros as pa
 inner join pa.programdias as pr 
 where pa.proceso.proCodigo = 1
 
-
-
+/* Consulta devuelve la cantidad de lineas programadas por orden y proceso */
+select count(*)
+from lineasturnos lt 
+inner join parametros pa on lt.param_codigo = pa.param_codigo
+where pa.ordenprod_codigo = 28
+and pa.pro_codigo = 1
+group by lt.lineapro_codigo
 

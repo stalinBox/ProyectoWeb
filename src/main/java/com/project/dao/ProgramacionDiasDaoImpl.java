@@ -95,9 +95,9 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 	public List<Object[]> findByProceso(Integer proCod) {
 		List<Object[]> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Ordenprod op "
-				+ "INNER JOIN op.parametros as pa INNER JOIN pa.programdias as pr WHERE pa.proceso.proCodigo = "
-				+ proCod;
+		String sql = "FROM Ordenprod op INNER JOIN op.parametros as pa "
+				+ "INNER JOIN pa.programdias as pr "
+				+ "WHERE pa.proceso.proCodigo = " + proCod;
 
 		System.out.println(sql);
 		try {

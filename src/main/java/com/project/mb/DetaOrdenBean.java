@@ -96,11 +96,11 @@ public class DetaOrdenBean implements Serializable {
 	@SuppressWarnings("static-access")
 	public void displayOrden() throws InvalidFormatException, IOException {
 		// MATANDO PROCESO EN EXCEL
-		KillProcessEXCEL a = new KillProcessEXCEL();
-		a.main(null);
+		// KillProcessEXCEL a = new KillProcessEXCEL();
+		// a.main(null);
 
 		WriteAndReadExcel wr = new WriteAndReadExcel();
-		
+
 		// Store la capacidad de produccion
 		cp = wr.getOrder(orderList);
 
