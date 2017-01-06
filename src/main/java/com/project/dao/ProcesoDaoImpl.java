@@ -195,4 +195,24 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findByOrdenProdNotInParam(Integer codOrden) {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Proceso p WHERE p.proceso.proCodigo IS NULL AND p.proCodigo NOT IN (SELECT pa.proceso.proCodigo  FROM Parametro pa WHERE pa.ordenprod.ordenprodCodigo = "
+				+ codOrden + ")";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETIZACION: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

@@ -118,8 +118,9 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 	public List<Lineasturno> findByOrden(Integer codOrden) {
 		List<Lineasturno> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Lineasturno lt INNER JOIN lt.parametro as pa "
-				+ " WHERE pa.ordenprod.ordenprodCodigo = " + codOrden;
+		String sql = "FROM Lineasturno lt where lt.parametro.paramCodigo in "
+				+ "(select p.paramCodigo from Parametro p where p.ordenprod = "
+				+ codOrden + ")";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -127,8 +128,7 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALL LINEASTURNOS: "
-					+ e.toString());
+			System.out.println("ERRORRRRR FINDALL BY ORDEN: " + e.toString());
 		}
 		return listado;
 	}

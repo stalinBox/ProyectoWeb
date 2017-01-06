@@ -16,7 +16,16 @@
 					<p:messages autoUpdate="true" />
 					<h:panelGrid id="idProc" columns="2">
 
-						<p:outputLabel for="idCbTrpProcesos" value="Proceso: " />
+						<p:outputLabel for="idCboProPadre" value="Proceso: " />
+						<p:selectOneMenu id="idCboProPadre"
+							value="#{procesoBean.proPadre}" style="width:150px">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{procesoBean.selectedItemsProceso}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="idCbTrpProcesos" value="Subproceso: " />
 						<p:selectOneMenu id="idCbTrpProcesos"
 							value="#{procesoBean.proTrp}" style="width:150px" required="true"
 							label="Proceso">
@@ -25,14 +34,7 @@
 							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
 						</p:selectOneMenu>
 
-						<p:outputLabel for="idCboProPadre" value="Padre: " />
-						<p:selectOneMenu id="idCboProPadre"
-							value="#{procesoBean.proPadre}" style="width:150px">
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{procesoBean.selectedItemsProceso}" />
-						</p:selectOneMenu>
 
 						<p:outputLabel for="idCboActivo" value="Activo: " />
 						<p:selectBooleanButton id="idCboActivo"

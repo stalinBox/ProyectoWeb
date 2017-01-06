@@ -14,6 +14,8 @@ import javax.faces.model.SelectItem;
 
 import com.project.dao.ParametrizacionDao;
 import com.project.dao.ParametrizacionDaoImpl;
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
@@ -30,6 +32,7 @@ public class ParamBean implements Serializable {
 	private List<Parametro> parametrizacion;
 	private Parametro selectedParametrizacion;
 	private List<SelectItem> selectItemsParamOrden;
+	private List<SelectItem> selectedItemsProceso;
 	private Integer stdConv;
 	private Integer stdAut;
 	private Integer totOrden;
@@ -43,11 +46,7 @@ public class ParamBean implements Serializable {
 		this.selectedParametrizacion = new Parametro();
 		this.selectedParametrizacion.setProceso(new Proceso());
 		this.selectedParametrizacion.setUsuario(new Usuario());
-
-		// this.stdConv = ContentParam.getStandConvMontaje();
-		// this.stdAut = ContentParam.getStandAutMontaje();
 		this.totOrden = ContentParam.getTotalOrden();
-
 	}
 
 	// METODOS
@@ -56,6 +55,8 @@ public class ParamBean implements Serializable {
 		String ruta = "";
 		ruta = MyUtil.calzadoPath() + "parametrizacion/lineasTurns.jsf";
 		try {
+			// LineasTurnosBean ac = new LineasTurnosBean();
+			// ac.setnOrden(ContentParam.getCodOrden());
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
 		} catch (Exception e) {
@@ -137,6 +138,22 @@ public class ParamBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+	public List<SelectItem> getSelectedItemsProceso() {
+		this.selectedItemsProceso = new ArrayList<SelectItem>();
+		ProcesoDao procesoDao = new ProcesoDaoImpl();
+		List<Proceso> proceso = procesoDao
+				.findByOrdenProdNotInParam(ContentParam.getCodOrden());
+		for (Proceso pro : proceso) {
+			SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro
+					.getTipoProceso().getTprNombre());
+			this.selectedItemsProceso.add(selectItem);
+		}
+		return selectedItemsProceso;
+	}
+
+	public void setSelectedItemsProceso(List<SelectItem> selectedItemsProceso) {
+		this.selectedItemsProceso = selectedItemsProceso;
+	}
 
 	public List<Parametro> getParametrizacion() {
 		ParametrizacionDao pDao = new ParametrizacionDaoImpl();

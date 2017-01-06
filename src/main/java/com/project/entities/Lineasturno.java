@@ -17,8 +17,6 @@ public class Lineasturno implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ltcodigo;
 
-	private Boolean hextras;
-
 	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
 	@JoinColumn(name = "lineapro_codigo")
@@ -43,14 +41,6 @@ public class Lineasturno implements Serializable {
 
 	public void setLtcodigo(Integer ltcodigo) {
 		this.ltcodigo = ltcodigo;
-	}
-
-	public Boolean getHextras() {
-		return this.hextras;
-	}
-
-	public void setHextras(Boolean hextras) {
-		this.hextras = hextras;
 	}
 
 	public Lineasprod getLineasprod() {

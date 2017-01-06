@@ -260,3 +260,6 @@ where pa.ordenprod_codigo = 28
 and pa.pro_codigo = 1
 group by lt.lineapro_codigo
 
+/* cambiar las consultas */
+interfaz lineasTurnos cambiar en el cbo proceso, este debe ir seleccionando todos los procesos 
+que se configuraron en la tabla parametros.

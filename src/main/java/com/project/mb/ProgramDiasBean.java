@@ -100,10 +100,13 @@ public class ProgramDiasBean implements Serializable {
 		ProcesoDao proPadre = new ProcesoDaoImpl();
 		List<Proceso> proceso = proPadre.findByProcesoPadreByOrden(ContentParam
 				.getCodOrden());
+
 		for (Proceso pro : proceso) {
 			System.out.println("" + pro.getProCodigo());
 		}
-		//
+
+		// DEVUELVE UN ARRAY DE LA CANTIDAD DE LINEAS POR PROCESO A UTILIZAR
+		// PARA GENERAR EL CALENDARIO
 		LineasTurnosDao ltDao = new LineasTurnosDaoImpl();
 		ArrayList<Integer> lineaT = ltDao.findByOrdenProd(
 				ContentParam.getCodOrden(), 1);

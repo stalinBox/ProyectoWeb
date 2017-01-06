@@ -37,6 +37,8 @@ public class LineasTurnosBean implements Serializable {
 	private List<SelectItem> selectItemsLineas;
 	private List<SelectItem> selectItemsTurnos;
 	private Date fInicioMontaje;
+	private boolean hExtras;
+	private Integer nOrden;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -51,9 +53,6 @@ public class LineasTurnosBean implements Serializable {
 	public void btnCreateLT(ActionListener actionListener) {
 		String msg = "";
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
-		Parametro parametro = new Parametro();
-		parametro.setParamCodigo(4);
-		this.selectedLineaTurn.setParametro(parametro);
 		if (lineasTurnosDao.create(this.selectedLineaTurn)) {
 			msg = "Se ha configurado una nueva linea";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -89,10 +88,28 @@ public class LineasTurnosBean implements Serializable {
 	// SETTERS AND GETTERS
 
 	public List<Lineasturno> getLineaTurno() {
+		System.out.println("NUMERO DE ORDEN: " + ContentParam.getCodOrden());
+
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
 		this.lineaTurno = lineasTurnosDao.findByOrden(ContentParam
 				.getCodOrden());
 		return lineaTurno;
+	}
+
+	public Integer getnOrden() {
+		return nOrden;
+	}
+
+	public void setnOrden(Integer nOrden) {
+		this.nOrden = nOrden;
+	}
+
+	public boolean ishExtras() {
+		return hExtras;
+	}
+
+	public void sethExtras(boolean hExtras) {
+		this.hExtras = hExtras;
 	}
 
 	public Date getfInicioMontaje() {

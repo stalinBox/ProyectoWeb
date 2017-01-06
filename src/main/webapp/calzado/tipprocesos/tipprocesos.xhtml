@@ -27,9 +27,7 @@
 					CONFIGURACIÓN PROCESOS
 					</f:facet>
 
-					<p:column headerText="Tipo Proceso"
-						filterBy="#{TipoProceso.tprNombre}" footerText="contains"
-						filterMatchMode="contains">
+					<p:column headerText="Tipo Proceso">
 						<h:outputText value="#{TipoProceso.tprNombre}" />
 					</p:column>
 
@@ -114,8 +112,8 @@
 					showEffect="fade" hideEffect="fade"
 					header="Eliminar Tipo de Proceso" severity="alert"
 					widgetVar="dialogTipoProcesoDelete">
-					<h:inputSecret
-						value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}"></h:inputSecret>
+					<h:inputHidden
+						value="#{tipoProcesosBean.selectedTipProceso.tprCodigo}" />
 					<p:commandButton id="confirm" value="Si"
 						update="formDataTable, msgs" icon="ui-icon-check"
 						oncomplete="PF('dialogTipoProcesoDelete').hide()"
