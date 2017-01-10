@@ -7,6 +7,9 @@ import com.project.entities.Parametro;
 public interface ParametrizacionDao {
 	public List<Parametro> findAll();
 
+	public List<Parametro> findByStandarByProceso(Integer codOrden,
+			Integer codProceso);
+
 	public List<Parametro> findByOrdenProd(Integer codOrden);
 
 	public boolean create(Parametro parametrizacion);

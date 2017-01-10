@@ -49,7 +49,7 @@ public class DistribucionTables {
 		ArrayList<Object> array4 = new ArrayList<Object>();
 
 		int k = 0;
-		for (Integer o : this.numTurnos) {
+		for (Object o : this.numTurnos) {
 			array1.add(new ArrayList<Object>());
 			array3.add(new ArrayList<Object>());
 			array2 = DistribucionP(o);
@@ -94,18 +94,18 @@ public class DistribucionTables {
 	}
 
 	// **** FUNCION DISTRIBUCION PARES **** //
-	public ArrayList<Object> DistribucionP(Integer numT) {
+	public ArrayList<Object> DistribucionP(Object o) {
 		ArrayList<Object> arrPares = new ArrayList<Object>();
-		arrPares = DistribucionPares(this.prodTotal, this.prodCap, numT);
+		arrPares = DistribucionPares(this.prodTotal, this.prodCap, o);
 		return arrPares;
 	}
 
 	public ArrayList<Object> DistribucionPares(Integer pTotal, Integer pCap,
-			Integer numTurn) {
+			Object o) {
 		this.distribPares.clear();
 		int numT = 0;
 		do {
-			numT = pCap * numTurn;
+			numT = pCap * Integer.parseInt(o.toString());
 			pTotal = pTotal - numT;
 
 			if (pTotal <= 0) {
@@ -120,14 +120,14 @@ public class DistribucionTables {
 	}
 
 	public ArrayList<Object> DistribucionHoras(ArrayList<Object> distribPares,
-			float prodCap, Integer numTurn) {
+			float prodCap, Object o) {
 		this.distribhoras.clear();
 
 		double a, pp;
 		String epa = null;
 		Integer t = 8, r;
-		pp = prodCap * numTurn;
-		r = t * numTurn;
+		pp = prodCap * Integer.parseInt(o.toString());
+		r = t * Integer.parseInt(o.toString());
 		for (Object i : distribPares) {
 			DecimalFormat formato = new DecimalFormat("##.00");
 			a = 0;

@@ -7,16 +7,19 @@ public class ContentParam implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static Integer codOrden;
-	private static Integer standConvMontaje;
-	private static Integer StandAutMontaje;
-	private static Integer standConvTroquelado;
-	private static Integer StandAutTroquelado;
-	private static Integer standConvAparado;
-	private static Integer StandAutAparado;
 	private static Integer totalOrden;
-	private static Integer respGenOrden;
+	private static Integer StandConvMontaje;
+	private static Integer StandConvAparado;
+	private static Integer StandConvTroquelado;
+
+	private static Integer StandAutMontaje;
+	private static Integer StandAutAparado;
+	private static Integer StandAutTroquelado;
+
+	private static Integer RespGenOrden;
 
 	public static Integer getCodOrden() {
+		// codOrden = 37;
 		return codOrden;
 	}
 
@@ -24,12 +27,37 @@ public class ContentParam implements Serializable {
 		ContentParam.codOrden = codOrden;
 	}
 
+	public static Integer getTotalOrden() {
+		// totalOrden = 100;
+		return totalOrden;
+	}
+
+	public static void setTotalOrden(Integer totalOrden) {
+		ContentParam.totalOrden = totalOrden;
+	}
+
 	public static Integer getStandConvMontaje() {
-		return standConvMontaje;
+		return StandConvMontaje;
 	}
 
 	public static void setStandConvMontaje(Integer standConvMontaje) {
-		ContentParam.standConvMontaje = standConvMontaje;
+		StandConvMontaje = standConvMontaje;
+	}
+
+	public static Integer getStandConvAparado() {
+		return StandConvAparado;
+	}
+
+	public static void setStandConvAparado(Integer standConvAparado) {
+		StandConvAparado = standConvAparado;
+	}
+
+	public static Integer getStandConvTroquelado() {
+		return StandConvTroquelado;
+	}
+
+	public static void setStandConvTroquelado(Integer standConvTroquelado) {
+		StandConvTroquelado = standConvTroquelado;
 	}
 
 	public static Integer getStandAutMontaje() {
@@ -40,12 +68,12 @@ public class ContentParam implements Serializable {
 		StandAutMontaje = standAutMontaje;
 	}
 
-	public static Integer getStandConvTroquelado() {
-		return standConvTroquelado;
+	public static Integer getStandAutAparado() {
+		return StandAutAparado;
 	}
 
-	public static void setStandConvTroquelado(Integer standConvTroquelado) {
-		ContentParam.standConvTroquelado = standConvTroquelado;
+	public static void setStandAutAparado(Integer standAutAparado) {
+		StandAutAparado = standAutAparado;
 	}
 
 	public static Integer getStandAutTroquelado() {
@@ -56,36 +84,12 @@ public class ContentParam implements Serializable {
 		StandAutTroquelado = standAutTroquelado;
 	}
 
-	public static Integer getStandConvAparado() {
-		return standConvAparado;
-	}
-
-	public static void setStandConvAparado(Integer standConvAparado) {
-		ContentParam.standConvAparado = standConvAparado;
-	}
-
-	public static Integer getStandAutAparado() {
-		return StandAutAparado;
-	}
-
-	public static void setStandAutAparado(Integer standAutAparado) {
-		StandAutAparado = standAutAparado;
-	}
-
-	public static Integer getTotalOrden() {
-		return totalOrden;
-	}
-
-	public static void setTotalOrden(Integer totalOrden) {
-		ContentParam.totalOrden = totalOrden;
-	}
-
 	public static Integer getRespGenOrden() {
-		return respGenOrden;
+		return RespGenOrden;
 	}
 
 	public static void setRespGenOrden(Integer respGenOrden) {
-		ContentParam.respGenOrden = respGenOrden;
+		RespGenOrden = respGenOrden;
 	}
 
 }

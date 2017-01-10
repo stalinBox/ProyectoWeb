@@ -11,6 +11,11 @@ public interface LineasTurnosDao {
 
 	public List<Lineasturno> findByOrden(Integer codOrden);
 
+	public List<Integer> GetCodProcesoByOrden(Integer codOrden);
+
+	public ArrayList<Integer> GetArrayByProcesoByOrden(Integer codOrden,
+			Integer codProceso);
+
 	public ArrayList<Integer> findByOrdenProd(Integer codOrden, Integer codPro);
 
 	public boolean create(Lineasturno lienasTurnos);

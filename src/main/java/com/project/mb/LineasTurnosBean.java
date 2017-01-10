@@ -2,7 +2,6 @@ package com.project.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -36,9 +35,6 @@ public class LineasTurnosBean implements Serializable {
 	private Lineasturno selectedLineaTurn;
 	private List<SelectItem> selectItemsLineas;
 	private List<SelectItem> selectItemsTurnos;
-	private Date fInicioMontaje;
-	private boolean hExtras;
-	private Integer nOrden;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -94,30 +90,6 @@ public class LineasTurnosBean implements Serializable {
 		this.lineaTurno = lineasTurnosDao.findByOrden(ContentParam
 				.getCodOrden());
 		return lineaTurno;
-	}
-
-	public Integer getnOrden() {
-		return nOrden;
-	}
-
-	public void setnOrden(Integer nOrden) {
-		this.nOrden = nOrden;
-	}
-
-	public boolean ishExtras() {
-		return hExtras;
-	}
-
-	public void sethExtras(boolean hExtras) {
-		this.hExtras = hExtras;
-	}
-
-	public Date getfInicioMontaje() {
-		return fInicioMontaje;
-	}
-
-	public void setfInicioMontaje(Date fInicioMontaje) {
-		this.fInicioMontaje = fInicioMontaje;
 	}
 
 	public List<SelectItem> getSelectItemsLineas() {

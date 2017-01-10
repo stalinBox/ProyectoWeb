@@ -96,17 +96,17 @@
 					<h:panelGrid id="idPngConLineas" columns="2">
 
 						<h:outputLabel value="H. Extras:" />
-						<p:selectBooleanButton value="#{lineasTurnosBean.hExtras}"
+						<p:selectBooleanButton value="#{programDiasBean.hExtras}"
 							onLabel="Si" offLabel="No" style="width:60px" />
 
 						<h:outputLabel value="F. Comienzo:" />
-						<p:calendar id="btnFechaMtn"
-							value="#{lineasTurnosBean.fInicioMontaje}" showOn="button"
-							size="8" locale="es" />
+						<p:calendar id="btnFechaMtn" value="#{programDiasBean.fInicio}"
+							showOn="button" size="8" locale="es" required="true" />
 
 						<f:facet name="footer">
 							<p:commandButton id="btnGenerarPedido" value="Procesar"
-								actionListener="#{programDiasBean.btnProcesar()}" />
+								actionListener="#{programDiasBean.btnProcesar()}"
+								update=":idTblFechas" />
 
 							<p:commandButton id="btnReProcesarPedido" value="Re-Procesar" />
 

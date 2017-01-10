@@ -10,6 +10,7 @@ public class ConvertArrayToMatriz {
 			ArrayList<Object> row = array0.get(i);
 			arrayPrincipal[i] = row.toArray(new Object[row.size()]);
 		}
+
 		return arrayPrincipal;
 	}
 
