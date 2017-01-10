@@ -204,6 +204,7 @@ public class OrdenProduccionBean implements Serializable {
 		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
 		List<Detalleorden> deta = detaOrdenDao.findByOrden(Codigo);
 		oo.clear();
+		orderList.clear();
 		for (Detalleorden d : deta) {
 			Items orderitem = new Items(d.getModelo().getModNombre(), d
 					.getTalla().getTalNumero(), d.getCantidad());

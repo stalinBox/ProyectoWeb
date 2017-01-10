@@ -108,9 +108,13 @@
 								actionListener="#{programDiasBean.btnProcesar()}"
 								update=":idTblFechas" />
 
-							<p:commandButton id="btnReProcesarPedido" value="Re-Procesar" />
+							<p:commandButton id="btnReProcesarPedido" value="Re-Procesar"
+								actionListener="#{programDiasBean.btnReProcesar()}"
+								process="@this" />
 
-							<p:commandButton id="btnContinuar" value="Continuar" />
+							<p:commandButton id="btnContinuar" value="Continuar"
+								actionListener="#{programDiasBean.btnContinuar()}"
+								process="@this" />
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>

@@ -153,7 +153,7 @@ public class WriteAndReadExcel implements Serializable {
 			String tNombre = "MONTAJE";
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
 			ts = (int) sttDao.findByTs(mNombre, tNombre);
-			System.out.println("Tiempo a ingresar en pp2: " + ts);
+			System.out.println("Capacidad por Montaje en pp2: " + ts);
 			pp2.add(ts);
 		}
 		Integer m = 1;
@@ -182,7 +182,7 @@ public class WriteAndReadExcel implements Serializable {
 			String tNombre = "APARADO";
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
 			ts = (int) sttDao.findByTs(mNombre, tNombre);
-			System.out.println("Tiempo a ingresar en pp3: " + ts);
+			System.out.println("Capacidad por APARADO en pp3:  " + ts);
 			pp3.add(ts);
 		}
 
@@ -214,7 +214,7 @@ public class WriteAndReadExcel implements Serializable {
 			String tNombre = "TROQUELADO";
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
 			ts = (int) sttDao.findByTs(mNombre, tNombre);
-			System.out.println("Tiempo a ingresar en pp4: " + ts);
+			System.out.println("Capacidad por TROQUELADO en pp2:  " + ts);
 			pp4.add(ts);
 		}
 

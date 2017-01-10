@@ -50,7 +50,6 @@ public class ParamBean implements Serializable {
 	}
 
 	// METODOS
-
 	public void btnConfLineas() {
 		String ruta = "";
 		ruta = MyUtil.calzadoPath() + "parametrizacion/lineasTurns.jsf";
@@ -134,7 +133,6 @@ public class ParamBean implements Serializable {
 			this.stdConv = ContentParam.getStandConvTroquelado();
 			this.stdAut = ContentParam.getStandAutTroquelado();
 		}
-
 	}
 
 	// SETTERS AND GETTERS

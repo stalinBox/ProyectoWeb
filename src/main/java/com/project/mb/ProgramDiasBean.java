@@ -33,6 +33,7 @@ import com.project.utils.ContentParam;
 import com.project.utils.ConvertArrayToMatriz;
 import com.project.utils.ConvertMatrizTranspuesta;
 import com.project.utils.DistribucionTables;
+import com.project.utils.MyUtil;
 
 @ManagedBean
 @ViewScoped
@@ -109,6 +110,29 @@ public class ProgramDiasBean implements Serializable {
 	}
 
 	// METODOS BOTONES
+	public void btnReProcesar() {
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "ordenesProd/insertOrder.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void btnContinuar() {
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "programacionTurnos/programturnos.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void btnProcesar() {
 		eventModel = new DefaultScheduleModel();
 		System.out.println("Procesando...");
@@ -146,27 +170,29 @@ public class ProgramDiasBean implements Serializable {
 				System.out.println("Array del total de turnos por linea: "
 						+ arrayTurnos);
 
-				DistribucionTables tablas = new DistribucionTables();
-				ArrayList<ArrayList<Object>> array0 = tablas.receivParamsPares(
-						ContentParam.getTotalOrden(), p.getStandconv(),
-						arrayTurnos);
-				System.out.println("ARRAY " + array0);
-
-				// CONVERT OBJECT FROM ARRAYLIST TO [][]
-				ConvertMatrizTranspuesta convertTranspuesta = new ConvertMatrizTranspuesta();
-				ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
-
-				// ARRAY PARES
-				Object[][] array2 = new Object[array0.size()][];
-				array2 = convert.convertArray(array0);
-
-				// TRANSPUESTA PARES
-				Object[][] matrizTPmontaje = null;
-				matrizTPmontaje = convertTranspuesta
-						.converMatrizTranspuesta(array2);
-
-				generateSchedule(matrizTPmontaje, p.getProceso()
-						.getTipoProceso().getTprNombre());
+				// DistribucionTables tablas = new DistribucionTables();
+				// ArrayList<ArrayList<Object>> array0 =
+				// tablas.receivParamsPares(
+				// ContentParam.getTotalOrden(), p.getStandconv(),
+				// arrayTurnos);
+				// System.out.println("ARRAY " + array0);
+				//
+				// // CONVERT OBJECT FROM ARRAYLIST TO [][]
+				// ConvertMatrizTranspuesta convertTranspuesta = new
+				// ConvertMatrizTranspuesta();
+				// ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
+				//
+				// // ARRAY PARES
+				// Object[][] array2 = new Object[array0.size()][];
+				// array2 = convert.convertArray(array0);
+				//
+				// // TRANSPUESTA PARES
+				// Object[][] matrizTPmontaje = null;
+				// matrizTPmontaje = convertTranspuesta
+				// .converMatrizTranspuesta(array2);
+				//
+				// generateSchedule(matrizTPmontaje, p.getProceso()
+				// .getTipoProceso().getTprNombre());
 			}
 		}
 
@@ -353,14 +379,6 @@ public class ProgramDiasBean implements Serializable {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal;
-	}
-
-	public void btnReProcesar() {
-
-	}
-
-	public void btnContinuar() {
-
 	}
 
 	// METODOS DML
