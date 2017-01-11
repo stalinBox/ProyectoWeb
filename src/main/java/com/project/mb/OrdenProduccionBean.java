@@ -161,21 +161,29 @@ public class OrdenProduccionBean implements Serializable {
 	// DML DETALLE ORDEN
 	public void btnCreateDetaOrden(ActionEvent actionEvent) {
 		String msg = "";
-		DetaOrdenDao detaorden = new DetaOrdenDaoImpl();
-		Ordenprod ordenprod = new Ordenprod();
-		ordenprod.setOrdenprodCodigo(Codigo);
-		this.selectedDetaOrden.setOrdenprod(ordenprod);
-		if (detaorden.create(this.selectedDetaOrden)) {
-			msg = "Se ha añadido un item";
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					msg, null);
-			FacesContext.getCurrentInstance().addMessage(null, message);
+		if (Codigo != null) {
+			DetaOrdenDao detaorden = new DetaOrdenDaoImpl();
+			Ordenprod ordenprod = new Ordenprod();
+			ordenprod.setOrdenprodCodigo(Codigo);
+			this.selectedDetaOrden.setOrdenprod(ordenprod);
+			if (detaorden.create(this.selectedDetaOrden)) {
+				msg = "Se ha añadido un item";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				msg = "Error al añadir un item";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 		} else {
-			msg = "Error al añadir un item";
+			msg = "Crear una orden primero";
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+
 	}
 
 	public void btnUpdateDetaOrden(ActionEvent actionEvent) {

@@ -46,18 +46,18 @@
 
 				<h:panelGrid id="idPGridOrder" columns="3">
 					<p:outputLabel for="idTxtResponsable" value="Responsable: " />
-					<h:inputText id="idTxtResponsable"
+					<p:inputText id="idTxtResponsable"
 						value="#{ordenProduccionBean.responsable}" disabled="true" />
 
 					<h:inputHidden id="idTxtCodigo"
 						value="#{ordenProduccionBean.codigo}" disabled="true" />
 
 					<p:outputLabel for="idTxtCliente" value="Cliente: " />
-					<h:inputText id="idTxtCliente"
+					<p:inputText id="idTxtCliente"
 						value="#{ordenProduccionBean.cliente}" disabled="true" />
 				</h:panelGrid>
 			</h:form>
-
+			<p:separator />
 			<h:form id="idFrmIngresosDetalle">
 				<p:panel id="idPanel">
 					<p:messages autoUpdate="true" />

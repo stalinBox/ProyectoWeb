@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 public class GuestPreferences implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String theme = "aristo";
+	private String theme = "start";
 
 	public String getTheme() {
 		Map<String, String> params = FacesContext.getCurrentInstance()

@@ -46,7 +46,7 @@ h1 {
 	float: right;
 	background-color: #ece3a5;
 	padding: 5px;
-	wisdth: 150px;
+	width: 150px;
 }
 
 .header {
@@ -59,7 +59,10 @@ h1 {
 	position: relative;
 	background-color: #c2dfef;
 	padding: 5px;
-	margin: 1px 0px, 0px 0px;
+	margin-top: 1px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
 	height: 40px;
 }
 
@@ -89,13 +92,13 @@ h1 {
 .left_content {
 	background-color: #dddddd;
 	padding: 5px;
-	margin-left: 170 px;
+	margin-left: 170px;
 }
 
 .right_content {
 	background-color: #dddddd;
 	padding: 5px;
-	margin-right: 170 px;
+	margin-right: 170px;
 }
 
 #top a:link, #top a:visited {
