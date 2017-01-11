@@ -105,7 +105,8 @@
 
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="detaO"
-					value="#{ordenProduccionBean.detaOrden}">
+					value="#{ordenProduccionBean.detaOrden}"
+					emptyMessage="Ningun registro encontrado">
 
 					<f:facet name="header">Detalle Orden</f:facet>
 
@@ -187,7 +188,7 @@
 
 							<p:commandButton id="btnCreateCancelar" icon="fa fa-fw fa-close"
 								title="Cancelar" value="Cancelar"
-								oncomplete="PF('dialogDetaProCreate').hide()" />
+								oncomplete="PF('dialogDetaProCreate').hide()" process="@this" />
 						</f:facet>
 					</p:panelGrid>
 				</p:dialog>
@@ -212,7 +213,7 @@
 
 			<h:form id="formDeleteOrden">
 				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade" header="Eliminar Orden"
+					showEffect="fade" hideEffect="explode" header="Eliminar Orden"
 					severity="alert" widgetVar="dialogOrdenDelete">
 
 					<p:commandButton id="confirm" value="Si"

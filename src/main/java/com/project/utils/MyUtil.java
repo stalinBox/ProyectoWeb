@@ -4,19 +4,29 @@ package com.project.utils;
  * @author Stalin Ramírez Clase para navegacion entre las paginas
  */
 public class MyUtil {
+	public static String ip = DireccionesIP.baseIP();
+
 	public static String baseurl() {
+		// System.out.println("1 url: " + "http://" + ip +
+		// ":8080/ProyectoWeb/");
 		return "http://localhost:8080/ProyectoWeb/";
 	}
 
 	public static String basepathlogin() {
+		// System.out.println("2 url: " + "http://" + ip +
+		// ":8080/ProyectoWeb/");
 		return "http://localhost:8080/ProyectoWeb/";
 	}
 
 	public static String basePath() {
+		// System.out.println("3 url: " + "http://" + ip +
+		// ":8080/ProyectoWeb/");
 		return "http://localhost:8080/ProyectoWeb/";
 	}
 
 	public static String calzadoPath() {
+		// System.out.println("4 url: " + "http://" + ip +
+		// ":8080/ProyectoWeb/");
 		return "http://localhost:8080/ProyectoWeb/calzado/";
 	}
 

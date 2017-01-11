@@ -75,7 +75,8 @@
 
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="p"
-					value="#{paramBean.parametrizacion}">
+					value="#{paramBean.parametrizacion}"
+					emptyMessage="Ningun registro encontrado">
 
 					<f:facet name="header">Detalle Parametrizacion</f:facet>
 

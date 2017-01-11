@@ -61,7 +61,8 @@
 
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="lineasT"
-					value="#{lineasTurnosBean.lineaTurno}">
+					value="#{lineasTurnosBean.lineaTurno}"
+					emptyMessage="Ningun registro encontrado">
 
 					<f:facet name="header">DETALLE LINEAS TURNOS</f:facet>
 
@@ -90,6 +91,7 @@
 				</p:dataTable>
 			</h:form>
 
+			<p:separator />
 
 			<h:form id="idFmrButtons">
 				<p:panel id="idPanel">

@@ -162,7 +162,8 @@ public class ProgramDiasBean implements Serializable {
 						+ ContentParam.getTotalOrden());
 
 				System.out.println("El Proceso: "
-						+ p.getProceso().getProCodigo());
+						+ p.getProceso().getProCodigo() + "-"
+						+ p.getProceso().getTipoProceso().getTprNombre());
 
 				System.out
 						.println("Capacidad del Proceso: " + p.getStandconv());
@@ -170,29 +171,33 @@ public class ProgramDiasBean implements Serializable {
 				System.out.println("Array del total de turnos por linea: "
 						+ arrayTurnos);
 
-				// DistribucionTables tablas = new DistribucionTables();
-				// ArrayList<ArrayList<Object>> array0 =
-				// tablas.receivParamsPares(
-				// ContentParam.getTotalOrden(), p.getStandconv(),
-				// arrayTurnos);
-				// System.out.println("ARRAY " + array0);
-				//
-				// // CONVERT OBJECT FROM ARRAYLIST TO [][]
-				// ConvertMatrizTranspuesta convertTranspuesta = new
-				// ConvertMatrizTranspuesta();
-				// ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
-				//
-				// // ARRAY PARES
-				// Object[][] array2 = new Object[array0.size()][];
-				// array2 = convert.convertArray(array0);
-				//
-				// // TRANSPUESTA PARES
-				// Object[][] matrizTPmontaje = null;
-				// matrizTPmontaje = convertTranspuesta
-				// .converMatrizTranspuesta(array2);
-				//
-				// generateSchedule(matrizTPmontaje, p.getProceso()
-				// .getTipoProceso().getTprNombre());
+				DistribucionTables tablas = new DistribucionTables();
+				ArrayList<ArrayList<Object>> array0 = tablas.receivParamsPares(
+						ContentParam.getTotalOrden(), p.getStandconv(),
+						arrayTurnos);
+
+				System.out.println("ARRAY " + array0);
+
+				// CONVERT OBJECT FROM ARRAYLIST TO [][]
+				ConvertMatrizTranspuesta convertTranspuesta = new ConvertMatrizTranspuesta();
+				ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
+
+				// ARRAY PARES
+				Object[][] array2 = new Object[array0.size()][];
+				array2 = convert.convertArray(array0);
+
+				// TRANSPUESTA PARES
+				Object[][] matrizTPmontaje = null;
+				matrizTPmontaje = convertTranspuesta
+						.converMatrizTranspuesta(array2);
+
+				for (int x = 0; x < matrizTPmontaje.length; x++) {
+					for (int y = 0; y < matrizTPmontaje[x].length; y++) {
+						System.out.println("--" + matrizTPmontaje[x][y]);
+					}
+				}
+				generateSchedule(matrizTPmontaje, p.getProceso()
+						.getTipoProceso().getTprNombre());
 			}
 		}
 
