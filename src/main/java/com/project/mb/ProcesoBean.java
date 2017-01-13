@@ -41,6 +41,7 @@ public class ProcesoBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		this.selectedProceso = new Proceso();
+		this.selectedProceso.setProceso(new Proceso());
 	}
 
 	// METODOS

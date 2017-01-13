@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+			<p:growl id="msgs" showDetail="true" />
+
+			<h:form>
+				<p:commandButton id="btnCreateTipoLinea" update=":formCreate"
+					oncomplete="PF('dialogTipoLineaCreate').show()"
+					title="Nuevo Tipo de linea" icon="fa fa-plus" value="Nuevo">
+				</p:commandButton>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="tipoL"
+					value="#{tipoLineaBean.tipoLinea}">
+
+					<f:facet name="header">
+					Tipo de linea
+					</f:facet>
+
+					<p:column headerText="Nombre del tipo de linea">
+						<h:outputText value="#{tipoL.tipolinea}" />
+					</p:column>
+
+					<p:column headerText="Descripcion">
+						<h:outputText value="#{tipoL.desctiplinea}" />
+					</p:column>
+
+
+					<p:column headerText="Actualizar/Eliminar" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogTipoLineaUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{tipoL}"
+								target="#{tipoLineaBean.selectedTipoLinea}" />
+						</p:commandButton>
+
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogTipoLineaDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{tipoL}"
+								target="#{tipoLineaBean.selectedTipoLinea}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formCreate">
+				<p:dialog header="Nuevo Tipo" widgetVar="dialogTipoLineaCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgTipoLineaCreate">
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre:" />
+						<p:inputText value="#{tipoLineaBean.selectedTipoLinea.tipolinea}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+
+						<h:outputText value="Descripción:" />
+						<p:inputText id="entrada"
+							value="#{tipoLineaBean.selectedTipoLinea.desctiplinea}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnCreateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogTipoLineaCreate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{tipoLineaBean.bntCreateTipLinea(actionEvent)}" />
+
+							<p:commandButton id="btnCreateCancelar"
+								oncomplete="PF('dialogTipoLineaCreate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar Tipo" widgetVar="dialogTipoLineaUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgTipoLineaUpdate">
+					<h:inputHidden
+						value="#{tipoLineaBean.selectedTipoLinea.codigoTiplinea}" />
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Nombre" />
+						<p:inputText value="#{tipoLineaBean.selectedTipoLinea.tipolinea}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+
+						<h:outputText value="Descripción" />
+						<p:inputText id="entrada"
+							value="#{tipoLineaBean.selectedTipoLinea.desctiplinea}"
+							onblur="aMayusculas(this.value,this.id)"
+							onkeypress="this.value=this.value.toUpperCase();" />
+
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update="formDataTable, msgs"
+								oncomplete="PF('dialogTipoLineaUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{tipoLineaBean.bntUpdateTipLinea(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogTipoLineaUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar" />
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar tipo de linea"
+					severity="alert" widgetVar="dialogTipoLineaDelete">
+
+					<h:inputHidden
+						value="#{tipoLineaBean.selectedTipoLinea.codigoTiplinea}"></h:inputHidden>
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogTipoLineaDelete').hide()"
+						actionListener="#{tipoLineaBean.bntDeleteTipLinea(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogTipoLineaDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

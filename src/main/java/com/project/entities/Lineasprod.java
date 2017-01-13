@@ -25,14 +25,17 @@ public class Lineasprod implements Serializable {
 	@Column(name="linea_numtrab")
 	private Integer lineaNumtrab;
 
-	private Boolean lineaaut;
-
 	private String nomlinea;
 
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
 	@JoinColumn(name="pro_codigo")
 	private Proceso proceso;
+
+	//bi-directional many-to-one association to TipLinea
+	@ManyToOne
+	@JoinColumn(name="codigo_tiplinea")
+	private TipLinea tipLinea;
 
 	//bi-directional many-to-one association to Lineasturno
 	@OneToMany(mappedBy="lineasprod")
@@ -69,14 +72,6 @@ public class Lineasprod implements Serializable {
 		this.lineaNumtrab = lineaNumtrab;
 	}
 
-	public Boolean getLineaaut() {
-		return this.lineaaut;
-	}
-
-	public void setLineaaut(Boolean lineaaut) {
-		this.lineaaut = lineaaut;
-	}
-
 	public String getNomlinea() {
 		return this.nomlinea;
 	}
@@ -91,6 +86,14 @@ public class Lineasprod implements Serializable {
 
 	public void setProceso(Proceso proceso) {
 		this.proceso = proceso;
+	}
+
+	public TipLinea getTipLinea() {
+		return this.tipLinea;
+	}
+
+	public void setTipLinea(TipLinea tipLinea) {
+		this.tipLinea = tipLinea;
 	}
 
 	public List<Lineasturno> getLineasturnos() {

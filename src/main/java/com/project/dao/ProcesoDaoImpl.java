@@ -94,7 +94,7 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE MODELO: "
+			System.out.println("ERRORRRRR DELETE PROCESO: "
 					+ e.getMessage().toString());
 		}
 		return flag;

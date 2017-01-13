@@ -48,5 +48,8 @@
 
 		<mapping class="com.project.entities.Confproceso" />
 		<mapping class="com.project.entities.Costosindi" />
+
+		<mapping class="com.project.entities.TipLinea" />
+
 	</session-factory>
 </hibernate-configuration>

@@ -16,8 +16,11 @@ import com.project.dao.LineasProdDao;
 import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
+import com.project.dao.TipoLineaDao;
+import com.project.dao.TipoLineaDaoImpl;
 import com.project.entities.Lineasprod;
 import com.project.entities.Proceso;
+import com.project.entities.TipLinea;
 
 @ManagedBean
 @RequestScoped
@@ -28,6 +31,7 @@ public class LineasProduccionBean implements Serializable {
 	private List<Lineasprod> lineasProd;
 	private Lineasprod selectedLineasProd;
 	private List<SelectItem> selectedItemsProcesos;
+	private List<SelectItem> selectedItemsTipoLineas;
 	private boolean lAutomatico;
 
 	// INICIALIZADORES
@@ -35,6 +39,7 @@ public class LineasProduccionBean implements Serializable {
 	public void init() {
 		this.selectedLineasProd = new Lineasprod();
 		this.selectedLineasProd.setProceso(new Proceso());
+		this.selectedLineasProd.setTipLinea(new TipLinea());
 	}
 
 	// METODOS
@@ -59,7 +64,7 @@ public class LineasProduccionBean implements Serializable {
 		String msg = "";
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
 
-		this.selectedLineasProd.setLineaaut(null);
+		// this.selectedLineasProd.setLineaaut(null);
 		if (lineasDao.update(this.selectedLineasProd)) {
 			msg = "Se ha modificado una linea de producción";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -95,6 +100,23 @@ public class LineasProduccionBean implements Serializable {
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
 		this.lineasProd = lineasDao.findAll();
 		return lineasProd;
+	}
+
+	public List<SelectItem> getSelectedItemsTipoLineas() {
+		this.selectedItemsTipoLineas = new ArrayList<SelectItem>();
+		TipoLineaDao tipoLineaDao = new TipoLineaDaoImpl();
+		List<TipLinea> tipoLinea = tipoLineaDao.findAll();
+		for (TipLinea tip : tipoLinea) {
+			SelectItem selectItem = new SelectItem(tip.getCodigoTiplinea(),
+					tip.getTipolinea());
+			this.selectedItemsTipoLineas.add(selectItem);
+		}
+		return selectedItemsTipoLineas;
+	}
+
+	public void setSelectedItemsTipoLineas(
+			List<SelectItem> selectedItemsTipoLineas) {
+		this.selectedItemsTipoLineas = selectedItemsTipoLineas;
 	}
 
 	public List<SelectItem> getSelectedItemsProcesos() {

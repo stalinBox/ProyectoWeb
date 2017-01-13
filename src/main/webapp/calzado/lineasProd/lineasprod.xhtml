@@ -37,8 +37,8 @@
 						<h:outputText value="#{lineaP.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
-					<p:column headerText="Automática?">
-						<h:outputText value="#{lineaP.lineaaut}" />
+					<p:column headerText="Tipo">
+						<h:outputText value="#{lineaP.tipLinea.tipolinea}" />
 					</p:column>
 
 					<p:column headerText="Numero de trabajadores">
@@ -91,10 +91,15 @@
 							onblur="aMayusculas(this.value,this.id)"
 							onkeypress="this.value=this.value.toUpperCase();" />
 
-						<h:outputText value="Automática?" />
-						<p:selectBooleanButton
-							value="#{lineasProduccionBean.selectedLineasProd.lineaaut}"
-							onLabel="Si" offLabel="No" style="width:60px" />
+						<h:outputText value="Tipo" />
+						<p:selectOneMenu id="idTipoLineaProceso"
+							value="#{lineasProduccionBean.selectedLineasProd.tipLinea.codigoTiplinea}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{lineasProduccionBean.selectedItemsTipoLineas}" />
+						</p:selectOneMenu>
 
 						<h:outputText value="Numero de Maquinas" />
 						<p:inputText
@@ -150,10 +155,15 @@
 							onblur="aMayusculas(this.value,this.id)"
 							onkeypress="this.value=this.value.toUpperCase();" />
 
-						<h:outputText value="Automática?" />
-						<p:selectBooleanButton
-							value="#{lineasProduccionBean.selectedLineasProd.lineaaut}"
-							onLabel="Si" offLabel="No" style="width:60px" />
+						<h:outputText value="Tipo" />
+						<p:selectOneMenu id="idTipoLineaProceso"
+							value="#{lineasProduccionBean.selectedLineasProd.tipLinea.codigoTiplinea}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{lineasProduccionBean.selectedItemsTipoLineas}" />
+						</p:selectOneMenu>
 
 						<h:outputText value="Numero de Maquinas" />
 						<p:inputText
