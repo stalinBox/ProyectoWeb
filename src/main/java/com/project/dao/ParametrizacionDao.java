@@ -12,6 +12,10 @@ public interface ParametrizacionDao {
 
 	public List<Parametro> findByOrdenProd(Integer codOrden);
 
+	public List<Integer> findByProcesosInLT(Integer codOrden);
+
+	public List<Parametro> getProcesosbyOrden(Integer codOrden);
+
 	public boolean create(Parametro parametrizacion);
 
 	public boolean update(Parametro parametrizacion);

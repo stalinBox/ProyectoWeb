@@ -6,7 +6,10 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -26,6 +29,7 @@ import com.project.dao.ParametrizacionDao;
 import com.project.dao.ParametrizacionDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
+import com.project.entities.Lineasturno;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Programdia;
@@ -34,6 +38,7 @@ import com.project.utils.ConvertArrayToMatriz;
 import com.project.utils.ConvertMatrizTranspuesta;
 import com.project.utils.DistribucionTables;
 import com.project.utils.MyUtil;
+import com.project.utils.Tablas;
 
 @ManagedBean
 @ViewScoped
@@ -51,6 +56,8 @@ public class ProgramDiasBean implements Serializable {
 	private Date fInicio;
 	private boolean hExtras;
 	private String d;
+
+	private Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
 
 	// CONSTRUCTOR
 	@PostConstruct
@@ -136,71 +143,63 @@ public class ProgramDiasBean implements Serializable {
 	public void btnProcesar() {
 		eventModel = new DefaultScheduleModel();
 		System.out.println("Procesando...");
+		System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
 
-		System.out.println("Codigo Orden" + ContentParam.getCodOrden());
-
-		LineasTurnosDao lt = new LineasTurnosDaoImpl();
-		List<Integer> lineasT = lt.GetCodProcesoByOrden(ContentParam
+		ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
+		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
 				.getCodOrden());
 
-		for (Integer ln : lineasT) {
-			System.out.println("codigos de las lineas a ingresar: " + ln);
-			// Obtiene el standar por orden y proceso
-			ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-			List<Parametro> param = paramDao.findByStandarByProceso(
-					ContentParam.getCodOrden(), ln);
-			for (Parametro p : param) {
-				// aqui ya tengo las capacidades por parametros que estan en la
-				// tabla lineasturnos
-				ArrayList<Integer> arrayTurnos = lt.GetArrayByProcesoByOrden(
-						ContentParam.getCodOrden(), p.getProceso()
-								.getProCodigo());
+		for (Parametro param : parametros) {
+			this.mLineasCantidad.clear();
+			LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
+			List<Integer> lineasTurnos = lienasTurnosDao
+					.getLineasByProceso(param.getProceso().getProCodigo());
 
-				// Parametros a enviar para generar las tablas
-				System.out.println("PARAMETROS A ENVIAR ");
-				System.out.println("Total de la oden:"
-						+ ContentParam.getTotalOrden());
-
-				System.out.println("El Proceso: "
-						+ p.getProceso().getProCodigo() + "-"
-						+ p.getProceso().getTipoProceso().getTprNombre());
-
-				System.out
-						.println("Capacidad del Proceso: " + p.getStandconv());
-
-				System.out.println("Array del total de turnos por linea: "
-						+ arrayTurnos);
-
-				DistribucionTables tablas = new DistribucionTables();
-				ArrayList<ArrayList<Object>> array0 = tablas.receivParamsPares(
-						ContentParam.getTotalOrden(), p.getStandconv(),
-						arrayTurnos);
-
-				System.out.println("ARRAY " + array0);
-
-				// CONVERT OBJECT FROM ARRAYLIST TO [][]
-				ConvertMatrizTranspuesta convertTranspuesta = new ConvertMatrizTranspuesta();
-				ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
-
-				// ARRAY PARES
-				Object[][] array2 = new Object[array0.size()][];
-				array2 = convert.convertArray(array0);
-
-				// TRANSPUESTA PARES
-				Object[][] matrizTPmontaje = null;
-				matrizTPmontaje = convertTranspuesta
-						.converMatrizTranspuesta(array2);
-
-				for (int x = 0; x < matrizTPmontaje.length; x++) {
-					for (int y = 0; y < matrizTPmontaje[x].length; y++) {
-						System.out.println("--" + matrizTPmontaje[x][y]);
-					}
-				}
-				generateSchedule(matrizTPmontaje, p.getProceso()
-						.getTipoProceso().getTprNombre());
+			for (Integer lt : lineasTurnos) {
+				// System.out.println("Lineas por el proceso: " + lt);
+				Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt);
+				// System.out.println("Conteo por linea: " + countLinea);
+				this.mLineasCantidad.put(lt, countLinea);
 			}
+			Tablas tablas = new Tablas();
+			tablas.receivParamsPares(ContentParam.getTotalOrden(),
+					param.getStandconv(), mLineasCantidad);
 		}
 
+		// // DistribucionTables tablas = new DistribucionTables();
+		// // ArrayList<ArrayList<Object>> array0 =
+		// // tablas.receivParamsPares(
+		// // ContentParam.getTotalOrden(), p.getStandconv(),
+		// // arrayTurnos);
+		// //
+		// // System.out.println("ARRAY " + array0);
+		//
+		// // // CONVERT OBJECT FROM ARRAYLIST TO [][]
+		// // ConvertMatrizTranspuesta convertTranspuesta = new
+		// // ConvertMatrizTranspuesta();
+		// // ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
+		// //
+		// // // ARRAY PARES
+		// // Object[][] array2 = new Object[array0.size()][];
+		// // array2 = convert.convertArray(array0);
+		// //
+		// // // TRANSPUESTA PARES
+		// // ArrayList<Integer> matriz = new ArrayList<Integer>();
+		// // matriz = convertTranspuesta.converMatrizTranspuesta(array2);
+		//
+		// // this.mAll.put(p.getProceso().getProCodigo(), array0);
+		// // Muestra en el schedule
+		// // generateSchedule(matrizTPmontaje, p.getProceso()
+		// // .getTipoProceso().getTprNombre());
+		// //}
+		// }
+		// RECORRIENDO PARA VER LAS MATRICES DEL HASHMAP
+		// Iterator<Integer> it = mAll.keySet().iterator();
+		// while (it.hasNext()) {
+		// Integer key = (Integer) it.next();
+		// ArrayList<Integer> a = mAll.get(key);
+		// System.out.println("Codigo Param: " + key + " -> Valor: " + a);
+		// }
 	}
 
 	// GENERAR LOS EVENTOS EN EL CALENDARIO
@@ -402,6 +401,14 @@ public class ProgramDiasBean implements Serializable {
 		// ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
 		// this.programDias = programDiasDao.findAll();
 		return programDias;
+	}
+
+	public Map<Integer, Object> getmLineasCantidad() {
+		return mLineasCantidad;
+	}
+
+	public void setmLineasCantidad(Map<Integer, Object> mLineasCantidad) {
+		this.mLineasCantidad = mLineasCantidad;
 	}
 
 	public String getD() {

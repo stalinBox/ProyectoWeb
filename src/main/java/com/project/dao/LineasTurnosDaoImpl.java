@@ -64,8 +64,8 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR UPDATE MODELO: "
-					+ e.getMessage().toString());
+			System.out
+					.println("ERRORRRRR UPDATE: " + e.getMessage().toString());
 		}
 		return flag;
 	}
@@ -84,8 +84,8 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE MODELO: "
-					+ e.getMessage().toString());
+			System.out
+					.println("ERRORRRRR DELETE: " + e.getMessage().toString());
 		}
 		return flag;
 	}
@@ -107,8 +107,7 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR ENCONTRANDO EL ARRAY TURNOS: "
-					+ e.toString());
+			System.out.println("ERRORRRRR FINDBYORDENPROD: " + e.toString());
 		}
 		return listado;
 	}
@@ -128,7 +127,7 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALL BY ORDEN: " + e.toString());
+			System.out.println("ERRORRRRR FINDBYORDEN: " + e.toString());
 		}
 		return listado;
 	}
@@ -138,7 +137,7 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 	public List<Integer> GetCodProcesoByOrden(Integer codOrden) {
 		List<Integer> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "select distinct (lt.parametro.proceso.proCodigo) "
+		String sql = "select distinct(lt.lineasprod.lineaproCodigo) "
 				+ "from Lineasturno lt "
 				+ "where lt.parametro.paramCodigo in "
 				+ "(select pa.paramCodigo from Parametro pa where pa.ordenprod.ordenprodCodigo = "
@@ -150,7 +149,28 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR GET BY PROCESO AND ORDEN: "
+			System.out.println("ERRORRRRR GETCODPROCESOBYORDEN: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
+	@Override
+	public Object GetArrayByProcesoByOrden(Integer codOrden, Integer codProceso) {
+		Object listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String hql = "select count(lt.lineasprod.lineaproCodigo) "
+				+ " from Lineasturno lt inner join lt.parametro as pa "
+				+ " where pa.ordenprod.ordenprodCodigo = " + codOrden
+				+ " and lt.lineasprod.lineaproCodigo = " + codProceso;
+		System.out.println(hql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(hql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETARRAYBYPROCESOBYORDEN: "
 					+ e.toString());
 		}
 		return listado;
@@ -158,23 +178,37 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ArrayList<Integer> GetArrayByProcesoByOrden(Integer codOrden,
-			Integer codProceso) {
-		ArrayList<Integer> listado = null;
+	public List<Integer> getLineasByProceso(Integer codPro) {
+		List<Integer> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "select count(lt) from Lineasturno lt   "
-				+ "inner join lt.parametro as pa  "
-				+ "where pa.ordenprod.ordenprodCodigo =  " + codOrden
-				+ "and pa.proceso.proCodigo = " + codProceso
-				+ "group by lt.lineasprod.lineaproCodigo";
+		String sql = "select distinct (lt.lineasprod.lineaproCodigo) from Lineasturno lt inner join lt.parametro pa where pa.proceso.proCodigo = "
+				+ codPro;
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
-			listado = (ArrayList<Integer>) sesion.createQuery(sql).list();
+			listado = sesion.createQuery(sql).list();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR GET BY PROCESO AND ORDEN: "
+			System.out.println("ERRORRRRR GETLINEASBYPROCESO: " + e.toString());
+		}
+		return listado;
+	}
+
+	@Override
+	public Object getCountTurnosByLineas(Integer lineaCod) {
+		Object listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select count(lt.lineasprod.lineaproCodigo)from Lineasturno lt inner join lt.parametro pa where lt.lineasprod.lineaproCodigo = "
+				+ lineaCod;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETCOUNTTURNOSBYLINEAS: "
 					+ e.toString());
 		}
 		return listado;

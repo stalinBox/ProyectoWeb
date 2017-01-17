@@ -13,10 +13,13 @@ public interface LineasTurnosDao {
 
 	public List<Integer> GetCodProcesoByOrden(Integer codOrden);
 
-	public ArrayList<Integer> GetArrayByProcesoByOrden(Integer codOrden,
-			Integer codProceso);
+	public Object GetArrayByProcesoByOrden(Integer codOrden, Integer codProceso);
 
 	public ArrayList<Integer> findByOrdenProd(Integer codOrden, Integer codPro);
+
+	public List<Integer> getLineasByProceso(Integer codPro);
+
+	public Object getCountTurnosByLineas(Integer lineaCod);
 
 	public boolean create(Lineasturno lienasTurnos);
 

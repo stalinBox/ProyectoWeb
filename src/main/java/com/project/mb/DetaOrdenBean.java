@@ -115,10 +115,10 @@ public class DetaOrdenBean implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
 
-			ParametrizacionBean nn = new ParametrizacionBean(cp, total);
+			// ParametrizacionBean nn = new ParametrizacionBean(cp, total);
 
-			nn.setValoresCP(cp);
-			nn.setTotPedido(total);
+			// nn.setValoresCP(cp);
+			// nn.setTotPedido(total);
 
 		} catch (Exception e) {
 			e.printStackTrace();

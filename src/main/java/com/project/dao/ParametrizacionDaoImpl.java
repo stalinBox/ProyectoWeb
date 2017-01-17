@@ -129,4 +129,43 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> findByProcesosInLT(Integer codOrden) {
+		List<Integer> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select distinct (pa.proceso.proCodigo) "
+				+ "from  Parametro pa  inner join pa.lineasturnos lt "
+				+ "where pa.ordenprod.ordenprodCodigo = " + codOrden
+				+ "order by pa.proceso.proCodigo";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FIND STANDARES: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> getProcesosbyOrden(Integer codOrden) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Parametro pa where pa.ordenprod.ordenprodCodigo = "
+				+ codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FIND STANDARES: " + e.toString());
+		}
+		return listado;
+	}
 }

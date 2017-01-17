@@ -14,7 +14,7 @@ public class TipoLineaDaoImpl implements TipoLineaDao {
 	public List<TipLinea> findAll() {
 		List<TipLinea> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM TipLinea ORDER BY tipolinea";
+		String sql = "FROM TipLinea ORDER BY codigoTiplinea";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

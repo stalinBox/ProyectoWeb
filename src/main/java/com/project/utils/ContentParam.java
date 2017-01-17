@@ -19,7 +19,7 @@ public class ContentParam implements Serializable {
 	private static Integer RespGenOrden;
 
 	public static Integer getCodOrden() {
-		// codOrden = 44;
+		codOrden = 7;
 		return codOrden;
 	}
 
@@ -28,7 +28,7 @@ public class ContentParam implements Serializable {
 	}
 
 	public static Integer getTotalOrden() {
-		// totalOrden = 50;
+		totalOrden = 924;
 		return totalOrden;
 	}
 

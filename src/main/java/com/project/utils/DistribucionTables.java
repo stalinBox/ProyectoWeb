@@ -13,10 +13,6 @@ public class DistribucionTables {
 	ArrayList<Object> distribPares = new ArrayList<Object>();
 	ArrayList<Object> distribhoras = new ArrayList<Object>();
 
-	public DistribucionTables() {
-
-	}
-
 	public ArrayList<ArrayList<Object>> receivParamsPares(Integer prodTotal,
 			Integer prodCap, ArrayList<Integer> ListaTurnos) {
 
