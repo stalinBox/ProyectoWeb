@@ -17,9 +17,9 @@ public interface LineasTurnosDao {
 
 	public ArrayList<Integer> findByOrdenProd(Integer codOrden, Integer codPro);
 
-	public List<Integer> getLineasByProceso(Integer codPro);
+	public List<Integer> getLineasByProceso(Integer codPro, Integer codOrden);
 
-	public Object getCountTurnosByLineas(Integer lineaCod);
+	public Object getCountTurnosByLineas(Integer lineaCod, Integer codOrden);
 
 	public boolean create(Lineasturno lienasTurnos);
 

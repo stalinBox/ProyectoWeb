@@ -90,7 +90,7 @@ public class SettingTimesDaoImpl implements SettingTimesDao {
 	public double findByTs(String mNombre, String tNombre) {
 		double a = 0;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String hql = "SELECT (ROUND((1/SUM(c.tiempoTs))*8*60))*5"
+		String hql = "SELECT (ROUND((1/MAX(c.tiempoTs))*8*60))*5"
 				+ " FROM Confproceso c"
 				+ " WHERE c.modelo.modCodigo = (SELECT m.modCodigo"
 				+ " FROM Modelo m WHERE  m.modNombre = '" + mNombre + "')"

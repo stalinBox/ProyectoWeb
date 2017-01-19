@@ -3,11 +3,9 @@ package com.project.mb;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,14 +27,10 @@ import com.project.dao.ParametrizacionDao;
 import com.project.dao.ParametrizacionDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
-import com.project.entities.Lineasturno;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Programdia;
 import com.project.utils.ContentParam;
-import com.project.utils.ConvertArrayToMatriz;
-import com.project.utils.ConvertMatrizTranspuesta;
-import com.project.utils.DistribucionTables;
 import com.project.utils.MyUtil;
 import com.project.utils.Tablas;
 
@@ -152,18 +146,25 @@ public class ProgramDiasBean implements Serializable {
 		for (Parametro param : parametros) {
 			this.mLineasCantidad.clear();
 			LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
-			List<Integer> lineasTurnos = lienasTurnosDao
-					.getLineasByProceso(param.getProceso().getProCodigo());
+			List<Integer> lineasTurnos = lienasTurnosDao.getLineasByProceso(
+					param.getProceso().getProCodigo(),
+					ContentParam.getCodOrden());
 
 			for (Integer lt : lineasTurnos) {
-				// System.out.println("Lineas por el proceso: " + lt);
-				Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt);
-				// System.out.println("Conteo por linea: " + countLinea);
+				Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt,
+						ContentParam.getCodOrden());
 				this.mLineasCantidad.put(lt, countLinea);
 			}
-			Tablas tablas = new Tablas();
-			tablas.receivParamsPares(ContentParam.getTotalOrden(),
-					param.getStandconv(), mLineasCantidad);
+
+			if (this.mLineasCantidad.isEmpty()) {
+				System.out
+						.println("No hay lineas para generar la distribucion por dias");
+			} else {
+				Tablas tablas = new Tablas();
+				tablas.receivParamsPares(ContentParam.getTotalOrden(),
+						param.getStandconv(), this.mLineasCantidad);
+			}
+
 		}
 
 		// // DistribucionTables tablas = new DistribucionTables();

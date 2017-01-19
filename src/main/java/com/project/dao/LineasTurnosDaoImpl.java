@@ -178,11 +178,12 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Integer> getLineasByProceso(Integer codPro) {
+	public List<Integer> getLineasByProceso(Integer codPro, Integer codOrden) {
 		List<Integer> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "select distinct (lt.lineasprod.lineaproCodigo) from Lineasturno lt inner join lt.parametro pa where pa.proceso.proCodigo = "
-				+ codPro;
+		String sql = "select distinct (lt.lineasprod.lineaproCodigo) from Lineasturno lt "
+				+ "inner join lt.parametro pa where pa.proceso.proCodigo = "
+				+ codPro + "and pa.ordenprod.ordenprodCodigo = " + codOrden;
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -196,11 +197,12 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 	}
 
 	@Override
-	public Object getCountTurnosByLineas(Integer lineaCod) {
+	public Object getCountTurnosByLineas(Integer lineaCod, Integer codOrden) {
 		Object listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "select count(lt.lineasprod.lineaproCodigo)from Lineasturno lt inner join lt.parametro pa where lt.lineasprod.lineaproCodigo = "
-				+ lineaCod;
+		String sql = "select count(lt.lineasprod.lineaproCodigo)from Lineasturno lt "
+				+ "inner join lt.parametro pa where lt.lineasprod.lineaproCodigo = "
+				+ lineaCod + " and pa.ordenprod.ordenprodCodigo = " + codOrden;
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
