@@ -5,31 +5,24 @@ import java.util.Map;
 
 public class Tablas {
 
-	public Map<Integer, ArrayList<Integer>> receivParamsPares(
-			Integer prodTotal, Integer prodCap,
-			Map<Integer, Object> LineasTurnos) {
+	public ArrayList<ArrayList<Object>> receivParamsPares(Integer prodTotal,
+			Integer prodCap, Map<Integer, Object> LineasTurnos) {
 
-		ArrayList<Integer> array = new ArrayList<Integer>();
+		ArrayList<ArrayList<Object>> arrayCompleto = new ArrayList<ArrayList<Object>>();
 		double diasLab = 0;
 		Integer cp = 0;
 
 		cp = prodCap * LineasTurnos.size();
 		diasLab = prodTotal.doubleValue() / cp.doubleValue() * 5;
 
-		System.out.println("PARAMETROS PARA TRABAJAR");
-		System.out.println("OrdenTotal: " + prodTotal);
-		System.out.println("Capacidad por proceso: " + cp);
-		System.out.println("Dias a laborar: " + diasLab);
+		// System.out.println("PARAMETROS PARA TRABAJAR CLASE TABLAS");
+		// System.out.println("OrdenTotal: " + prodTotal);
+		// System.out.println("Capacidad por proceso: " + cp);
+		// System.out.println("Dias a laborar: " + diasLab);
 
 		FragmentNumber abc = new FragmentNumber();
-		array = abc.Number(cp, diasLab);
-		System.out.println("array: " + array);
+		arrayCompleto = abc.Number(cp, diasLab);
 
-		int a = 0;
-		for (Integer i : array) {
-			a += i;
-		}
-		System.out.println("Total Suma: " + a);
-		return null;
+		return arrayCompleto;
 	}
 }

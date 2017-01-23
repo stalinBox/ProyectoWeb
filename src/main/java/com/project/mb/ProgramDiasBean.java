@@ -3,11 +3,15 @@ package com.project.mb;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -32,6 +36,7 @@ import com.project.entities.Parametro;
 import com.project.entities.Programdia;
 import com.project.utils.ContentParam;
 import com.project.utils.MyUtil;
+import com.project.utils.ScheduleDays;
 import com.project.utils.Tablas;
 
 @ManagedBean
@@ -143,6 +148,9 @@ public class ProgramDiasBean implements Serializable {
 		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
 				.getCodOrden());
 
+		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
+		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+
 		for (Parametro param : parametros) {
 			this.mLineasCantidad.clear();
 			LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
@@ -161,117 +169,131 @@ public class ProgramDiasBean implements Serializable {
 						.println("No hay lineas para generar la distribucion por dias");
 			} else {
 				Tablas tablas = new Tablas();
-				tablas.receivParamsPares(ContentParam.getTotalOrden(),
-						param.getStandconv(), this.mLineasCantidad);
+				mProcesos = tablas.receivParamsPares(
+						ContentParam.getTotalOrden(), param.getStandconv(),
+						this.mLineasCantidad);
+				mAll.put(param.getProceso().getProCodigo(), mProcesos);
 			}
-
 		}
-
-		// // DistribucionTables tablas = new DistribucionTables();
-		// // ArrayList<ArrayList<Object>> array0 =
-		// // tablas.receivParamsPares(
-		// // ContentParam.getTotalOrden(), p.getStandconv(),
-		// // arrayTurnos);
-		// //
-		// // System.out.println("ARRAY " + array0);
-		//
-		// // // CONVERT OBJECT FROM ARRAYLIST TO [][]
-		// // ConvertMatrizTranspuesta convertTranspuesta = new
-		// // ConvertMatrizTranspuesta();
-		// // ConvertArrayToMatriz convert = new ConvertArrayToMatriz();
-		// //
-		// // // ARRAY PARES
-		// // Object[][] array2 = new Object[array0.size()][];
-		// // array2 = convert.convertArray(array0);
-		// //
-		// // // TRANSPUESTA PARES
-		// // ArrayList<Integer> matriz = new ArrayList<Integer>();
-		// // matriz = convertTranspuesta.converMatrizTranspuesta(array2);
-		//
-		// // this.mAll.put(p.getProceso().getProCodigo(), array0);
-		// // Muestra en el schedule
-		// // generateSchedule(matrizTPmontaje, p.getProceso()
-		// // .getTipoProceso().getTprNombre());
-		// //}
-		// }
+		generateCalendar(mAll, this.fInicio);
 		// RECORRIENDO PARA VER LAS MATRICES DEL HASHMAP
 		// Iterator<Integer> it = mAll.keySet().iterator();
 		// while (it.hasNext()) {
 		// Integer key = (Integer) it.next();
-		// ArrayList<Integer> a = mAll.get(key);
-		// System.out.println("Codigo Param: " + key + " -> Valor: " + a);
+		// ArrayList<ArrayList<Object>> a = mAll.get(key);
+		// System.out.println("Codigo Proceso: " + key
+		// + " ->Array por proceso: " + a);
 		// }
 	}
 
-	// GENERAR LOS EVENTOS EN EL CALENDARIO
-	@SuppressWarnings("deprecation")
-	public void generateSchedule(Object[][] matrizTPmontaje, String nomProceso) {
+	@SuppressWarnings({ "deprecation" })
+	public boolean generateCalendar(
+			Map<Integer, ArrayList<ArrayList<Object>>> mAll, Date fInicio) {
 
-		// VARIABLES PARA FECHAS
+		// INICIALIZADOR
+		ScheduleDays days = new ScheduleDays();
+
+		// VARIABLES
+		boolean flat = false;
 		Calendar tConvertCal = null;
-		Calendar tConvertCalApa = null;
-		Calendar tConvertCalTrq = null;
-		tConvertCal = DateToCalendar(this.fInicio);
 
-		if (nomProceso.equals("MONTAJE")) {
-			System.out.println("Fecha Montaje--: " + tConvertCal.getTime());
+		Double dhora = null;
+		tConvertCal = days.DateToCalendar(fInicio);
 
-			// Verificar que no se programe en fines de semana
-			if (this.fInicio.getDay() == 0 || this.fInicio.getDay() == 6) {
-				FacesContext
-						.getCurrentInstance()
-						.addMessage(
-								null,
-								new FacesMessage(
-										"No se puede empezar a programar los fines de semana"));
-				eventModel = new DefaultScheduleModel();
-			} else if (this.hExtras == true) {
-				withHextras(matrizTPmontaje, tConvertCal, nomProceso);
-			} else {
-				withOutHextras(matrizTPmontaje, tConvertCal, nomProceso);
-			}
+		// ORDENA EL MAP EN FORMA DESCENDENTE
+		Map<Integer, ArrayList<ArrayList<Object>>> treeMap = new TreeMap<Integer, ArrayList<ArrayList<Object>>>(
+				new Comparator<Integer>() {
+					@Override
+					public int compare(Integer o1, Integer o2) {
+						return o2.compareTo(o1);
+					}
 
-		} else if (nomProceso.equals("APARADO")) {
-			tConvertCalApa = prevDayApa(tConvertCal);
-			System.out.println("Fecha Aparado**: " + tConvertCalApa.getTime());
+				});
+		// TRABAJAR CON TREEMAP
+		treeMap.putAll(mAll);
 
-			if (this.hExtras == true) {
-				withHextras(matrizTPmontaje, tConvertCalApa, nomProceso);
-			} else {
-				withOutHextras(matrizTPmontaje, tConvertCalApa, nomProceso);
-			}
+		// VISUALIZAR LA MATRIZ
+		if (fInicio.getDay() == 0 || fInicio.getDay() == 6) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									"No se puede empezar a programar los fines de semana"));
+			eventModel = new DefaultScheduleModel();
+		} else if (this.hExtras != true) {
+			Iterator<Integer> it = treeMap.keySet().iterator();
+			while (it.hasNext()) {
+				Integer key = (Integer) it.next();
+				ArrayList<ArrayList<Object>> a = treeMap.get(key);
+				// System.out.println("Codigo Proceso: " + key
+				// + " ->Array por proceso: " + a);
+				if (dhora != null) {
+					System.out.println(dhora);
 
-		} else if (nomProceso.equals("TROQUELADO")) {
-			tConvertCalTrq = prevDayTrq(tConvertCal);
-			System.out.println("Fecha Troquelado//: "
-					+ tConvertCalTrq.getTime());
-			if (this.hExtras == true) {
-				withHextras(matrizTPmontaje, tConvertCalTrq, nomProceso);
-			} else {
-				withOutHextras(matrizTPmontaje, tConvertCalTrq, nomProceso);
+					if (dhora < 4) {
+						withOutHextras(a.get(0), days.prevDayApa(tConvertCal),
+								key);
+					} else {
+						withOutHextras(a.get(0), tConvertCal, key);
+					}
+
+					dhora = (Double) a.get(1).get(1);
+					System.out.println(dhora);
+				} else {
+					withOutHextras(a.get(0), tConvertCal, key);
+					dhora = (Double) a.get(1).get(1);
+				}
+				// System.out.println("indice: " + key + " pares: " + a.get(0));
+				// System.out.println("indice: " + key + " horas: " + a.get(1));
 			}
 		} else {
-			System.out.println("ALGUNA VARIABLE NO FUE BUENA");
-		}
+			Iterator<Integer> it = treeMap.keySet().iterator();
+			while (it.hasNext()) {
+				Integer key = (Integer) it.next();
+				ArrayList<ArrayList<Object>> a = treeMap.get(key);
+				// System.out.println("Codigo Proceso: " + key
+				// + " ->Array por proceso: " + a);
+				if (dhora != null) {
+					System.out.println(dhora);
 
+					if (dhora < 4) {
+						withOutHextras(a.get(0), days.prevDayApa(tConvertCal),
+								key);
+					} else {
+						withOutHextras(a.get(0), tConvertCal, key);
+					}
+
+					dhora = (Double) a.get(1).get(1);
+					System.out.println(dhora);
+				} else {
+					withHextras(a.get(0), tConvertCal, key);
+					dhora = (Double) a.get(1).get(1);
+				}
+				// System.out.println("indice: " + key + " pares: " + a.get(0));
+				// System.out.println("indice: " + key + " horas: " + a.get(1));
+			}
+
+		}
+		return flat;
 	}
 
 	// INSERTAR EN EL MODELO SIN HORAS EXTRAS
-	public void withOutHextras(Object[][] matrizT, Calendar fMontajeParam,
-			String nomProceso) {
+	public void withOutHextras(ArrayList<Object> arrayProceso,
+			Calendar fMontajeParam, Integer key) {
 
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		ScheduleDays days = new ScheduleDays();
 		Calendar m = fMontajeParam;
 		float d = 0, s = 0;
 
-		NumberFormat formatter = new DecimalFormat("#0.00");
-		for (int i = 0; i < matrizT.length; i++) {
+		for (Object k : arrayProceso) {
+			eventModel.addEvent(new DefaultScheduleEvent("L:" + key + " Pares:"
+					+ k.toString(), m.getTime(), m.getTime()));
+			m = days.nextDay(m);
 			d++;
-			for (int j = 0; j < matrizT[i].length; j++) {
-				eventModel.addEvent(new DefaultScheduleEvent(nomProceso + " "
-						+ matrizT[i][j].toString(), m.getTime(), m.getTime()));
-			}
-			m = nextDay(m);
 		}
+
 		s = (d / 5);
 		formatter.format(s);
 
@@ -292,25 +314,22 @@ public class ProgramDiasBean implements Serializable {
 	}
 
 	// INSERTAR EN EL MODELO CON HORAS EXTRAS
-	public void withHextras(Object[][] matrizT, Calendar fMontajeParam,
-			String nomProceso) {
-
+	public void withHextras(ArrayList<Object> arrayProceso,
+			Calendar fMontajeParam, Integer key) {
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		ScheduleDays days = new ScheduleDays();
 		Calendar m = fMontajeParam;
 		float d = 0, s = 0;
 
-		NumberFormat formatter = new DecimalFormat("#0.00");
-		for (int i = 0; i < matrizT.length; i++) {
+		for (Object k : arrayProceso) {
+			eventModel.addEvent(new DefaultScheduleEvent("L:" + key + " Pares:"
+					+ k.toString(), m.getTime(), m.getTime()));
+			m = days.nextDayExtras(m);
 			d++;
-			for (int j = 0; j < matrizT[i].length; j++) {
-				eventModel.addEvent(new DefaultScheduleEvent(nomProceso + " "
-						+ matrizT[i][j].toString(), m.getTime(), m.getTime()));
-
-			}
-			m = nextDayExtras(m);
 		}
+
 		s = (d / 6);
 		formatter.format(s);
-
 		if (s > 4) {
 			this.d = "La programacion no debe sobrepasar el mes 4 semanas, ud ha programado "
 					+ s + " Semanas";
@@ -324,66 +343,6 @@ public class ProgramDiasBean implements Serializable {
 
 		System.out.println("Dias labadorados: " + d);
 		System.out.println("Semanas labadoradas: " + s);
-	}
-
-	// ***************RECORRER DIAS EN EL CALENDAR*************
-	@SuppressWarnings("deprecation")
-	private Calendar nextDayExtras(Calendar a) {
-		if (a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			nextDayExtras(a);
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			a.set(Calendar.HOUR, 8);
-		}
-		return a;
-	}
-
-	@SuppressWarnings("deprecation")
-	private Calendar nextDay(Calendar a) {
-		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			nextDay(a);
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			a.set(Calendar.HOUR, 8);
-		}
-		return a;
-	}
-
-	@SuppressWarnings("deprecation")
-	private Calendar prevDayApa(Calendar a) {
-		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-			prevDayApa(a);
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-			a.set(Calendar.HOUR, 8);
-		}
-		return a;
-	}
-
-	@SuppressWarnings("deprecation")
-	private Calendar prevDayTrq(Calendar a) {
-		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-			prevDayTrq(a);
-
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 2);
-			a.set(Calendar.HOUR, 8);
-		}
-		return a;
-	}
-
-	public Calendar DateToCalendar(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		return cal;
 	}
 
 	// METODOS DML
