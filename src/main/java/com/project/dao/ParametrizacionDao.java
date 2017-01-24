@@ -16,6 +16,9 @@ public interface ParametrizacionDao {
 
 	public List<Parametro> getProcesosbyOrden(Integer codOrden);
 
+	public List<Parametro> getCpByProcesoOrden(Integer codOrden,
+			Integer codProceso);
+
 	public boolean create(Parametro parametrizacion);
 
 	public boolean update(Parametro parametrizacion);

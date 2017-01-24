@@ -33,7 +33,7 @@
 							style="width:150px" required="true">
 
 							<p:ajax listener="#{paramBean.onChangeProcesos(actionEvent)}"
-								update="idStdCon,idStdAut" />
+								update="idStdCon,idStdAut,idStdMan" />
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{paramBean.selectedItemsProceso}" />
@@ -55,6 +55,10 @@
 
 						<h:outputLabel for="idStdAut" value="Estandar Aut:" />
 						<h:inputText id="idStdAut" value="#{paramBean.stdAut}"
+							disabled="true" required="true" />
+
+						<h:outputLabel for="idStdMan" value="Estandar Manual:" />
+						<h:inputText id="idStdMan" value="#{paramBean.stdMan}"
 							disabled="true" required="true" />
 
 						<h:outputLabel for="idTotalOrden" value="Total Orden:" />
@@ -94,6 +98,10 @@
 
 					<p:column headerText="StandarAutomatico">
 						<h:outputText value="#{p.standauto}" />
+					</p:column>
+
+					<p:column headerText="StandarManual">
+						<h:outputText value="#{p.standman}" />
 					</p:column>
 
 					<p:column headerText="Eliminar?" style="width:10%">

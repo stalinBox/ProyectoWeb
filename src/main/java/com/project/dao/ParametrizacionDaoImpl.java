@@ -168,4 +168,25 @@ public class ParametrizacionDaoImpl implements ParametrizacionDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> getCpByProcesoOrden(Integer codOrden,
+			Integer codProceso) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Parametro pa where pa.ordenprod.ordenprodCodigo =  "
+				+ codOrden + " and pa.proceso.proCodigo = " + codProceso;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out
+					.println("ERRORRRRR GETCPBYPROCESOORDEN: " + e.toString());
+		}
+		return listado;
+	}
 }

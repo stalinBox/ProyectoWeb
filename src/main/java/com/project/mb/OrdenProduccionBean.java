@@ -236,13 +236,14 @@ public class OrdenProduccionBean implements Serializable {
 			ContentParam.setStandConvMontaje(this.cp.get(0));
 			ContentParam.setStandConvAparado(this.cp.get(1));
 			ContentParam.setStandConvTroquelado(this.cp.get(2));
+			ContentParam.setStandTroqueladoTroquel(this.cp.get(3));
+
 			ContentParam.setTotalOrden(this.total);
 
 			ContentParam.setRespGenOrden(0);
 			ContentParam.setStandAutMontaje(0);
 			ContentParam.setStandAutAparado(0);
-			ContentParam.setStandAutTroquelado(0);
-
+			ContentParam.setStandAutTroquelado(this.cp.get(4));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

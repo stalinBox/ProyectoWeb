@@ -1,5 +1,6 @@
 package com.project.utils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class FragmentNumber {
@@ -9,14 +10,16 @@ public class FragmentNumber {
 		ArrayList<Object> arrayDiasPares = new ArrayList<Object>();
 		ArrayList<Object> arrDiasHoras = new ArrayList<Object>();
 		ArrayList<ArrayList<Object>> arrayComplet = new ArrayList<ArrayList<Object>>();
-		// DecimalFormat formateador = new DecimalFormat("####.###");
+		DecimalFormat formateador = new DecimalFormat("####.###");
 
 		// System.out.println("Clase FragmentNumero: ");
+		//
 		// System.out.println("Valor cp: " + cp);
-		// System.out.println("Valor Ndias" + formateador.format(nDias));
+		// System.out.println("Valor Ndias: " + formateador.format(nDias));
 
 		double a = nDias % 1;
-		double b = Math.round(nDias);
+
+		int b = (int) (nDias);
 
 		// System.out.println("Parte entera: " + b);
 		// System.out.println("Parte decimal: " + formateador.format(a));
@@ -25,6 +28,7 @@ public class FragmentNumber {
 			int j = cp / 5;
 			arrayDiasPares.add(j);
 		}
+
 		// calculo independiente para la capacidad por dia
 		double k = cp * a / 5;
 		arrayDiasPares.add((int) Math.round(k));

@@ -4,47 +4,48 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the parametros database table.
  * 
  */
 @Entity
-@Table(name="parametros")
-@NamedQuery(name="Parametro.findAll", query="SELECT p FROM Parametro p")
+@Table(name = "parametros")
+@NamedQuery(name = "Parametro.findAll", query = "SELECT p FROM Parametro p")
 public class Parametro implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="param_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "param_codigo")
 	private Integer paramCodigo;
 
 	private Integer standauto;
 
 	private Integer standconv;
 
-	//bi-directional many-to-one association to Lineasturno
-	@OneToMany(mappedBy="parametro")
+	private Integer standman;
+
+	// bi-directional many-to-one association to Lineasturno
+	@OneToMany(mappedBy = "parametro")
 	private List<Lineasturno> lineasturnos;
 
-	//bi-directional many-to-one association to Ordenprod
+	// bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name="ordenprod_codigo")
+	@JoinColumn(name = "ordenprod_codigo")
 	private Ordenprod ordenprod;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name = "pro_codigo")
 	private Proceso proceso;
 
-	//bi-directional many-to-one association to Usuario
+	// bi-directional many-to-one association to Usuario
 	@ManyToOne
-	@JoinColumn(name="user_id_resp")
+	@JoinColumn(name = "user_id_resp")
 	private Usuario usuario;
 
-	//bi-directional many-to-one association to Programdia
-	@OneToMany(mappedBy="parametro")
+	// bi-directional many-to-one association to Programdia
+	@OneToMany(mappedBy = "parametro")
 	private List<Programdia> programdias;
 
 	public Parametro() {
@@ -72,6 +73,14 @@ public class Parametro implements Serializable {
 
 	public void setStandconv(Integer standconv) {
 		this.standconv = standconv;
+	}
+
+	public Integer getStandman() {
+		return standman;
+	}
+
+	public void setStandman(Integer standman) {
+		this.standman = standman;
 	}
 
 	public List<Lineasturno> getLineasturnos() {

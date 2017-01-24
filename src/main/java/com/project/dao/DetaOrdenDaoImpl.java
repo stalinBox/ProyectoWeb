@@ -132,4 +132,43 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		}
 		return flag;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getByOrden(Integer codOrden) {
+		List<String> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select distinct(deta.modelo.modNombre) from Detalleorden deta where deta.ordenprod.ordenprodCodigo = "
+				+ codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETBYORDEN: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> getSumByModelo(Integer codOrden, String modelo) {
+		List<Integer> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select SUM(deta.cantidad) from Detalleorden deta inner join deta.ordenprod op "
+				+ "inner join deta.modelo m where op.ordenprodCodigo =  "
+				+ codOrden + "and m.modNombre = '" + modelo + "'";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETSUMBYMODELO: " + e.toString());
+		}
+		return listado;
+	}
 }

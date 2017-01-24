@@ -18,8 +18,10 @@ public class ContentParam implements Serializable {
 
 	private static Integer RespGenOrden;
 
+	private static Integer StandTroqueladoTroquel;
+
 	public static Integer getCodOrden() {
-		codOrden = 10;
+		// codOrden = 16;
 		return codOrden;
 	}
 
@@ -28,7 +30,7 @@ public class ContentParam implements Serializable {
 	}
 
 	public static Integer getTotalOrden() {
-		totalOrden = 190;
+		// totalOrden = 190;
 		return totalOrden;
 	}
 
@@ -90,6 +92,14 @@ public class ContentParam implements Serializable {
 
 	public static void setRespGenOrden(Integer respGenOrden) {
 		RespGenOrden = respGenOrden;
+	}
+
+	public static Integer getStandTroqueladoTroquel() {
+		return StandTroqueladoTroquel;
+	}
+
+	public static void setStandTroqueladoTroquel(Integer standTroqueladoTroquel) {
+		StandTroqueladoTroquel = standTroqueladoTroquel;
 	}
 
 }

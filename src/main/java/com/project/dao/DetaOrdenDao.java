@@ -15,5 +15,9 @@ public interface DetaOrdenDao {
 
 	public List<Detalleorden> findAll();
 
+	public List<String> getByOrden(Integer codOrden);
+
+	public List<Integer> getSumByModelo(Integer codOrden, String modelo);
+
 	public List<Detalleorden> findByOrden(Integer idOrden);
 }

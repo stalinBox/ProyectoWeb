@@ -36,6 +36,7 @@ public class ParamBean implements Serializable {
 	private Integer stdConv;
 	private Integer stdAut;
 	private Integer totOrden;
+	private Integer stdMan;
 
 	ContentParam cparam = new ContentParam();
 
@@ -73,6 +74,7 @@ public class ParamBean implements Serializable {
 		this.selectedParametrizacion.setOrdenprod(ordenpro);
 		this.selectedParametrizacion.setStandconv(this.stdConv);
 		this.selectedParametrizacion.setStandauto(this.stdAut);
+		this.selectedParametrizacion.setStandman(this.stdMan);
 
 		if (paramDao.create(this.selectedParametrizacion)) {
 			msg = "Se ha añadido un nuevo parametrizacion";
@@ -126,12 +128,15 @@ public class ParamBean implements Serializable {
 		if (a == 1) {
 			this.stdConv = ContentParam.getStandConvMontaje();
 			this.stdAut = ContentParam.getStandAutMontaje();
+			this.stdMan = 0;
 		} else if (a == 2) {
 			this.stdConv = ContentParam.getStandConvAparado();
 			this.stdAut = ContentParam.getStandAutAparado();
+			this.stdMan = 0;
 		} else {
 			this.stdConv = ContentParam.getStandConvTroquelado();
 			this.stdAut = ContentParam.getStandAutTroquelado();
+			this.stdMan = ContentParam.getStandTroqueladoTroquel();
 		}
 	}
 
@@ -210,6 +215,14 @@ public class ParamBean implements Serializable {
 
 	public void setSelectedParametrizacion(Parametro selectedParametrizacion) {
 		this.selectedParametrizacion = selectedParametrizacion;
+	}
+
+	public Integer getStdMan() {
+		return stdMan;
+	}
+
+	public void setStdMan(Integer stdMan) {
+		this.stdMan = stdMan;
 	}
 
 }

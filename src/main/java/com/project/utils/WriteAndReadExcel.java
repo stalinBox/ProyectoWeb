@@ -94,7 +94,7 @@ public class WriteAndReadExcel implements Serializable {
 				orderList);
 		File pathNewFile = new File(dirNewLocationFile);
 		if (ExecuteMacro(pathNewFile) == true) {
-			cpStands = ReadingExcelXLSM(dirNewLocationFile);
+			cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList);
 		}
 		return cpStands;
 	}
@@ -186,9 +186,6 @@ public class WriteAndReadExcel implements Serializable {
 			pp3.add(ts);
 		}
 
-		// pp3.add(460);
-		// pp3.add(510);
-		// pp3.add(333);
 		Integer m1 = 1;
 		for (Integer key : pp3) {
 			Row r = sheetApa.getRow(m1);
@@ -203,34 +200,6 @@ public class WriteAndReadExcel implements Serializable {
 
 			c.setCellValue(key);
 			m1++;
-		}
-
-		// INGRESAR LA CAPACIDAD DE PRODUCCION DE TROQUELADO
-		ArrayList<Integer> pp4 = new ArrayList<Integer>();
-		Sheet sheetTrq = workbook.getSheetAt(2);
-		for (String mNombre : pp) {
-			System.out.println("MODELOS A CONSULTAR: " + mNombre);
-			int ts = 0;
-			String tNombre = "TROQUELADO";
-			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre);
-			System.out.println("Capacidad por TROQUELADO en pp2:  " + ts);
-			pp4.add(ts);
-		}
-
-		Integer m2 = 1;
-		for (Integer key : pp4) {
-			Row r = sheetTrq.getRow(m2);
-			if (r == null) {
-				r = sheetTrq.createRow(m2);
-			}
-
-			Cell c = r.getCell(0);
-			if (c == null) {
-				c = r.createCell(0, Cell.CELL_TYPE_NUMERIC);
-			}
-			c.setCellValue(key);
-			m2++;
 		}
 
 		// GUARDA EL ARCHIVO CON OTRO NOMBRE EN LA MISMA DIRECCION
@@ -252,17 +221,17 @@ public class WriteAndReadExcel implements Serializable {
 	}
 
 	// RETORNA EL VALOR RESULTANTE DEL SOLVER
-	public ArrayList<Integer> ReadingExcelXLSM(String path) throws IOException {
+	public ArrayList<Integer> ReadingExcelXLSM(String path,
+			ArrayList<Items> orderList) throws IOException {
+
 		ArrayList<Integer> standaresProcesos = new ArrayList<Integer>();
+
 		// PARA MONTAJE
 		Double cpDoubleMontaje = null;
 		Integer cpInt = null;
 		// PARA APARADO
 		Double cpDoubleApa = null;
 		Integer cpIntApa = null;
-		// PARA TROQUELADO
-		Double cpDoubleTrq = null;
-		Integer cpIntTrq = null;
 
 		FileInputStream fis = new FileInputStream(path);
 		Workbook wb = new XSSFWorkbook(fis);
@@ -283,7 +252,7 @@ public class WriteAndReadExcel implements Serializable {
 		if (row != null && rowApa != null && rowTrq != null) {
 			Cell c = row.getCell(cellReference.getCol());
 			Cell c1 = rowApa.getCell(cellReference1.getCol());
-			Cell c2 = rowTrq.getCell(cellReference1.getCol());
+
 			// VALOR MONTAJE
 			switch (evaluator.evaluateFormulaCell(c)) {
 			case Cell.CELL_TYPE_NUMERIC:
@@ -293,6 +262,7 @@ public class WriteAndReadExcel implements Serializable {
 			case Cell.CELL_TYPE_FORMULA:
 				break;
 			}
+
 			// VALOR APARADO
 			switch (evaluator.evaluateFormulaCell(c1)) {
 			case Cell.CELL_TYPE_NUMERIC:
@@ -302,26 +272,32 @@ public class WriteAndReadExcel implements Serializable {
 			case Cell.CELL_TYPE_FORMULA:
 				break;
 			}
-			// VALOR TROQUELADO
-			switch (evaluator.evaluateFormulaCell(c2)) {
-			case Cell.CELL_TYPE_NUMERIC:
-				cpDoubleTrq = c2.getNumericCellValue();
-				cpIntTrq = (int) Math.round(cpDoubleTrq);
-				break;
-			case Cell.CELL_TYPE_FORMULA:
-				break;
-			}
 		}
+
+		// PARA TROQUELADO
+		ArrayList<String> pp = new ArrayList<String>();
+		pp = ModelosUnicos(orderList);
+		// INGRESAR TROQUELADO
+		ArrayList<Integer> pp4 = new ArrayList<Integer>();
+		for (String mNombre : pp) {
+			System.out.println("MODELOS A CONSULTAR: " + mNombre);
+			int ts = 0;
+			String tNombre = "TROQUELADO";
+			SettingTimesDao sttDao = new SettingTimesDaoImpl();
+			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			System.out.println("Capacidad por TROQUELADO en pp2:  " + ts);
+			pp4.add(ts);
+		}
+
 		standaresProcesos.add(cpInt);
 		standaresProcesos.add(cpIntApa);
-		standaresProcesos.add(cpIntTrq);
-
+		standaresProcesos.addAll(pp4);
 		System.out.println("Valor para ocupar en double MONTAJE: "
 				+ cpDoubleMontaje);
 		System.out.println("Valor para ocupar en double APARADO: "
 				+ cpDoubleApa);
-		System.out.println("Valor para ocupar en double TROQUELADO: "
-				+ cpDoubleTrq);
+
+		System.out.println("***standaresProcesos***: " + standaresProcesos);
 		return standaresProcesos;
 	}
 
@@ -348,12 +324,10 @@ public class WriteAndReadExcel implements Serializable {
 		// VARIABLE CON EL NOMBRE DE LA MACRO
 		String macroNameMontaje = "!calculoMontaje";
 		String macroNameAparado = "!calculoAparado";
-		String macroNameTroquelado = "!calculoTroquelado";
 		PrintSolveMB execute = new PrintSolveMB();
 		try {
 			if (execute.executeMacro(pathFile, macroNameMontaje) == true
-					&& execute.executeMacro(pathFile, macroNameAparado) == true
-					&& execute.executeMacro(pathFile, macroNameTroquelado) == true) {
+					&& execute.executeMacro(pathFile, macroNameAparado) == true) {
 				System.out.println("MACROS SUCCESFULL");
 				return true;
 			} else {
