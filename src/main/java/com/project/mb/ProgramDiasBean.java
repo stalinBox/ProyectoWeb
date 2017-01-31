@@ -33,7 +33,6 @@ import com.project.dao.ParametrizacionDao;
 import com.project.dao.ParametrizacionDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
-import com.project.entities.Detalleorden;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Programdia;
@@ -174,54 +173,50 @@ public class ProgramDiasBean implements Serializable {
 			if (this.mLineasCantidad.isEmpty()) {
 				System.out
 						.println("No hay lineas para generar la distribucion por dias");
-				// ArrayList<ArrayList<Object>> mProcesosT1 = new
-				// ArrayList<ArrayList<Object>>();
-				// ArrayList<ArrayList<Object>> mProcesosT2 = new
-				// ArrayList<ArrayList<Object>>();
-				// ArrayList<ArrayList<Object>> mProcesosT3 = new
-				// ArrayList<ArrayList<Object>>();
-				//
-				// ArrayList<Integer> demandaT = new ArrayList<Integer>();
-				// Map<Integer, Object> mLineas = new HashMap<Integer,
-				// Object>();
-				// mLineas.put(4, 1);
-				// Tablas tablas = new Tablas();
-				//
-				// List<Parametro> params = paramDao.getCpByProcesoOrden(
-				// ContentParam.getCodOrden(), 3);
-				// for (Parametro p : params) {
-				// System.out.println("T manual: " + p.getStandconv());
-				// System.out.println("T automatico: " + p.getStandman());
-				// System.out.println("T Troquel: " + p.getStandauto());
-				//
-				// DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
-				// List<String> detalle = detalleDao.getByOrden(ContentParam
-				// .getCodOrden());
-				//
-				// for (String d : detalle) {
-				// System.out.println(d);
-				// List<Integer> det = detalleDao.getSumByModelo(
-				// ContentParam.getCodOrden(), d);
-				// for (Object dt : det) {
-				// System.out.println("Demanda: " + dt);
-				// demandaT.add(Integer.parseInt(dt.toString()));
-				// }
-				// }
-				//
-				// mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
-				// p.getStandconv(), mLineas);
-				// mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
-				// p.getStandman(), mLineas);
-				// mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
-				// p.getStandauto(), mLineas);
-				//
-				// System.out.println("T1: " + mProcesosT1);
-				// System.out.println("T2: " + mProcesosT2);
-				// System.out.println("T3: " + mProcesosT3);
-				// mAll.put(3, mProcesosT1);
-				// mAll.put(4, mProcesosT2);
-				// mAll.put(5, mProcesosT3);
-				// }
+				ArrayList<ArrayList<Object>> mProcesosT1 = new ArrayList<ArrayList<Object>>();
+				ArrayList<ArrayList<Object>> mProcesosT2 = new ArrayList<ArrayList<Object>>();
+				ArrayList<ArrayList<Object>> mProcesosT3 = new ArrayList<ArrayList<Object>>();
+
+				ArrayList<Integer> demandaT = new ArrayList<Integer>();
+				Map<Integer, Object> mLineas = new HashMap<Integer, Object>();
+				mLineas.put(4, 1);
+				Tablas tablas = new Tablas();
+
+				List<Parametro> params = paramDao.getCpByProcesoOrden(
+						ContentParam.getCodOrden(), 3);
+				for (Parametro p : params) {
+					// System.out.println("T manual: " + p.getStandconv());
+					// System.out.println("T automatico: " + p.getStandman());
+					// System.out.println("T Troquel: " + p.getStandauto());
+
+					DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+					List<String> detalle = detalleDao.getByOrden(ContentParam
+							.getCodOrden());
+
+					for (String d : detalle) {
+						System.out.println(d);
+						List<Integer> det = detalleDao.getSumByModelo(
+								ContentParam.getCodOrden(), d);
+						for (Object dt : det) {
+							System.out.println("Demanda: " + dt);
+							demandaT.add(Integer.parseInt(dt.toString()));
+						}
+					}
+
+					mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
+							p.getStandconv(), mLineas);
+					mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
+							p.getStandman(), mLineas);
+					mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
+							p.getStandauto(), mLineas);
+
+					// System.out.println("T1: " + mProcesosT1);
+					// System.out.println("T2: " + mProcesosT2);
+					// System.out.println("T3: " + mProcesosT3);
+					mAll.put(3, mProcesosT1);
+					mAll.put(4, mProcesosT2);
+					mAll.put(5, mProcesosT3);
+				}
 
 			} else {
 				Tablas tablas = new Tablas();
@@ -290,15 +285,21 @@ public class ProgramDiasBean implements Serializable {
 						withOutHextras(a.get(0), tConvertCal, key);
 					}
 
-					dhora = (Double) a.get(1).get(1);
+					if (a.get(1).size() == 1) {
+						dhora = (Double) a.get(1).get(0);
+					} else {
+						dhora = (Double) a.get(1).get(1);
+					}
 					System.out.println("dHora: " + dhora);
 				} else {
-					// System.out.println("Tamaño***: " + a.size());
 					withOutHextras(a.get(0), tConvertCal, key);
-					dhora = (Double) a.get(1).get(1);
+					System.out.println("Numero: " + a.get(1).size());
+					if (a.get(1).size() == 1) {
+						dhora = (Double) a.get(1).get(0);
+					} else {
+						dhora = (Double) a.get(1).get(1);
+					}
 				}
-				// System.out.println("indice: " + key + " pares: " + a.get(0));
-				// System.out.println("indice: " + key + " horas: " + a.get(1));
 			}
 		} else {
 			Iterator<Integer> it = treeMap.keySet().iterator();
@@ -311,22 +312,27 @@ public class ProgramDiasBean implements Serializable {
 					System.out.println(dhora);
 
 					if (dhora < 4) {
-						withOutHextras(a.get(0), days.prevDayApa(tConvertCal),
-								key);
+						withHextras(a.get(0), days.prevDayApa(tConvertCal), key);
 					} else {
-						withOutHextras(a.get(0), tConvertCal, key);
+						withHextras(a.get(0), tConvertCal, key);
 					}
 
-					dhora = (Double) a.get(1).get(1);
-					System.out.println(dhora);
+					if (a.get(1).size() == 1) {
+						dhora = (Double) a.get(1).get(0);
+					} else {
+						dhora = (Double) a.get(1).get(1);
+					}
+					// System.out.println("dHora: " + dhora);
 				} else {
 					withHextras(a.get(0), tConvertCal, key);
-					dhora = (Double) a.get(1).get(1);
+					// System.out.println("Numero: " + a.get(1).size());
+					if (a.get(1).size() == 1) {
+						dhora = (Double) a.get(1).get(0);
+					} else {
+						dhora = (Double) a.get(1).get(1);
+					}
 				}
-				// System.out.println("indice: " + key + " pares: " + a.get(0));
-				// System.out.println("indice: " + key + " horas: " + a.get(1));
 			}
-
 		}
 		return flat;
 	}
