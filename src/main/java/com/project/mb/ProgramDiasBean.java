@@ -64,6 +64,8 @@ public class ProgramDiasBean implements Serializable {
 	@PostConstruct
 	public void init() {
 
+		this.selectedDias = new Programdia();
+		this.selectedDias.setParametro(new Parametro());
 		eventModel = new DefaultScheduleModel();
 
 		// *******************ENVIAR EL PARAMETRO findByProceso(1) CONSULTADO
@@ -117,22 +119,48 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
+	// METODOS DML
+	public void btnCreateProgramDias(ActionEvent actionEvent) {
+	}
+
+	public void btnDeleteProgramDias(ActionEvent actionEvent) {
+	}
+
+	public void btnUpdateProgramDias(ActionEvent actionEvent) {
+	}
+
 	// METODOS BOTONES
-	public void btnReProcesar() {
+	public void btnContinuar() {
 		String ruta = "";
-		ruta = MyUtil.calzadoPath() + "ordenesProd/insertOrder.jsf";
+		String msg = "";
+		ruta = MyUtil.calzadoPath() + "programacionTurnos/programturnos.jsf";
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
+			// GUARDAR
+			System.out.println("ESTO SE VA A GUARDAR");
+			System.out.println(" : ");
+
+			ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
+			if (programDiasDao.create(this.selectedDias)) {
+				msg = "Se ha añadido en programDias";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				msg = "Error al añadir en programDias";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	public void btnContinuar() {
+	public void btnReProcesar() {
 		String ruta = "";
-		ruta = MyUtil.calzadoPath() + "programacionTurnos/programturnos.jsf";
+		ruta = MyUtil.calzadoPath() + "ordenesProd/insertOrder.jsf";
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
@@ -149,12 +177,11 @@ public class ProgramDiasBean implements Serializable {
 		ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
 		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
 				.getCodOrden());
+		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
+		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
 		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
-
-		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
-		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		for (Parametro param : parametros) {
 			this.mLineasCantidad.clear();
@@ -252,7 +279,6 @@ public class ProgramDiasBean implements Serializable {
 					public int compare(Integer o1, Integer o2) {
 						return o2.compareTo(o1);
 					}
-
 				});
 
 		// TRABAJAR CON TREEMAP
@@ -277,14 +303,12 @@ public class ProgramDiasBean implements Serializable {
 				// + " ->Array por proceso: " + a);
 				if (dhora != null) {
 					System.out.println(dhora);
-
 					if (dhora < 4) {
 						withOutHextras(a.get(0), days.prevDayApa(tConvertCal),
 								key);
 					} else {
 						withOutHextras(a.get(0), tConvertCal, key);
 					}
-
 					if (a.get(1).size() == 1) {
 						dhora = (Double) a.get(1).get(0);
 					} else {
@@ -356,6 +380,12 @@ public class ProgramDiasBean implements Serializable {
 			}
 			eventModel.addEvent(new DefaultScheduleEvent("L:" + pal + ":"
 					+ k.toString(), m.getTime(), m.getTime()));
+			// AQUI CUALQUIER COSA
+			ByInsert h = new ByInsert();
+			h.setPares(Integer.parseInt(k.toString()));
+			h.setfFin(m.getTime());
+			h.setfInicio(m.getTime());
+
 			m = days.nextDay(m);
 			d++;
 		}
@@ -409,16 +439,6 @@ public class ProgramDiasBean implements Serializable {
 
 		System.out.println("Dias labadorados: " + d);
 		System.out.println("Semanas labadoradas: " + s);
-	}
-
-	// METODOS DML
-	public void btnCreateProgramDias(ActionEvent actionEvent) {
-	}
-
-	public void btnDeleteProgramDias(ActionEvent actionEvent) {
-	}
-
-	public void btnUpdateProgramDias(ActionEvent actionEvent) {
 	}
 
 	// SETTERS AND GETTERS
@@ -489,4 +509,50 @@ public class ProgramDiasBean implements Serializable {
 		this.selectedDias = selectedDias;
 	}
 
+	public class ByInsert {
+		// Atributos de la clase
+		private Integer pares;
+		private Double horas;
+		private Date fInicio;
+		private Date fFin;
+
+		public void insert(Integer pares, Double horas, Date fInicio, Date fFin) {
+			this.pares = pares;
+			this.horas = horas;
+			this.fInicio = fInicio;
+			this.fFin = fFin;
+		}
+
+		public Integer getPares() {
+			return pares;
+		}
+
+		public void setPares(Integer pares) {
+			this.pares = pares;
+		}
+
+		public Double getHoras() {
+			return horas;
+		}
+
+		public void setHoras(Double horas) {
+			this.horas = horas;
+		}
+
+		public Date getfInicio() {
+			return fInicio;
+		}
+
+		public void setfInicio(Date fInicio) {
+			this.fInicio = fInicio;
+		}
+
+		public Date getfFin() {
+			return fFin;
+		}
+
+		public void setfFin(Date fFin) {
+			this.fFin = fFin;
+		}
+	}
 }

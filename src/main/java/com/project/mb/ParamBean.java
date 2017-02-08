@@ -43,7 +43,6 @@ public class ParamBean implements Serializable {
 	// INICIALIZADOR
 	@PostConstruct
 	public void init() {
-
 		this.selectedParametrizacion = new Parametro();
 		this.selectedParametrizacion.setProceso(new Proceso());
 		this.selectedParametrizacion.setUsuario(new Usuario());

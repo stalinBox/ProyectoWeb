@@ -21,7 +21,7 @@ public class ContentParam implements Serializable {
 	private static Integer StandTroqueladoTroquel;
 
 	public static Integer getCodOrden() {
-		// codOrden = 15;
+		codOrden = 23;
 		return codOrden;
 	}
 
@@ -30,7 +30,7 @@ public class ContentParam implements Serializable {
 	}
 
 	public static Integer getTotalOrden() {
-		// totalOrden = 190;
+		totalOrden = 190;
 		return totalOrden;
 	}
 
