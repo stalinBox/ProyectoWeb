@@ -59,6 +59,7 @@ public class ProgramDiasBean implements Serializable {
 	private String d;
 
 	private Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
+	private ArrayList<Items> orderList = new ArrayList<Items>();
 
 	// CONSTRUCTOR
 	@PostConstruct
@@ -135,24 +136,29 @@ public class ProgramDiasBean implements Serializable {
 		String msg = "";
 		ruta = MyUtil.calzadoPath() + "programacionTurnos/programturnos.jsf";
 		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(ruta);
+			// FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
+
 			// GUARDAR
 			System.out.println("ESTO SE VA A GUARDAR");
-			System.out.println(" : ");
-
-			ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
-			if (programDiasDao.create(this.selectedDias)) {
-				msg = "Se ha añadido en programDias";
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, msg, null);
-				FacesContext.getCurrentInstance().addMessage(null, message);
-			} else {
-				msg = "Error al añadir en programDias";
-				FacesMessage message = new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, msg, null);
-				FacesContext.getCurrentInstance().addMessage(null, message);
+			for (Items a : orderList) {
+				System.out.println(": " + a.pares);
+				System.out.println(": " + a.horas);
+				System.out.println(": " + a.fFin);
+				System.out.println(": " + a.fInicio);
 			}
+			// ProgramacionDiasDao programDiasDao = new
+			// ProgramacionDiasDaoImpl();
+			// if (programDiasDao.create(this.selectedDias)) {
+			// msg = "Se ha añadido en programDias";
+			// FacesMessage message = new FacesMessage(
+			// FacesMessage.SEVERITY_INFO, msg, null);
+			// FacesContext.getCurrentInstance().addMessage(null, message);
+			// } else {
+			// msg = "Error al añadir en programDias";
+			// FacesMessage message = new FacesMessage(
+			// FacesMessage.SEVERITY_ERROR, msg, null);
+			// FacesContext.getCurrentInstance().addMessage(null, message);
+			// }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -299,25 +305,32 @@ public class ProgramDiasBean implements Serializable {
 			while (it.hasNext()) {
 				Integer key = (Integer) it.next();
 				ArrayList<ArrayList<Object>> a = treeMap.get(key);
-				// System.out.println("Codigo Proceso: " + key
-				// + " ->Array por proceso: " + a);
+				// for (int i = 0; i < a.size(); i++) {
+				// // System.out.println(" ->Array por proceso(HORAS): "
+				// // + a.get(i));
+				// for (int j = 0; j < a.get(i).size(); j++) {
+				// System.out.println(" ->Array por proceso(HORAS): "
+				// + a.get(i).get(j));
+				// Items orderitem = new Items();
+				// orderitem.setHoras(Double.parseDouble(a.get(i).get(j)
+				// .toString()));
+				// }
+				// }
+
 				if (dhora != null) {
-					System.out.println(dhora);
 					if (dhora < 4) {
 						withOutHextras(a.get(0), days.prevDayApa(tConvertCal),
-								key);
+								key, dhora);
 					} else {
-						withOutHextras(a.get(0), tConvertCal, key);
+						withOutHextras(a.get(0), tConvertCal, key, dhora);
 					}
 					if (a.get(1).size() == 1) {
 						dhora = (Double) a.get(1).get(0);
 					} else {
 						dhora = (Double) a.get(1).get(1);
 					}
-					System.out.println("dHora: " + dhora);
 				} else {
-					withOutHextras(a.get(0), tConvertCal, key);
-					System.out.println("Numero: " + a.get(1).size());
+					withOutHextras(a.get(0), tConvertCal, key, dhora);
 					if (a.get(1).size() == 1) {
 						dhora = (Double) a.get(1).get(0);
 					} else {
@@ -363,7 +376,7 @@ public class ProgramDiasBean implements Serializable {
 
 	// INSERTAR EN EL MODELO SIN HORAS EXTRAS
 	public void withOutHextras(ArrayList<Object> arrayProceso,
-			Calendar fMontajeParam, Integer key) {
+			Calendar fMontajeParam, Integer key, Double dhora) {
 
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		ScheduleDays days = new ScheduleDays();
@@ -380,12 +393,11 @@ public class ProgramDiasBean implements Serializable {
 			}
 			eventModel.addEvent(new DefaultScheduleEvent("L:" + pal + ":"
 					+ k.toString(), m.getTime(), m.getTime()));
-			// AQUI CUALQUIER COSA
-			ByInsert h = new ByInsert();
-			h.setPares(Integer.parseInt(k.toString()));
-			h.setfFin(m.getTime());
-			h.setfInicio(m.getTime());
 
+			// PARA GUARDAR EN LA BD
+			Items orderitem = new Items(Integer.parseInt(k.toString()), dhora,
+					m.getTime(), m.getTime());
+			this.orderList.add(orderitem);
 			m = days.nextDay(m);
 			d++;
 		}
@@ -509,18 +521,31 @@ public class ProgramDiasBean implements Serializable {
 		this.selectedDias = selectedDias;
 	}
 
-	public class ByInsert {
+	public ArrayList<Items> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(ArrayList<Items> orderList) {
+		this.orderList = orderList;
+	}
+
+	public class Items implements Serializable {
+		private static final long serialVersionUID = 1L;
 		// Atributos de la clase
 		private Integer pares;
 		private Double horas;
 		private Date fInicio;
 		private Date fFin;
 
-		public void insert(Integer pares, Double horas, Date fInicio, Date fFin) {
+		public Items(Integer pares, Double horas, Date fInicio, Date fFin) {
 			this.pares = pares;
 			this.horas = horas;
 			this.fInicio = fInicio;
 			this.fFin = fFin;
+		}
+
+		public Items() {
+			// TODO Auto-generated constructor stub
 		}
 
 		public Integer getPares() {
