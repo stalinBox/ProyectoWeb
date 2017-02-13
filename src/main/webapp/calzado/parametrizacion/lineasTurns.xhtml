@@ -115,8 +115,7 @@
 								process="@this" />
 
 							<p:commandButton id="btnContinuar" value="Continuar"
-								actionListener="#{programDiasBean.btnContinuar()}"
-								process="@this" />
+								oncomplete="PF('dialogLTFin').show()" process="@this" />
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>
@@ -148,6 +147,20 @@
 
 					<p:commandButton id="decline" value="No" icon="ui-icon-close"
 						oncomplete="PF('dialogLTDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
+
+			<h:form id="formFinalizar">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Finalizar Proceso"
+					severity="alert" widgetVar="dialogLTFin">
+
+					<p:commandButton id="confirm" value="Si" icon="ui-icon-check"
+						oncomplete="PF('dialogLTFin').hide()"
+						actionListener="#{programDiasBean.btnContinuar()}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogLTFin').hide()" />
 				</p:confirmDialog>
 			</h:form>
 

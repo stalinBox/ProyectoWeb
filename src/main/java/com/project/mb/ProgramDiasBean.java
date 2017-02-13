@@ -134,9 +134,10 @@ public class ProgramDiasBean implements Serializable {
 	public void btnContinuar() {
 		String ruta = "";
 		String msg = "";
-		ruta = MyUtil.calzadoPath() + "programacionTurnos/programturnos.jsf";
+		ruta = MyUtil.basePath() + "inicio.xhtml";
 		try {
-			// FacesContext.getCurrentInstance().getExternalContext().redirect(ruta);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
 
 			// GUARDAR
 			System.out.println("ESTO SE VA A GUARDAR");
