@@ -115,7 +115,8 @@
 								process="@this" />
 
 							<p:commandButton id="btnContinuar" value="Continuar"
-								oncomplete="PF('dialogLTFin').show()" process="@this" />
+								process="@this"
+								actionListener="#{programDiasBean.btnContinuar()}" />
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>

@@ -60,6 +60,7 @@ public class ProgramDiasBean implements Serializable {
 
 	private Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
 	private ArrayList<Items> orderList = new ArrayList<Items>();
+	private ArrayList<Items2> orderList2 = new ArrayList<Items2>();
 
 	// CONSTRUCTOR
 	@PostConstruct
@@ -134,10 +135,10 @@ public class ProgramDiasBean implements Serializable {
 	public void btnContinuar() {
 		String ruta = "";
 		String msg = "";
-		ruta = MyUtil.basePath() + "inicio.xhtml";
+		// ruta = MyUtil.basePath() + "inicio.xhtml";
 		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(ruta);
+			// FacesContext.getCurrentInstance().getExternalContext()
+			// .redirect(ruta);
 
 			// GUARDAR
 			System.out.println("ESTO SE VA A GUARDAR");
@@ -146,6 +147,7 @@ public class ProgramDiasBean implements Serializable {
 				System.out.println(": " + a.horas);
 				System.out.println(": " + a.fFin);
 				System.out.println(": " + a.fInicio);
+				System.out.println(": " + a.codesParams);
 			}
 			// ProgramacionDiasDao programDiasDao = new
 			// ProgramacionDiasDaoImpl();
@@ -178,6 +180,7 @@ public class ProgramDiasBean implements Serializable {
 
 	public void btnProcesar() {
 		eventModel = new DefaultScheduleModel();
+		ArrayList<Integer> codesParams = new ArrayList<Integer>();
 		System.out.println("Procesando...");
 		System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
 
@@ -185,7 +188,8 @@ public class ProgramDiasBean implements Serializable {
 		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
 				.getCodOrden());
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
-		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
+		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
 		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
@@ -207,9 +211,12 @@ public class ProgramDiasBean implements Serializable {
 			if (this.mLineasCantidad.isEmpty()) {
 				System.out
 						.println("No hay lineas para generar la distribucion por dias");
-				ArrayList<ArrayList<Object>> mProcesosT1 = new ArrayList<ArrayList<Object>>();
-				ArrayList<ArrayList<Object>> mProcesosT2 = new ArrayList<ArrayList<Object>>();
-				ArrayList<ArrayList<Object>> mProcesosT3 = new ArrayList<ArrayList<Object>>();
+				// ArrayList<ArrayList<Object>> mProcesosT1 = new
+				// ArrayList<ArrayList<Object>>();
+				// ArrayList<ArrayList<Object>> mProcesosT2 = new
+				// ArrayList<ArrayList<Object>>();
+				// ArrayList<ArrayList<Object>> mProcesosT3 = new
+				// ArrayList<ArrayList<Object>>();
 
 				ArrayList<Integer> demandaT = new ArrayList<Integer>();
 				Map<Integer, Object> mLineas = new HashMap<Integer, Object>();
@@ -237,37 +244,68 @@ public class ProgramDiasBean implements Serializable {
 						}
 					}
 
-					mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
-							p.getStandconv(), mLineas);
-					mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
-							p.getStandman(), mLineas);
-					mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
-							p.getStandauto(), mLineas);
+					for (int j = 0; j < demandaT.size(); j++) {
+						ArrayList<ArrayList<Object>> mProcesosT = new ArrayList<ArrayList<Object>>();
+						mProcesosT = tablas.receivParamsPares(demandaT.get(j),
+								p.getStandconv(), mLineas);
 
+						Items2 orderItem = new Items2(param.getProceso()
+								.getProCodigo(), param.getParamCodigo(),
+								mProcesosT);
+						this.orderList2.add(orderItem);
+					}
+
+					// mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
+					// p.getStandconv(), mLineas);
+					//
+					// mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
+					// p.getStandman(), mLineas);
+					//
+					// mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
+					// p.getStandauto(), mLineas);
+					//
+					// System.out.println("Tamaño demandaT: " +
+					// demandaT.size());
 					// System.out.println("T1: " + mProcesosT1);
 					// System.out.println("T2: " + mProcesosT2);
 					// System.out.println("T3: " + mProcesosT3);
-					mAll.put(3, mProcesosT1);
-					mAll.put(4, mProcesosT2);
-					mAll.put(5, mProcesosT3);
+
+					// PUNTO CRITICO poner el codigo del parametrizacion
+					// Items orderitem = new
+					// Items(Integer.parseInt(arrayProceso.get(0)
+					// .get(i).toString()),
+					// Double.parseDouble(arrayProceso.get(1)
+					// .get(i).toString()), m.getTime(), m.getTime(),
+					// codesParams);
+					// this.orderList.add(orderitem);
+
+					// mAll.put(param.getParamCodigo(), mProcesosT1);
+					// mAll.put(param.getParamCodigo(), mProcesosT2);
+					// mAll.put(param.getParamCodigo(), mProcesosT3);
 				}
 
 			} else {
 				Tablas tablas = new Tablas();
+
 				mProcesos = tablas.receivParamsPares(
 						ContentParam.getTotalOrden(), param.getStandconv(),
 						this.mLineasCantidad);
-				mAll.put(param.getProceso().getProCodigo(), mProcesos);
+				// PUNTO CRITICO poner el codigo del parametrizacion
+				Items2 orderItem = new Items2(
+						param.getProceso().getProCodigo(),
+						param.getParamCodigo(), mProcesos);
+				this.orderList2.add(orderItem);
+				// mAll.put(param.getParamCodigo(), mProcesos);
+
 			}
-
+			codesParams.add(param.getParamCodigo());
 		}
-
-		generateCalendar(mAll, this.fInicio);
+		generateCalendar(orderList2, this.fInicio, codesParams);
 	}
 
 	@SuppressWarnings({ "deprecation" })
-	public boolean generateCalendar(
-			Map<Integer, ArrayList<ArrayList<Object>>> mAll, Date fInicio) {
+	public boolean generateCalendar(ArrayList<Items2> orderList22,
+			Date fInicio, ArrayList<Integer> codesParams) {
 
 		// INICIALIZADOR
 		ScheduleDays days = new ScheduleDays();
@@ -280,17 +318,23 @@ public class ProgramDiasBean implements Serializable {
 		tConvertCal = days.DateToCalendar(fInicio);
 
 		// ORDENA EL MAP EN FORMA DESCENDENTE
-		Map<Integer, ArrayList<ArrayList<Object>>> treeMap = new TreeMap<Integer, ArrayList<ArrayList<Object>>>(
-				new Comparator<Integer>() {
-					@Override
-					public int compare(Integer o1, Integer o2) {
-						return o2.compareTo(o1);
-					}
-				});
+		// Map<Integer, ArrayList<ArrayList<Object>>> treeMap = new
+		// TreeMap<Integer, ArrayList<ArrayList<Object>>>(
+		// new Comparator<Integer>() {
+		// @Override
+		// public int compare(Integer o1, Integer o2) {
+		// return o2.compareTo(o1);
+		// }
+		// });
 
 		// TRABAJAR CON TREEMAP
-		treeMap.putAll(mAll);
-		System.out.println("TreeMap: " + treeMap);
+		// treeMap.putAll(orderList22);
+		for (Items2 i : orderList22) {
+			System.out.println("??OrderList22: " + i.getCodParam());
+			System.out.println("??OrderList22: " + i.getCodProceso());
+			System.out.println("??OrderList22: " + i.getmProcesos());
+
+		}
 
 		// VISUALIZAR LA MATRIZ
 		if (fInicio.getDay() == 0 || fInicio.getDay() == 6) {
@@ -302,89 +346,66 @@ public class ProgramDiasBean implements Serializable {
 									"No se puede empezar a programar los fines de semana"));
 			eventModel = new DefaultScheduleModel();
 		} else if (this.hExtras != true) {
-			Iterator<Integer> it = treeMap.keySet().iterator();
-			while (it.hasNext()) {
-				Integer key = (Integer) it.next();
-				ArrayList<ArrayList<Object>> a = treeMap.get(key);
-				// for (int i = 0; i < a.size(); i++) {
-				// // System.out.println(" ->Array por proceso(HORAS): "
-				// // + a.get(i));
-				// for (int j = 0; j < a.get(i).size(); j++) {
-				// System.out.println(" ->Array por proceso(HORAS): "
-				// + a.get(i).get(j));
-				// Items orderitem = new Items();
-				// orderitem.setHoras(Double.parseDouble(a.get(i).get(j)
-				// .toString()));
-				// }
-				// }
-
-				if (dhora != null) {
-					if (dhora < 4) {
-						withOutHextras(a.get(0), days.prevDayApa(tConvertCal),
-								key, dhora);
-					} else {
-						withOutHextras(a.get(0), tConvertCal, key, dhora);
-					}
-					if (a.get(1).size() == 1) {
-						dhora = (Double) a.get(1).get(0);
-					} else {
-						dhora = (Double) a.get(1).get(1);
-					}
-				} else {
-					withOutHextras(a.get(0), tConvertCal, key, dhora);
-					if (a.get(1).size() == 1) {
-						dhora = (Double) a.get(1).get(0);
-					} else {
-						dhora = (Double) a.get(1).get(1);
+			for (Items2 i : orderList22) {
+				for (ArrayList<Object> a : i.getmProcesos()) {
+					System.out.println("i: " + i.getCodProceso());
+					System.out.println("tamaño de mProcesos variable a: "
+							+ a.size());
+					for (int ii = 0; ii < a.size(); ii++) {
+						System.out.println("a: " + a.get(ii));
 					}
 				}
-			}
+			}// fin foreach
 		} else {
-			Iterator<Integer> it = treeMap.keySet().iterator();
-			while (it.hasNext()) {
-				Integer key = (Integer) it.next();
-				ArrayList<ArrayList<Object>> a = treeMap.get(key);
-				// System.out.println("Codigo Proceso: " + key
-				// + " ->Array por proceso: " + a);
-				if (dhora != null) {
-					System.out.println(dhora);
-
-					if (dhora < 4) {
-						withHextras(a.get(0), days.prevDayApa(tConvertCal), key);
-					} else {
-						withHextras(a.get(0), tConvertCal, key);
-					}
-
-					if (a.get(1).size() == 1) {
-						dhora = (Double) a.get(1).get(0);
-					} else {
-						dhora = (Double) a.get(1).get(1);
-					}
-					// System.out.println("dHora: " + dhora);
-				} else {
-					withHextras(a.get(0), tConvertCal, key);
-					// System.out.println("Numero: " + a.get(1).size());
-					if (a.get(1).size() == 1) {
-						dhora = (Double) a.get(1).get(0);
-					} else {
-						dhora = (Double) a.get(1).get(1);
-					}
-				}
-			}
+			// OCUPAR MAS LUEGO
+			// Iterator<Integer> it = treeMap.keySet().iterator();
+			// while (it.hasNext()) {
+			// Integer key = (Integer) it.next();
+			// ArrayList<ArrayList<Object>> a = treeMap.get(key);
+			// // System.out.println("Codigo Proceso: " + key
+			// // + " ->Array por proceso: " + a);
+			// if (dhora != null) {
+			// System.out.println(dhora);
+			//
+			// if (dhora < 4) {
+			// withHextras(a.get(0), days.prevDayApa(tConvertCal), key);
+			// } else {
+			// withHextras(a.get(0), tConvertCal, key);
+			// }
+			//
+			// if (a.get(1).size() == 1) {
+			// dhora = (Double) a.get(1).get(0);
+			// } else {
+			// dhora = (Double) a.get(1).get(1);
+			// }
+			// // System.out.println("dHora: " + dhora);
+			// } else {
+			// withHextras(a.get(0), tConvertCal, key);
+			// // System.out.println("Numero: " + a.get(1).size());
+			// if (a.get(1).size() == 1) {
+			// dhora = (Double) a.get(1).get(0);
+			// } else {
+			// dhora = (Double) a.get(1).get(1);
+			// }
+			// }
+			// }
 		}
 		return flat;
 	}
 
 	// INSERTAR EN EL MODELO SIN HORAS EXTRAS
-	public void withOutHextras(ArrayList<Object> arrayProceso,
-			Calendar fMontajeParam, Integer key, Double dhora) {
+	public void withOutHextras(ArrayList<ArrayList<Object>> arrayProceso,
+			Calendar fMontajeParam, Integer key, ArrayList<Integer> codesParams) {
 
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		ScheduleDays days = new ScheduleDays();
 		Calendar m = fMontajeParam;
 		float d = 0, s = 0;
 		String pal = "";
-		for (Object k : arrayProceso) {
+
+		for (int i = 0; i < arrayProceso.get(0).size(); i++) {
+			System.out.println("i: " + arrayProceso.get(0).get(i));
+
 			if (key == 1) {
 				pal = "MONTAJE";
 			} else if (key == 2) {
@@ -393,16 +414,41 @@ public class ProgramDiasBean implements Serializable {
 				pal = "TRQ";
 			}
 			eventModel.addEvent(new DefaultScheduleEvent("L:" + pal + ":"
-					+ k.toString(), m.getTime(), m.getTime()));
+					+ arrayProceso.get(0).get(i).toString(), m.getTime(), m
+					.getTime()));
 
 			// PARA GUARDAR EN LA BD
-			Items orderitem = new Items(Integer.parseInt(k.toString()), dhora,
-					m.getTime(), m.getTime());
+			Items orderitem = new Items(Integer.parseInt(arrayProceso.get(0)
+					.get(i).toString()), Double.parseDouble(arrayProceso.get(1)
+					.get(i).toString()), m.getTime(), m.getTime(), codesParams);
 			this.orderList.add(orderitem);
+			// FIN GUARDAR EN LA BD
+
 			m = days.nextDay(m);
 			d++;
-		}
 
+		}
+		// for (Object k : arrayProceso.get(0)) {
+		// if (key == 1) {
+		// pal = "MONTAJE";
+		// } else if (key == 2) {
+		// pal = "APARADO";
+		// } else {
+		// pal = "TRQ";
+		// }
+		// eventModel.addEvent(new DefaultScheduleEvent("L:" + pal + ":"
+		// + k.toString(), m.getTime(), m.getTime()));
+		// System.out.println("Variable dentro de k: " + k);
+		// // PARA GUARDAR EN LA BD
+		// // Items orderitem = new Items(Integer.parseInt(k.toString()),
+		// // arrayProceso.,
+		// // m.getTime(), m.getTime());
+		// // this.orderList.add(orderitem);
+		// // FIN GUARDAR EN LA BD
+		//
+		// m = days.nextDay(m);
+		// d++;
+		// }
 		s = (d / 5);
 		formatter.format(s);
 
@@ -537,16 +583,26 @@ public class ProgramDiasBean implements Serializable {
 		private Double horas;
 		private Date fInicio;
 		private Date fFin;
+		private ArrayList<Integer> codesParams;
 
-		public Items(Integer pares, Double horas, Date fInicio, Date fFin) {
+		public Items(Integer pares, Double horas, Date fInicio, Date fFin,
+				ArrayList<Integer> codesParams) {
 			this.pares = pares;
 			this.horas = horas;
 			this.fInicio = fInicio;
 			this.fFin = fFin;
+			this.codesParams = codesParams;
 		}
 
 		public Items() {
-			// TODO Auto-generated constructor stub
+		}
+
+		public ArrayList<Integer> getCodesParams() {
+			return codesParams;
+		}
+
+		public void setCodesParams(ArrayList<Integer> codesParams) {
+			this.codesParams = codesParams;
 		}
 
 		public Integer getPares() {
@@ -579,6 +635,48 @@ public class ProgramDiasBean implements Serializable {
 
 		public void setfFin(Date fFin) {
 			this.fFin = fFin;
+		}
+	}
+
+	public class Items2 implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		private Integer codProceso;
+		private Integer codParam;
+		private ArrayList<ArrayList<Object>> mProcesos;
+
+		public Items2(Integer codProceso, Integer codParam,
+				ArrayList<ArrayList<Object>> mProcesos) {
+			this.codProceso = codProceso;
+			this.codParam = codParam;
+			this.mProcesos = mProcesos;
+		}
+
+		public Items2() {
+		}
+
+		public Integer getCodProceso() {
+			return codProceso;
+		}
+
+		public void setCodProceso(Integer codProceso) {
+			this.codProceso = codProceso;
+		}
+
+		public Integer getCodParam() {
+			return codParam;
+		}
+
+		public void setCodParam(Integer codParam) {
+			this.codParam = codParam;
+		}
+
+		public ArrayList<ArrayList<Object>> getmProcesos() {
+			return mProcesos;
+		}
+
+		public void setmProcesos(ArrayList<ArrayList<Object>> mProcesos) {
+			this.mProcesos = mProcesos;
 		}
 	}
 }
