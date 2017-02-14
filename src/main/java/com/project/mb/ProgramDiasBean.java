@@ -205,83 +205,63 @@ public class ProgramDiasBean implements Serializable {
 				Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt,
 						ContentParam.getCodOrden());
 				this.mLineasCantidad.put(lt, countLinea);
+
 				System.out.println("Esta cosa: " + mLineasCantidad);
 			}
 
 			if (this.mLineasCantidad.isEmpty()) {
 				System.out
 						.println("No hay lineas para generar la distribucion por dias");
-				// ArrayList<ArrayList<Object>> mProcesosT1 = new
-				// ArrayList<ArrayList<Object>>();
-				// ArrayList<ArrayList<Object>> mProcesosT2 = new
-				// ArrayList<ArrayList<Object>>();
-				// ArrayList<ArrayList<Object>> mProcesosT3 = new
-				// ArrayList<ArrayList<Object>>();
+				System.out.println("PROCESO TROQUELADO ***");
 
 				ArrayList<Integer> demandaT = new ArrayList<Integer>();
-				Map<Integer, Object> mLineas = new HashMap<Integer, Object>();
-				mLineas.put(4, 1);
-				Tablas tablas = new Tablas();
+
+				// Map<Integer, Object> mLineas = new HashMap<Integer,
+				// Object>();
+				// mLineas.put(4, 1);
 
 				List<Parametro> params = paramDao.getCpByProcesoOrden(
 						ContentParam.getCodOrden(), 3);
+
 				for (Parametro p : params) {
-					// System.out.println("T manual: " + p.getStandconv());
-					// System.out.println("T automatico: " + p.getStandman());
-					// System.out.println("T Troquel: " + p.getStandauto());
+					System.out.println("cod. param: " + p.getParamCodigo());
+					System.out.println("T manual: " + p.getStandconv());
+					System.out.println("T automatico: " + p.getStandman());
+					System.out.println("T Troquel: " + p.getStandauto());
 
 					DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
 					List<String> detalle = detalleDao.getByOrden(ContentParam
 							.getCodOrden());
 
 					for (String d : detalle) {
-						System.out.println(d);
+						System.out.println("Detalle: " + d);
+
 						List<Integer> det = detalleDao.getSumByModelo(
 								ContentParam.getCodOrden(), d);
 						for (Object dt : det) {
-							System.out.println("Demanda: " + dt);
 							demandaT.add(Integer.parseInt(dt.toString()));
+							System.out.println("DemandaT: " + demandaT);
 						}
 					}
 
-					for (int j = 0; j < demandaT.size(); j++) {
-						ArrayList<ArrayList<Object>> mProcesosT = new ArrayList<ArrayList<Object>>();
-						mProcesosT = tablas.receivParamsPares(demandaT.get(j),
-								p.getStandconv(), mLineas);
-
-						Items2 orderItem = new Items2(param.getProceso()
-								.getProCodigo(), param.getParamCodigo(),
-								mProcesosT);
-						this.orderList2.add(orderItem);
-					}
-
-					// mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
+					// for (Integer i : demandaT) {
+					// Tablas tablas = new Tablas();
+					// ArrayList<ArrayList<Object>> mProcesosT = null;
+					// System.out.println("Variable i: " + i);
+					// System.out.println("p.getStandconv: "
+					// + p.getStandconv());
+					// System.out.println("mLineas: " + mLineas);
+					// System.out.println("/********/");
+					//
+					// mProcesosT = tablas.receivParamsPares(i,
 					// p.getStandconv(), mLineas);
 					//
-					// mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
-					// p.getStandman(), mLineas);
-					//
-					// mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
-					// p.getStandauto(), mLineas);
-					//
-					// System.out.println("Tamaño demandaT: " +
-					// demandaT.size());
-					// System.out.println("T1: " + mProcesosT1);
-					// System.out.println("T2: " + mProcesosT2);
-					// System.out.println("T3: " + mProcesosT3);
+					// Items2 orderItem = new Items2(param.getProceso()
+					// .getProCodigo(), param.getParamCodigo(),
+					// mProcesosT);
+					// this.orderList2.add(orderItem);
+					// }
 
-					// PUNTO CRITICO poner el codigo del parametrizacion
-					// Items orderitem = new
-					// Items(Integer.parseInt(arrayProceso.get(0)
-					// .get(i).toString()),
-					// Double.parseDouble(arrayProceso.get(1)
-					// .get(i).toString()), m.getTime(), m.getTime(),
-					// codesParams);
-					// this.orderList.add(orderitem);
-
-					// mAll.put(param.getParamCodigo(), mProcesosT1);
-					// mAll.put(param.getParamCodigo(), mProcesosT2);
-					// mAll.put(param.getParamCodigo(), mProcesosT3);
 				}
 
 			} else {
@@ -296,7 +276,6 @@ public class ProgramDiasBean implements Serializable {
 						param.getParamCodigo(), mProcesos);
 				this.orderList2.add(orderItem);
 				// mAll.put(param.getParamCodigo(), mProcesos);
-
 			}
 			codesParams.add(param.getParamCodigo());
 		}
@@ -346,16 +325,16 @@ public class ProgramDiasBean implements Serializable {
 									"No se puede empezar a programar los fines de semana"));
 			eventModel = new DefaultScheduleModel();
 		} else if (this.hExtras != true) {
-			for (Items2 i : orderList22) {
-				for (ArrayList<Object> a : i.getmProcesos()) {
-					System.out.println("i: " + i.getCodProceso());
-					System.out.println("tamaño de mProcesos variable a: "
-							+ a.size());
-					for (int ii = 0; ii < a.size(); ii++) {
-						System.out.println("a: " + a.get(ii));
-					}
-				}
-			}// fin foreach
+			// for (Items2 i : orderList22) {
+			// for (ArrayList<Object> a : i.getmProcesos()) {
+			// System.out.println("i: " + i.getCodProceso());
+			// System.out.println("tamaño de mProcesos variable a: "
+			// + a.size());
+			// for (int ii = 0; ii < a.size(); ii++) {
+			// System.out.println("a: " + a.get(ii));
+			// }
+			// }
+			// }// fin foreach
 		} else {
 			// OCUPAR MAS LUEGO
 			// Iterator<Integer> it = treeMap.keySet().iterator();
@@ -677,6 +656,47 @@ public class ProgramDiasBean implements Serializable {
 
 		public void setmProcesos(ArrayList<ArrayList<Object>> mProcesos) {
 			this.mProcesos = mProcesos;
+		}
+	}
+
+	public class ItemsTroquel implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		private Integer demanda;
+		private Integer cPonderada;
+		private String modelo;
+
+		public ItemsTroquel(Integer demanda, Integer cPonderada, String modelo) {
+			this.demanda = demanda;
+			this.cPonderada = cPonderada;
+			this.modelo = modelo;
+		}
+
+		public ItemsTroquel() {
+		}
+
+		public Integer getDemanda() {
+			return demanda;
+		}
+
+		public void setDemanda(Integer demanda) {
+			this.demanda = demanda;
+		}
+
+		public Integer getcPonderada() {
+			return cPonderada;
+		}
+
+		public void setcPonderada(Integer cPonderada) {
+			this.cPonderada = cPonderada;
+		}
+
+		public String getModelo() {
+			return modelo;
+		}
+
+		public void setModelo(String modelo) {
+			this.modelo = modelo;
 		}
 	}
 }
