@@ -9,18 +9,16 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 
-			<h1>HELLO WORLD..!</h1>
+			<h1>PROCESOS OP</h1>
 
 			<h:form id="ordenProceso">
 				<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
-					<p:outputLabel value="Proceso" />
 					<p:outputLabel value="Nº Orden" />
-					<p:outputLabel value="Origen Lugar" />
-					<p:outputLabel value="Responsable" />
 
+					<p:outputLabel value="Proceso" />
+					<p:outputLabel value="Responsable" />
 					<p:outputLabel value="Fecha actual" />
 					<p:outputLabel value="Fecha estimada" />
-					<p:outputLabel value="Destino" />
 				</h:panelGrid>
 
 			</h:form>
@@ -29,6 +27,7 @@
 				<p:commandButton value="Consultar" />
 			</h:form>
 			<p:separator />
+			<h1>PROGRAMACION TURNOS</h1>
 			<h:form id="programTurnos">
 				<p:growl id="msgs" showDetail="true" />
 

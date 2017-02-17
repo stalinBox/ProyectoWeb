@@ -6,12 +6,9 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,7 +35,6 @@ import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Programdia;
-import com.project.mb.ProgramDiasBean.Items2;
 import com.project.utils.ContentParam;
 import com.project.utils.MyUtil;
 import com.project.utils.ScheduleDays;
@@ -138,7 +134,7 @@ public class ProgramDiasBean implements Serializable {
 	public void btnContinuar() {
 		String ruta = "";
 		String msg = "";
-		ruta = MyUtil.basePath() + "inicio.xhtml";
+		ruta = MyUtil.baseurl() + "inicio.xhtml";
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
@@ -151,20 +147,29 @@ public class ProgramDiasBean implements Serializable {
 				System.out.println(": " + a.fFin);
 				System.out.println(": " + a.fInicio);
 				System.out.println(": " + a.codParam);
+
+				ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
+				Parametro param = new Parametro();
+				param.setParamCodigo(a.codParam);
+
+				this.selectedDias.setParametro(param);
+				this.selectedDias.setCanthoras(a.horas);
+				this.selectedDias.setCantpares(a.pares);
+				this.selectedDias.setFfin(a.fFin);
+				this.selectedDias.setFinicio(a.fInicio);
+
+				if (programDiasDao.create(this.selectedDias)) {
+					msg = "Se ha añadido en programDias";
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_INFO, msg, null);
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				} else {
+					msg = "Error al añadir en programDias";
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, msg, null);
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
 			}
-			// ProgramacionDiasDao programDiasDao = new
-			// ProgramacionDiasDaoImpl();
-			// if (programDiasDao.create(this.selectedDias)) {
-			// msg = "Se ha añadido en programDias";
-			// FacesMessage message = new FacesMessage(
-			// FacesMessage.SEVERITY_INFO, msg, null);
-			// FacesContext.getCurrentInstance().addMessage(null, message);
-			// } else {
-			// msg = "Error al añadir en programDias";
-			// FacesMessage message = new FacesMessage(
-			// FacesMessage.SEVERITY_ERROR, msg, null);
-			// FacesContext.getCurrentInstance().addMessage(null, message);
-			// }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -288,7 +293,6 @@ public class ProgramDiasBean implements Serializable {
 		Calendar tConvertCal = null;
 
 		Double dhora = null;
-		Double dhora2 = null;
 		tConvertCal = days.DateToCalendar(fInicio);
 
 		// VISUALIZAR LA MATRIZ
@@ -303,7 +307,6 @@ public class ProgramDiasBean implements Serializable {
 		} else if (this.hExtras != true) {
 
 			Collections.reverse(orderList22);
-			Double aux = null;
 			Object lastElem = null;
 			for (Items2 o : orderList22) {
 				// System.out.println("mProcesos: " + o.getmProcesos());
@@ -321,23 +324,15 @@ public class ProgramDiasBean implements Serializable {
 				for (Object ii : a.get(1)) {
 					if (ii == lastElem) {
 
-						if (dhora2 == null && dhora != lastElem) {
-							dhora = (Double) ii;
-							System.out.println("Ultimo Elemento(HORA): "
-									+ dhora);
-							System.out.println("Pares: " + a.get(0));
-
-						} else {
-							dhora = dhora2;
-							System.out.println("Hora: " + dhora);
-						}
+						System.out.println("Pares: " + a.get(0));
+						dhora = (Double) ii;
+						System.out.println("Ultimo Elemento(HORA): " + dhora);
 						// withOutHextras(a.get(0),
 						// days.prevDayApa(tConvertCal),
 						// o.getCodProceso(), dhora, o.getCodParam());
 					} else {
-						dhora2 = (Double) ii;
-						// System.out.println("Resto Elementos(Hora): " +
-						// dhora2);
+						dhora = (Double) ii;
+						System.out.println("Resto Elementos(Hora): " + dhora);
 						// System.out.println("Pares: " + a.get(0));
 					}
 					// System.out.println("Horas: " + ii);
