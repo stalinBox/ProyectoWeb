@@ -36,13 +36,6 @@
 					<f:facet name="header">
 					</f:facet>
 
-					<p:ajax event="rowEdit"
-						listener="#{paramTurnosBean.onRowEdit(RowEditEvent)}"
-						update=":programTurnos:msgs" />
-					<p:ajax event="rowEditCancel"
-						listener="#{paramTurnosBean.onRowCancel(RowEditEvent)}"
-						update=":programTurnos:msgs" />
-
 					<p:column headerText="Dia">
 						<p:cellEditor>
 							<f:facet name="output">

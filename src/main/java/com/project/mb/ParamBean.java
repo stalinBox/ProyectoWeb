@@ -33,6 +33,7 @@ public class ParamBean implements Serializable {
 	private Parametro selectedParametrizacion;
 	private List<SelectItem> selectItemsParamOrden;
 	private List<SelectItem> selectedItemsProceso;
+
 	private Integer stdConv;
 	private Integer stdAut;
 	private Integer totOrden;
