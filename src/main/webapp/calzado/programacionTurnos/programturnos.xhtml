@@ -8,25 +8,60 @@
 <h:body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-
+			<p:messages id="msg" autoUpdate="true" />
 			<h1>PROCESOS OP</h1>
 
 			<h:form id="ordenProceso">
-				<h:panelGrid id="ordenProd" columns="4" cellpadding="2">
-					<p:outputLabel value="Nº Orden" />
+				<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
+					<h:panelGrid id="ordenProd" columns="2" cellpadding="2">
+						<p:outputLabel value="Nº Orden" />
+						<p:selectOneMenu id="idCbxOrdenes"
+							value="#{procesosOPBean.nOrden}" required="true"
+							style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
 
-					<p:outputLabel value="Proceso" />
-					<p:outputLabel value="Responsable" />
-					<p:outputLabel value="Fecha actual" />
-					<p:outputLabel value="Fecha estimada" />
+							<p:ajax
+								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
+								update=":ordenProceso:idCbxProceso" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Proceso" />
+						<p:selectOneMenu id="idCbxProceso"
+							value="#{procesosOPBean.selectedProcesosOP.ordenprod.ordenprodCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Responsable" />
+						<p:selectOneMenu id="idResponsable"
+							value="#{procesosOPBean.selectedProcesosOP.usuario.userId}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{ordenProduccionBean.selectedItemsUsuarios}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
+						<p:outputLabel value="Fecha Inicio" />
+						<p:outputLabel value="#{procesosOPBean.fActual}" />
+
+						<p:outputLabel value="Fecha Estimada" />
+						<p:outputLabel value="#{procesosOPBean.fActual}" />
+					</h:panelGrid>
 				</h:panelGrid>
+				<p:commandButton value="Consultar"
+					actionListener="#{procesosOPBean.btnConsultar()}"
+					process=":ordenProceso" />
+			</h:form>
 
-			</h:form>
 			<p:separator />
-			<h:form>
-				<p:commandButton value="Consultar" />
-			</h:form>
-			<p:separator />
+
 			<h1>PROGRAMACION TURNOS</h1>
 			<h:form id="programTurnos">
 				<p:growl id="msgs" showDetail="true" />

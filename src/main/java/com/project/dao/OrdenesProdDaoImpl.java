@@ -154,4 +154,22 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 
 		return entities;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Ordenprod> getAllOrderN() {
+		List<Ordenprod> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Ordenprod op where op.fFinal is null";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR getAllOrderN: " + e.toString());
+		}
+		return listado;
+	}
 }

@@ -13,6 +13,8 @@ public interface OrdenesProdDao {
 
 	public List<Ordenprod> findAll();
 
+	public List<Ordenprod> getAllOrderN();
+
 	public Ordenprod LastRespOrden();
 
 	public Ordenprod findByLast(Integer id);
