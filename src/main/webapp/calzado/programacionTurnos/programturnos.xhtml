@@ -29,11 +29,14 @@
 
 						<p:outputLabel value="Proceso" />
 						<p:selectOneMenu id="idCbxProceso"
-							value="#{procesosOPBean.selectedProcesosOP.ordenprod.ordenprodCodigo}"
-							required="true" style="width:150px">
+							value="#{procesosOPBean.nProceso}" required="true"
+							style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
+							<p:ajax
+								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
+								update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="Responsable" />
@@ -49,10 +52,10 @@
 
 					<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
 						<p:outputLabel value="Fecha Inicio" />
-						<p:outputLabel value="#{procesosOPBean.fActual}" />
+						<p:outputLabel id="lblFinicio" value="#{procesosOPBean.fInicio}" />
 
 						<p:outputLabel value="Fecha Estimada" />
-						<p:outputLabel value="#{procesosOPBean.fActual}" />
+						<p:outputLabel id="lblFfin" value="#{procesosOPBean.fFin}" />
 					</h:panelGrid>
 				</h:panelGrid>
 				<p:commandButton value="Consultar"

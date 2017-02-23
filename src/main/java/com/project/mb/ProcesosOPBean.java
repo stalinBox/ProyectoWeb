@@ -15,11 +15,14 @@ import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
 import com.project.dao.ParametrizacionDao;
 import com.project.dao.ParametrizacionDaoImpl;
+import com.project.dao.ProgramacionDiasDao;
+import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Lugare;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Procesosop;
+import com.project.entities.Programdia;
 import com.project.entities.Usuario;
 
 @ManagedBean
@@ -30,8 +33,10 @@ public class ProcesosOPBean implements Serializable {
 	// VARIABLES
 	private List<Procesosop> procesosOP;
 	private Procesosop selectedProcesosOP;
-	private Date fActual;
+	private Date fInicio;
+	private Date fFin;
 	private Integer nOrden;
+	private Integer nProceso;
 	// VARIABLE BASE
 	private List<SelectItem> selectedItemsOrdenes;
 	private List<SelectItem> selectedItemsProceso;
@@ -45,14 +50,22 @@ public class ProcesosOPBean implements Serializable {
 		this.selectedProcesosOP.setLugare1(new Lugare());
 		this.selectedProcesosOP.setLugare2(new Lugare());
 		this.selectedProcesosOP.setUsuario(new Usuario());
-
-		this.fActual = new Date();
 	}
 
 	// METODOS
-	public void onChangeProcesos(ActionEvent actionEvent) {
-		System.out.println("variable: " + this.nOrden);
 
+	public void onChangeProcesos(ActionEvent actionEvent) {
+		System.out.println("variable codOrden: " + this.nOrden);
+		System.err.println("Variable codProceso: " + this.nProceso);
+		getFechas();
+	}
+
+	public Integer getnProceso() {
+		return nProceso;
+	}
+
+	public void setnProceso(Integer nProceso) {
+		this.nProceso = nProceso;
 	}
 
 	public void btnConsultar() {
@@ -60,13 +73,38 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public void btnCreateProcesosOP() {
+	}
 
+	public void getFechas() {
+		ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
+		List<Programdia> pp = programDias.getOrderDates(this.nOrden,
+				this.nProceso);
+
+		System.out.println("Se ejecuto getFechas");
+		this.fInicio = new Date();
+		this.fFin = new Date();
 	}
 
 	// SETTERS AND GETTERS
 
 	public List<Procesosop> getProcesosOP() {
 		return procesosOP;
+	}
+
+	public Date getfInicio() {
+		return fInicio;
+	}
+
+	public void setfInicio(Date fInicio) {
+		this.fInicio = fInicio;
+	}
+
+	public Date getfFin() {
+		return fFin;
+	}
+
+	public void setfFin(Date fFin) {
+		this.fFin = fFin;
 	}
 
 	public List<SelectItem> getSelectedItemsProceso() {
@@ -98,14 +136,6 @@ public class ProcesosOPBean implements Serializable {
 
 	public void setnOrden(Integer nOrden) {
 		this.nOrden = nOrden;
-	}
-
-	public Date getfActual() {
-		return fActual;
-	}
-
-	public void setfActual(Date fActual) {
-		this.fActual = fActual;
 	}
 
 	public List<SelectItem> getSelectedItemsOrdenes() {

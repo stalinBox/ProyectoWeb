@@ -8,6 +8,8 @@ public interface ProgramacionDiasDao {
 
 	public List<Programdia> findAll();
 
+	public List<Programdia> getOrderDates(Integer codOrden, Integer codProceso);
+
 	public boolean create(Programdia programDia);
 
 	public boolean update(Programdia programDia);
