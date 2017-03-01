@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -25,7 +26,7 @@ public class Programturno implements Serializable {
 	@Column(name = "cant_real")
 	private Integer cantReal;
 
-	private String dia;
+	private Integer dia;
 
 	@Column(name = "estado_tur")
 	private String estadoTur;
@@ -38,8 +39,7 @@ public class Programturno implements Serializable {
 	@Column(name = "f_inicio")
 	private Date fInicio;
 
-	@Temporal(TemporalType.DATE)
-	private Date hora;
+	private Timestamp hora;
 
 	@Column(name = "no_plan")
 	private String noPlan;
@@ -63,6 +63,11 @@ public class Programturno implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "tal_codigo")
 	private Talla talla;
+
+	// bi-directional many-to-one association to Turno
+	@ManyToOne
+	@JoinColumn(name = "turno_codigo")
+	private Turno turno;
 
 	public Programturno() {
 	}
@@ -91,11 +96,11 @@ public class Programturno implements Serializable {
 		this.cantReal = cantReal;
 	}
 
-	public String getDia() {
+	public Integer getDia() {
 		return this.dia;
 	}
 
-	public void setDia(String dia) {
+	public void setDia(Integer dia) {
 		this.dia = dia;
 	}
 
@@ -123,11 +128,11 @@ public class Programturno implements Serializable {
 		this.fInicio = fInicio;
 	}
 
-	public Date getHora() {
+	public Timestamp getHora() {
 		return this.hora;
 	}
 
-	public void setHora(Date hora) {
+	public void setHora(Timestamp hora) {
 		this.hora = hora;
 	}
 
@@ -169,6 +174,14 @@ public class Programturno implements Serializable {
 
 	public void setTalla(Talla talla) {
 		this.talla = talla;
+	}
+
+	public Turno getTurno() {
+		return this.turno;
+	}
+
+	public void setTurno(Turno turno) {
+		this.turno = turno;
 	}
 
 }

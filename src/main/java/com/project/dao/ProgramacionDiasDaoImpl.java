@@ -117,10 +117,12 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 	public List<Programdia> getOrderDates(Integer codOrden, Integer codProceso) {
 		List<Programdia> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Programdia pg INNER JOIN pg.parametro pr "
-				+ " WHERE pr.ordenprod.ordenprodCodigo = " + codOrden
-				+ " AND pr.proceso.proCodigo= " + codProceso
-				+ " ORDER BY pg ASC";
+		String sql = "FROM Programdia pg "
+				+ "WHERE pg.parametro.paramCodigo = "
+				+ "( SELECT pr.paramCodigo FROM Parametro pr "
+				+ "WHERE pr.ordenprod.ordenprodCodigo = " + codOrden
+				+ "AND pr.proceso.proCodigo= " + codProceso + ") "
+				+ "ORDER BY pg ASC";
 
 		System.out.println(sql);
 		try {
@@ -134,4 +136,23 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Programdia> findByCodProgram(Integer codProgram) {
+		List<Programdia> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Programdia pg where pg.progdiasCodigo = "
+				+ codProgram;
+
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETORDERDATES: " + e.toString());
+		}
+		return listado;
+	}
 }

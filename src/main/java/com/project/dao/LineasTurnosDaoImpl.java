@@ -215,4 +215,24 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasturno> findByOrden(Integer codOrden, Integer codProceso) {
+		List<Lineasturno> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasturno lt where lt.parametro.paramCodigo = "
+				+ " (select p.paramCodigo from Parametro p where p.ordenprod = "
+				+ codOrden + " and p.proceso.proCodigo = " + codProceso + " )";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDBYORDEN: " + e.toString());
+		}
+		return listado;
+	}
 }

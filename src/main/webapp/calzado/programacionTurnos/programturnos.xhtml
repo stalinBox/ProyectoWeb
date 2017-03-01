@@ -21,10 +21,7 @@
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
-
-							<p:ajax
-								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
-								update=":ordenProceso:idCbxProceso" />
+							<p:ajax update=":ordenProceso:idCbxProceso" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="Proceso" />
@@ -58,137 +55,139 @@
 						<p:outputLabel id="lblFfin" value="#{procesosOPBean.fFin}" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:commandButton value="Consultar"
-					actionListener="#{procesosOPBean.btnConsultar()}"
-					process=":ordenProceso" />
+				<p:commandButton value="GUARDAR"
+					update=":fmrItems:idCbxModelo, :fmrItems:idCbxFechas"
+					actionListener="#{procesosOPBean.btnCreateProcesosOP(actionEvent)}" />
+
+				<p:commandButton value="ELIMINAR"
+					actionListener="#{procesosOPBean.btnConsultar()}" />
 			</h:form>
+
 
 			<p:separator />
 
 			<h1>PROGRAMACION TURNOS</h1>
-			<h:form id="programTurnos">
-				<p:growl id="msgs" showDetail="true" />
+			<h:form id="fmrItems">
+				<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
 
-				<p:dataTable id="proTurnos" var="pt" value="" editable="true"
-					style="margin-bottom:20px">
-					<f:facet name="header">
+					<p:outputLabel value="Dia" />
+					<p:selectOneMenu id="idCbxFechas"
+						value="#{procesosOPBean.codProgramD}" required="true"
+						style="width:150px">
+						<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+							itemValue="0" />
+						<f:selectItems value="#{procesosOPBean.selectedItemsFechas}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Modelo" />
+					<p:selectOneMenu id="idCbxModelo" value="#{procesosOPBean.codMod}"
+						required="true" style="width:150px">
+						<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+							itemValue="0" />
+						<f:selectItems value="#{procesosOPBean.selectedItemsModelo}" />
+						<p:ajax update=":fmrItems:idCbxTalla" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Talla" />
+					<p:selectOneMenu id="idCbxTalla"
+						value="#{procesosOPBean.selectedProgramTurno.talla.talCodigo}"
+						required="true" style="width:150px">
+						<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+							itemValue="0" />
+						<f:selectItems value="#{procesosOPBean.selectedItemsTalla}" />
+						<p:ajax update=":fmrItems:idCbxTurno" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Turno" />
+					<p:selectOneMenu id="idCbxTurno"
+						value="#{procesosOPBean.selectedProgramTurno.turno.turnoCodigo}"
+						required="true" style="width:150px">
+						<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+							itemValue="0" />
+						<f:selectItems value="#{procesosOPBean.selectedItemsTurno}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Cantidad Estimada: " />
+					<p:outputLabel value="#{procesosOPBean.cantEstim}" />
+
+					<f:facet name="footer">
+						<p:commandButton id="btnAgregarDetalle" value="Agregar"
+							update=":formDataTable"
+							actionListener="#{procesosOPBean.btnCreateProgramTurnos(actionEvent)}" />
 					</f:facet>
+				</h:panelGrid>
+			</h:form>
+
+			<p:separator />
+
+			<h:form id="formDataTable">
+				<p:growl id="msg" showDetail="true" />
+				<p:dataTable id="basicDT" var="pgTurn"
+					value="#{procesosOPBean.programTurnos}">
 
 					<p:column headerText="Dia">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+						<h:outputText value="#{pgTurn.dia}" />
 					</p:column>
 
-					<p:column headerText="F. inicio">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" label="Year" />
-							</f:facet>
-						</p:cellEditor>
+					<p:column headerText="F. Inicio">
+						<h:outputText value="#{pgTurn.FInicio}" />
 					</p:column>
 
 					<p:column headerText="Modelo">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:selectOneMenu value="#{detaOrdenBean.modelo}" required="true"
-									style="width:150px">
-
-									<f:selectItem itemLabel="- Seleccione -"
-										noSelectionOption="true" itemValue="0" />
-									<f:selectItems value="#{detaOrdenBean.selectedItemsModelo}" />
-								</p:selectOneMenu>
-							</f:facet>
-						</p:cellEditor>
+						<h:outputText value="#{pgTurn.modelo.modNombre}" />
 					</p:column>
 
 					<p:column headerText="Talla">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:selectOneMenu id="idTalla" value="#{detaOrdenBean.talla}"
-									required="true" style="width:150px">
-
-									<f:selectItem itemLabel="- Seleccione -" itemValue=""
-										noSelectionOption="true" />
-									<f:selectItems value="#{detaOrdenBean.selectedItemsTalla}"></f:selectItems>
-								</p:selectOneMenu>
-							</f:facet>
-						</p:cellEditor>
+						<h:outputText value="#{pgTurn.talla.talNumero}" />
 					</p:column>
 
-					<p:column headerText="Turnos">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+					<p:column headerText="Turno">
+						<h:outputText value="#{pgTurn.turno.nombturno}" />
 					</p:column>
 
-					<p:column headerText="Cant Estim">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+					<p:column headerText="Cant. Estim">
+						<h:outputText value="#{pgTurn.cantEstim}" />
 					</p:column>
 
-					<p:column headerText="Cant Real">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+					<p:column headerText="Cant. Real">
+						<h:outputText value="#{pgTurn.cantReal}" />
 					</p:column>
 
 					<p:column headerText="F. Final">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+						<h:outputText value="#{pgTurn.FFinal}" />
 					</p:column>
 
 					<p:column headerText="Hora">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+						<h:outputText value="#{pgTurn.hora}" />
 					</p:column>
 
-					<p:column style="width:32px">
-						<p:rowEditor />
+					<p:column headerText="Eliminar" style="width:10%">
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogPgTurnosDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{pgTurn}"
+								target="#{procesosOPBean.selectedProgramTurno}" />
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar"
+					severity="alert" widgetVar="dialogPgTurnosDelete">
+
+					<h:inputHidden
+						value="#{procesosOPBean.selectedProgramTurno.programCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msg" icon="ui-icon-check"
+						oncomplete="PF('dialogPgTurnosDelete').hide()"
+						actionListener="#{procesosOPBean.btnDeleteProgramTurnos(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogPgTurnosDelete').hide()" />
+				</p:confirmDialog>
 			</h:form>
 		</ui:define>
 	</ui:composition>

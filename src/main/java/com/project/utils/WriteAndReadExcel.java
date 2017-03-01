@@ -306,7 +306,6 @@ public class WriteAndReadExcel implements Serializable {
 		ArrayList<String> arrMod = new ArrayList<String>();
 		ArrayList<Integer> arrCanti = new ArrayList<Integer>();
 		Set<String> hs = new HashSet<>();
-
 		for (Items i : orderListModUnique) {
 			arrMod.add(i.getModelo());
 			arrCanti.add(i.getCantidad());

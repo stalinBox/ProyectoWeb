@@ -3,6 +3,7 @@ package com.project.dao;
 import java.util.List;
 
 import com.project.entities.Detalleorden;
+import com.project.entities.Modelo;
 
 public interface DetaOrdenDao {
 	public boolean create(Detalleorden detaOrden);
@@ -17,7 +18,11 @@ public interface DetaOrdenDao {
 
 	public List<String> getByOrden(Integer codOrden);
 
+	public List<Modelo> findByOrden2(Integer idOrden);
+
 	public List<Integer> getSumByModelo(Integer codOrden, String modelo);
 
 	public List<Detalleorden> findByOrden(Integer idOrden);
+
+	public List<Detalleorden> findByOrdenByMod(Integer idOrden, Integer codMod);
 }

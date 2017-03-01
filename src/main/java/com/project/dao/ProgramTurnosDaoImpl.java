@@ -4,18 +4,17 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import com.project.entities.Ordenprod;
-import com.project.entities.Procesosop;
+import com.project.entities.Programturno;
 import com.project.utils.HibernateUtil;
 
-public class ProcesosOPDaoImpl implements ProcesosOPDao {
+public class ProgramTurnosDaoImpl implements ProgramTurnosDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Procesosop> findAll() {
-		List<Procesosop> listado = null;
+	public List<Programturno> findAll() {
+		List<Programturno> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Procesosop ";
+		String sql = "FROM Programturno ";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -23,31 +22,32 @@ public class ProcesosOPDaoImpl implements ProcesosOPDao {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR FINDALLPROCESOSOP: " + e.toString());
+			System.out
+					.println("ERRORRRRR FINDALLPROGRAMTURNO: " + e.toString());
 		}
 		return listado;
 	}
 
 	@Override
-	public boolean create(Procesosop processOP) {
+	public boolean create(Programturno pgTurnos) {
 		boolean flag;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			sesion.save(processOP);
+			sesion.save(pgTurnos);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR CREATE PROCESOSOP: "
+			System.out.println("ERRORRRRR CREATE PGTURNOS: "
 					+ e.getMessage().toString());
 		}
 		return flag;
 	}
 
 	@Override
-	public boolean update(Procesosop processOP) {
+	public boolean update(Programturno pgTurnos) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -58,53 +58,39 @@ public class ProcesosOPDaoImpl implements ProcesosOPDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		try {
 			sesion.beginTransaction();
-			Procesosop cliente = (Procesosop) sesion.load(Procesosop.class, id);
+			Programturno cliente = (Programturno) sesion.load(
+					Programturno.class, id);
 			sesion.delete(cliente);
 			sesion.getTransaction().commit();
 			flag = true;
 		} catch (Exception e) {
 			flag = false;
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRRRR DELETE PROCESOSOP: "
+			System.out.println("ERRORRRRR DELETE PROGRAMTURNO: "
 					+ e.getMessage().toString());
 		}
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Procesosop getLastResp() {
-		Procesosop entities = null;
-		Integer ent = 0;
+	public List<Programturno> findByPop(Integer codPop) {
+		List<Programturno> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "select max(op.processopCod) from Procesosop op";
+		String sql = "from Programturno pgt where pgt.procesosop.processopCod in "
+				+ "(select pop.processopCod from Procesosop pop where pop.processopCod = "
+				+ codPop + ")";
 		System.out.println(sql);
-
 		try {
 			sesion.beginTransaction();
-			ent = (Integer) sesion.createQuery(sql).uniqueResult();
-			entities = this.getLastRecord(ent);
+			listado = sesion.createQuery(sql).list();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
-			System.out.println("ERRORRR LASTRESORDEN: " + e.toString());
-			throw e;
+			System.out
+					.println("ERRORRRRR FINDALLPROGRAMTURNO: " + e.toString());
 		}
-		return entities;
-	}
-
-	@Override
-	public Procesosop getLastRecord(Integer id) {
-		Procesosop entities = null;
-		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from Procesosop op where op.processopCod = " + id;
-		System.out.println(sql);
-		try {
-			entities = (Procesosop) sesion.createQuery(sql).uniqueResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return entities;
+		return listado;
 	}
 
 }

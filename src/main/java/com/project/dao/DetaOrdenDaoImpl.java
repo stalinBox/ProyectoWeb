@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.project.entities.Detalleorden;
+import com.project.entities.Modelo;
 import com.project.utils.HibernateUtil;
 
 public class DetaOrdenDaoImpl implements DetaOrdenDao {
@@ -168,6 +169,45 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		} catch (Exception e) {
 			sesion.getTransaction().rollback();
 			System.out.println("ERRORRRRR GETSUMBYMODELO: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Detalleorden> findByOrdenByMod(Integer idOrden, Integer codMod) {
+		List<Detalleorden> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Detalleorden dtO where dtO.ordenprod.ordenprodCodigo = "
+				+ idOrden + " and dtO.modelo.modCodigo = " + codMod;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDBYORDENBYMOD: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Modelo> findByOrden2(Integer idOrden) {
+		List<Modelo> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "SELECT DISTINCT(d.modelo) FROM Detalleorden d WHERE d.ordenprod.ordenprodCodigo = "
+				+ idOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FIND BY ORDEN DETAORDER: "
+					+ e.toString());
 		}
 		return listado;
 	}
