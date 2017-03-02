@@ -35,6 +35,7 @@ public class LineasTurnosBean implements Serializable {
 	private Lineasturno selectedLineaTurn;
 	private List<SelectItem> selectItemsLineas;
 	private List<SelectItem> selectItemsTurnos;
+	private Integer codParam;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -92,10 +93,19 @@ public class LineasTurnosBean implements Serializable {
 		return lineaTurno;
 	}
 
+	public Integer getCodParam() {
+		return codParam;
+	}
+
+	public void setCodParam(Integer codParam) {
+		this.codParam = codParam;
+	}
+
 	public List<SelectItem> getSelectItemsLineas() {
 		this.selectItemsLineas = new ArrayList<SelectItem>();
 		LineasProdDao lineasDao = new LineasProdDaoImpl();
-		List<Lineasprod> linea = lineasDao.findAll();
+
+		List<Lineasprod> linea = lineasDao.findByParam(this.codParam);
 		for (Lineasprod li : linea) {
 			SelectItem selectItem = new SelectItem(li.getLineaproCodigo(),
 					li.getNomlinea());

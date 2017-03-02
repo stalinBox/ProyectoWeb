@@ -4,7 +4,11 @@ package com.project.utils;
  * @author Stalin Ramírez Clase para navegacion entre las paginas
  */
 public class MyUtil {
-	public static String ip = DireccionesIP.baseIP();
+	public static String ip = "localhost";
+
+	public static String andonMonitor() {
+		return "http://172.21.123.55/webandon/";
+	}
 
 	public static String baseurl() {
 		// return "http://" + ip + ":8080/ProyectoWeb/";

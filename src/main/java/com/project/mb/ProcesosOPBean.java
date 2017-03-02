@@ -271,7 +271,7 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public Integer getCantEstim() {
-		cantEstim = 165;
+		// cantEstim = 165;
 		return cantEstim;
 	}
 

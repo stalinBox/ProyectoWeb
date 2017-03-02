@@ -88,4 +88,23 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasprod> findByParam(Integer codParam) {
+		List<Lineasprod> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Lineasprod lp WHERE lp.proceso.proCodigo IN "
+				+ "(SELECT pa.proceso.proCodigo FROM Parametro pa WHERE pa.paramCodigo = "
+				+ codParam + ")";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLLINEA: " + e.toString());
+		}
+		return listado;
+	}
 }

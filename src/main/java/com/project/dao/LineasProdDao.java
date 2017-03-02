@@ -8,6 +8,8 @@ public interface LineasProdDao {
 
 	public List<Lineasprod> findAll();
 
+	public List<Lineasprod> findByParam(Integer codParam);
+
 	public boolean create(Lineasprod lineaP);
 
 	public boolean update(Lineasprod lineaP);

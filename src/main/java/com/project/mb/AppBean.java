@@ -13,6 +13,10 @@ public class AppBean {
 
 	}
 
+	public String getAndonMonitor() {
+		return MyUtil.andonMonitor();
+	}
+
 	public String getBaseUrl() {
 		return MyUtil.baseurl();
 	}
