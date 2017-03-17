@@ -94,6 +94,8 @@
 			<p:separator />
 
 			<h:form id="idFmrButtons">
+				<p:growl id="msgs" showDetail="true" />
+
 				<p:panel id="idPanel">
 					<h:panelGrid id="idPngConLineas" columns="2">
 
@@ -108,7 +110,7 @@
 						<f:facet name="footer">
 							<p:commandButton id="btnGenerarPedido" value="Buil"
 								actionListener="#{programDiasBean.btnProcesar()}"
-								update=":idTblFechas" />
+								update=":idTblFechas, :idFmrButtons:msgs" />
 
 							<p:commandButton id="btnReProcesarPedido" value="Rebuild"
 								actionListener="#{programDiasBean.btnReProcesar()}"
@@ -126,13 +128,14 @@
 					<h:panelGrid columnClasses="value">
 						<p:schedule id="schedule" value="#{programDiasBean.eventModel}"
 							widgetVar="myschedule" timeZone="GMT-5" rightHeaderTemplate=""
-							showWeekends="true" styleClass="custom">
+							showWeekends="true" styleClass="custom" locale="es">
 						</p:schedule>
 					</h:panelGrid>
 				</center>
 			</h:form>
 
 			<h:form id="formDelete">
+
 				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
 					showEffect="fade" hideEffect="fade" header="Eliminar Item"
 					severity="alert" widgetVar="dialogLTDelete">

@@ -209,13 +209,12 @@ public class ProgramDiasBean implements Serializable {
 
 		if (diaInicio.getTime().getDay() == 0
 				|| diaInicio.getTime().getDay() == 6) {
-			System.out.println("Por un lado");
-			// FacesContext
-			// .getCurrentInstance()
-			// .addMessage(
-			// null,
-			// new FacesMessage(
-			// "No se puede empezar a programar los fines de semana"));
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									"No se puede empezar a programar los fines de semana"));
 		} else {
 			System.out.println("Paso por el otro lado");
 		}
