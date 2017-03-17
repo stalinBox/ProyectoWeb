@@ -97,24 +97,24 @@
 				<p:panel id="idPanel">
 					<h:panelGrid id="idPngConLineas" columns="2">
 
-						<h:outputLabel value="H. Extras:" />
+						<h:outputLabel value="Overtime:" />
 						<p:selectBooleanButton value="#{programDiasBean.hExtras}"
 							onLabel="Si" offLabel="No" style="width:60px" />
 
-						<h:outputLabel value="F. Comienzo:" />
+						<h:outputLabel value="Start:" />
 						<p:calendar id="btnFechaMtn" value="#{programDiasBean.fInicio}"
 							showOn="button" size="8" locale="es" required="true" />
 
 						<f:facet name="footer">
-							<p:commandButton id="btnGenerarPedido" value="Procesar"
+							<p:commandButton id="btnGenerarPedido" value="Buil"
 								actionListener="#{programDiasBean.btnProcesar()}"
 								update=":idTblFechas" />
 
-							<p:commandButton id="btnReProcesarPedido" value="Re-Procesar"
+							<p:commandButton id="btnReProcesarPedido" value="Rebuild"
 								actionListener="#{programDiasBean.btnReProcesar()}"
 								process="@this" />
 
-							<p:commandButton id="btnContinuar" value="Continuar"
+							<p:commandButton id="btnContinuar" value="Submit"
 								oncomplete="PF('dialogLTFin').show()" process="@this" />
 						</f:facet>
 					</h:panelGrid>
@@ -125,8 +125,8 @@
 				<center>
 					<h:panelGrid columnClasses="value">
 						<p:schedule id="schedule" value="#{programDiasBean.eventModel}"
-							widgetVar="myschedule" timeZone="GMT-5" locale="es"
-							rightHeaderTemplate="" showWeekends="true" styleClass="custom">
+							widgetVar="myschedule" timeZone="GMT-5" rightHeaderTemplate=""
+							showWeekends="true" styleClass="custom">
 						</p:schedule>
 					</h:panelGrid>
 				</center>

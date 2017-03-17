@@ -42,7 +42,7 @@ public class Programturno implements Serializable {
 	private Timestamp hora;
 
 	@Column(name = "no_plan")
-	private String noPlan;
+	private Integer noPlan;
 
 	// bi-directional many-to-one association to Modelo
 	@ManyToOne
@@ -136,11 +136,11 @@ public class Programturno implements Serializable {
 		this.hora = hora;
 	}
 
-	public String getNoPlan() {
+	public Integer getNoPlan() {
 		return this.noPlan;
 	}
 
-	public void setNoPlan(String noPlan) {
+	public void setNoPlan(Integer noPlan) {
 		this.noPlan = noPlan;
 	}
 

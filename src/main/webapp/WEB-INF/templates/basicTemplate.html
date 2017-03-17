@@ -30,8 +30,8 @@
 		<div id="top" class="ui-widget-header ui-corner-all">
 			<ui:insert name="top">
 				<center>
-					SISTEMA DE GESTION DE LA PRODUCCION DE CALZADO (1er.prototipo) <br />
-					UTA-PROYECTO INVESTIGACION
+					FAPS System: A LEAN MANUFACTURING SCHEDULING FOOTWEAR PROTOTYPE<br />
+					UTA-INVESTIGATION PROJECT
 				</center>
 			</ui:insert>
 		</div>
@@ -40,7 +40,7 @@
 				<p:growl id="messages" />
 
 				<p:menubar>
-					<p:submenu label="Seguridad" icon="ui-icon-document">
+					<p:submenu label="Security" icon="ui-icon-document">
 						<p:menuitem value="Usuarios"
 							url="#{appBean.basePath}usuario/indexUser.jsf" />
 						<p:separator />
@@ -48,7 +48,7 @@
 							oncomplete="handleLoginRequest(xhr, status, args)" />
 					</p:submenu>
 
-					<p:submenu label="Parametrización" icon="ui-icon-pencil">
+					<p:submenu label="Parameterization" icon="ui-icon-pencil">
 						<p:menuitem value="Modelos"
 							url="#{appBean.calzadoPath()}modelos/modelos.jsf"
 							icon="ui-icon-arrowreturnthick-1-e" />
@@ -93,7 +93,7 @@
 							icon="ui-icon-arrowreturnthick-1-e" />
 					</p:submenu>
 
-					<p:submenu label="Ayuda" icon="ui-icon-help">
+					<p:submenu label="Help" icon="ui-icon-help">
 						<p:menuitem value="Temas"
 							url="#{appBean.themePath()}changeTheme.xhtml" />
 						<p:submenu label="Reportes" icon="ui-icon-search">
@@ -115,7 +115,7 @@
 							url="#{appBean.andonPath()}maquinas.jsf" icon="fa fa-steam" />
 					</p:submenu>
 
-					<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"
+					<p:menuitem value="Exit" actionListener="#{loginBean.logout()}"
 						oncomplete="handleLoginRequest(xhr, status, args)"
 						icon="ui-icon-close" />
 				</p:menubar>
