@@ -118,107 +118,61 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
-	// METODOS DML
-	public void btnCreateProgramDias(ActionEvent actionEvent) {
-	}
-
-	public void btnDeleteProgramDias(ActionEvent actionEvent) {
-	}
-
-	public void btnUpdateProgramDias(ActionEvent actionEvent) {
-	}
-
-	// METODOS BOTONES
-	public void btnContinuar() {
-		String ruta = "";
-		String msg = "";
-		ruta = MyUtil.baseurl() + "inicio.xhtml";
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(ruta);
-
-			// GUARDAR
-			System.out.println("ESTO SE VA A GUARDAR");
-			for (Items a : orderList) {
-				System.out.println(": " + a.pares);
-				System.out.println(": " + a.horas);
-				System.out.println(": " + a.fFin);
-				System.out.println(": " + a.fInicio);
-				System.out.println(": " + a.codParam);
-
-				ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
-				Parametro param = new Parametro();
-				param.setParamCodigo(a.codParam);
-
-				this.selectedDias.setParametro(param);
-				this.selectedDias.setCanthoras(a.horas);
-				this.selectedDias.setCantpares(a.pares);
-				this.selectedDias.setFfin(a.fFin);
-				this.selectedDias.setFinicio(a.fInicio);
-
-				if (programDiasDao.create(this.selectedDias)) {
-					msg = "Se ha añadido en programDias";
-					FacesMessage message = new FacesMessage(
-							FacesMessage.SEVERITY_INFO, msg, null);
-					FacesContext.getCurrentInstance().addMessage(null, message);
-				} else {
-					msg = "Error al añadir en programDias";
-					FacesMessage message = new FacesMessage(
-							FacesMessage.SEVERITY_ERROR, msg, null);
-					FacesContext.getCurrentInstance().addMessage(null, message);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void btnReProcesar() {
-		String ruta = "";
-		ruta = MyUtil.calzadoPath() + "ordenesProd/insertOrder.jsf";
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(ruta);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void btnProcesar() {
 		this.eventModel = new DefaultScheduleModel();
 		this.orderList2.clear();
-		System.out.println("Procesando...");
-		System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
-
-		ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
-				.getCodOrden());
-
-		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
-		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
-
-		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
-		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
 
 		ScheduleDays days = new ScheduleDays();
 		Calendar diaInicio = days.DateToCalendar(this.fInicio);
 
-		System.out.println("Numero de Dia Normal: " + this.fInicio.getDate());
-		System.out.println("Numero de Dia Calendar: "
-				+ diaInicio.getTime().getDay());
+		// VERIFICAR SI ES CON HORAS EXTRAS
+		if (this.hExtras == true) {
+			if (diaInicio.getTime().getDay() == 0) {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(
+								"No se puede empezar a programar en domingo"));
+			} else {
+				System.out.println("PROGRAMANDO DIAS");
+				System.out.println("Procesando...");
+				System.out.println("Codigo Orden: "
+						+ ContentParam.getCodOrden());
 
-		if (diaInicio.getTime().getDay() == 0
-				|| diaInicio.getTime().getDay() == 6) {
-			FacesContext
-					.getCurrentInstance()
-					.addMessage(
-							null,
-							new FacesMessage(
-									"No se puede empezar a programar los fines de semana"));
+			}
 		} else {
-			System.out.println("Paso por el otro lado");
+			if (diaInicio.getTime().getDay() == 0
+					|| diaInicio.getTime().getDay() == 6) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										"No se puede empezar a programar los fines de semana"));
+			} else {
+				System.out.println("PROGRAMANDO DIAS");
+				System.out.println("Procesando...");
+				System.out.println("Codigo Orden: "
+						+ ContentParam.getCodOrden());
+				// PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
+
+			}
 		}
 
+		// System.out.println("Procesando...");
+		// System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
+		//
+		// ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
+		// List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
+		// .getCodOrden());
+		//
+		// // VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
+		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
+		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+		//
+		// // VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
+		// ArrayList<ArrayList<Object>> mProcesos = new
+		// ArrayList<ArrayList<Object>>();
+		//
 		// for (Parametro param : parametros) {
 		// this.mLineasCantidad.clear();
 		// LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
@@ -500,6 +454,72 @@ public class ProgramDiasBean implements Serializable {
 
 		System.out.println("Dias labadorados: " + d);
 		System.out.println("Semanas labadoradas: " + s);
+	}
+
+	// METODOS DML
+	public void btnCreateProgramDias(ActionEvent actionEvent) {
+	}
+
+	public void btnDeleteProgramDias(ActionEvent actionEvent) {
+	}
+
+	public void btnUpdateProgramDias(ActionEvent actionEvent) {
+	}
+
+	// METODOS BOTONES
+	public void btnContinuar() {
+		String ruta = "";
+		String msg = "";
+		ruta = MyUtil.baseurl() + "inicio.xhtml";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+
+			// GUARDAR
+			System.out.println("ESTO SE VA A GUARDAR");
+			for (Items a : orderList) {
+				System.out.println(": " + a.pares);
+				System.out.println(": " + a.horas);
+				System.out.println(": " + a.fFin);
+				System.out.println(": " + a.fInicio);
+				System.out.println(": " + a.codParam);
+
+				ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
+				Parametro param = new Parametro();
+				param.setParamCodigo(a.codParam);
+
+				this.selectedDias.setParametro(param);
+				this.selectedDias.setCanthoras(a.horas);
+				this.selectedDias.setCantpares(a.pares);
+				this.selectedDias.setFfin(a.fFin);
+				this.selectedDias.setFinicio(a.fInicio);
+
+				if (programDiasDao.create(this.selectedDias)) {
+					msg = "Se ha añadido en programDias";
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_INFO, msg, null);
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				} else {
+					msg = "Error al añadir en programDias";
+					FacesMessage message = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, msg, null);
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void btnReProcesar() {
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "ordenesProd/insertOrder.jsf";
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// SETTERS AND GETTERS
