@@ -55,7 +55,6 @@ public class ProgramDiasBean implements Serializable {
 	private boolean hExtras;
 	private String d;
 
-	private Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
 	private ArrayList<Items> orderList = new ArrayList<Items>();
 	private ArrayList<Items2> orderList2 = new ArrayList<Items2>();
 
@@ -118,14 +117,22 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public void btnProcesar() {
-		this.eventModel = new DefaultScheduleModel();
-		this.orderList2.clear();
 
+		// 1. SECCION VARIABLES
+		this.eventModel = new DefaultScheduleModel();
 		ScheduleDays days = new ScheduleDays();
 		Calendar diaInicio = days.DateToCalendar(this.fInicio);
+		Integer iCodOrden = ContentParam.getCodOrden();
+		Items2 orderitem2 = new Items2();
+		Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
+		// 1. FIN SECCION VARIABLES
 
-		// VERIFICAR SI ES CON HORAS EXTRAS
+		// LIMPIAR VARIABLES
+		this.orderList2.clear();
+
+		// 2. VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
 		if (this.hExtras == true) {
 			if (diaInicio.getTime().getDay() == 0) {
 				FacesContext.getCurrentInstance().addMessage(
@@ -133,10 +140,8 @@ public class ProgramDiasBean implements Serializable {
 						new FacesMessage(
 								"No se puede empezar a programar en domingo"));
 			} else {
-				System.out.println("PROGRAMANDO DIAS");
-				System.out.println("Procesando...");
-				System.out.println("Codigo Orden: "
-						+ ContentParam.getCodOrden());
+				System.out.println("Procesando...1");
+				System.out.println("Codigo Orden: " + iCodOrden);
 
 			}
 		} else {
@@ -149,14 +154,36 @@ public class ProgramDiasBean implements Serializable {
 								new FacesMessage(
 										"No se puede empezar a programar los fines de semana"));
 			} else {
-				System.out.println("PROGRAMANDO DIAS");
-				System.out.println("Procesando...");
-				System.out.println("Codigo Orden: "
-						+ ContentParam.getCodOrden());
+				System.out.println("Procesando...2");
+				System.out.println("Codigo Orden: " + iCodOrden);
 				// PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
+				//
+				// paramDao OBTIENE LOS PROCESO POR ORDEN
+				ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
+				List<Parametro> parametros = paramDao
+						.getProcesosbyOrden(iCodOrden);
 
+				// 1. CICLO FOR
+				for (Parametro param : parametros) {
+					// lineasTurnosDao OBTIENE EL NUMERO DE LINEAS POR PROCESO
+					LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
+					List<Integer> lineasTurnos = lineasTurnosDao
+							.getLineasByProceso(param.getProceso()
+									.getProCodigo(), iCodOrden);
+
+					for (Integer lt : lineasTurnos) {
+						Object countLinea = lineasTurnosDao
+								.getCountTurnosByLineas(lt, iCodOrden);
+
+						mLineasCantidad.put(lt, countLinea);
+					}
+				} // 1. CICLO FOR
+
+				System.out.println("Variable mLineasCantidad: "
+						+ mLineasCantidad);
 			}
 		}
+		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
 
 		// System.out.println("Procesando...");
 		// System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
@@ -528,14 +555,6 @@ public class ProgramDiasBean implements Serializable {
 		// ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
 		// this.programDias = programDiasDao.findAll();
 		return programDias;
-	}
-
-	public Map<Integer, Object> getmLineasCantidad() {
-		return mLineasCantidad;
-	}
-
-	public void setmLineasCantidad(Map<Integer, Object> mLineasCantidad) {
-		this.mLineasCantidad = mLineasCantidad;
 	}
 
 	public String getD() {
