@@ -24,6 +24,8 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import com.project.dao.DetaOrdenDao;
+import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.ParametrizacionDao;
@@ -133,158 +135,152 @@ public class ProgramDiasBean implements Serializable {
 		this.orderList2.clear();
 
 		// 2. VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
-		if (this.hExtras == true) {
-			if (diaInicio.getTime().getDay() == 0) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(
-								"No se puede empezar a programar en domingo"));
-			} else {
-				System.out.println("Procesando...1");
-				System.out.println("Codigo Orden: " + iCodOrden);
-
-			}
-		} else {
-			if (diaInicio.getTime().getDay() == 0
-					|| diaInicio.getTime().getDay() == 6) {
-				FacesContext
-						.getCurrentInstance()
-						.addMessage(
-								null,
-								new FacesMessage(
-										"No se puede empezar a programar los fines de semana"));
-			} else {
-				System.out.println("Procesando...2");
-				System.out.println("Codigo Orden: " + iCodOrden);
-				// PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
-				//
-				// paramDao OBTIENE LOS PROCESO POR ORDEN
-				ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-				List<Parametro> parametros = paramDao
-						.getProcesosbyOrden(iCodOrden);
-
-				// 1. CICLO FOR
-				for (Parametro param : parametros) {
-					// lineasTurnosDao OBTIENE EL NUMERO DE LINEAS POR PROCESO
-					LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
-					List<Integer> lineasTurnos = lineasTurnosDao
-							.getLineasByProceso(param.getProceso()
-									.getProCodigo(), iCodOrden);
-
-					for (Integer lt : lineasTurnos) {
-						Object countLinea = lineasTurnosDao
-								.getCountTurnosByLineas(lt, iCodOrden);
-
-						mLineasCantidad.put(lt, countLinea);
-					}
-				} // 1. CICLO FOR
-
-				System.out.println("Variable mLineasCantidad: "
-						+ mLineasCantidad);
-			}
-		}
-		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
-
-		// System.out.println("Procesando...");
-		// System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
+		// if (this.hExtras == true) {
+		// if (diaInicio.getTime().getDay() == 0) {
+		// FacesContext.getCurrentInstance().addMessage(
+		// null,
+		// new FacesMessage(
+		// "No se puede empezar a programar en domingo"));
+		// } else {
+		// System.out.println("Procesando...1");
+		// System.out.println("Codigo Orden: " + iCodOrden);
 		//
+		// }
+		// } else {
+		// if (diaInicio.getTime().getDay() == 0
+		// || diaInicio.getTime().getDay() == 6) {
+		// FacesContext
+		// .getCurrentInstance()
+		// .addMessage(
+		// null,
+		// new FacesMessage(
+		// "No se puede empezar a programar los fines de semana"));
+		// } else {
+		// System.out.println("Procesando...2");
+		// System.out.println("Codigo Orden: " + iCodOrden);
+		// // PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
+		// //
+		// // paramDao OBTIENE LOS PROCESO POR ORDEN
 		// ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-		// List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
-		// .getCodOrden());
+		// List<Parametro> parametros = paramDao
+		// .getProcesosbyOrden(iCodOrden);
 		//
-		// // VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
-		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
-		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
-		//
-		// // VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
-		// ArrayList<ArrayList<Object>> mProcesos = new
-		// ArrayList<ArrayList<Object>>();
-		//
+		// // 1. CICLO FOR
 		// for (Parametro param : parametros) {
-		// this.mLineasCantidad.clear();
-		// LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
-		// List<Integer> lineasTurnos = lienasTurnosDao.getLineasByProceso(
-		// param.getProceso().getProCodigo(),
-		// ContentParam.getCodOrden());
+		// // lineasTurnosDao OBTIENE EL NUMERO DE LINEAS POR PROCESO
+		// LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
+		// List<Integer> lineasTurnos = lineasTurnosDao
+		// .getLineasByProceso(param.getProceso()
+		// .getProCodigo(), iCodOrden);
 		//
 		// for (Integer lt : lineasTurnos) {
-		// Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt,
-		// ContentParam.getCodOrden());
-		// this.mLineasCantidad.put(lt, countLinea);
-		// System.out.println("Esta cosa: " + this.mLineasCantidad);
+		// Object countLinea = lineasTurnosDao
+		// .getCountTurnosByLineas(lt, iCodOrden);
+		//
+		// mLineasCantidad.put(lt, countLinea);
 		// }
-		// Items2 orderitem2 = new Items2();
+		// } // 1. CICLO FOR
 		//
-		// if (this.mLineasCantidad.isEmpty()) {
-		// System.out
-		// .println("No hay lineas para generar la distribucion por dias");
-		// // ArrayList<ArrayList<Object>> mProcesosT1 = new
-		// // ArrayList<ArrayList<Object>>();
-		// // ArrayList<ArrayList<Object>> mProcesosT2 = new
-		// // ArrayList<ArrayList<Object>>();
-		// // ArrayList<ArrayList<Object>> mProcesosT3 = new
-		// // ArrayList<ArrayList<Object>>();
-		// //
-		// // ArrayList<Integer> demandaT = new ArrayList<Integer>();
-		// // Map<Integer, Object> mLineas = new HashMap<Integer,
-		// // Object>();
-		// // mLineas.put(4, 1);
-		// // Tablas tablas = new Tablas();
-		// //
-		// // List<Parametro> params = paramDao.getCpByProcesoOrden(
-		// // ContentParam.getCodOrden(), 3);
-		// // for (Parametro p : params) {
-		// // DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
-		// // List<String> detalle = detalleDao.getByOrden(ContentParam
-		// // .getCodOrden());
-		// //
-		// // for (String d : detalle) {
-		// // List<Integer> det = detalleDao.getSumByModelo(
-		// // ContentParam.getCodOrden(), d);
-		// // for (Object dt : det) {
-		// // demandaT.add(Integer.parseInt(dt.toString()));
-		// // }
-		// // }
-		// //
-		// // mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
-		// // p.getStandconv(), mLineas);
-		// // mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
-		// // p.getStandman(), mLineas);
-		// // mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
-		// // p.getStandauto(), mLineas);
-		// // mAll.put(3, mProcesosT1);
-		// // mAll.put(4, mProcesosT2);
-		// // mAll.put(5, mProcesosT3);
-		// // System.out.println("Parametro codigo: "
-		// // + p.getParamCodigo());
-		// // orderitem2 = new Items2(p.getProceso().getProCodigo(),
-		// // p.getParamCodigo(), mProcesosT1);
-		// // this.orderList2.add(orderitem2);
-		// //
-		// // orderitem2 = new Items2(p.getProceso().getProCodigo(),
-		// // p.getParamCodigo(), mProcesosT2);
-		// // this.orderList2.add(orderitem2);
-		// //
-		// // orderitem2 = new Items2(p.getProceso().getProCodigo(),
-		// // p.getParamCodigo(), mProcesosT3);
-		// // this.orderList2.add(orderitem2);
-		// // }
-		//
-		// } else {
-		// System.out.println("Codigo Parametro2: "
-		// + param.getParamCodigo());
-		// Tablas tablas = new Tablas();
-		// mProcesos = tablas.receivParamsPares(
-		// ContentParam.getTotalOrden(), param.getStandconv(),
-		// this.mLineasCantidad);
-		// mAll.put(param.getProceso().getProCodigo(), mProcesos);
-		//
-		// orderitem2 = new Items2(param.getProceso().getProCodigo(),
-		// param.getParamCodigo(), mProcesos);
-		// this.orderList2.add(orderitem2);
+		// System.out.println("Variable mLineasCantidad: "
+		// + mLineasCantidad);
 		// }
 		// }
-		// generateCalendar(this.orderList2, this.fInicio);
+		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
+
+		System.out.println("Procesando...");
+		System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
+
+		ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
+		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
+				.getCodOrden());
+
+		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
+		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+
+		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
+		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
+
+		for (Parametro param : parametros) {
+			mLineasCantidad.clear();
+			LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
+			List<Integer> lineasTurnos = lienasTurnosDao.getLineasByProceso(
+					param.getProceso().getProCodigo(),
+					ContentParam.getCodOrden());
+
+			for (Integer lt : lineasTurnos) {
+				Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt,
+						ContentParam.getCodOrden());
+				mLineasCantidad.put(lt, countLinea);
+				System.out.println("Esta cosa: " + mLineasCantidad);
+			}
+			// Items2 orderitem2 = new Items2();
+
+			if (mLineasCantidad.isEmpty()) {
+				System.out
+						.println("No hay lineas para generar la distribucion por dias");
+				ArrayList<ArrayList<Object>> mProcesosT1 = new ArrayList<ArrayList<Object>>();
+				ArrayList<ArrayList<Object>> mProcesosT2 = new ArrayList<ArrayList<Object>>();
+				ArrayList<ArrayList<Object>> mProcesosT3 = new ArrayList<ArrayList<Object>>();
+
+				ArrayList<Integer> demandaT = new ArrayList<Integer>();
+				Map<Integer, Object> mLineas = new HashMap<Integer, Object>();
+				mLineas.put(4, 1);
+				Tablas tablas = new Tablas();
+
+				List<Parametro> params = paramDao.getCpByProcesoOrden(
+						ContentParam.getCodOrden(), 3);
+				for (Parametro p : params) {
+					DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+					List<String> detalle = detalleDao.getByOrden(ContentParam
+							.getCodOrden());
+
+					for (String d : detalle) {
+						List<Integer> det = detalleDao.getSumByModelo(
+								ContentParam.getCodOrden(), d);
+						for (Object dt : det) {
+							demandaT.add(Integer.parseInt(dt.toString()));
+						}
+					}
+
+					mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
+							p.getStandconv(), mLineas);
+					mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
+							p.getStandman(), mLineas);
+					mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
+							p.getStandauto(), mLineas);
+					mAll.put(3, mProcesosT1);
+					mAll.put(4, mProcesosT2);
+					mAll.put(5, mProcesosT3);
+					System.out.println("Parametro codigo: "
+							+ p.getParamCodigo());
+					orderitem2 = new Items2(p.getProceso().getProCodigo(),
+							p.getParamCodigo(), mProcesosT1);
+					this.orderList2.add(orderitem2);
+
+					orderitem2 = new Items2(p.getProceso().getProCodigo(),
+							p.getParamCodigo(), mProcesosT2);
+					this.orderList2.add(orderitem2);
+
+					orderitem2 = new Items2(p.getProceso().getProCodigo(),
+							p.getParamCodigo(), mProcesosT3);
+					this.orderList2.add(orderitem2);
+				}
+
+			} else {
+				System.out.println("Codigo Parametro2: "
+						+ param.getParamCodigo());
+				Tablas tablas = new Tablas();
+				mProcesos = tablas.receivParamsPares(
+						ContentParam.getTotalOrden(), param.getStandconv(),
+						mLineasCantidad);
+				mAll.put(param.getProceso().getProCodigo(), mProcesos);
+
+				orderitem2 = new Items2(param.getProceso().getProCodigo(),
+						param.getParamCodigo(), mProcesos);
+				this.orderList2.add(orderitem2);
+			}
+		}
+		generateCalendar(this.orderList2, this.fInicio);
 	}
 
 	@SuppressWarnings({ "deprecation" })
