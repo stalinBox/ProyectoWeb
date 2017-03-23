@@ -12,42 +12,42 @@
 			<p:growl id="msgs" showDetail="true" />
 
 			<h:form id="idProcesos">
-				<p:panel header="PROCESOS" id="panel">
+				<p:panel header="PROCESSES" id="panel">
 					<p:messages autoUpdate="true" />
 					<h:panelGrid id="idProc" columns="2">
 
-						<p:outputLabel for="idCboProPadre" value="Proceso: " />
+						<p:outputLabel for="idCboProPadre" value="Process: " />
 						<p:selectOneMenu id="idCboProPadre"
 							value="#{procesoBean.proPadre}" style="width:150px">
 
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+							<f:selectItem itemLabel="- Selection -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{procesoBean.selectedItemsProceso}" />
 						</p:selectOneMenu>
 
-						<p:outputLabel for="idCbTrpProcesos" value="Subproceso: " />
+						<p:outputLabel for="idCbTrpProcesos" value="Thread: " />
 						<p:selectOneMenu id="idCbTrpProcesos"
 							value="#{procesoBean.proTrp}" style="width:150px" required="true"
 							label="Proceso">
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+							<f:selectItem itemLabel="- Selection -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{procesoBean.selectedTprProceso}" />
 						</p:selectOneMenu>
 
 
 
-						<p:outputLabel for="idCboActivo" value="Activo: " />
+						<p:outputLabel for="idCboActivo" value="Check: " />
 						<p:selectBooleanButton id="idCboActivo"
 							value="#{procesoBean.proActivo}" onLabel="Si" offLabel="No"
 							style="width:60px" />
 
-						<p:outputLabel for="proDescrip" value="Descripción: " />
+						<p:outputLabel for="proDescrip" value="Description: " />
 						<p:inputTextarea id="proDescrip" rows="6" cols="33"
 							value="#{procesoBean.proDesc}" />
 
 					</h:panelGrid>
 					<f:facet name="footer">
-						<p:commandButton id="btnGuardarProceso" value="Guardar"
+						<p:commandButton id="btnGuardarProceso" value="Save"
 							actionListener="#{procesoBean.btnCreateProceso(actionEvent)}"
 							update=":formDataTable:basicDT, :idProcesos:idCboProPadre, :idProcesos" />
 					</f:facet>
@@ -59,16 +59,15 @@
 
 				<p:dataTable id="basicDT" var="process"
 					value="#{procesoBean.procesos}" editable="true" editMode="cell">
-					<f:facet name="header">Procesos</f:facet>
-					<p:column headerText="proceso">
+					<p:column headerText="Process">
 						<h:outputText value="#{process.tipoProceso.tprNombre}" />
 					</p:column>
 
-					<p:column headerText="Padre">
+					<p:column headerText="Parent ">
 						<h:outputText value="#{process.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
-					<p:column headerText="Activo">
+					<p:column headerText="Check in">
 						<h:outputText value="#{process.proActivo}" />
 					</p:column>
 
@@ -76,7 +75,7 @@
 						<h:outputText value="#{process.proDescrip}" />
 					</p:column>
 
-					<p:column headerText="Eliminar" style="width:10%">
+					<p:column headerText="Delete?" style="width:10%">
 						<p:commandButton id="btnDelete" update=":formDelete"
 							oncomplete="PF('dialogProcesoDelete').show()"
 							icon="ui-icon-close" title="Eliminar">

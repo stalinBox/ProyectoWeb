@@ -411,11 +411,11 @@ public class ProgramDiasBean implements Serializable {
 		String pal = "";
 		for (Object k : arrayProceso) {
 			if (codProceso == 1) {
-				pal = "MONTAJE";
+				pal = "ASSEMBLY";
 			} else if (codProceso == 2) {
-				pal = "APARADO";
+				pal = "SEWING";
 			} else {
-				pal = "TRQ";
+				pal = "TRICKLE";
 			}
 			eventModel.addEvent(new DefaultScheduleEvent("L:" + pal + ":"
 					+ k.toString(), m.getTime(), m.getTime()));

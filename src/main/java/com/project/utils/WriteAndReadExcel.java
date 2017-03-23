@@ -321,7 +321,7 @@ public class WriteAndReadExcel implements Serializable {
 	// EJECUTA LA MACRO EN EXCEL
 	public boolean ExecuteMacro(File pathFile) {
 		// VARIABLE CON EL NOMBRE DE LA MACRO
-		String macroNameMontaje = "!calculoMontaje";
+		String macroNameMontaje = "!MacroGeneral";// Ocupar esta macro pa todo
 		String macroNameAparado = "!calculoAparado";
 		PrintSolveMB execute = new PrintSolveMB();
 		try {
