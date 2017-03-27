@@ -55,10 +55,30 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy="usuario")
 	private List<Procesosop> procesosops;
 
+	//bi-directional many-to-one association to Lineasprod
+	@ManyToOne
+	@JoinColumn(name="lineapro_codigo")
+	private Lineasprod lineasprod;
+
+	//bi-directional many-to-one association to Maquina
+	@ManyToOne
+	@JoinColumn(name="maq_codigo")
+	private Maquina maquina;
+
+	//bi-directional many-to-one association to Proceso
+	@ManyToOne
+	@JoinColumn(name="pro_codigo")
+	private Proceso proceso;
+
 	//bi-directional many-to-one association to Rol
 	@ManyToOne
 	@JoinColumn(name="rol_id")
 	private Rol rol;
+
+	//bi-directional many-to-one association to Turno
+	@ManyToOne
+	@JoinColumn(name="turno_codigo")
+	private Turno turno;
 
 	public Usuario() {
 	}
@@ -193,12 +213,44 @@ public class Usuario implements Serializable {
 		return procesosop;
 	}
 
+	public Lineasprod getLineasprod() {
+		return this.lineasprod;
+	}
+
+	public void setLineasprod(Lineasprod lineasprod) {
+		this.lineasprod = lineasprod;
+	}
+
+	public Maquina getMaquina() {
+		return this.maquina;
+	}
+
+	public void setMaquina(Maquina maquina) {
+		this.maquina = maquina;
+	}
+
+	public Proceso getProceso() {
+		return this.proceso;
+	}
+
+	public void setProceso(Proceso proceso) {
+		this.proceso = proceso;
+	}
+
 	public Rol getRol() {
 		return this.rol;
 	}
 
 	public void setRol(Rol rol) {
 		this.rol = rol;
+	}
+
+	public Turno getTurno() {
+		return this.turno;
+	}
+
+	public void setTurno(Turno turno) {
+		this.turno = turno;
 	}
 
 }

@@ -32,6 +32,10 @@ public class Ordenprod implements Serializable {
 	@Column(name="f_final")
 	private Date fFinal;
 
+	//bi-directional many-to-one association to Capacidade
+	@OneToMany(mappedBy="ordenprod")
+	private List<Capacidade> capacidades;
+
 	//bi-directional many-to-one association to Costosindi
 	@OneToMany(mappedBy="ordenprod")
 	private List<Costosindi> costosindis;
@@ -96,6 +100,28 @@ public class Ordenprod implements Serializable {
 
 	public void setFFinal(Date fFinal) {
 		this.fFinal = fFinal;
+	}
+
+	public List<Capacidade> getCapacidades() {
+		return this.capacidades;
+	}
+
+	public void setCapacidades(List<Capacidade> capacidades) {
+		this.capacidades = capacidades;
+	}
+
+	public Capacidade addCapacidade(Capacidade capacidade) {
+		getCapacidades().add(capacidade);
+		capacidade.setOrdenprod(this);
+
+		return capacidade;
+	}
+
+	public Capacidade removeCapacidade(Capacidade capacidade) {
+		getCapacidades().remove(capacidade);
+		capacidade.setOrdenprod(null);
+
+		return capacidade;
 	}
 
 	public List<Costosindi> getCostosindis() {

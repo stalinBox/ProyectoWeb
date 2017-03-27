@@ -42,6 +42,10 @@ public class Proceso implements Serializable {
 	@OneToMany(mappedBy="proceso")
 	private List<Dispositivo> dispositivos;
 
+	//bi-directional many-to-one association to Distribdetalle
+	@OneToMany(mappedBy="proceso")
+	private List<Distribdetalle> distribdetalles;
+
 	//bi-directional many-to-one association to Lineasprod
 	@OneToMany(mappedBy="proceso")
 	private List<Lineasprod> lineasprods;
@@ -71,6 +75,10 @@ public class Proceso implements Serializable {
 	//bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy="proceso")
 	private List<Procesosop> procesosops;
+
+	//bi-directional many-to-one association to Usuario
+	@OneToMany(mappedBy="proceso")
+	private List<Usuario> usuarios;
 
 	public Proceso() {
 	}
@@ -185,6 +193,28 @@ public class Proceso implements Serializable {
 		dispositivo.setProceso(null);
 
 		return dispositivo;
+	}
+
+	public List<Distribdetalle> getDistribdetalles() {
+		return this.distribdetalles;
+	}
+
+	public void setDistribdetalles(List<Distribdetalle> distribdetalles) {
+		this.distribdetalles = distribdetalles;
+	}
+
+	public Distribdetalle addDistribdetalle(Distribdetalle distribdetalle) {
+		getDistribdetalles().add(distribdetalle);
+		distribdetalle.setProceso(this);
+
+		return distribdetalle;
+	}
+
+	public Distribdetalle removeDistribdetalle(Distribdetalle distribdetalle) {
+		getDistribdetalles().remove(distribdetalle);
+		distribdetalle.setProceso(null);
+
+		return distribdetalle;
 	}
 
 	public List<Lineasprod> getLineasprods() {
@@ -311,6 +341,28 @@ public class Proceso implements Serializable {
 		procesosop.setProceso(null);
 
 		return procesosop;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return this.usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Usuario addUsuario(Usuario usuario) {
+		getUsuarios().add(usuario);
+		usuario.setProceso(this);
+
+		return usuario;
+	}
+
+	public Usuario removeUsuario(Usuario usuario) {
+		getUsuarios().remove(usuario);
+		usuario.setProceso(null);
+
+		return usuario;
 	}
 
 }

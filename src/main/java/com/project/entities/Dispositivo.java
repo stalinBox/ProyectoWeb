@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -22,6 +23,9 @@ public class Dispositivo implements Serializable {
 	@Column(name="mac_dispositivo")
 	private String macDispositivo;
 
+	@Column(name="nombre_dis")
+	private String nombreDis;
+
 	//bi-directional many-to-one association to Maquina
 	@ManyToOne
 	@JoinColumn(name="id_maquinas_ref")
@@ -31,6 +35,10 @@ public class Dispositivo implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="pro_codigo_ref")
 	private Proceso proceso;
+
+	//bi-directional many-to-one association to ProcAlerta
+	@OneToMany(mappedBy="dispositivo")
+	private List<ProcAlerta> procAlertas;
 
 	public Dispositivo() {
 	}
@@ -51,6 +59,14 @@ public class Dispositivo implements Serializable {
 		this.macDispositivo = macDispositivo;
 	}
 
+	public String getNombreDis() {
+		return this.nombreDis;
+	}
+
+	public void setNombreDis(String nombreDis) {
+		this.nombreDis = nombreDis;
+	}
+
 	public Maquina getMaquina() {
 		return this.maquina;
 	}
@@ -65,6 +81,28 @@ public class Dispositivo implements Serializable {
 
 	public void setProceso(Proceso proceso) {
 		this.proceso = proceso;
+	}
+
+	public List<ProcAlerta> getProcAlertas() {
+		return this.procAlertas;
+	}
+
+	public void setProcAlertas(List<ProcAlerta> procAlertas) {
+		this.procAlertas = procAlertas;
+	}
+
+	public ProcAlerta addProcAlerta(ProcAlerta procAlerta) {
+		getProcAlertas().add(procAlerta);
+		procAlerta.setDispositivo(this);
+
+		return procAlerta;
+	}
+
+	public ProcAlerta removeProcAlerta(ProcAlerta procAlerta) {
+		getProcAlertas().remove(procAlerta);
+		procAlerta.setDispositivo(null);
+
+		return procAlerta;
 	}
 
 }

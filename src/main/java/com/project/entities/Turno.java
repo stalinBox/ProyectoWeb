@@ -36,6 +36,14 @@ public class Turno implements Serializable {
 	@OneToMany(mappedBy="turno")
 	private List<Lineasturno> lineasturnos;
 
+	//bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy="turno")
+	private List<Programturno> programturnos;
+
+	//bi-directional many-to-one association to Usuario
+	@OneToMany(mappedBy="turno")
+	private List<Usuario> usuarios;
+
 	public Turno() {
 	}
 
@@ -99,6 +107,50 @@ public class Turno implements Serializable {
 		lineasturno.setTurno(null);
 
 		return lineasturno;
+	}
+
+	public List<Programturno> getProgramturnos() {
+		return this.programturnos;
+	}
+
+	public void setProgramturnos(List<Programturno> programturnos) {
+		this.programturnos = programturnos;
+	}
+
+	public Programturno addProgramturno(Programturno programturno) {
+		getProgramturnos().add(programturno);
+		programturno.setTurno(this);
+
+		return programturno;
+	}
+
+	public Programturno removeProgramturno(Programturno programturno) {
+		getProgramturnos().remove(programturno);
+		programturno.setTurno(null);
+
+		return programturno;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return this.usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Usuario addUsuario(Usuario usuario) {
+		getUsuarios().add(usuario);
+		usuario.setTurno(this);
+
+		return usuario;
+	}
+
+	public Usuario removeUsuario(Usuario usuario) {
+		getUsuarios().remove(usuario);
+		usuario.setTurno(null);
+
+		return usuario;
 	}
 
 }

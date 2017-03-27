@@ -35,6 +35,10 @@ public class Maquina implements Serializable {
 	@JoinColumn(name="lineapro_codigo")
 	private Lineasprod lineasprod;
 
+	//bi-directional many-to-one association to Usuario
+	@OneToMany(mappedBy="maquina")
+	private List<Usuario> usuarios;
+
 	public Maquina() {
 	}
 
@@ -98,6 +102,28 @@ public class Maquina implements Serializable {
 
 	public void setLineasprod(Lineasprod lineasprod) {
 		this.lineasprod = lineasprod;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return this.usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Usuario addUsuario(Usuario usuario) {
+		getUsuarios().add(usuario);
+		usuario.setMaquina(this);
+
+		return usuario;
+	}
+
+	public Usuario removeUsuario(Usuario usuario) {
+		getUsuarios().remove(usuario);
+		usuario.setMaquina(null);
+
+		return usuario;
 	}
 
 }

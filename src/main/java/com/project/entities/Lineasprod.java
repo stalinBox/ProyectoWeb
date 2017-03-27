@@ -27,6 +27,14 @@ public class Lineasprod implements Serializable {
 
 	private String nomlinea;
 
+	//bi-directional many-to-one association to Capacidade
+	@OneToMany(mappedBy="lineasprod")
+	private List<Capacidade> capacidades;
+
+	//bi-directional many-to-one association to Distribdetalle
+	@OneToMany(mappedBy="lineasprod")
+	private List<Distribdetalle> distribdetalles;
+
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
 	@JoinColumn(name="pro_codigo")
@@ -44,6 +52,10 @@ public class Lineasprod implements Serializable {
 	//bi-directional many-to-one association to Maquina
 	@OneToMany(mappedBy="lineasprod")
 	private List<Maquina> maquinas;
+
+	//bi-directional many-to-one association to Usuario
+	@OneToMany(mappedBy="lineasprod")
+	private List<Usuario> usuarios;
 
 	public Lineasprod() {
 	}
@@ -78,6 +90,50 @@ public class Lineasprod implements Serializable {
 
 	public void setNomlinea(String nomlinea) {
 		this.nomlinea = nomlinea;
+	}
+
+	public List<Capacidade> getCapacidades() {
+		return this.capacidades;
+	}
+
+	public void setCapacidades(List<Capacidade> capacidades) {
+		this.capacidades = capacidades;
+	}
+
+	public Capacidade addCapacidade(Capacidade capacidade) {
+		getCapacidades().add(capacidade);
+		capacidade.setLineasprod(this);
+
+		return capacidade;
+	}
+
+	public Capacidade removeCapacidade(Capacidade capacidade) {
+		getCapacidades().remove(capacidade);
+		capacidade.setLineasprod(null);
+
+		return capacidade;
+	}
+
+	public List<Distribdetalle> getDistribdetalles() {
+		return this.distribdetalles;
+	}
+
+	public void setDistribdetalles(List<Distribdetalle> distribdetalles) {
+		this.distribdetalles = distribdetalles;
+	}
+
+	public Distribdetalle addDistribdetalle(Distribdetalle distribdetalle) {
+		getDistribdetalles().add(distribdetalle);
+		distribdetalle.setLineasprod(this);
+
+		return distribdetalle;
+	}
+
+	public Distribdetalle removeDistribdetalle(Distribdetalle distribdetalle) {
+		getDistribdetalles().remove(distribdetalle);
+		distribdetalle.setLineasprod(null);
+
+		return distribdetalle;
 	}
 
 	public Proceso getProceso() {
@@ -138,6 +194,28 @@ public class Lineasprod implements Serializable {
 		maquina.setLineasprod(null);
 
 		return maquina;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return this.usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Usuario addUsuario(Usuario usuario) {
+		getUsuarios().add(usuario);
+		usuario.setLineasprod(this);
+
+		return usuario;
+	}
+
+	public Usuario removeUsuario(Usuario usuario) {
+		getUsuarios().remove(usuario);
+		usuario.setLineasprod(null);
+
+		return usuario;
 	}
 
 }

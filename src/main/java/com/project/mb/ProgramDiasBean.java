@@ -242,15 +242,15 @@ public class ProgramDiasBean implements Serializable {
 						}
 					}
 
-					mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
-							p.getStandconv(), mLineas);
-					mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
-							p.getStandman(), mLineas);
-					mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
-							p.getStandauto(), mLineas);
-					mAll.put(3, mProcesosT1);
-					mAll.put(4, mProcesosT2);
-					mAll.put(5, mProcesosT3);
+					// mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
+					// p.getStandconv(), mLineas);
+					// mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
+					// p.getStandman(), mLineas);
+					// mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
+					// p.getStandauto(), mLineas);
+					// mAll.put(3, mProcesosT1);
+					// mAll.put(4, mProcesosT2);
+					// mAll.put(5, mProcesosT3);
 					System.out.println("Parametro codigo: "
 							+ p.getParamCodigo());
 					orderitem2 = new Items2(p.getProceso().getProCodigo(),
@@ -270,9 +270,9 @@ public class ProgramDiasBean implements Serializable {
 				System.out.println("Codigo Parametro2: "
 						+ param.getParamCodigo());
 				Tablas tablas = new Tablas();
-				mProcesos = tablas.receivParamsPares(
-						ContentParam.getTotalOrden(), param.getStandconv(),
-						mLineasCantidad);
+				// mProcesos = tablas.receivParamsPares(
+				// ContentParam.getTotalOrden(), param.getStandconv(),
+				// mLineasCantidad);
 				mAll.put(param.getProceso().getProCodigo(), mProcesos);
 
 				orderitem2 = new Items2(param.getProceso().getProCodigo(),

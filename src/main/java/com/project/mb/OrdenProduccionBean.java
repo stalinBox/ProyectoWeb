@@ -61,7 +61,6 @@ public class OrdenProduccionBean implements Serializable {
 	private Date currentDate;
 
 	private static final ArrayList<Items> orderList = new ArrayList<Items>();
-	private ArrayList<Integer> cp = new ArrayList<Integer>();
 	private Integer total;
 
 	// INICIALIZADORES
@@ -205,46 +204,14 @@ public class OrdenProduccionBean implements Serializable {
 		}
 	}
 
-	public void ProcesarOrden() throws InvalidFormatException, IOException {
-		int ab = 0;
-		List<SelectItem> oo = new ArrayList<SelectItem>();
-		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
-		List<Detalleorden> deta = detaOrdenDao.findByOrden(Codigo);
-		oo.clear();
-		orderList.clear();
-		for (Detalleorden d : deta) {
-			Items orderitem = new Items(d.getModelo().getModNombre(), d
-					.getTalla().getTalNumero(), d.getCantidad());
-			ab += d.getCantidad();
-			orderList.add(orderitem);
-		}
-
-		WriteAndReadExcel wr = new WriteAndReadExcel();
-		// Store la capacidad de produccion
-		this.cp = wr.getOrder(orderList);
-		this.total = ab;
-		System.out.println("TOTAL DE LA ORDEN: " + total);
-		System.out.println("CAPACIDAD PROCESOS M,A,T : " + cp);
-
+	public void NextOrden() throws InvalidFormatException, IOException {
 		String ruta = "";
-		ruta = MyUtil.calzadoPath() + "parametrizacion/param.jsf";
+		ruta = MyUtil.calzadoPath() + "ordenesProd/ordenLineas.jsf";
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
-
 			ContentParam.setCodOrden(Codigo);
-			ContentParam.setStandConvMontaje(this.cp.get(0));
-			ContentParam.setStandConvAparado(this.cp.get(1));
-
-			ContentParam.setStandConvTroquelado(this.cp.get(2));
-			ContentParam.setStandTroqueladoTroquel(this.cp.get(4));
-
-			ContentParam.setTotalOrden(this.total);
-
-			ContentParam.setRespGenOrden(0);
-			ContentParam.setStandAutMontaje(0);
-			ContentParam.setStandAutAparado(0);
-			ContentParam.setStandAutTroquelado(this.cp.get(3));
+			System.out.println("Codigo orden" + Codigo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -263,14 +230,6 @@ public class OrdenProduccionBean implements Serializable {
 
 	public List<Ordenprod> getOrdenProduccion() {
 		return ordenProduccion;
-	}
-
-	public ArrayList<Integer> getCp() {
-		return cp;
-	}
-
-	public void setCp(ArrayList<Integer> cp) {
-		this.cp = cp;
 	}
 
 	public Integer getTotal() {

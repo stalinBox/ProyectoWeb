@@ -71,10 +71,6 @@ public class ParamBean implements Serializable {
 
 		Ordenprod ordenpro = new Ordenprod();
 		ordenpro.setOrdenprodCodigo(ContentParam.getCodOrden());
-		this.selectedParametrizacion.setOrdenprod(ordenpro);
-		this.selectedParametrizacion.setStandconv(this.stdConv);
-		this.selectedParametrizacion.setStandauto(this.stdAut);
-		this.selectedParametrizacion.setStandman(this.stdMan);
 
 		if (paramDao.create(this.selectedParametrizacion)) {
 			msg = "Se ha añadido un nuevo parametrizacion";
