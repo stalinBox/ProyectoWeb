@@ -32,11 +32,10 @@ import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
 import com.project.entities.Talla;
 import com.project.entities.Usuario;
-import com.project.utils.ContentParam;
+import com.project.utils.ItemCodOrden;
 import com.project.utils.Items;
 import com.project.utils.MyUtil;
 import com.project.utils.RefreshPage;
-import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
 @ViewScoped
@@ -210,8 +209,7 @@ public class OrdenProduccionBean implements Serializable {
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
-			ContentParam.setCodOrden(Codigo);
-			System.out.println("Codigo orden" + Codigo);
+			ItemCodOrden.setCodOrden(Codigo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

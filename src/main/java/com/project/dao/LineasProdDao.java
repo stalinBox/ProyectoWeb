@@ -10,6 +10,8 @@ public interface LineasProdDao {
 
 	public List<Lineasprod> findByParam(Integer codParam);
 
+	public List<Lineasprod> findByProceso(Integer codPro);
+
 	public boolean create(Lineasprod lineaP);
 
 	public boolean update(Lineasprod lineaP);

@@ -107,4 +107,23 @@ public class LineasProdDaoImpl implements LineasProdDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasprod> findByProceso(Integer codPro) {
+		List<Lineasprod> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Lineasprod lp where lp.proceso.proCodigo = "
+				+ codPro;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLLINEA: " + e.toString());
+		}
+		return listado;
+	}
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import com.project.entities.Ordenprod;
 import com.project.entities.Procesosop;
 import com.project.utils.HibernateUtil;
 

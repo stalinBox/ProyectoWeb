@@ -9,8 +9,104 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+			<p:growl id="msgs" showDetail="true" />
+			<h:form id="idFmrDistrib">
+				<p:panel id="idPanel">
+					<p:messages autoUpdate="true" />
+					<f:facet name="header">Distribucion en las lineas</f:facet>
+					<h:panelGrid id="idProc" columns="2">
+
+						<h:outputLabel value="Proceso:" />
+						<p:selectOneMenu id="idCboProPadre"
+							value="#{distribDetalleBean.proCodigo}" style="width:150px"
+							required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{distribDetalleBean.selectedItemsProceso}" />
+
+							<p:ajax update="idCboLineasPros" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Línea: " />
+						<p:selectOneMenu id="idCboLineasPros"
+							value="#{distribDetalleBean.selectedDistribDeta.lineasprod.lineaproCodigo}"
+							style="width:150px" required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{distribDetalleBean.selectedItemsLinea}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Modelos:" />
+						<p:selectOneMenu id="idCboModDet"
+							value="#{distribDetalleBean.selectedDistribDeta.detalleorden.detaordenCodigo}"
+							style="width:150px" required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:commandButton id="btnAgregarDetalle" value="Agregar"
+								update=":formDataTable"
+								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}" />
+
+							<p:commandButton id="btnBack" value="Anterior" />
+
+							<p:commandButton id="btnNext" value="Procesar" />
 
 
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="distrib"
+					value="#{distribDetalleBean.distribDetalle}"
+					emptyMessage="Ningun registro encontrado">
+
+					<f:facet name="header">Detalle</f:facet>
+
+					<p:column headerText="Proceso">
+						<h:outputText value="#{distrib.proceso.tipoProceso.tprNombre}" />
+					</p:column>
+
+					<p:column headerText="Linea">
+						<h:outputText value="#{distrib.lineasprod.nomlinea}" />
+					</p:column>
+
+					<p:column headerText="Modelo">
+						<h:outputText value="#{distrib.detalleorden.modelo.modNombre}" />
+					</p:column>
+
+					<p:column headerText="Eliminar?" style="width:10%">
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogParamDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Item"
+					severity="alert" widgetVar="dialogParamDelete">
+
+					<h:inputHidden value="" />
+
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, :msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogParamDelete').hide()" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogParamDelete').hide()" />
+				</p:confirmDialog>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

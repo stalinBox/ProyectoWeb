@@ -211,4 +211,24 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Detalleorden> getByOrden2(Integer codOrden, Integer codPro) {
+		List<Detalleorden> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select distinct(deta) from Detalleorden deta where deta.detaordenCodigo not in (select dd.detalleorden.detaordenCodigo from Distribdetalle dd where dd.proceso.proCodigo = "
+				+ codPro + ") and deta.ordenprod.ordenprodCodigo = " + codOrden;
+
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETBYORDEN: " + e.toString());
+		}
+		return listado;
+	}
 }
