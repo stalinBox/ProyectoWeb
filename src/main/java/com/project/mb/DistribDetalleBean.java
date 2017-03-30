@@ -83,7 +83,7 @@ public class DistribDetalleBean implements Serializable {
 	}
 
 	public void btnProcesar(ActionEvent actionEvent) {
-
+		System.out.println("Procesando..");
 	}
 
 	// SETTERS AND GETTERS

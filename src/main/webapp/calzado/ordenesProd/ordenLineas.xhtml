@@ -53,9 +53,11 @@
 								update=":formDataTable"
 								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}" />
 
-							<p:commandButton id="btnBack" value="Anterior" />
+							<p:commandButton id="btnBack" value="Anterior" process="@this"
+								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
 
-							<p:commandButton id="btnNext" value="Procesar" />
+							<p:commandButton id="btnNext" value="Procesar" process="@this"
+								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}" />
 
 
 						</f:facet>
