@@ -36,6 +36,7 @@
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsLinea}" />
+							<p:ajax update="idCboModDet" />
 						</p:selectOneMenu>
 
 						<h:outputLabel value="Modelos:" />
@@ -46,11 +47,12 @@
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
+
 						</p:selectOneMenu>
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalle" value="Agregar"
-								update=":formDataTable"
+								update=":formDataTable, :idFmrDistrib:idCboProPadre, :idFmrDistrib:idCboLineasPros, :idFmrDistrib:idCboModDet"
 								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}" />
 
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
@@ -58,37 +60,34 @@
 
 							<p:commandButton id="btnNext" value="Procesar" process="@this"
 								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}" />
-
-
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>
 			</h:form>
 
 			<h:form id="formDataTable">
-				<p:dataTable id="basicDT" var="distrib"
+				<p:dataTable id="basicDT" var="p"
 					value="#{distribDetalleBean.distribDetalle}"
 					emptyMessage="Ningun registro encontrado">
 
-					<f:facet name="header">Detalle</f:facet>
+					<p:column headerText="Modelo">
+						<h:outputText value="#{p.detalleorden.modelo.modNombre}" />
+					</p:column>
 
 					<p:column headerText="Proceso">
-						<h:outputText value="#{distrib.proceso.tipoProceso.tprNombre}" />
+						<h:outputText value="#{p.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Linea">
-						<h:outputText value="#{distrib.lineasprod.nomlinea}" />
-					</p:column>
-
-					<p:column headerText="Modelo">
-						<h:outputText value="#{distrib.detalleorden.modelo.modNombre}" />
+						<h:outputText value="#{p.lineasprod.nomlinea}" />
 					</p:column>
 
 					<p:column headerText="Eliminar?" style="width:10%">
 						<p:commandButton id="btnDelete" update="formDelete"
-							oncomplete="PF('dialogParamDelete').show()" icon="ui-icon-close"
-							title="Eliminar">
-
+							oncomplete="PF('dialogDistribDelete').show()"
+							icon="ui-icon-close" title="Eliminar">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{distribDetalleBean.selectedDistribDeta}" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
@@ -97,16 +96,18 @@
 			<h:form id="formDelete">
 				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
 					showEffect="fade" hideEffect="fade" header="Eliminar Item"
-					severity="alert" widgetVar="dialogParamDelete">
+					severity="alert" widgetVar="dialogDistribDelete">
 
-					<h:inputHidden value="" />
+					<h:inputHidden
+						value="#{distribDetalleBean.selectedDistribDeta.distribCodigo}" />
 
 					<p:commandButton id="confirm" value="Si"
 						update="formDataTable, :msgs" icon="ui-icon-check"
-						oncomplete="PF('dialogParamDelete').hide()" />
+						oncomplete="PF('dialogDistribDelete').hide()"
+						actionListener="#{distribDetalleBean.btnDeleteDistrib(actionListener)}" />
 
 					<p:commandButton id="decline" value="No" icon="ui-icon-close"
-						oncomplete="PF('dialogParamDelete').hide()" />
+						oncomplete="PF('dialogDistribDelete').hide()" />
 				</p:confirmDialog>
 			</h:form>
 		</ui:define>

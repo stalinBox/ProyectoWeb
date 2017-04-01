@@ -86,6 +86,22 @@ public class DistribDetalleBean implements Serializable {
 		System.out.println("Procesando..");
 	}
 
+	public void btnDeleteDistrib(ActionEvent actionEvent) {
+		String msg;
+		DistribDetalleDao distribDao = new DistribDetalleDaoImpl();
+		if (distribDao.delete(this.selectedDistribDeta.getDistribCodigo())) {
+			msg = "Se eliminó un Item";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al eliminar una Item";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+
 	// SETTERS AND GETTERS
 
 	public List<Distribdetalle> getDistribDetalle() {

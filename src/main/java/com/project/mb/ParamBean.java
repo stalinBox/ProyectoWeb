@@ -62,7 +62,6 @@ public class ParamBean implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void btnCreateParametrizacion(ActionEvent actionEvent) {

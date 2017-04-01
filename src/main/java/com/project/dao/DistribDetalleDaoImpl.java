@@ -54,8 +54,22 @@ public class DistribDetalleDaoImpl implements DistribDetalleDao {
 
 	@Override
 	public boolean delete(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		try {
+			sesion.beginTransaction();
+			Distribdetalle distribdeta = (Distribdetalle) sesion.load(
+					Distribdetalle.class, id);
+			sesion.delete(distribdeta);
+			sesion.getTransaction().commit();
+			flag = true;
+		} catch (Exception e) {
+			flag = false;
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR DELETE DISTRIBDETALLE: "
+					+ e.getMessage().toString());
+		}
+		return flag;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,8 +77,8 @@ public class DistribDetalleDaoImpl implements DistribDetalleDao {
 	public List<Distribdetalle> findByOrden(Integer codOrden) {
 		List<Distribdetalle> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from Distribdetalle dt inner join dt.detalleorden do where do.ordenprod.ordenprodCodigo = "
-				+ codOrden;
+		String sql = "FROM Distribdetalle dt WHERE dt.detalleorden.detaordenCodigo in (SELECT do.detaordenCodigo FROM Detalleorden do where do.ordenprod.ordenprodCodigo="
+				+ codOrden + ") ";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

@@ -10,7 +10,6 @@ public interface DistribDetalleDao {
 
 	public List<Distribdetalle> findByOrden(Integer codOrden);
 
-
 	public boolean create(Distribdetalle distribDetalle);
 
 	public boolean update(Distribdetalle distribDetalle);
