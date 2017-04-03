@@ -13,7 +13,7 @@
 			<h:form id="idFmrDistrib">
 				<p:panel id="idPanel">
 					<p:messages autoUpdate="true" />
-					<f:facet name="header">Distribucion en las lineas</f:facet>
+					<f:facet name="header">Distribución Modelos por Línea</f:facet>
 					<h:panelGrid id="idProc" columns="2">
 
 						<h:outputLabel value="Proceso:" />
@@ -63,6 +63,11 @@
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>
+			</h:form>
+
+			<h:form>
+				<p:outputLabel value="Nº dias:" />
+				<p:inputText value="#{distribDetalleBean.nDias}" />
 			</h:form>
 
 			<h:form id="formDataTable">

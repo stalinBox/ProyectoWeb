@@ -42,6 +42,7 @@ public class DetaOrdenBean implements Serializable {
 	Items order;
 	private static final ArrayList<Items> orderList = new ArrayList<Items>();
 	private static Integer total;
+	private Integer nDias;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -101,7 +102,7 @@ public class DetaOrdenBean implements Serializable {
 		WriteAndReadExcel wr = new WriteAndReadExcel();
 
 		// Store la capacidad de produccion
-		cp = wr.getOrder(orderList);
+		cp = wr.GenerarEstandar(orderList, nDias);
 
 		// Store la orden total del pedido
 		total = totalOrden();
@@ -154,6 +155,14 @@ public class DetaOrdenBean implements Serializable {
 			this.selectedItemsTalla.add(selectItem);
 		}
 		return selectedItemsTalla;
+	}
+
+	public Integer getnDias() {
+		return nDias;
+	}
+
+	public void setnDias(Integer nDias) {
+		this.nDias = nDias;
 	}
 
 	public static ArrayList<Integer> getCp() {

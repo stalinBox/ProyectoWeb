@@ -58,7 +58,7 @@
 				<p:growl id="msgs" showDetail="true" />
 
 				<p:dataTable id="basicDT" var="process"
-					value="#{procesoBean.procesos}" editable="true" editMode="cell">
+					value="#{procesoBean.procesos}">
 					<p:column headerText="Process">
 						<h:outputText value="#{process.tipoProceso.tprNombre}" />
 					</p:column>

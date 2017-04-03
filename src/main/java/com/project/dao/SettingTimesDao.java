@@ -13,6 +13,6 @@ public interface SettingTimesDao {
 
 	public boolean delete(Integer id);
 
-	public double findByTs(String mNombre, String tNombre);
+	public double findByTs(String mNombre, String tNombre, Integer nDia);
 
 }

@@ -40,6 +40,7 @@ public class DistribDetalleBean implements Serializable {
 	private List<SelectItem> selectedItemsLinea;
 	private List<SelectItem> selectedItemsModDeta;
 	private Integer proCodigo;
+	private Integer nDias;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -108,6 +109,14 @@ public class DistribDetalleBean implements Serializable {
 		DistribDetalleDao distribDetaDao = new DistribDetalleDaoImpl();
 		this.distribDetalle = distribDetaDao.findByOrden(codDetaOrden);
 		return distribDetalle;
+	}
+
+	public Integer getnDias() {
+		return nDias;
+	}
+
+	public void setnDias(Integer nDias) {
+		this.nDias = nDias;
 	}
 
 	public List<SelectItem> getSelectedItemsModDeta() {

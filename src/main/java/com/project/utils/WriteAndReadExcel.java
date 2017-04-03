@@ -33,19 +33,10 @@ public class WriteAndReadExcel implements Serializable {
 	// VARIABLES
 	private Map<String, Object[]> dataOrderList = new TreeMap<String, Object[]>();
 
-	// SETTERS AND GETTERS
-	public Map<String, Object[]> getDataOrderList() {
-		return dataOrderList;
-	}
-
-	public void setDataOrderList(Map<String, Object[]> dataOrderList) {
-		this.dataOrderList = dataOrderList;
-	}
-
 	// ***************METODOS**************
 	// OBTIENE LA ORDEN DE PRODUCCION DE BEAN Y MAPEA HACIA UN MAP
-	public ArrayList<Integer> getOrder(ArrayList<Items> orderList)
-			throws InvalidFormatException, IOException {
+	public ArrayList<Integer> GenerarEstandar(ArrayList<Items> orderList,
+			Integer nDias) throws InvalidFormatException, IOException {
 		ArrayList<Integer> cpStands = new ArrayList<Integer>();
 		Integer k = 1;
 		for (Items i : orderList) {
@@ -63,15 +54,15 @@ public class WriteAndReadExcel implements Serializable {
 					new Object[] { k - 1, i.getModelo(), i.getTalla(),
 							i.getCantidad() });
 		}
-		cpStands = SendPathFile(orderList);
+		cpStands = SendPathFile(orderList, nDias);
 		System.out.println("capacidad de montaje,aparado,troquelado: "
 				+ cpStands);
 		return cpStands;
 	}
 
 	// OBTIENE EL DIRECTORIO Y LA UBICACION DEL ARCHIVO EXCEL
-	public ArrayList<Integer> SendPathFile(ArrayList<Items> orderList)
-			throws IOException, InvalidFormatException {
+	public ArrayList<Integer> SendPathFile(ArrayList<Items> orderList,
+			Integer nDias) throws IOException, InvalidFormatException {
 		ArrayList<Integer> cpStands = new ArrayList<Integer>();
 
 		// NOMBRE ESTATICO
@@ -91,18 +82,18 @@ public class WriteAndReadExcel implements Serializable {
 
 		// METODO PARA ENVIAR LA ORDEN Y ESCRIBIR EN EXCEL
 		dirNewLocationFile = WritingExcelXLSM(pathFile, pathLocationFile,
-				orderList);
+				orderList, nDias);
 		File pathNewFile = new File(dirNewLocationFile);
 		if (ExecuteMacro(pathNewFile) == true) {
-			cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList);
+			cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList, nDias);
 		}
 		return cpStands;
 	}
 
 	// ESCRIBE EN EXCEL LA ORDEN DE PRODUCCION
 	public String WritingExcelXLSM(String pathFile, String pathLocationFile,
-			ArrayList<Items> orderList) throws InvalidFormatException,
-			IOException {
+			ArrayList<Items> orderList, Integer nDias)
+			throws InvalidFormatException, IOException {
 
 		Workbook workbook;
 		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
@@ -152,7 +143,7 @@ public class WriteAndReadExcel implements Serializable {
 			int ts = 0;
 			String tNombre = "MONTAJE";
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			ts = (int) sttDao.findByTs(mNombre, tNombre, nDias);
 			System.out.println("Capacidad por Montaje en pp2: " + ts);
 			pp2.add(ts);
 		}
@@ -181,7 +172,7 @@ public class WriteAndReadExcel implements Serializable {
 			int ts = 0;
 			String tNombre = "APARADO";
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			ts = (int) sttDao.findByTs(mNombre, tNombre, nDias);
 			System.out.println("Capacidad por APARADO en pp3:  " + ts);
 			pp3.add(ts);
 		}
@@ -222,7 +213,7 @@ public class WriteAndReadExcel implements Serializable {
 
 	// RETORNA EL VALOR RESULTANTE DEL SOLVER
 	public ArrayList<Integer> ReadingExcelXLSM(String path,
-			ArrayList<Items> orderList) throws IOException {
+			ArrayList<Items> orderList, Integer nDias) throws IOException {
 
 		ArrayList<Integer> standaresProcesos = new ArrayList<Integer>();
 
@@ -284,7 +275,7 @@ public class WriteAndReadExcel implements Serializable {
 			int ts = 0;
 			String tNombre = "TROQUELADO";
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre);
+			ts = (int) sttDao.findByTs(mNombre, tNombre, nDias);
 			System.out.println("Capacidad por TROQUELADO en pp2:  " + ts);
 			pp4.add(ts);
 		}
@@ -338,5 +329,14 @@ public class WriteAndReadExcel implements Serializable {
 		}
 		return false;
 
+	}
+
+	// SETTERS AND GETTERS
+	public Map<String, Object[]> getDataOrderList() {
+		return dataOrderList;
+	}
+
+	public void setDataOrderList(Map<String, Object[]> dataOrderList) {
+		this.dataOrderList = dataOrderList;
 	}
 }
