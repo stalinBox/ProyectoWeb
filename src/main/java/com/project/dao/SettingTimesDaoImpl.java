@@ -62,8 +62,29 @@ public class SettingTimesDaoImpl implements SettingTimesDao {
 
 	@Override
 	public boolean update(Confproceso confPro) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		try {
+			sesion.beginTransaction();
+			Confproceso sttdb = (Confproceso) sesion.load(Confproceso.class,
+					confPro.getConfproCodigo());
+			// Parametros a cambiar
+			sttdb.setModelo(confPro.getModelo());
+			sttdb.setLineasprod(confPro.getLineasprod());
+			sttdb.setProceso1(confPro.getProceso1());
+			sttdb.setProceso2(confPro.getProceso2());
+			sttdb.setTiempoTs(confPro.getTiempoTs());
+			// fin de parametros
+			sesion.update(sttdb);
+			sesion.getTransaction().commit();
+			flag = true;
+		} catch (Exception e) {
+			flag = false;
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR UPDATE MODELO: "
+					+ e.getMessage().toString());
+		}
+		return flag;
 	}
 
 	@Override

@@ -3,37 +3,41 @@ package com.project.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the confproceso database table.
  * 
  */
 @Entity
-@NamedQuery(name="Confproceso.findAll", query="SELECT c FROM Confproceso c")
+@NamedQuery(name = "Confproceso.findAll", query = "SELECT c FROM Confproceso c")
 public class Confproceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="confpro_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "confpro_codigo")
 	private Integer confproCodigo;
 
-	@Column(name="tiempo_ts")
+	@Column(name = "tiempo_ts")
 	private double tiempoTs;
 
-	//bi-directional many-to-one association to Modelo
+	// bi-directional many-to-one association to Lineasprod
 	@ManyToOne
-	@JoinColumn(name="mod_codigo")
+	@JoinColumn(name = "lineapro_codigo")
+	private Lineasprod lineasprod;
+
+	// bi-directional many-to-one association to Modelo
+	@ManyToOne
+	@JoinColumn(name = "mod_codigo")
 	private Modelo modelo;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="pro_codigo")
+	@JoinColumn(name = "pro_codigo")
 	private Proceso proceso1;
 
-	//bi-directional many-to-one association to Proceso
+	// bi-directional many-to-one association to Proceso
 	@ManyToOne
-	@JoinColumn(name="sub_pro")
+	@JoinColumn(name = "sub_pro")
 	private Proceso proceso2;
 
 	public Confproceso() {
@@ -53,6 +57,14 @@ public class Confproceso implements Serializable {
 
 	public void setTiempoTs(double tiempoTs) {
 		this.tiempoTs = tiempoTs;
+	}
+
+	public Lineasprod getLineasprod() {
+		return this.lineasprod;
+	}
+
+	public void setLineasprod(Lineasprod lineasprod) {
+		this.lineasprod = lineasprod;
 	}
 
 	public Modelo getModelo() {

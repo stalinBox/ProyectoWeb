@@ -12,11 +12,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import com.project.dao.LineasProdDao;
+import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.SettingTimesDao;
 import com.project.dao.SettingTimesDaoImpl;
 import com.project.entities.Confproceso;
+import com.project.entities.Lineasprod;
 import com.project.entities.Modelo;
 import com.project.entities.Proceso;
 import com.project.utils.RefreshPage;
@@ -37,11 +40,9 @@ public class SettingsConfProcesoBean implements Serializable {
 
 	private List<SelectItem> selectedItemsProcesos;
 	private List<SelectItem> selectedItemsSubProcesos;
-
-	private Integer codModelo;
-	private Integer codProceso;
-	private Integer codSubProceso;
-	private double ts;
+	private List<SelectItem> selectedItemsLineas;
+	private List<SelectItem> selectedItemsSub;
+	private Integer codLinea;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -50,6 +51,7 @@ public class SettingsConfProcesoBean implements Serializable {
 		this.selectedConfProceso.setModelo(new Modelo());
 		this.selectedConfProceso.setProceso1(new Proceso());
 		this.selectedConfProceso.setProceso2(new Proceso());
+		this.selectedConfProceso.setLineasprod(new Lineasprod());
 	}
 
 	// METODOS
@@ -73,6 +75,23 @@ public class SettingsConfProcesoBean implements Serializable {
 	}
 
 	public void btnUpdateConfTimes(ActionEvent actionEvent) {
+		String msg;
+		SettingTimesDao sttDao = new SettingTimesDaoImpl();
+		Lineasprod lp = new Lineasprod();
+		lp.setLineaproCodigo(this.codLinea);
+
+		this.selectedConfProceso.setLineasprod(lp);
+		if (sttDao.update(this.selectedConfProceso)) {
+			msg = "SE HA MODIFICADO";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "ERROR AL MODIFICAR";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 
 	}
 
@@ -96,36 +115,57 @@ public class SettingsConfProcesoBean implements Serializable {
 
 	// SETTERS AND GETTERS
 
-	public Integer getCodModelo() {
-		return codModelo;
+	public List<SelectItem> getSelectedItemsLineas() {
+		if (this.selectedConfProceso.getProceso1().getProCodigo() != null
+				&& !this.selectedConfProceso.getProceso1().getProCodigo()
+						.equals("")
+				&& this.selectedConfProceso.getProceso1().getProCodigo() != 0) {
+
+			this.selectedItemsLineas = new ArrayList<SelectItem>();
+			LineasProdDao lineasProDao = new LineasProdDaoImpl();
+			List<Lineasprod> lineasP = lineasProDao
+					.findByProceso(this.selectedConfProceso.getProceso1()
+							.getProCodigo());
+			for (Lineasprod li : lineasP) {
+				SelectItem selectItem = new SelectItem(li.getLineaproCodigo(),
+						li.getNomlinea());
+				this.selectedItemsLineas.add(selectItem);
+			}
+			return selectedItemsLineas;
+		} else {
+			this.selectedItemsLineas = new ArrayList<SelectItem>();
+			return selectedItemsLineas;
+		}
 	}
 
-	public void setCodModelo(Integer codModelo) {
-		this.codModelo = codModelo;
+	public List<SelectItem> getSelectedItemsSub() {
+		this.selectedItemsSub = new ArrayList<SelectItem>();
+		ProcesoDao procesosDao = new ProcesoDaoImpl();
+		List<Proceso> proceso = procesosDao.findSubProcesos();
+		this.selectedItemsSub.clear();
+		for (Proceso pro : proceso) {
+			SelectItem selectItem = new SelectItem(pro.getProCodigo(), pro
+					.getTipoProceso().getTprNombre());
+			this.selectedItemsSub.add(selectItem);
+		}
+
+		return selectedItemsSub;
 	}
 
-	public Integer getCodProceso() {
-		return codProceso;
+	public void setSelectedItemsSub(List<SelectItem> selectedItemsSub) {
+		this.selectedItemsSub = selectedItemsSub;
 	}
 
-	public void setCodProceso(Integer codProceso) {
-		this.codProceso = codProceso;
+	public Integer getCodLinea() {
+		return codLinea;
 	}
 
-	public Integer getCodSubProceso() {
-		return codSubProceso;
+	public void setCodLinea(Integer codLinea) {
+		this.codLinea = codLinea;
 	}
 
-	public void setCodSubProceso(Integer codSubProceso) {
-		this.codSubProceso = codSubProceso;
-	}
-
-	public double getTs() {
-		return ts;
-	}
-
-	public void setTs(double ts) {
-		this.ts = ts;
+	public void setSelectedItemsLineas(List<SelectItem> selectedItemsLineas) {
+		this.selectedItemsLineas = selectedItemsLineas;
 	}
 
 	public List<SelectItem> getSelectedItemsProcesos() {

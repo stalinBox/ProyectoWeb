@@ -16,6 +16,17 @@
 					<f:facet name="header">Distribución Modelos por Línea</f:facet>
 					<h:panelGrid id="idProc" columns="2">
 
+						<h:outputLabel value="Modelos:" />
+						<p:selectOneMenu id="idCboModDet"
+							value="#{distribDetalleBean.selectedDistribDeta.detalleorden.detaordenCodigo}"
+							style="width:150px" required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
+
+						</p:selectOneMenu>
+
 						<h:outputLabel value="Proceso:" />
 						<p:selectOneMenu id="idCboProPadre"
 							value="#{distribDetalleBean.proCodigo}" style="width:150px"
@@ -39,17 +50,6 @@
 							<p:ajax update="idCboModDet" />
 						</p:selectOneMenu>
 
-						<h:outputLabel value="Modelos:" />
-						<p:selectOneMenu id="idCboModDet"
-							value="#{distribDetalleBean.selectedDistribDeta.detalleorden.detaordenCodigo}"
-							style="width:150px" required="true">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
-
-						</p:selectOneMenu>
-
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalle" value="Agregar"
 								update=":formDataTable, :idFmrDistrib:idCboProPadre, :idFmrDistrib:idCboLineasPros, :idFmrDistrib:idCboModDet"
@@ -66,8 +66,10 @@
 			</h:form>
 
 			<h:form>
-				<p:outputLabel value="Nº dias:" />
-				<p:inputText value="#{distribDetalleBean.nDias}" />
+				<h:panelGrid id="idnDias" columns="2">
+					<p:outputLabel value="Nº dias:" />
+					<p:inputText value="#{distribDetalleBean.nDias}" />
+				</h:panelGrid>
 			</h:form>
 
 			<h:form id="formDataTable">

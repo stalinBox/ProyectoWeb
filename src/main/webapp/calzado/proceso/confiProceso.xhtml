@@ -12,7 +12,8 @@
 			<p:growl id="msgs" showDetail="true" />
 
 			<h:form id="idConfProcesos">
-				<p:panel header="Configuracion TIEMPOS POR MODELOS POR PROCESO"
+				<p:panel
+					header="Configuracion TIEMPOS POR MODELOS POR PROCESO y POR LINEAS"
 					id="panel">
 					<p:messages autoUpdate="true" />
 					<h:panelGrid id="idProc" columns="2">
@@ -24,7 +25,8 @@
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{modelosBean.selectItemsModelo}" />
-							<p:ajax update=":idConfProcesos:idSubProceso" />
+							<p:ajax
+								update=":idConfProcesos:idSubProceso, :idConfProcesos:idLineaProd" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="idSettProceso" value="Proceso: " />
@@ -35,7 +37,8 @@
 								itemValue="0" />
 							<f:selectItems
 								value="#{settingsConfProcesoBean.selectedItemsProcesos}" />
-							<p:ajax update=":idConfProcesos:idSubProceso" />
+							<p:ajax
+								update=":idConfProcesos:idSubProceso, :idConfProcesos:idLineaProd" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="idSubProceso" value="SubProceso: " />
@@ -48,13 +51,23 @@
 								value="#{settingsConfProcesoBean.selectedItemsSubProcesos}" />
 						</p:selectOneMenu>
 
+						<p:outputLabel for="idLineaProd" value="Linea: " />
+						<p:selectOneMenu id="idLineaProd"
+							value="#{settingsConfProcesoBean.selectedConfProceso.lineasprod.lineaproCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{settingsConfProcesoBean.selectedItemsLineas}" />
+						</p:selectOneMenu>
+
 						<p:outputLabel for="idSettTs" value="Tiempo(m/par): " />
 						<p:inputNumber id="idSettTs"
 							value="#{settingsConfProcesoBean.selectedConfProceso.tiempoTs}" />
 						<f:facet name="footer">
 							<p:commandButton id="btnGuardarTS" value="Guardar"
 								actionListener="#{settingsConfProcesoBean.btnCreateConfTimes(actionEvent)}"
-								update=":formDataTable:basicDT, :idConfProcesos" />
+								update=":formDataTable:basicDT, :idConfProcesos, :msgs" />
 						</f:facet>
 					</h:panelGrid>
 
@@ -65,7 +78,7 @@
 				<p:dataTable id="basicDT" var="confPro"
 					value="#{settingsConfProcesoBean.confProceso}">
 
-					<f:facet name="header">Configuración de Tiempos</f:facet>
+					<f:facet name="header">Detalle</f:facet>
 
 					<p:column headerText="Modelos">
 						<h:outputText value="#{confPro.modelo.modNombre}" />
@@ -79,11 +92,22 @@
 						<h:outputText value="#{confPro.proceso2.tipoProceso.tprNombre}" />
 					</p:column>
 
+					<p:column headerText="Linea">
+						<h:outputText value="#{confPro.lineasprod.nomlinea}" />
+					</p:column>
+
 					<p:column headerText="Tiempos">
 						<h:outputText value="#{confPro.tiempoTs}" />
 					</p:column>
 
-					<p:column headerText="Eliminar" style="width:10%">
+					<p:column headerText="Update/Delete" style="width:10%">
+						<p:commandButton id="btnUpdate" update=":formUpdate"
+							oncomplete="PF('dialogConfProcesoUpdate').show()"
+							icon="ui-icon-pencil" title="Modificar">
+							<f:setPropertyActionListener value="#{confPro}"
+								target="#{settingsConfProcesoBean.selectedConfProceso}" />
+						</p:commandButton>
+
 						<p:commandButton id="btnDelete" update=":formDelete"
 							oncomplete="PF('dialogConfProcesoDelete').show()"
 							icon="ui-icon-close" title="Eliminar">
@@ -94,6 +118,80 @@
 				</p:dataTable>
 			</h:form>
 
+			<h:form id="formUpdate">
+				<p:dialog header="Modificar" widgetVar="dialogConfProcesoUpdate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgConfProcesoUpdate">
+					<h:inputHidden
+						value="#{settingsConfProcesoBean.selectedConfProceso.confproCodigo}" />
+
+					<p:panelGrid id="display" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<h:outputText value="Modelo:" />
+						<p:selectOneMenu id="idSettModelosU"
+							value="#{settingsConfProcesoBean.selectedConfProceso.modelo.modCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{modelosBean.selectItemsModelo}" />
+							<p:ajax
+								update=":formUpdate:idSubProcesoU, :formUpdate:idLineaProdU" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Proceso:" />
+						<p:selectOneMenu id="idSettProcesoU"
+							value="#{settingsConfProcesoBean.selectedConfProceso.proceso1.proCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{settingsConfProcesoBean.selectedItemsProcesos}" />
+							<p:ajax
+								update=":formUpdate:idSubProcesoU, :formUpdate:idLineaProdU" />
+						</p:selectOneMenu>
+
+						<h:outputText value="SubProceso:" />
+						<p:selectOneMenu id="idSubProcesoU"
+							value="#{settingsConfProcesoBean.selectedConfProceso.proceso2.proCodigo}"
+							style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{settingsConfProcesoBean.selectedItemsSub}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Línea:" />
+						<p:selectOneMenu id="idLineaProdU"
+							value="#{settingsConfProcesoBean.codLinea}" required="true"
+							style="width:150px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems
+								value="#{settingsConfProcesoBean.selectedItemsLineas}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="Tiempo::" />
+						<p:inputNumber id="idSettTsU"
+							value="#{settingsConfProcesoBean.selectedConfProceso.tiempoTs}" />
+						<f:facet name="footer">
+							<p:separator />
+							<p:commandButton id="btnUpdateAceptar"
+								update=":formDataTable, :msgs"
+								oncomplete="PF('dialogConfProcesoUpdate').hide()"
+								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								actionListener="#{settingsConfProcesoBean.btnUpdateConfTimes(actionEvent)}" />
+
+							<p:commandButton id="btnUpdateCancelar"
+								oncomplete="PF('dialogConfProcesoUpdate').hide()"
+								icon="fa fa-fw fa-close" title="Cancelar" value="Cancelar"
+								process="@this" />
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+
+
 			<h:form id="formDelete">
 				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
 					showEffect="fade" hideEffect="fade" header="Eliminar Tiempos"
@@ -101,7 +199,7 @@
 					<h:inputHidden
 						value="#{settingsConfProcesoBean.selectedConfProceso.confproCodigo}" />
 					<p:commandButton id="confirm" value="Si"
-						update=":formDataTable, :msgs,:idConfProcesos:panel"
+						update=":formDataTable, :msgs, :idConfProcesos:panel"
 						icon="ui-icon-check"
 						oncomplete="PF('dialogConfProcesoDelete').hide()"
 						actionListener="#{settingsConfProcesoBean.btnDeleteConfTimes(actionEvent)}" />
