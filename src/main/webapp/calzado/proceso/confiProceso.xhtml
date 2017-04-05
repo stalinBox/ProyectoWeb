@@ -51,14 +51,14 @@
 								value="#{settingsConfProcesoBean.selectedItemsSubProcesos}" />
 						</p:selectOneMenu>
 
-						<p:outputLabel for="idLineaProd" value="Linea: " />
+						<p:outputLabel for="idLineaProd" value="Tip Linea: " />
 						<p:selectOneMenu id="idLineaProd"
-							value="#{settingsConfProcesoBean.selectedConfProceso.lineasprod.lineaproCodigo}"
+							value="#{settingsConfProcesoBean.selectedConfProceso.tipLinea.codigoTiplinea}"
 							required="true" style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems
-								value="#{settingsConfProcesoBean.selectedItemsLineas}" />
+								value="#{settingsConfProcesoBean.selectedItemsTipLineas}" />
 						</p:selectOneMenu>
 
 						<p:outputLabel for="idSettTs" value="Tiempo(m/par): " />
@@ -92,8 +92,8 @@
 						<h:outputText value="#{confPro.proceso2.tipoProceso.tprNombre}" />
 					</p:column>
 
-					<p:column headerText="Linea">
-						<h:outputText value="#{confPro.lineasprod.nomlinea}" />
+					<p:column headerText="Tipo Linea">
+						<h:outputText value="#{confPro.tipLinea.tipolinea}" />
 					</p:column>
 
 					<p:column headerText="Tiempos">
@@ -168,7 +168,7 @@
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems
-								value="#{settingsConfProcesoBean.selectedItemsLineas}" />
+								value="#{settingsConfProcesoBean.selectedItemsTipLineas}" />
 						</p:selectOneMenu>
 
 						<h:outputText value="Tiempo::" />

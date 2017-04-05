@@ -7,6 +7,8 @@ import com.project.entities.TipLinea;
 public interface TipoLineaDao {
 	public List<TipLinea> findAll();
 
+	public List<TipLinea> findbyProceso(Integer codPro);
+
 	public boolean create(TipLinea tipoLinea);
 
 	public boolean update(TipLinea tipoLinea);

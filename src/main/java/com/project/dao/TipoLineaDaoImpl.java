@@ -89,4 +89,23 @@ public class TipoLineaDaoImpl implements TipoLineaDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TipLinea> findbyProceso(Integer codPro) {
+		List<TipLinea> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from TipLinea tp where tp.codigoTiplinea in (select lp.tipLinea.codigoTiplinea from Lineasprod lp where lp.proceso.proCodigo = "
+				+ codPro + ")";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL TIPO DE LINEA: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

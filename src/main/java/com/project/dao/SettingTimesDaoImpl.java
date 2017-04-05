@@ -70,7 +70,7 @@ public class SettingTimesDaoImpl implements SettingTimesDao {
 					confPro.getConfproCodigo());
 			// Parametros a cambiar
 			sttdb.setModelo(confPro.getModelo());
-			sttdb.setLineasprod(confPro.getLineasprod());
+			sttdb.setTipLinea(confPro.getTipLinea());
 			sttdb.setProceso1(confPro.getProceso1());
 			sttdb.setProceso2(confPro.getProceso2());
 			sttdb.setTiempoTs(confPro.getTiempoTs());
