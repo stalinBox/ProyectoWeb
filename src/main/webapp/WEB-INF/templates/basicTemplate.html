@@ -120,6 +120,10 @@
 					<p:menuitem value="Exit" actionListener="#{loginBean.logout()}"
 						oncomplete="handleLoginRequest(xhr, status, args)"
 						icon="ui-icon-close" />
+
+					<p:menuitem value="Home" url="#{appBean.basePath}inicio.jsf"
+						icon="ui-icon-home" />
+
 				</p:menubar>
 			</h:form>
 

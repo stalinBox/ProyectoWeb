@@ -27,14 +27,6 @@ public class Lineasprod implements Serializable {
 
 	private String nomlinea;
 
-	//bi-directional many-to-one association to Capacidade
-	@OneToMany(mappedBy="lineasprod")
-	private List<Capacidade> capacidades;
-
-	//bi-directional many-to-one association to Distribdetalle
-	@OneToMany(mappedBy="lineasprod")
-	private List<Distribdetalle> distribdetalles;
-
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
 	@JoinColumn(name="pro_codigo")
@@ -90,50 +82,6 @@ public class Lineasprod implements Serializable {
 
 	public void setNomlinea(String nomlinea) {
 		this.nomlinea = nomlinea;
-	}
-
-	public List<Capacidade> getCapacidades() {
-		return this.capacidades;
-	}
-
-	public void setCapacidades(List<Capacidade> capacidades) {
-		this.capacidades = capacidades;
-	}
-
-	public Capacidade addCapacidade(Capacidade capacidade) {
-		getCapacidades().add(capacidade);
-		capacidade.setLineasprod(this);
-
-		return capacidade;
-	}
-
-	public Capacidade removeCapacidade(Capacidade capacidade) {
-		getCapacidades().remove(capacidade);
-		capacidade.setLineasprod(null);
-
-		return capacidade;
-	}
-
-	public List<Distribdetalle> getDistribdetalles() {
-		return this.distribdetalles;
-	}
-
-	public void setDistribdetalles(List<Distribdetalle> distribdetalles) {
-		this.distribdetalles = distribdetalles;
-	}
-
-	public Distribdetalle addDistribdetalle(Distribdetalle distribdetalle) {
-		getDistribdetalles().add(distribdetalle);
-		distribdetalle.setLineasprod(this);
-
-		return distribdetalle;
-	}
-
-	public Distribdetalle removeDistribdetalle(Distribdetalle distribdetalle) {
-		getDistribdetalles().remove(distribdetalle);
-		distribdetalle.setLineasprod(null);
-
-		return distribdetalle;
 	}
 
 	public Proceso getProceso() {

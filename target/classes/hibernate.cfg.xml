@@ -50,9 +50,8 @@
 
 		<mapping class="com.project.entities.TipLinea" />
 		<mapping class="com.project.entities.Capacidade" />
-		<mapping class="com.project.entities.Distribdetalle" />
 		<mapping class="com.project.entities.EstadosAlt" />
-		
+
 
 	</session-factory>
 </hibernate-configuration>

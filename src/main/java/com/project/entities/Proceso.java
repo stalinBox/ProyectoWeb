@@ -42,10 +42,6 @@ public class Proceso implements Serializable {
 	@OneToMany(mappedBy="proceso")
 	private List<Dispositivo> dispositivos;
 
-	//bi-directional many-to-one association to Distribdetalle
-	@OneToMany(mappedBy="proceso")
-	private List<Distribdetalle> distribdetalles;
-
 	//bi-directional many-to-one association to Lineasprod
 	@OneToMany(mappedBy="proceso")
 	private List<Lineasprod> lineasprods;
@@ -193,28 +189,6 @@ public class Proceso implements Serializable {
 		dispositivo.setProceso(null);
 
 		return dispositivo;
-	}
-
-	public List<Distribdetalle> getDistribdetalles() {
-		return this.distribdetalles;
-	}
-
-	public void setDistribdetalles(List<Distribdetalle> distribdetalles) {
-		this.distribdetalles = distribdetalles;
-	}
-
-	public Distribdetalle addDistribdetalle(Distribdetalle distribdetalle) {
-		getDistribdetalles().add(distribdetalle);
-		distribdetalle.setProceso(this);
-
-		return distribdetalle;
-	}
-
-	public Distribdetalle removeDistribdetalle(Distribdetalle distribdetalle) {
-		getDistribdetalles().remove(distribdetalle);
-		distribdetalle.setProceso(null);
-
-		return distribdetalle;
 	}
 
 	public List<Lineasprod> getLineasprods() {

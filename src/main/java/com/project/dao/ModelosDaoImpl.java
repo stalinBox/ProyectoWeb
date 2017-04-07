@@ -88,4 +88,23 @@ public class ModelosDaoImpl implements ModelosDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Modelo> findByDistrib(Integer codOrden) {
+		// TODO Auto-generated method stub
+		List<Modelo> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Modelo m where m.modCodigo in ( select dt.modelo.modCodigo from Detalleorden dt where dt.ordenprod.ordenprodCodigo = "
+				+ codOrden + ")";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLMODELOS: " + e.toString());
+		}
+		return listado;
+	}
 }

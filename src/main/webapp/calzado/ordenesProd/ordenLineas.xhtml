@@ -16,43 +16,42 @@
 					<f:facet name="header">Distribución Modelos por Línea</f:facet>
 					<h:panelGrid id="idProc" columns="2">
 
-						<h:outputLabel value="Modelos:" />
-						<p:selectOneMenu id="idCboModDet"
-							value="#{distribDetalleBean.selectedDistribDeta.detalleorden.detaordenCodigo}"
-							style="width:150px" required="true">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
-
-						</p:selectOneMenu>
-
 						<h:outputLabel value="Proceso:" />
-						<p:selectOneMenu id="idCboProPadre"
-							value="#{distribDetalleBean.proCodigo}" style="width:150px"
+						<p:selectOneMenu id="idCboProPadre" value="" style="width:150px"
 							required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsProceso}" />
-
-							<p:ajax update="idCboLineasPros" />
+							<p:ajax update=":idFmrDistrib:idCboModDet" />
 						</p:selectOneMenu>
 
-						<h:outputLabel value="Línea: " />
-						<p:selectOneMenu id="idCboLineasPros"
-							value="#{distribDetalleBean.selectedDistribDeta.lineasprod.lineaproCodigo}"
-							style="width:150px" required="true">
+						<h:outputLabel value="Modelos:" />
+						<p:selectOneMenu id="idCboModDet" value="" style="width:150px"
+							required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
-							<f:selectItems value="#{distribDetalleBean.selectedItemsLinea}" />
-							<p:ajax update="idCboModDet" />
+							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
+							<p:ajax update=":idFmrDistrib:idCboLineasPros" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Tipo Línea: " />
+						<p:selectOneMenu id="idCboLineasPros" value="" style="width:150px"
+							required="true">
+
+							<f:selectItem itemLabel="- Seleccione -" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems
+								value="#{distribDetalleBean.selectedItemsTipLinea}" />
 						</p:selectOneMenu>
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalle" value="Agregar"
-								update=":formDataTable, :idFmrDistrib:idCboProPadre, :idFmrDistrib:idCboLineasPros, :idFmrDistrib:idCboModDet"
+								update=":formDataTable, :idFmrDistrib:idCboProPadre, 
+								:idFmrDistrib:idCboLineasPros, 
+								:idFmrDistrib:idCboModDet, 
+								:idFmrDistrib"
 								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}" />
 
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
@@ -78,15 +77,15 @@
 					emptyMessage="Ningun registro encontrado">
 
 					<p:column headerText="Modelo">
-						<h:outputText value="#{p.detalleorden.modelo.modNombre}" />
+						<h:outputText value="" />
 					</p:column>
 
 					<p:column headerText="Proceso">
-						<h:outputText value="#{p.proceso.tipoProceso.tprNombre}" />
+						<h:outputText value="" />
 					</p:column>
 
 					<p:column headerText="Linea">
-						<h:outputText value="#{p.lineasprod.nomlinea}" />
+						<h:outputText value="" />
 					</p:column>
 
 					<p:column headerText="Eliminar?" style="width:10%">
@@ -105,8 +104,7 @@
 					showEffect="fade" hideEffect="fade" header="Eliminar Item"
 					severity="alert" widgetVar="dialogDistribDelete">
 
-					<h:inputHidden
-						value="#{distribDetalleBean.selectedDistribDeta.distribCodigo}" />
+					<h:inputHidden value="" />
 
 					<p:commandButton id="confirm" value="Si"
 						update="formDataTable, :msgs" icon="ui-icon-check"

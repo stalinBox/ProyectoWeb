@@ -24,6 +24,18 @@ public class TipLinea implements Serializable {
 
 	private String tipolinea;
 
+	//bi-directional many-to-one association to Capacidade
+	@OneToMany(mappedBy="tipLinea1")
+	private List<Capacidade> capacidades1;
+
+	//bi-directional many-to-one association to Capacidade
+	@OneToMany(mappedBy="tipLinea2")
+	private List<Capacidade> capacidades2;
+
+	//bi-directional many-to-one association to Capacidade
+	@OneToMany(mappedBy="tipLinea3")
+	private List<Capacidade> capacidades3;
+
 	//bi-directional many-to-one association to Confproceso
 	@OneToMany(mappedBy="tipLinea")
 	private List<Confproceso> confprocesos;
@@ -57,6 +69,72 @@ public class TipLinea implements Serializable {
 
 	public void setTipolinea(String tipolinea) {
 		this.tipolinea = tipolinea;
+	}
+
+	public List<Capacidade> getCapacidades1() {
+		return this.capacidades1;
+	}
+
+	public void setCapacidades1(List<Capacidade> capacidades1) {
+		this.capacidades1 = capacidades1;
+	}
+
+	public Capacidade addCapacidades1(Capacidade capacidades1) {
+		getCapacidades1().add(capacidades1);
+		capacidades1.setTipLinea1(this);
+
+		return capacidades1;
+	}
+
+	public Capacidade removeCapacidades1(Capacidade capacidades1) {
+		getCapacidades1().remove(capacidades1);
+		capacidades1.setTipLinea1(null);
+
+		return capacidades1;
+	}
+
+	public List<Capacidade> getCapacidades2() {
+		return this.capacidades2;
+	}
+
+	public void setCapacidades2(List<Capacidade> capacidades2) {
+		this.capacidades2 = capacidades2;
+	}
+
+	public Capacidade addCapacidades2(Capacidade capacidades2) {
+		getCapacidades2().add(capacidades2);
+		capacidades2.setTipLinea2(this);
+
+		return capacidades2;
+	}
+
+	public Capacidade removeCapacidades2(Capacidade capacidades2) {
+		getCapacidades2().remove(capacidades2);
+		capacidades2.setTipLinea2(null);
+
+		return capacidades2;
+	}
+
+	public List<Capacidade> getCapacidades3() {
+		return this.capacidades3;
+	}
+
+	public void setCapacidades3(List<Capacidade> capacidades3) {
+		this.capacidades3 = capacidades3;
+	}
+
+	public Capacidade addCapacidades3(Capacidade capacidades3) {
+		getCapacidades3().add(capacidades3);
+		capacidades3.setTipLinea3(this);
+
+		return capacidades3;
+	}
+
+	public Capacidade removeCapacidades3(Capacidade capacidades3) {
+		getCapacidades3().remove(capacidades3);
+		capacidades3.setTipLinea3(null);
+
+		return capacidades3;
 	}
 
 	public List<Confproceso> getConfprocesos() {
