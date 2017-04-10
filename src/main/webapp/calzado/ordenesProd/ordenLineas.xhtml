@@ -10,6 +10,7 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 			<p:growl id="msgs" showDetail="true" />
+
 			<h:form id="idFmrDistrib">
 				<p:panel id="idPanel">
 					<p:messages autoUpdate="true" />
@@ -17,17 +18,20 @@
 					<h:panelGrid id="idProc" columns="2">
 
 						<h:outputLabel value="Proceso:" />
-						<p:selectOneMenu id="idCboProPadre" value="" style="width:150px"
+						<p:selectOneMenu id="idCboProPadre"
+							value="#{distribDetalleBean.codProceso}" style="width:150px"
 							required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsProceso}" />
-							<p:ajax update=":idFmrDistrib:idCboModDet" />
+							<p:ajax
+								update=":idFmrDistrib:idCboModDet, :idFmrDistrib:idCboLineasPros" />
 						</p:selectOneMenu>
 
-						<h:outputLabel value="Modelos:" />
-						<p:selectOneMenu id="idCboModDet" value="" style="width:150px"
+						<h:outputLabel value="Modelo:" />
+						<p:selectOneMenu id="idCboModDet"
+							value="#{distribDetalleBean.codModelo}" style="width:150px"
 							required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
@@ -37,7 +41,8 @@
 						</p:selectOneMenu>
 
 						<h:outputLabel value="Tipo Línea: " />
-						<p:selectOneMenu id="idCboLineasPros" value="" style="width:150px"
+						<p:selectOneMenu id="idCboLineasPros"
+							value="#{distribDetalleBean.codTipLinea}" style="width:150px"
 							required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
@@ -48,11 +53,8 @@
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalle" value="Agregar"
-								update=":formDataTable, :idFmrDistrib:idCboProPadre, 
-								:idFmrDistrib:idCboLineasPros, 
-								:idFmrDistrib:idCboModDet, 
-								:idFmrDistrib"
-								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}" />
+								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}"
+								update=":formDataTable, :idFmrDistrib:idProc" />
 
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
 								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
@@ -65,56 +67,39 @@
 			</h:form>
 
 			<h:form>
-				<h:panelGrid id="idnDias" columns="2">
-					<p:outputLabel value="Nº dias:" />
-					<p:inputText value="#{distribDetalleBean.nDias}" />
-				</h:panelGrid>
+				<p:panel id="idPanel2">
+					<h:panelGrid id="idnDias" columns="2">
+						<p:outputLabel value="Nº dias:" />
+						<p:inputText value="#{distribDetalleBean.nDias}" />
+					</h:panelGrid>
+				</p:panel>
 			</h:form>
 
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="p"
-					value="#{distribDetalleBean.distribDetalle}"
+					value="#{distribDetalleBean.orderList}"
 					emptyMessage="Ningun registro encontrado">
 
-					<p:column headerText="Modelo">
-						<h:outputText value="" />
+					<p:column headerText="Modelos">
+						<h:outputText value="#{p.codModelo}" />
 					</p:column>
 
 					<p:column headerText="Proceso">
-						<h:outputText value="" />
+						<h:outputText value="#{p.codProceso}" />
 					</p:column>
 
-					<p:column headerText="Linea">
-						<h:outputText value="" />
+					<p:column headerText="Tipo Linea">
+						<h:outputText value="#{p.codLinea}" />
 					</p:column>
 
 					<p:column headerText="Eliminar?" style="width:10%">
-						<p:commandButton id="btnDelete" update="formDelete"
-							oncomplete="PF('dialogDistribDelete').show()"
-							icon="ui-icon-close" title="Eliminar">
-							<f:setPropertyActionListener value="#{p}"
-								target="#{distribDetalleBean.selectedDistribDeta}" />
-						</p:commandButton>
+						<p:commandButton icon="ui-icon-trash" title="Delete this actor"
+							actionListener="#{distribDetalleBean.remove(p)}"
+							update="formDataTable" />
 					</p:column>
 				</p:dataTable>
 			</h:form>
 
-			<h:form id="formDelete">
-				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
-					showEffect="fade" hideEffect="fade" header="Eliminar Item"
-					severity="alert" widgetVar="dialogDistribDelete">
-
-					<h:inputHidden value="" />
-
-					<p:commandButton id="confirm" value="Si"
-						update="formDataTable, :msgs" icon="ui-icon-check"
-						oncomplete="PF('dialogDistribDelete').hide()"
-						actionListener="#{distribDetalleBean.btnDeleteDistrib(actionListener)}" />
-
-					<p:commandButton id="decline" value="No" icon="ui-icon-close"
-						oncomplete="PF('dialogDistribDelete').hide()" />
-				</p:confirmDialog>
-			</h:form>
 		</ui:define>
 	</ui:composition>
 </body>

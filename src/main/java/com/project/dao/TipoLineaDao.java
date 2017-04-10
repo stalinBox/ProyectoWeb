@@ -9,7 +9,7 @@ public interface TipoLineaDao {
 
 	public List<TipLinea> findbyProceso(Integer codPro);
 
-	public List<TipLinea> findByProcesoByModelo(Integer codPro, Integer codMod);
+	public List<TipLinea> findByProcesoByModelo(String codPro, String codMod);
 
 	public boolean create(TipLinea tipoLinea);
 

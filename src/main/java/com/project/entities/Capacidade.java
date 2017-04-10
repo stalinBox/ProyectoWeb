@@ -3,42 +3,41 @@ package com.project.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the capacidades database table.
  * 
  */
 @Entity
-@Table(name="capacidades")
-@NamedQuery(name="Capacidade.findAll", query="SELECT c FROM Capacidade c")
+@Table(name = "capacidades")
+@NamedQuery(name = "Capacidade.findAll", query = "SELECT c FROM Capacidade c")
 public class Capacidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="cap_codigo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cap_codigo")
 	private Integer capCodigo;
 
 	private Integer standar;
 
-	//bi-directional many-to-one association to Ordenprod
+	// bi-directional many-to-one association to Ordenprod
 	@ManyToOne
-	@JoinColumn(name="ordenprod_codigo")
+	@JoinColumn(name = "ordenprod_codigo")
 	private Ordenprod ordenprod;
 
-	//bi-directional many-to-one association to TipLinea
+	// bi-directional many-to-one association to TipLinea
 	@ManyToOne
-	@JoinColumn(name="codigo_tiplinea")
+	@JoinColumn(name = "codigo_tiplinea", insertable = false, updatable = false)
 	private TipLinea tipLinea1;
 
-	//bi-directional many-to-one association to TipLinea
+	// bi-directional many-to-one association to TipLinea
 	@ManyToOne
-	@JoinColumn(name="codigo_tiplinea")
+	@JoinColumn(name = "codigo_tiplinea", insertable = false, updatable = false)
 	private TipLinea tipLinea2;
 
-	//bi-directional many-to-one association to TipLinea
+	// bi-directional many-to-one association to TipLinea
 	@ManyToOne
-	@JoinColumn(name="codigo_tiplinea")
+	@JoinColumn(name = "codigo_tiplinea", insertable = false, updatable = false)
 	private TipLinea tipLinea3;
 
 	public Capacidade() {

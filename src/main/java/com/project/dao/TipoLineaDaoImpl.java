@@ -111,11 +111,13 @@ public class TipoLineaDaoImpl implements TipoLineaDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TipLinea> findByProcesoByModelo(Integer codPro, Integer codMod) {
+	public List<TipLinea> findByProcesoByModelo(String codPro, String codMod) {
 		List<TipLinea> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from TipLinea tp where tp.codigoTiplinea in ( select conf.tipLinea.codigoTiplinea from Confproceso conf where conf.modelo.modCodigo = "
-				+ codMod + "and conf.proceso1.proCodigo = " + codPro + " )";
+		String sql = "from TipLinea tp where tp.codigoTiplinea in ( select conf.tipLinea.codigoTiplinea from Confproceso conf where conf.modelo.modNombre = '"
+				+ codMod
+				+ "' and conf.proceso1.tipoProceso.tprNombre = '"
+				+ codPro + "' )";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

@@ -119,7 +119,6 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public void btnProcesar() {
 
 		// 1. SECCION VARIABLES

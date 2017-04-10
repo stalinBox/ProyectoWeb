@@ -5,12 +5,11 @@ import java.io.Serializable;
 public class Distribdetalle implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Integer codProceso;
-	private Integer codLinea;
-	private Integer codModelo;
+	private String codProceso;
+	private String codLinea;
+	private String codModelo;
 
-	public Distribdetalle(Integer codProceso, Integer codLinea,
-			Integer codModelo) {
+	public Distribdetalle(String codModelo, String codProceso, String codLinea) {
 		this.codProceso = codProceso;
 		this.codModelo = codModelo;
 		this.codLinea = codLinea;
@@ -19,27 +18,27 @@ public class Distribdetalle implements Serializable {
 	public Distribdetalle() {
 	}
 
-	public Integer getCodProceso() {
+	public String getCodProceso() {
 		return codProceso;
 	}
 
-	public void setCodProceso(Integer codProceso) {
+	public void setCodProceso(String codProceso) {
 		this.codProceso = codProceso;
 	}
 
-	public Integer getCodLinea() {
+	public String getCodLinea() {
 		return codLinea;
 	}
 
-	public void setCodLinea(Integer codLinea) {
+	public void setCodLinea(String codLinea) {
 		this.codLinea = codLinea;
 	}
 
-	public Integer getCodModelo() {
+	public String getCodModelo() {
 		return codModelo;
 	}
 
-	public void setCodModelo(Integer codModelo) {
+	public void setCodModelo(String codModelo) {
 		this.codModelo = codModelo;
 	}
 
