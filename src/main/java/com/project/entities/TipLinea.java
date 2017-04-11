@@ -40,6 +40,18 @@ public class TipLinea implements Serializable {
 	@OneToMany(mappedBy="tipLinea")
 	private List<Confproceso> confprocesos;
 
+	//bi-directional many-to-one association to Distribdetalle
+	@OneToMany(mappedBy="tipLinea1")
+	private List<Distribdetalle> distribdetalles1;
+
+	//bi-directional many-to-one association to Distribdetalle
+	@OneToMany(mappedBy="tipLinea2")
+	private List<Distribdetalle> distribdetalles2;
+
+	//bi-directional many-to-one association to Distribdetalle
+	@OneToMany(mappedBy="tipLinea3")
+	private List<Distribdetalle> distribdetalles3;
+
 	//bi-directional many-to-one association to Lineasprod
 	@OneToMany(mappedBy="tipLinea")
 	private List<Lineasprod> lineasprods;
@@ -157,6 +169,72 @@ public class TipLinea implements Serializable {
 		confproceso.setTipLinea(null);
 
 		return confproceso;
+	}
+
+	public List<Distribdetalle> getDistribdetalles1() {
+		return this.distribdetalles1;
+	}
+
+	public void setDistribdetalles1(List<Distribdetalle> distribdetalles1) {
+		this.distribdetalles1 = distribdetalles1;
+	}
+
+	public Distribdetalle addDistribdetalles1(Distribdetalle distribdetalles1) {
+		getDistribdetalles1().add(distribdetalles1);
+		distribdetalles1.setTipLinea1(this);
+
+		return distribdetalles1;
+	}
+
+	public Distribdetalle removeDistribdetalles1(Distribdetalle distribdetalles1) {
+		getDistribdetalles1().remove(distribdetalles1);
+		distribdetalles1.setTipLinea1(null);
+
+		return distribdetalles1;
+	}
+
+	public List<Distribdetalle> getDistribdetalles2() {
+		return this.distribdetalles2;
+	}
+
+	public void setDistribdetalles2(List<Distribdetalle> distribdetalles2) {
+		this.distribdetalles2 = distribdetalles2;
+	}
+
+	public Distribdetalle addDistribdetalles2(Distribdetalle distribdetalles2) {
+		getDistribdetalles2().add(distribdetalles2);
+		distribdetalles2.setTipLinea2(this);
+
+		return distribdetalles2;
+	}
+
+	public Distribdetalle removeDistribdetalles2(Distribdetalle distribdetalles2) {
+		getDistribdetalles2().remove(distribdetalles2);
+		distribdetalles2.setTipLinea2(null);
+
+		return distribdetalles2;
+	}
+
+	public List<Distribdetalle> getDistribdetalles3() {
+		return this.distribdetalles3;
+	}
+
+	public void setDistribdetalles3(List<Distribdetalle> distribdetalles3) {
+		this.distribdetalles3 = distribdetalles3;
+	}
+
+	public Distribdetalle addDistribdetalles3(Distribdetalle distribdetalles3) {
+		getDistribdetalles3().add(distribdetalles3);
+		distribdetalles3.setTipLinea3(this);
+
+		return distribdetalles3;
+	}
+
+	public Distribdetalle removeDistribdetalles3(Distribdetalle distribdetalles3) {
+		getDistribdetalles3().remove(distribdetalles3);
+		distribdetalles3.setTipLinea3(null);
+
+		return distribdetalles3;
 	}
 
 	public List<Lineasprod> getLineasprods() {

@@ -19,41 +19,68 @@
 
 						<h:outputLabel value="Proceso:" />
 						<p:selectOneMenu id="idCboProPadre"
-							value="#{distribDetalleBean.codProceso}" style="width:150px"
-							required="true">
+							value="#{distribDetalleBean.selectedDT.proceso.proCodigo}"
+							style="width:150px" required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsProceso}" />
-							<p:ajax
-								update=":idFmrDistrib:idCboModDet, :idFmrDistrib:idCboLineasPros" />
-						</p:selectOneMenu>
-
-						<h:outputLabel value="Modelo:" />
-						<p:selectOneMenu id="idCboModDet"
-							value="#{distribDetalleBean.codModelo}" style="width:150px"
-							required="true">
-
-							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
-							<f:selectItems value="#{distribDetalleBean.selectedItemsModDeta}" />
 							<p:ajax update=":idFmrDistrib:idCboLineasPros" />
 						</p:selectOneMenu>
 
 						<h:outputLabel value="Tipo Línea: " />
 						<p:selectOneMenu id="idCboLineasPros"
-							value="#{distribDetalleBean.codTipLinea}" style="width:150px"
-							required="true">
+							value="#{distribDetalleBean.selectedDT.tipLinea1.codigoTiplinea}"
+							style="width:150px" required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems
 								value="#{distribDetalleBean.selectedItemsTipLinea}" />
+							<p:ajax update=":formDetalleOrden:checkboxDT" />
 						</p:selectOneMenu>
+
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+
+			<h:form id="formDetalleOrden">
+				<p:dataTable id="checkboxDT" var="dt"
+					value="#{distribDetalleBean.detalleOrden}"
+					selection="#{distribDetalleBean.selectedDeta}"
+					rowKey="#{dt.detaordenCodigo}" style="margin-bottom:0"
+					emptyMessage="Ningun registro encontrado">
+					<f:facet name="header">DETALLE</f:facet>
+
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center" />
+
+					<p:column headerText="Modelos">
+						<h:outputText value="#{dt.modelo.modNombre}" />
+					</p:column>
+
+					<p:column headerText="Tallas">
+						<h:outputText value="#{dt.talla.talNumero}" />
+					</p:column>
+
+					<p:column headerText="Cantidad">
+						<h:outputText value="#{dt.cantidad}" />
+					</p:column>
+				</p:dataTable>
+				<p:commandButton id="btnAgregarDetalle" value="Agregar"
+					actionListener="#{distribDetalleBean.btnCrear()}"
+					update=":formDataTable, :idFmrDistrib:idProc" />
+			</h:form>
+
+			<h:form>
+				<p:panel id="idPanel2">
+					<h:panelGrid id="idnDias" columns="2">
+						<p:outputLabel value="Nº dias:" />
+						<p:inputText value="#{distribDetalleBean.nDias}" />
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalle" value="Agregar"
-								actionListener="#{distribDetalleBean.btnCrear(actionEvent)}"
+								actionListener="#{distribDetalleBean.btnCrear()}"
 								update=":formDataTable, :idFmrDistrib:idProc" />
 
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
@@ -66,38 +93,58 @@
 				</p:panel>
 			</h:form>
 
-			<h:form>
-				<p:panel id="idPanel2">
-					<h:panelGrid id="idnDias" columns="2">
-						<p:outputLabel value="Nº dias:" />
-						<p:inputText value="#{distribDetalleBean.nDias}" />
-					</h:panelGrid>
-				</p:panel>
-			</h:form>
-
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="p"
-					value="#{distribDetalleBean.orderList}"
+					value="#{distribDetalleBean.distribDetalle}"
 					emptyMessage="Ningun registro encontrado">
 
-					<p:column headerText="Modelos">
-						<h:outputText value="#{p.codModelo}" />
+					<p:column headerText="Proceso">
+						<h:outputText value="#{p.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
-					<p:column headerText="Proceso">
-						<h:outputText value="#{p.codProceso}" />
+					<p:column headerText="Modelos">
+						<h:outputText value="#{p.detalleorden.modelo.modNombre}" />
+					</p:column>
+
+					<p:column headerText="Talla">
+						<h:outputText value="#{p.detalleorden.talla.talNumero}" />
+					</p:column>
+
+					<p:column headerText="Cantidad">
+						<h:outputText value="#{p.detalleorden.cantidad}" />
 					</p:column>
 
 					<p:column headerText="Tipo Linea">
-						<h:outputText value="#{p.codLinea}" />
+						<h:outputText value="#{p.tipLinea1.tipolinea}" />
 					</p:column>
 
-					<p:column headerText="Eliminar?" style="width:10%">
-						<p:commandButton icon="ui-icon-trash" title="Delete this actor"
-							actionListener="#{distribDetalleBean.remove(p)}"
-							update="formDataTable" />
+					<p:column headerText="Eliminar" style="width:10%">
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogDistribDelete').show()"
+							icon="ui-icon-trash" title="Eliminar">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{distribDetalleBean.selectedDT}" />
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Item"
+					severity="alert" widgetVar="dialogDistribDelete">
+
+					<h:inputHidden
+						value="#{distribDetalleBean.selectedDT.distribCodigo}" />
+
+					<p:commandButton id="confirm" value="Si"
+						update=":formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogDistribDelete').hide()"
+						actionListener="#{distribDetalleBean.btnDeleteDistrib(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogDistribDelete').hide()" />
+				</p:confirmDialog>
 			</h:form>
 
 		</ui:define>

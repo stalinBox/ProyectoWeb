@@ -212,4 +212,27 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Detalleorden> findByCCO(Integer idOrden, Integer codPro,
+			Integer codTlinea) {
+		List<Detalleorden> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Detalleorden dt where dt.modelo.modCodigo in ( select cnf.modelo.modCodigo from Confproceso cnf where cnf.proceso1.proCodigo = "
+				+ codPro
+				+ " and cnf.tipLinea.codigoTiplinea = "
+				+ codTlinea
+				+ ") and dt.ordenprod.ordenprodCodigo = " + idOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL DETAORDER: " + e.toString());
+		}
+		return listado;
+	}
+
 }

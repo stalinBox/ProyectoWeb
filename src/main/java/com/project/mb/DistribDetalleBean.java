@@ -12,15 +12,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import com.project.dao.ModelosDao;
-import com.project.dao.ModelosDaoImpl;
+import com.project.dao.DetaOrdenDao;
+import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TipoLineaDao;
 import com.project.dao.TipoLineaDaoImpl;
-import com.project.mb.ProgramDiasBean.Items;
-import com.project.utils.Distribdetalle;
-import com.project.entities.Modelo;
+import com.project.entities.Detalleorden;
+import com.project.entities.Distribdetalle;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;
 import com.project.utils.ItemCodOrden;
@@ -32,23 +31,26 @@ public class DistribDetalleBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// VARIABLES
-	// private List<Distribdetalle> distribDetalle;
-	// private Distribdetalle selectedDistribDeta;
+	private List<Distribdetalle> distribDetalle;
 
-	private ArrayList<Distribdetalle> orderList = new ArrayList<Distribdetalle>();
-	private String codProceso;
-	private String codModelo;
-	private String codTipLinea;
+	private Distribdetalle selectedDT;
+
+	private List<Detalleorden> detalleOrden;
+	private List<Detalleorden> selectedDeta;
+	private Detalleorden selectedDetalleorden;
+
 	private Integer codDetaOrden;
 	private List<SelectItem> selectedItemsProceso;
 	private List<SelectItem> selectedItemsTipLinea;
-	private List<SelectItem> selectedItemsModDeta;
 	private Integer nDias;
 
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
-		codDetaOrden = ItemCodOrden.getCodOrden();
+		this.selectedDT = new Distribdetalle();
+		this.selectedDT.setProceso(new Proceso());
+		this.selectedDT.setTipLinea1(new TipLinea());
+		this.codDetaOrden = ItemCodOrden.getCodOrden();
 	}
 
 	// DML
@@ -63,28 +65,40 @@ public class DistribDetalleBean implements Serializable {
 		}
 	}
 
-	public void btnCrear(ActionEvent actionEvent) {
-		System.out.println("Procesando..");
-		Distribdetalle items = new Distribdetalle(this.codModelo,
-				this.codProceso, this.codTipLinea);
-		this.orderList.add(items);
-		System.out.println("ITEMS GUARDADOS: " + this.orderList);
+	public void btnCrear() {
+		for (Detalleorden i : selectedDeta) {
+			Detalleorden dt = new Detalleorden();
+			dt.setDetaordenCodigo(i.getDetaordenCodigo());
+			this.selectedDT.setDetalleorden(dt);
+			System.out.println("Detalle Orden: "
+					+ this.selectedDT.getDetalleorden().getDetaordenCodigo());
+			System.out.println("Proceso: "
+					+ this.selectedDT.getProceso().getProCodigo());
+			System.out.println("Tipo Linea: "
+					+ this.selectedDT.getTipLinea1().getCodigoTiplinea());
+			System.out.println("_________");
+		}
+		// Distribdetalle items = new Distribdetalle(this.codModelo,
+		// this.codProceso, this.codTipLinea);
+		// this.orderList.add(items);
+		// System.out.println("ITEMS GUARDADOS: " + this.orderList);
 		// Items orderitem = new Items(Integer.parseInt(k.toString()), dhora,
 		// m.getTime(), m.getTime(), codParam);
 		// this.orderList.add(orderitem);
 	}
 
 	public void remove(Distribdetalle distrib) {
-		try {
-			this.orderList.remove(distrib);
-			// Distribdetalle = orderList.searchAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try {
+		// this.orderList.remove(distrib);
+		// // Distribdetalle = orderList.searchAll();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public void btnProcesar(ActionEvent actionEvent) {
 		System.out.println("Procesando..");
+
 	}
 
 	public void btnDeleteDistrib(ActionEvent actionEvent) {
@@ -92,56 +106,63 @@ public class DistribDetalleBean implements Serializable {
 
 	// SETTERS AND GETTERS
 
-	public ArrayList<Distribdetalle> getOrderList() {
-		return orderList;
-	}
-
-	public String getCodProceso() {
-		return codProceso;
-	}
-
-	public void setCodProceso(String codProceso) {
-		this.codProceso = codProceso;
-	}
-
-	public String getCodModelo() {
-		return codModelo;
-	}
-
-	public void setCodModelo(String codModelo) {
-		this.codModelo = codModelo;
-	}
-
-	public String getCodTipLinea() {
-		return codTipLinea;
-	}
-
-	public void setCodTipLinea(String codTipLinea) {
-		this.codTipLinea = codTipLinea;
-	}
-
-	public void setOrderList(ArrayList<Distribdetalle> orderList) {
-		this.orderList = orderList;
-	}
-
 	public List<SelectItem> getSelectedItemsTipLinea() {
-		if (this.codModelo != null && this.codModelo != null) {
-			this.selectedItemsTipLinea = new ArrayList<SelectItem>();
-			TipoLineaDao tpDao = new TipoLineaDaoImpl();
-
-			List<TipLinea> tp = tpDao.findByProcesoByModelo(this.codProceso,
-					this.codModelo);
-			for (TipLinea t : tp) {
-				SelectItem selectItem = new SelectItem(t.getTipolinea(),
-						t.getTipolinea());
-				this.selectedItemsTipLinea.add(selectItem);
-			}
-			return selectedItemsTipLinea;
-		} else {
-			this.selectedItemsTipLinea = new ArrayList<SelectItem>();
-			return selectedItemsTipLinea;
+		this.selectedItemsTipLinea = new ArrayList<SelectItem>();
+		TipoLineaDao tpDao = new TipoLineaDaoImpl();
+		List<TipLinea> tp = tpDao.findbyProceso(this.selectedDT.getProceso()
+				.getProCodigo());
+		for (TipLinea t : tp) {
+			SelectItem selectItem = new SelectItem(t.getCodigoTiplinea(),
+					t.getTipolinea());
+			this.selectedItemsTipLinea.add(selectItem);
 		}
+		return selectedItemsTipLinea;
 
+	}
+
+	public List<Detalleorden> getSelectedDeta() {
+		return selectedDeta;
+	}
+
+	public void setSelectedDeta(List<Detalleorden> selectedDeta) {
+		this.selectedDeta = selectedDeta;
+	}
+
+	public List<Detalleorden> getDetalleOrden() {
+		// if(){}else{}
+		DetaOrdenDao detaDao = new DetaOrdenDaoImpl();
+		this.detalleOrden = detaDao.findByCCO(codDetaOrden, this.selectedDT
+				.getProceso().getProCodigo(), this.selectedDT.getTipLinea1()
+				.getCodigoTiplinea());
+		return detalleOrden;
+	}
+
+	public void setDetalleOrden(List<Detalleorden> detalleOrden) {
+		this.detalleOrden = detalleOrden;
+	}
+
+	public Detalleorden getSelectedDetalleorden() {
+		return selectedDetalleorden;
+	}
+
+	public void setSelectedDetalleorden(Detalleorden selectedDetalleorden) {
+		this.selectedDetalleorden = selectedDetalleorden;
+	}
+
+	public List<Distribdetalle> getDistribDetalle() {
+		return distribDetalle;
+	}
+
+	public void setDistribDetalle(List<Distribdetalle> distribDetalle) {
+		this.distribDetalle = distribDetalle;
+	}
+
+	public Distribdetalle getSelectedDT() {
+		return selectedDT;
+	}
+
+	public void setSelectedDT(Distribdetalle selectedDT) {
+		this.selectedDT = selectedDT;
 	}
 
 	public void setSelectedItemsTipLinea(List<SelectItem> selectedItemsTipLinea) {
@@ -154,22 +175,6 @@ public class DistribDetalleBean implements Serializable {
 
 	public void setnDias(Integer nDias) {
 		this.nDias = nDias;
-	}
-
-	public List<SelectItem> getSelectedItemsModDeta() {
-		this.selectedItemsModDeta = new ArrayList<SelectItem>();
-		ModelosDao modelosDao = new ModelosDaoImpl();
-		List<Modelo> mod = modelosDao.findByDistrib(codDetaOrden);
-		for (Modelo d : mod) {
-			SelectItem selectItem = new SelectItem(d.getModNombre(),
-					d.getModNombre());
-			this.selectedItemsModDeta.add(selectItem);
-		}
-		return selectedItemsModDeta;
-	}
-
-	public void setSelectedItemsModDeta(List<SelectItem> selectedItemsModDeta) {
-		this.selectedItemsModDeta = selectedItemsModDeta;
 	}
 
 	public Integer getCodDetaOrden() {
@@ -185,8 +190,8 @@ public class DistribDetalleBean implements Serializable {
 		ProcesoDao procesoDao = new ProcesoDaoImpl();
 		List<Proceso> proceso = procesoDao.findPadre();
 		for (Proceso p : proceso) {
-			SelectItem selectItem = new SelectItem(p.getTipoProceso()
-					.getTprNombre(), p.getTipoProceso().getTprNombre());
+			SelectItem selectItem = new SelectItem(p.getProCodigo(), p
+					.getTipoProceso().getTprNombre());
 			this.selectedItemsProceso.add(selectItem);
 		}
 		return selectedItemsProceso;

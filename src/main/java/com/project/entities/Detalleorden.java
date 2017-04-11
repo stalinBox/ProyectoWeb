@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -34,6 +35,10 @@ public class Detalleorden implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="tal_codigo")
 	private Talla talla;
+
+	//bi-directional many-to-one association to Distribdetalle
+	@OneToMany(mappedBy="detalleorden")
+	private List<Distribdetalle> distribdetalles;
 
 	public Detalleorden() {
 	}
@@ -76,6 +81,28 @@ public class Detalleorden implements Serializable {
 
 	public void setTalla(Talla talla) {
 		this.talla = talla;
+	}
+
+	public List<Distribdetalle> getDistribdetalles() {
+		return this.distribdetalles;
+	}
+
+	public void setDistribdetalles(List<Distribdetalle> distribdetalles) {
+		this.distribdetalles = distribdetalles;
+	}
+
+	public Distribdetalle addDistribdetalle(Distribdetalle distribdetalle) {
+		getDistribdetalles().add(distribdetalle);
+		distribdetalle.setDetalleorden(this);
+
+		return distribdetalle;
+	}
+
+	public Distribdetalle removeDistribdetalle(Distribdetalle distribdetalle) {
+		getDistribdetalles().remove(distribdetalle);
+		distribdetalle.setDetalleorden(null);
+
+		return distribdetalle;
 	}
 
 }
