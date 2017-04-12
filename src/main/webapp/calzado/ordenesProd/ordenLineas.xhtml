@@ -15,26 +15,26 @@
 				<p:panel id="idPanel">
 					<p:messages autoUpdate="true" />
 					<f:facet name="header">Distribución Modelos por Línea</f:facet>
-					<h:panelGrid id="idProc" columns="2">
 
+					<h:panelGrid id="idProc" columns="2">
 						<h:outputLabel value="Proceso:" />
 						<p:selectOneMenu id="idCboProPadre"
 							value="#{distribDetalleBean.selectedDT.proceso.proCodigo}"
 							style="width:150px" required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
+								noSelectionOption="false" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsProceso}" />
 							<p:ajax update=":idFmrDistrib:idCboLineasPros" />
 						</p:selectOneMenu>
 
 						<h:outputLabel value="Tipo Línea: " />
 						<p:selectOneMenu id="idCboLineasPros"
-							value="#{distribDetalleBean.selectedDT.tipLinea1.codigoTiplinea}"
+							value="#{distribDetalleBean.selectedDT.tipLinea.codigoTiplinea}"
 							style="width:150px" required="true">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
-								noSelectionOption="true" />
+								noSelectionOption="false" />
 							<f:selectItems
 								value="#{distribDetalleBean.selectedItemsTipLinea}" />
 							<p:ajax update=":formDetalleOrden:checkboxDT" />
@@ -67,32 +67,13 @@
 						<h:outputText value="#{dt.cantidad}" />
 					</p:column>
 				</p:dataTable>
+				<br />
 				<p:commandButton id="btnAgregarDetalle" value="Agregar"
 					actionListener="#{distribDetalleBean.btnCrear()}"
-					update=":formDataTable, :idFmrDistrib:idProc" />
+					update=":formDetalleOrden:checkboxDT, :formDataTable:basicDT" />
+				<br />
 			</h:form>
-
-			<h:form>
-				<p:panel id="idPanel2">
-					<h:panelGrid id="idnDias" columns="2">
-						<p:outputLabel value="Nº dias:" />
-						<p:inputText value="#{distribDetalleBean.nDias}" />
-
-						<f:facet name="footer">
-							<p:commandButton id="btnAgregarDetalle" value="Agregar"
-								actionListener="#{distribDetalleBean.btnCrear()}"
-								update=":formDataTable, :idFmrDistrib:idProc" />
-
-							<p:commandButton id="btnBack" value="Anterior" process="@this"
-								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
-
-							<p:commandButton id="btnNext" value="Procesar" process="@this"
-								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}" />
-						</f:facet>
-					</h:panelGrid>
-				</p:panel>
-			</h:form>
-
+			<br />
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="p"
 					value="#{distribDetalleBean.distribDetalle}"
@@ -115,7 +96,7 @@
 					</p:column>
 
 					<p:column headerText="Tipo Linea">
-						<h:outputText value="#{p.tipLinea1.tipolinea}" />
+						<h:outputText value="#{p.tipLinea.tipolinea}" />
 					</p:column>
 
 					<p:column headerText="Eliminar" style="width:10%">
@@ -127,6 +108,23 @@
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>
+			</h:form>
+
+			<h:form id="formButttons">
+				<p:panel id="idPanel2">
+					<h:panelGrid id="idnDias" columns="2">
+						<p:outputLabel value="Nº dias:" />
+						<p:inputText value="#{distribDetalleBean.nDias}" />
+
+						<f:facet name="footer">
+							<p:commandButton id="btnBack" value="Anterior" process="@this"
+								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
+
+							<p:commandButton id="btnNext" value="Procesar" process="@this"
+								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}" />
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
 			</h:form>
 
 			<h:form id="formDelete">

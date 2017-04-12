@@ -14,6 +14,8 @@ import javax.faces.model.SelectItem;
 
 import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
+import com.project.dao.DistribDetaDao;
+import com.project.dao.DistribDetaDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TipoLineaDao;
@@ -32,7 +34,6 @@ public class DistribDetalleBean implements Serializable {
 
 	// VARIABLES
 	private List<Distribdetalle> distribDetalle;
-
 	private Distribdetalle selectedDT;
 
 	private List<Detalleorden> detalleOrden;
@@ -49,11 +50,16 @@ public class DistribDetalleBean implements Serializable {
 	public void init() {
 		this.selectedDT = new Distribdetalle();
 		this.selectedDT.setProceso(new Proceso());
-		this.selectedDT.setTipLinea1(new TipLinea());
+		this.selectedDT.setTipLinea(new TipLinea());
 		this.codDetaOrden = ItemCodOrden.getCodOrden();
 	}
 
 	// DML
+	public void btnProcesar(ActionEvent actionEvent) {
+		System.out.println("Procesando..");
+
+	}
+
 	public void btnReprocesar(ActionEvent actionEvent) {
 		String ruta = "";
 		ruta = MyUtil.calzadoPath() + "ordenesProd/insertOrder.jsf";
@@ -66,42 +72,41 @@ public class DistribDetalleBean implements Serializable {
 	}
 
 	public void btnCrear() {
+		String msg = "";
+		DistribDetaDao distribDao = new DistribDetaDaoImpl();
 		for (Detalleorden i : selectedDeta) {
 			Detalleorden dt = new Detalleorden();
 			dt.setDetaordenCodigo(i.getDetaordenCodigo());
 			this.selectedDT.setDetalleorden(dt);
-			System.out.println("Detalle Orden: "
-					+ this.selectedDT.getDetalleorden().getDetaordenCodigo());
-			System.out.println("Proceso: "
-					+ this.selectedDT.getProceso().getProCodigo());
-			System.out.println("Tipo Linea: "
-					+ this.selectedDT.getTipLinea1().getCodigoTiplinea());
-			System.out.println("_________");
+
+			if (distribDao.create(this.selectedDT)) {
+				msg = "Se ha añadido un ITEM";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				msg = "Error al momento de añadir un ITEM";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 		}
-		// Distribdetalle items = new Distribdetalle(this.codModelo,
-		// this.codProceso, this.codTipLinea);
-		// this.orderList.add(items);
-		// System.out.println("ITEMS GUARDADOS: " + this.orderList);
-		// Items orderitem = new Items(Integer.parseInt(k.toString()), dhora,
-		// m.getTime(), m.getTime(), codParam);
-		// this.orderList.add(orderitem);
-	}
-
-	public void remove(Distribdetalle distrib) {
-		// try {
-		// this.orderList.remove(distrib);
-		// // Distribdetalle = orderList.searchAll();
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-	}
-
-	public void btnProcesar(ActionEvent actionEvent) {
-		System.out.println("Procesando..");
-
 	}
 
 	public void btnDeleteDistrib(ActionEvent actionEvent) {
+		String msg;
+		DistribDetaDao distribDao = new DistribDetaDaoImpl();
+		if (distribDao.delete(this.selectedDT.getDistribCodigo())) {
+			msg = "Se eliminó el item";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al eliminar el item";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	// SETTERS AND GETTERS
@@ -129,10 +134,9 @@ public class DistribDetalleBean implements Serializable {
 	}
 
 	public List<Detalleorden> getDetalleOrden() {
-		// if(){}else{}
 		DetaOrdenDao detaDao = new DetaOrdenDaoImpl();
 		this.detalleOrden = detaDao.findByCCO(codDetaOrden, this.selectedDT
-				.getProceso().getProCodigo(), this.selectedDT.getTipLinea1()
+				.getProceso().getProCodigo(), this.selectedDT.getTipLinea()
 				.getCodigoTiplinea());
 		return detalleOrden;
 	}
@@ -150,6 +154,8 @@ public class DistribDetalleBean implements Serializable {
 	}
 
 	public List<Distribdetalle> getDistribDetalle() {
+		DistribDetaDao distribDao = new DistribDetaDaoImpl();
+		this.distribDetalle = distribDao.findByOrder(this.codDetaOrden);
 		return distribDetalle;
 	}
 

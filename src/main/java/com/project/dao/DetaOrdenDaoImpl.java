@@ -218,11 +218,16 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 			Integer codTlinea) {
 		List<Detalleorden> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from Detalleorden dt where dt.modelo.modCodigo in ( select cnf.modelo.modCodigo from Confproceso cnf where cnf.proceso1.proCodigo = "
-				+ codPro
-				+ " and cnf.tipLinea.codigoTiplinea = "
-				+ codTlinea
-				+ ") and dt.ordenprod.ordenprodCodigo = " + idOrden;
+		String sql = "from Detalleorden dt where dt.modelo.modCodigo "
+				+ "in( select cnf.modelo.modCodigo from "
+				+ "Confproceso cnf where cnf.proceso1.proCodigo = " + codPro
+				+ " and cnf.tipLinea.codigoTiplinea = " + codTlinea
+				+ ") and dt.ordenprod.ordenprodCodigo = " + idOrden
+				+ " and dt.detaordenCodigo not in "
+				+ "( select dis.detalleorden.detaordenCodigo "
+				+ "from Distribdetalle dis where dis.proceso.proCodigo = "
+				+ codPro + " and dis.tipLinea.codigoTiplinea=" + codTlinea
+				+ ")";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -234,5 +239,4 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		}
 		return listado;
 	}
-
 }
