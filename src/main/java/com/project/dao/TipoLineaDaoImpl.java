@@ -130,4 +130,28 @@ public class TipoLineaDaoImpl implements TipoLineaDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TipLinea> findTpLineaByDistrib(Integer codOrden) {
+		List<TipLinea> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from TipLinea tpl where tpl.codigoTiplinea in "
+				+ "( select dt.tipLinea.codigoTiplinea "
+				+ "from Distribdetalle dt where dt.detalleorden.detaordenCodigo "
+				+ "in ( select dto.detaordenCodigo from Detalleorden "
+				+ "dto where dto.ordenprod.ordenprodCodigo = " + codOrden
+				+ " ))";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL TIPO DE LINEA: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

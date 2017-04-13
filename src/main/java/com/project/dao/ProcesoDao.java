@@ -19,6 +19,8 @@ public interface ProcesoDao {
 
 	public List<Proceso> findByOrdenProdNotInParam(Integer codOrden);
 
+	public List<Proceso> findProcesosDistribByOrden(Integer codOrden);
+
 	public boolean create(Proceso proceso);
 
 	public boolean update(Proceso proceso);

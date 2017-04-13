@@ -215,4 +215,29 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findProcesosDistribByOrden(Integer codOrden) {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Proceso p where p.proceso.proCodigo "
+				+ " is null and p.proCodigo in ( "
+				+ " select dt.proceso.proCodigo from "
+				+ " Distribdetalle dt where dt.detalleorden.detaordenCodigo"
+				+ " in (select deto.detaordenCodigo"
+				+ " from Detalleorden deto where deto.ordenprod.ordenprodCodigo = "
+				+ codOrden + " ))";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL FINDPROCESOSDISTRIBBYORDEN: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

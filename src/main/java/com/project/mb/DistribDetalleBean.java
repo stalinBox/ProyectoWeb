@@ -57,6 +57,42 @@ public class DistribDetalleBean implements Serializable {
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
 		System.out.println("Procesando..");
+		ProcesoDao proDao = new ProcesoDaoImpl();
+		List<Proceso> process = proDao.findProcesosDistribByOrden(codDetaOrden);
+
+		TipoLineaDao tipLineaDao = new TipoLineaDaoImpl();
+		List<TipLinea> tipo = tipLineaDao.findTpLineaByDistrib(codDetaOrden);
+
+		DistribDetaDao distribDao = new DistribDetaDaoImpl();
+		List<Distribdetalle> distro = null;
+
+		ItemsGen items = new ItemsGen();
+		ArrayList<ItemsGen> listaItems = new ArrayList<ItemsGen>();
+
+		for (Proceso p : process) {
+			for (TipLinea tp : tipo) {
+				items = new ItemsGen(p.getProCodigo(), tp.getCodigoTiplinea());
+				listaItems.add(items);
+				// distro = distribDao.findByOrderByProByTL(codDetaOrden,
+				// p.getProCodigo(), tp.getCodigoTiplinea());
+				// for (Distribdetalle d : distro) {
+				// System.out.println("Nada: ");
+				// // System.out.println("--p: "
+				// // + d.getProceso().getTipoProceso().getTprNombre());
+				// // System.out.println("-- tp: "
+				// // + d.getTipLinea().getTipolinea());
+				// }
+			}
+		}
+		for (ItemsGen i : listaItems) {
+			System.out.println("Proceso: " + i.getCodProceso() + " TLinea: "
+					+ i.getCodTlinea());
+			distro = distribDao.findByOrderByProByTL(codDetaOrden,
+					i.getCodProceso(), i.getCodTlinea());
+			for (Distribdetalle d : distro) {
+				System.out.println("nada");
+			}
+		}
 
 	}
 
@@ -207,4 +243,35 @@ public class DistribDetalleBean implements Serializable {
 		this.selectedItemsProceso = selectedItemsProceso;
 	}
 
+	// CLASE
+	public class ItemsGen implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private Integer codProceso;
+		private Integer codTlinea;
+
+		public ItemsGen(Integer codProceso, Integer codTlinea) {
+			this.codProceso = codProceso;
+			this.codTlinea = codTlinea;
+		}
+
+		public ItemsGen() {
+		}
+
+		public Integer getCodProceso() {
+			return codProceso;
+		}
+
+		public void setCodProceso(Integer codProceso) {
+			this.codProceso = codProceso;
+		}
+
+		public Integer getCodTlinea() {
+			return codTlinea;
+		}
+
+		public void setCodTlinea(Integer codTlinea) {
+			this.codTlinea = codTlinea;
+		}
+
+	}
 }

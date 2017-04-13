@@ -12,7 +12,8 @@ public class ItemCodOrden implements Serializable {
 	}
 
 	public static void setCodOrden(Integer codOrden) {
-		ItemCodOrden.codOrden = codOrden;
+		ItemCodOrden.codOrden = 112;
+		// ItemCodOrden.codOrden = codOrden;
 	}
 
 }

@@ -111,4 +111,31 @@ public class DistribDetaDaoImpl implements DistribDetaDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Distribdetalle> findByOrderByProByTL(Integer codOrden,
+			Integer codPro, Integer codTLinea) {
+		List<Distribdetalle> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Distribdetalle dt where dt.proceso.proCodigo = "
+				+ codPro
+				+ " and dt.tipLinea.codigoTiplinea = "
+				+ codTLinea
+				+ " and dt.detalleorden.detaordenCodigo in "
+				+ "( select deto.detaordenCodigo from Detalleorden deto where deto.ordenprod.ordenprodCodigo= "
+				+ codOrden + ")";
+
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLDISTRIBDETALLE: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
 }
