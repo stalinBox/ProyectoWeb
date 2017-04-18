@@ -24,6 +24,7 @@ import com.project.entities.Detalleorden;
 import com.project.entities.Distribdetalle;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;
+import com.project.mb.ProgramDiasBean.Items2;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.MyUtil;
 
@@ -45,6 +46,8 @@ public class DistribDetalleBean implements Serializable {
 	private List<SelectItem> selectedItemsTipLinea;
 	private Integer nDias;
 
+	private ArrayList<ItemsDistrib> orderList = new ArrayList<ItemsDistrib>();
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
@@ -56,7 +59,11 @@ public class DistribDetalleBean implements Serializable {
 
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
+		// orderitem2 = new Items2(param.getProceso().getProCodigo(),
+		// param.getParamCodigo(), mProcesos);
+		// this.orderList2.add(orderitem2);
 		System.out.println("Procesando..");
+
 		ProcesoDao proDao = new ProcesoDaoImpl();
 		List<Proceso> process = proDao.findProcesosDistribByOrden(codDetaOrden);
 
@@ -66,33 +73,37 @@ public class DistribDetalleBean implements Serializable {
 		DistribDetaDao distribDao = new DistribDetaDaoImpl();
 		List<Distribdetalle> distro = null;
 
-		ItemsGen items = new ItemsGen();
-		ArrayList<ItemsGen> listaItems = new ArrayList<ItemsGen>();
-
+		ItemsDistrib orderList1 = new ItemsDistrib();
 		for (Proceso p : process) {
 			for (TipLinea tp : tipo) {
-				items = new ItemsGen(p.getProCodigo(), tp.getCodigoTiplinea());
-				listaItems.add(items);
-				// distro = distribDao.findByOrderByProByTL(codDetaOrden,
-				// p.getProCodigo(), tp.getCodigoTiplinea());
-				// for (Distribdetalle d : distro) {
-				// System.out.println("Nada: ");
-				// // System.out.println("--p: "
-				// // + d.getProceso().getTipoProceso().getTprNombre());
-				// // System.out.println("-- tp: "
-				// // + d.getTipLinea().getTipolinea());
-				// }
+				distro = distribDao.findByOrderByProByTL(codDetaOrden,
+						p.getProCodigo(), tp.getCodigoTiplinea());
+
+				if (!(distro.isEmpty())) {
+					for (Distribdetalle poc : distro) {
+						orderList1 = new ItemsDistrib(poc.getDetalleorden()
+								.getModelo().getModNombre(), poc
+								.getDetalleorden().getTalla().getTalNumero(),
+								poc.getDetalleorden().getCantidad());
+						this.orderList.add(orderList1);
+					}
+					System.out.println("PROCESO: "
+							+ p.getTipoProceso().getTprNombre());
+					System.out.println("LINEA: " + tp.getTipolinea());
+					for (ItemsDistrib listado : orderList) {
+						System.out.println("Modelo: " + listado.getModelo()
+								+ " Talla: " + listado.getTalla()
+								+ " Cantidad: " + listado.getCantidad());
+					}
+				} else {
+					continue;
+				}
+				this.orderList.clear();
 			}
 		}
-		for (ItemsGen i : listaItems) {
-			System.out.println("Proceso: " + i.getCodProceso() + " TLinea: "
-					+ i.getCodTlinea());
-			distro = distribDao.findByOrderByProByTL(codDetaOrden,
-					i.getCodProceso(), i.getCodTlinea());
-			for (Distribdetalle d : distro) {
-				System.out.println("nada");
-			}
-		}
+
+		process.clear();
+		tipo.clear();
 
 	}
 
@@ -159,6 +170,14 @@ public class DistribDetalleBean implements Serializable {
 		}
 		return selectedItemsTipLinea;
 
+	}
+
+	public ArrayList<ItemsDistrib> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(ArrayList<ItemsDistrib> orderList) {
+		this.orderList = orderList;
 	}
 
 	public List<Detalleorden> getSelectedDeta() {
@@ -243,35 +262,44 @@ public class DistribDetalleBean implements Serializable {
 		this.selectedItemsProceso = selectedItemsProceso;
 	}
 
-	// CLASE
-	public class ItemsGen implements Serializable {
+	public class ItemsDistrib implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private Integer codProceso;
-		private Integer codTlinea;
 
-		public ItemsGen(Integer codProceso, Integer codTlinea) {
-			this.codProceso = codProceso;
-			this.codTlinea = codTlinea;
+		private String modelo;
+		private Integer talla;
+		private Integer cantidad;
+
+		public ItemsDistrib(String modelo, Integer talla, Integer cantidad) {
+			this.modelo = modelo;
+			this.talla = talla;
+			this.cantidad = cantidad;
 		}
 
-		public ItemsGen() {
+		public ItemsDistrib() {
 		}
 
-		public Integer getCodProceso() {
-			return codProceso;
+		public String getModelo() {
+			return modelo;
 		}
 
-		public void setCodProceso(Integer codProceso) {
-			this.codProceso = codProceso;
+		public void setModelo(String modelo) {
+			this.modelo = modelo;
 		}
 
-		public Integer getCodTlinea() {
-			return codTlinea;
+		public Integer getTalla() {
+			return talla;
 		}
 
-		public void setCodTlinea(Integer codTlinea) {
-			this.codTlinea = codTlinea;
+		public void setTalla(Integer talla) {
+			this.talla = talla;
 		}
 
+		public Integer getCantidad() {
+			return cantidad;
+		}
+
+		public void setCantidad(Integer cantidad) {
+			this.cantidad = cantidad;
+		}
 	}
 }
