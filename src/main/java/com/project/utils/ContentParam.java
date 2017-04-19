@@ -2,26 +2,33 @@ package com.project.utils;
 
 import java.io.Serializable;
 
+/**
+ * @author Stalin
+ *
+ */
 public class ContentParam implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private static Integer codOrden;
-	private static Integer totalOrden;
-	private static Integer StandConvMontaje;
-	private static Integer StandConvAparado;
-	private static Integer StandConvTroquelado;
+	private static Integer StandarPonderado;
+	private static String proceso;
+	private static String TipoLinea;
 
-	private static Integer StandAutMontaje;
-	private static Integer StandAutAparado;
-	private static Integer StandAutTroquelado;
+	public ContentParam(Integer codOrden, String proceso, String TipoLinea,
+			Integer StandarPonderado) {
 
-	private static Integer RespGenOrden;
+		ContentParam.codOrden = codOrden;
+		ContentParam.proceso = proceso;
+		ContentParam.TipoLinea = TipoLinea;
+		ContentParam.StandarPonderado = StandarPonderado;
+	}
 
-	private static Integer StandTroqueladoTroquel;
+	public ContentParam() {
+
+	}
 
 	public static Integer getCodOrden() {
-		codOrden = 27;
 		return codOrden;
 	}
 
@@ -29,77 +36,28 @@ public class ContentParam implements Serializable {
 		ContentParam.codOrden = codOrden;
 	}
 
-	public static Integer getTotalOrden() {
-		totalOrden = 190;
-		return totalOrden;
+	public static Integer getStandarPonderado() {
+		return StandarPonderado;
 	}
 
-	public static void setTotalOrden(Integer totalOrden) {
-		ContentParam.totalOrden = totalOrden;
+	public static void setStandarPonderado(Integer standarPonderado) {
+		StandarPonderado = standarPonderado;
 	}
 
-	public static Integer getStandConvMontaje() {
-		return StandConvMontaje;
+	public static String getProceso() {
+		return proceso;
 	}
 
-	public static void setStandConvMontaje(Integer standConvMontaje) {
-		StandConvMontaje = standConvMontaje;
+	public static void setProceso(String proceso) {
+		ContentParam.proceso = proceso;
 	}
 
-	public static Integer getStandConvAparado() {
-		return StandConvAparado;
+	public static String getTipoLinea() {
+		return TipoLinea;
 	}
 
-	public static void setStandConvAparado(Integer standConvAparado) {
-		StandConvAparado = standConvAparado;
-	}
-
-	public static Integer getStandConvTroquelado() {
-		return StandConvTroquelado;
-	}
-
-	public static void setStandConvTroquelado(Integer standConvTroquelado) {
-		StandConvTroquelado = standConvTroquelado;
-	}
-
-	public static Integer getStandAutMontaje() {
-		return StandAutMontaje;
-	}
-
-	public static void setStandAutMontaje(Integer standAutMontaje) {
-		StandAutMontaje = standAutMontaje;
-	}
-
-	public static Integer getStandAutAparado() {
-		return StandAutAparado;
-	}
-
-	public static void setStandAutAparado(Integer standAutAparado) {
-		StandAutAparado = standAutAparado;
-	}
-
-	public static Integer getStandAutTroquelado() {
-		return StandAutTroquelado;
-	}
-
-	public static void setStandAutTroquelado(Integer standAutTroquelado) {
-		StandAutTroquelado = standAutTroquelado;
-	}
-
-	public static Integer getRespGenOrden() {
-		return RespGenOrden;
-	}
-
-	public static void setRespGenOrden(Integer respGenOrden) {
-		RespGenOrden = respGenOrden;
-	}
-
-	public static Integer getStandTroqueladoTroquel() {
-		return StandTroqueladoTroquel;
-	}
-
-	public static void setStandTroqueladoTroquel(Integer standTroqueladoTroquel) {
-		StandTroqueladoTroquel = standTroqueladoTroquel;
+	public static void setTipoLinea(String tipoLinea) {
+		TipoLinea = tipoLinea;
 	}
 
 }

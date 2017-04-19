@@ -24,10 +24,6 @@ public class TipLinea implements Serializable {
 
 	private String tipolinea;
 
-	//bi-directional many-to-one association to Capacidade
-	@OneToMany(mappedBy="tipLinea")
-	private List<Capacidade> capacidades;
-
 	//bi-directional many-to-one association to Confproceso
 	@OneToMany(mappedBy="tipLinea")
 	private List<Confproceso> confprocesos;
@@ -65,28 +61,6 @@ public class TipLinea implements Serializable {
 
 	public void setTipolinea(String tipolinea) {
 		this.tipolinea = tipolinea;
-	}
-
-	public List<Capacidade> getCapacidades() {
-		return this.capacidades;
-	}
-
-	public void setCapacidades(List<Capacidade> capacidades) {
-		this.capacidades = capacidades;
-	}
-
-	public Capacidade addCapacidade(Capacidade capacidade) {
-		getCapacidades().add(capacidade);
-		capacidade.setTipLinea(this);
-
-		return capacidade;
-	}
-
-	public Capacidade removeCapacidade(Capacidade capacidade) {
-		getCapacidades().remove(capacidade);
-		capacidade.setTipLinea(null);
-
-		return capacidade;
 	}
 
 	public List<Confproceso> getConfprocesos() {

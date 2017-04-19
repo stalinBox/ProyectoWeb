@@ -50,10 +50,6 @@ public class Proceso implements Serializable {
 	@OneToMany(mappedBy="proceso")
 	private List<Lineasprod> lineasprods;
 
-	//bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy="proceso")
-	private List<Parametro> parametros;
-
 	//bi-directional many-to-one association to ProcAlerta
 	@OneToMany(mappedBy="proceso")
 	private List<ProcAlerta> procAlertas;
@@ -237,28 +233,6 @@ public class Proceso implements Serializable {
 		lineasprod.setProceso(null);
 
 		return lineasprod;
-	}
-
-	public List<Parametro> getParametros() {
-		return this.parametros;
-	}
-
-	public void setParametros(List<Parametro> parametros) {
-		this.parametros = parametros;
-	}
-
-	public Parametro addParametro(Parametro parametro) {
-		getParametros().add(parametro);
-		parametro.setProceso(this);
-
-		return parametro;
-	}
-
-	public Parametro removeParametro(Parametro parametro) {
-		getParametros().remove(parametro);
-		parametro.setProceso(null);
-
-		return parametro;
 	}
 
 	public List<ProcAlerta> getProcAlertas() {

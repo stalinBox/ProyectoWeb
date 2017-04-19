@@ -102,7 +102,7 @@ public class DetaOrdenBean implements Serializable {
 		WriteAndReadExcel wr = new WriteAndReadExcel();
 
 		// Store la capacidad de produccion
-		cp = wr.GenerarEstandar(orderList, nDias);
+		// cp = wr.GenerarEstandar(orderList, nDias);
 
 		// Store la orden total del pedido
 		total = totalOrden();

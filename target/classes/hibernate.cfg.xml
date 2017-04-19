@@ -31,7 +31,6 @@
 		<mapping class="com.project.entities.Lineasprod" />
 		<mapping class="com.project.entities.Lugare" />
 		<mapping class="com.project.entities.Ordenprod" />
-		<mapping class="com.project.entities.Parametro" />
 		<mapping class="com.project.entities.Programdia" />
 		<mapping class="com.project.entities.Programturno" />
 		<mapping class="com.project.entities.Turno" />

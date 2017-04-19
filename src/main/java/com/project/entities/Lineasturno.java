@@ -18,15 +18,15 @@ public class Lineasturno implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer ltcodigo;
 
+	//bi-directional many-to-one association to Capacidade
+	@ManyToOne
+	@JoinColumn(name="cap_codigo")
+	private Capacidade capacidade;
+
 	//bi-directional many-to-one association to Lineasprod
 	@ManyToOne
 	@JoinColumn(name="lineapro_codigo")
 	private Lineasprod lineasprod;
-
-	//bi-directional many-to-one association to Parametro
-	@ManyToOne
-	@JoinColumn(name="param_codigo")
-	private Parametro parametro;
 
 	//bi-directional many-to-one association to Turno
 	@ManyToOne
@@ -44,20 +44,20 @@ public class Lineasturno implements Serializable {
 		this.ltcodigo = ltcodigo;
 	}
 
+	public Capacidade getCapacidade() {
+		return this.capacidade;
+	}
+
+	public void setCapacidade(Capacidade capacidade) {
+		this.capacidade = capacidade;
+	}
+
 	public Lineasprod getLineasprod() {
 		return this.lineasprod;
 	}
 
 	public void setLineasprod(Lineasprod lineasprod) {
 		this.lineasprod = lineasprod;
-	}
-
-	public Parametro getParametro() {
-		return this.parametro;
-	}
-
-	public void setParametro(Parametro parametro) {
-		this.parametro = parametro;
 	}
 
 	public Turno getTurno() {

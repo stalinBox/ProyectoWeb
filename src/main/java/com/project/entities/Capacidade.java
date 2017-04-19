@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -21,15 +22,23 @@ public class Capacidade implements Serializable {
 
 	private Integer standar;
 
+	//bi-directional many-to-one association to Distribdetalle
+	@ManyToOne
+	@JoinColumn(name="distrib_codigo")
+	private Distribdetalle distribdetalle;
+
 	//bi-directional many-to-one association to Ordenprod
 	@ManyToOne
 	@JoinColumn(name="ordenprod_codigo")
 	private Ordenprod ordenprod;
 
-	//bi-directional many-to-one association to TipLinea
-	@ManyToOne
-	@JoinColumn(name="codigo_tiplinea")
-	private TipLinea tipLinea;
+	//bi-directional many-to-one association to Lineasturno
+	@OneToMany(mappedBy="capacidade")
+	private List<Lineasturno> lineasturnos;
+
+	//bi-directional many-to-one association to Programdia
+	@OneToMany(mappedBy="capacidade")
+	private List<Programdia> programdias;
 
 	public Capacidade() {
 	}
@@ -50,6 +59,14 @@ public class Capacidade implements Serializable {
 		this.standar = standar;
 	}
 
+	public Distribdetalle getDistribdetalle() {
+		return this.distribdetalle;
+	}
+
+	public void setDistribdetalle(Distribdetalle distribdetalle) {
+		this.distribdetalle = distribdetalle;
+	}
+
 	public Ordenprod getOrdenprod() {
 		return this.ordenprod;
 	}
@@ -58,12 +75,48 @@ public class Capacidade implements Serializable {
 		this.ordenprod = ordenprod;
 	}
 
-	public TipLinea getTipLinea() {
-		return this.tipLinea;
+	public List<Lineasturno> getLineasturnos() {
+		return this.lineasturnos;
 	}
 
-	public void setTipLinea(TipLinea tipLinea) {
-		this.tipLinea = tipLinea;
+	public void setLineasturnos(List<Lineasturno> lineasturnos) {
+		this.lineasturnos = lineasturnos;
+	}
+
+	public Lineasturno addLineasturno(Lineasturno lineasturno) {
+		getLineasturnos().add(lineasturno);
+		lineasturno.setCapacidade(this);
+
+		return lineasturno;
+	}
+
+	public Lineasturno removeLineasturno(Lineasturno lineasturno) {
+		getLineasturnos().remove(lineasturno);
+		lineasturno.setCapacidade(null);
+
+		return lineasturno;
+	}
+
+	public List<Programdia> getProgramdias() {
+		return this.programdias;
+	}
+
+	public void setProgramdias(List<Programdia> programdias) {
+		this.programdias = programdias;
+	}
+
+	public Programdia addProgramdia(Programdia programdia) {
+		getProgramdias().add(programdia);
+		programdia.setCapacidade(this);
+
+		return programdia;
+	}
+
+	public Programdia removeProgramdia(Programdia programdia) {
+		getProgramdias().remove(programdia);
+		programdia.setCapacidade(null);
+
+		return programdia;
 	}
 
 }

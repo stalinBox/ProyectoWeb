@@ -15,4 +15,7 @@ public interface SettingTimesDao {
 
 	public double findByTs(String mNombre, String tNombre, Integer nDia);
 
+	public Double findByTs(String codMod, Integer codPro, Integer codTLinea,
+			Double nDia);
+
 }

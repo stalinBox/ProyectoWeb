@@ -25,6 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.project.dao.SettingTimesDao;
 import com.project.dao.SettingTimesDaoImpl;
+import com.project.mb.DistribDetalleBean.ItemsDistrib;
 
 public class WriteAndReadExcel implements Serializable {
 
@@ -35,11 +36,12 @@ public class WriteAndReadExcel implements Serializable {
 
 	// ***************METODOS**************
 	// OBTIENE LA ORDEN DE PRODUCCION DE BEAN Y MAPEA HACIA UN MAP
-	public ArrayList<Integer> GenerarEstandar(ArrayList<Items> orderList,
-			Integer nDias) throws InvalidFormatException, IOException {
-		ArrayList<Integer> cpStands = new ArrayList<Integer>();
+	public Integer GenerarEstandar(ArrayList<ItemsDistrib> orderList,
+			Double nDias, Integer codPro, Integer codTLinea)
+			throws InvalidFormatException, IOException {
+		Integer cpStand = null;
 		Integer k = 1;
-		for (Items i : orderList) {
+		for (ItemsDistrib i : orderList) {
 			k++;
 			this.dataOrderList.put("1", new Object[] { "ID", "MODELO", "TALLA",
 					"CANTIDAD", "MODELOS(UNICOS)", "SUBTOTAL",
@@ -54,16 +56,16 @@ public class WriteAndReadExcel implements Serializable {
 					new Object[] { k - 1, i.getModelo(), i.getTalla(),
 							i.getCantidad() });
 		}
-		cpStands = SendPathFile(orderList, nDias);
-		System.out.println("capacidad de montaje,aparado,troquelado: "
-				+ cpStands);
-		return cpStands;
+		cpStand = SendPathFile(orderList, nDias, codPro, codTLinea);
+		System.out.println("Capacidad Ponderada: " + cpStand);
+		return cpStand;
 	}
 
 	// OBTIENE EL DIRECTORIO Y LA UBICACION DEL ARCHIVO EXCEL
-	public ArrayList<Integer> SendPathFile(ArrayList<Items> orderList,
-			Integer nDias) throws IOException, InvalidFormatException {
-		ArrayList<Integer> cpStands = new ArrayList<Integer>();
+	public Integer SendPathFile(ArrayList<ItemsDistrib> orderList,
+			Double nDias, Integer codPro, Integer codTLinea)
+			throws IOException, InvalidFormatException {
+		Integer cpStands = 0;
 
 		// NOMBRE ESTATICO
 		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
@@ -82,18 +84,19 @@ public class WriteAndReadExcel implements Serializable {
 
 		// METODO PARA ENVIAR LA ORDEN Y ESCRIBIR EN EXCEL
 		dirNewLocationFile = WritingExcelXLSM(pathFile, pathLocationFile,
-				orderList, nDias);
-		File pathNewFile = new File(dirNewLocationFile);
-		if (ExecuteMacro(pathNewFile) == true) {
-			cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList, nDias);
-		}
+				orderList, nDias, codPro, codTLinea);
+
+		// File pathNewFile = new File(dirNewLocationFile);
+		// if (ExecuteMacro(pathNewFile) == true) {
+		// cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList, nDias);
+		// }
 		return cpStands;
 	}
 
 	// ESCRIBE EN EXCEL LA ORDEN DE PRODUCCION
 	public String WritingExcelXLSM(String pathFile, String pathLocationFile,
-			ArrayList<Items> orderList, Integer nDias)
-			throws InvalidFormatException, IOException {
+			ArrayList<ItemsDistrib> orderList, Double nDias, Integer codPro,
+			Integer codTLinea) throws InvalidFormatException, IOException {
 
 		Workbook workbook;
 		workbook = new XSSFWorkbook(OPCPackage.open(pathFile));
@@ -117,38 +120,23 @@ public class WriteAndReadExcel implements Serializable {
 			}
 		}
 
-		// INGRESA LOS MODELOS EN LA COLUMNA VALORES UNICOS
+		// Obtiene los modeos unicos
 		ArrayList<String> pp = new ArrayList<String>();
 		pp = ModelosUnicos(orderList);
-		Integer p = 1;
-		for (String key : pp) {
-			Row r = sheet.getRow(p);
-			if (r == null) {
-				r = sheet.createRow(p);
-			}
-
-			Cell c = r.getCell(4);
-			if (c == null) {
-				c = r.createCell(4, Cell.CELL_TYPE_STRING);
-			}
-
-			c.setCellValue(key);
-			p++;
-		}
 
 		// INGRESAR DE CAPACIDAD DE PRODUCCION MONTAJE
-		ArrayList<Integer> pp2 = new ArrayList<Integer>();
+		ArrayList<Double> pp2 = new ArrayList<Double>();
 		for (String mNombre : pp) {
 			System.out.println("MODELOS A CONSULTAR: " + mNombre);
-			int ts = 0;
-			String tNombre = "MONTAJE";
+			Double ts = null;
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre, nDias);
-			System.out.println("Capacidad por Montaje en pp2: " + ts);
+			ts = sttDao.findByTs(mNombre, codPro, codTLinea, nDias);
+			System.out.println("Capacidad por proceso en pp2: " + ts);
 			pp2.add(ts);
 		}
+
 		Integer m = 1;
-		for (Integer key : pp2) {
+		for (Double key : pp2) {
 			Row r = sheet.getRow(m);
 			if (r == null) {
 				r = sheet.createRow(m);
@@ -161,36 +149,6 @@ public class WriteAndReadExcel implements Serializable {
 
 			c.setCellValue(key);
 			m++;
-		}
-
-		// INGRESAR LA CAPACIDAD DE PRODUCCION APARADO
-		ArrayList<Integer> pp3 = new ArrayList<Integer>();
-		Sheet sheetApa = workbook.getSheetAt(1);
-
-		for (String mNombre : pp) {
-			System.out.println("MODELOS A CONSULTAR: " + mNombre);
-			int ts = 0;
-			String tNombre = "APARADO";
-			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre, nDias);
-			System.out.println("Capacidad por APARADO en pp3:  " + ts);
-			pp3.add(ts);
-		}
-
-		Integer m1 = 1;
-		for (Integer key : pp3) {
-			Row r = sheetApa.getRow(m1);
-			if (r == null) {
-				r = sheetApa.createRow(m1);
-			}
-
-			Cell c = r.getCell(0);
-			if (c == null) {
-				c = r.createCell(0, Cell.CELL_TYPE_NUMERIC);
-			}
-
-			c.setCellValue(key);
-			m1++;
 		}
 
 		// GUARDA EL ARCHIVO CON OTRO NOMBRE EN LA MISMA DIRECCION
@@ -212,17 +170,15 @@ public class WriteAndReadExcel implements Serializable {
 	}
 
 	// RETORNA EL VALOR RESULTANTE DEL SOLVER
-	public ArrayList<Integer> ReadingExcelXLSM(String path,
-			ArrayList<Items> orderList, Integer nDias) throws IOException {
+	public Integer ReadingExcelXLSM(String path,
+			ArrayList<ItemsDistrib> orderList, Integer nDias)
+			throws IOException {
 
-		ArrayList<Integer> standaresProcesos = new ArrayList<Integer>();
+		Integer standaresProcesos = null;
 
 		// PARA MONTAJE
 		Double cpDoubleMontaje = null;
-		Integer cpInt = null;
-		// PARA APARADO
-		Double cpDoubleApa = null;
-		Integer cpIntApa = null;
+		Integer cpInt = 0;
 
 		FileInputStream fis = new FileInputStream(path);
 		Workbook wb = new XSSFWorkbook(fis);
@@ -253,51 +209,16 @@ public class WriteAndReadExcel implements Serializable {
 			case Cell.CELL_TYPE_FORMULA:
 				break;
 			}
-
-			// VALOR APARADO
-			switch (evaluator.evaluateFormulaCell(c1)) {
-			case Cell.CELL_TYPE_NUMERIC:
-				cpDoubleApa = c1.getNumericCellValue();
-				cpIntApa = (int) Math.round(cpDoubleApa);
-				break;
-			case Cell.CELL_TYPE_FORMULA:
-				break;
-			}
 		}
-
-		// PARA TROQUELADO
-		ArrayList<String> pp = new ArrayList<String>();
-		pp = ModelosUnicos(orderList);
-		// INGRESAR TROQUELADO
-		ArrayList<Integer> pp4 = new ArrayList<Integer>();
-		for (String mNombre : pp) {
-			System.out.println("MODELOS A CONSULTAR: " + mNombre);
-			int ts = 0;
-			String tNombre = "TROQUELADO";
-			SettingTimesDao sttDao = new SettingTimesDaoImpl();
-			ts = (int) sttDao.findByTs(mNombre, tNombre, nDias);
-			System.out.println("Capacidad por TROQUELADO en pp2:  " + ts);
-			pp4.add(ts);
-		}
-
-		standaresProcesos.add(cpInt);
-		standaresProcesos.add(cpIntApa);
-		standaresProcesos.addAll(pp4);
-		System.out.println("Valor para ocupar en double MONTAJE: "
-				+ cpDoubleMontaje);
-		System.out.println("Valor para ocupar en double APARADO: "
-				+ cpDoubleApa);
-
-		System.out.println("***standaresProcesos***: " + standaresProcesos);
 		return standaresProcesos;
 	}
 
 	// RETORNA VALORES SIN REPETIR
-	public ArrayList<String> ModelosUnicos(ArrayList<Items> orderListModUnique) {
+	public ArrayList<String> ModelosUnicos(ArrayList<ItemsDistrib> orderList) {
 		ArrayList<String> arrMod = new ArrayList<String>();
 		ArrayList<Integer> arrCanti = new ArrayList<Integer>();
 		Set<String> hs = new HashSet<>();
-		for (Items i : orderListModUnique) {
+		for (ItemsDistrib i : orderList) {
 			arrMod.add(i.getModelo());
 			arrCanti.add(i.getCantidad());
 		}

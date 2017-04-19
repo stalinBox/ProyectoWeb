@@ -28,12 +28,10 @@ import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
-import com.project.dao.ParametrizacionDao;
-import com.project.dao.ParametrizacionDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
+import com.project.entities.Capacidade;
 import com.project.entities.Ordenprod;
-import com.project.entities.Parametro;
 import com.project.entities.Programdia;
 import com.project.utils.ContentParam;
 import com.project.utils.MyUtil;
@@ -65,57 +63,57 @@ public class ProgramDiasBean implements Serializable {
 	public void init() {
 
 		this.selectedDias = new Programdia();
-		this.selectedDias.setParametro(new Parametro());
+		this.selectedDias.setCapacidade(new Capacidade());
 		eventModel = new DefaultScheduleModel();
 
 		// *******************ENVIAR EL PARAMETRO findByProceso(1) CONSULTADO
 		// TODOS LOS PADRES ASI TAL COMO ESTA, ESTA MAL HECHO ***************
 
-		// LINEAS DE MONTAJE
-		ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
-		List<Object[]> proDias1 = programDiasDao.findByProceso(1);
-		for (Object[] result : proDias1) {
-			Ordenprod op = (Ordenprod) result[0];
-			Parametro pa = (Parametro) result[1];
-			Programdia pr = (Programdia) result[2];
-			eventModel.addEvent(new DefaultScheduleEvent(op
-					.getOrdenprodCodigo()
-					+ "-"
-					+ pa.getProceso().getTipoProceso().getTprNombre()
-					+ "-"
-					+ pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
-					"montajeMTN"));
-		}
-
-		// LINEAS DE APARADO
-		List<Object[]> proDias2 = programDiasDao.findByProceso(2);
-		for (Object[] result : proDias2) {
-			Ordenprod op = (Ordenprod) result[0];
-			Parametro pa = (Parametro) result[1];
-			Programdia pr = (Programdia) result[2];
-			eventModel.addEvent(new DefaultScheduleEvent(op
-					.getOrdenprodCodigo()
-					+ "-"
-					+ pa.getProceso().getTipoProceso().getTprNombre()
-					+ "-"
-					+ pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
-					"aparadoAPA"));
-		}
-
-		// LINEAS DE TROQUELADO
-		List<Object[]> proDias3 = programDiasDao.findByProceso(3);
-		for (Object[] result : proDias3) {
-			Ordenprod op = (Ordenprod) result[0];
-			Parametro pa = (Parametro) result[1];
-			Programdia pr = (Programdia) result[2];
-			eventModel.addEvent(new DefaultScheduleEvent(op
-					.getOrdenprodCodigo()
-					+ "-"
-					+ pa.getProceso().getTipoProceso().getTprNombre()
-					+ "-"
-					+ pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
-					"troqueladoTRQ"));
-		}
+		// // LINEAS DE MONTAJE
+		// ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
+		// List<Object[]> proDias1 = programDiasDao.findByProceso(1);
+		// for (Object[] result : proDias1) {
+		// Ordenprod op = (Ordenprod) result[0];
+		// Parametro pa = (Parametro) result[1];
+		// Programdia pr = (Programdia) result[2];
+		// eventModel.addEvent(new DefaultScheduleEvent(op
+		// .getOrdenprodCodigo()
+		// + "-"
+		// + pa.getProceso().getTipoProceso().getTprNombre()
+		// + "-"
+		// + pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
+		// "montajeMTN"));
+		// }
+		//
+		// // LINEAS DE APARADO
+		// List<Object[]> proDias2 = programDiasDao.findByProceso(2);
+		// for (Object[] result : proDias2) {
+		// Ordenprod op = (Ordenprod) result[0];
+		// Parametro pa = (Parametro) result[1];
+		// Programdia pr = (Programdia) result[2];
+		// eventModel.addEvent(new DefaultScheduleEvent(op
+		// .getOrdenprodCodigo()
+		// + "-"
+		// + pa.getProceso().getTipoProceso().getTprNombre()
+		// + "-"
+		// + pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
+		// "aparadoAPA"));
+		// }
+		//
+		// // LINEAS DE TROQUELADO
+		// List<Object[]> proDias3 = programDiasDao.findByProceso(3);
+		// for (Object[] result : proDias3) {
+		// Ordenprod op = (Ordenprod) result[0];
+		// Parametro pa = (Parametro) result[1];
+		// Programdia pr = (Programdia) result[2];
+		// eventModel.addEvent(new DefaultScheduleEvent(op
+		// .getOrdenprodCodigo()
+		// + "-"
+		// + pa.getProceso().getTipoProceso().getTprNombre()
+		// + "-"
+		// + pr.getCantpares(), pr.getFinicio(), pr.getFfin(),
+		// "troqueladoTRQ"));
+		// }
 
 	}
 
@@ -189,96 +187,95 @@ public class ProgramDiasBean implements Serializable {
 		System.out.println("Procesando...");
 		System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
 
-		ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-		List<Parametro> parametros = paramDao.getProcesosbyOrden(ContentParam
-				.getCodOrden());
-
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
 		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
 		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
 
-		for (Parametro param : parametros) {
-			mLineasCantidad.clear();
-			LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
-			List<Integer> lineasTurnos = lienasTurnosDao.getLineasByProceso(
-					param.getProceso().getProCodigo(),
-					ContentParam.getCodOrden());
-
-			for (Integer lt : lineasTurnos) {
-				Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt,
-						ContentParam.getCodOrden());
-				mLineasCantidad.put(lt, countLinea);
-				System.out.println("Esta cosa: " + mLineasCantidad);
-			}
-			// Items2 orderitem2 = new Items2();
-
-			if (mLineasCantidad.isEmpty()) {
-				System.out
-						.println("No hay lineas para generar la distribucion por dias");
-				ArrayList<ArrayList<Object>> mProcesosT1 = new ArrayList<ArrayList<Object>>();
-				ArrayList<ArrayList<Object>> mProcesosT2 = new ArrayList<ArrayList<Object>>();
-				ArrayList<ArrayList<Object>> mProcesosT3 = new ArrayList<ArrayList<Object>>();
-
-				ArrayList<Integer> demandaT = new ArrayList<Integer>();
-				Map<Integer, Object> mLineas = new HashMap<Integer, Object>();
-				mLineas.put(4, 1);
-				Tablas tablas = new Tablas();
-
-				List<Parametro> params = paramDao.getCpByProcesoOrden(
-						ContentParam.getCodOrden(), 3);
-				for (Parametro p : params) {
-					DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
-					List<String> detalle = detalleDao.getByOrden(ContentParam
-							.getCodOrden());
-
-					for (String d : detalle) {
-						List<Integer> det = detalleDao.getSumByModelo(
-								ContentParam.getCodOrden(), d);
-						for (Object dt : det) {
-							demandaT.add(Integer.parseInt(dt.toString()));
-						}
-					}
-
-					// mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
-					// p.getStandconv(), mLineas);
-					// mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
-					// p.getStandman(), mLineas);
-					// mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
-					// p.getStandauto(), mLineas);
-					// mAll.put(3, mProcesosT1);
-					// mAll.put(4, mProcesosT2);
-					// mAll.put(5, mProcesosT3);
-					System.out.println("Parametro codigo: "
-							+ p.getParamCodigo());
-					orderitem2 = new Items2(p.getProceso().getProCodigo(),
-							p.getParamCodigo(), mProcesosT1);
-					this.orderList2.add(orderitem2);
-
-					orderitem2 = new Items2(p.getProceso().getProCodigo(),
-							p.getParamCodigo(), mProcesosT2);
-					this.orderList2.add(orderitem2);
-
-					orderitem2 = new Items2(p.getProceso().getProCodigo(),
-							p.getParamCodigo(), mProcesosT3);
-					this.orderList2.add(orderitem2);
-				}
-
-			} else {
-				System.out.println("Codigo Parametro2: "
-						+ param.getParamCodigo());
-				Tablas tablas = new Tablas();
-				// mProcesos = tablas.receivParamsPares(
-				// ContentParam.getTotalOrden(), param.getStandconv(),
-				// mLineasCantidad);
-				mAll.put(param.getProceso().getProCodigo(), mProcesos);
-
-				orderitem2 = new Items2(param.getProceso().getProCodigo(),
-						param.getParamCodigo(), mProcesos);
-				this.orderList2.add(orderitem2);
-			}
-		}
+		// for (Parametro param : parametros) {
+		// mLineasCantidad.clear();
+		// LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
+		// List<Integer> lineasTurnos = lienasTurnosDao.getLineasByProceso(
+		// param.getProceso().getProCodigo(),
+		// ContentParam.getCodOrden());
+		//
+		// for (Integer lt : lineasTurnos) {
+		// Object countLinea = lienasTurnosDao.getCountTurnosByLineas(lt,
+		// ContentParam.getCodOrden());
+		// mLineasCantidad.put(lt, countLinea);
+		// System.out.println("Esta cosa: " + mLineasCantidad);
+		// }
+		// // Items2 orderitem2 = new Items2();
+		//
+		// if (mLineasCantidad.isEmpty()) {
+		// System.out
+		// .println("No hay lineas para generar la distribucion por dias");
+		// ArrayList<ArrayList<Object>> mProcesosT1 = new
+		// ArrayList<ArrayList<Object>>();
+		// ArrayList<ArrayList<Object>> mProcesosT2 = new
+		// ArrayList<ArrayList<Object>>();
+		// ArrayList<ArrayList<Object>> mProcesosT3 = new
+		// ArrayList<ArrayList<Object>>();
+		//
+		// ArrayList<Integer> demandaT = new ArrayList<Integer>();
+		// Map<Integer, Object> mLineas = new HashMap<Integer, Object>();
+		// mLineas.put(4, 1);
+		// Tablas tablas = new Tablas();
+		//
+		// List<Parametro> params = paramDao.getCpByProcesoOrden(
+		// ContentParam.getCodOrden(), 3);
+		// for (Parametro p : params) {
+		// DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+		// List<String> detalle = detalleDao.getByOrden(ContentParam
+		// .getCodOrden());
+		//
+		// for (String d : detalle) {
+		// List<Integer> det = detalleDao.getSumByModelo(
+		// ContentParam.getCodOrden(), d);
+		// for (Object dt : det) {
+		// demandaT.add(Integer.parseInt(dt.toString()));
+		// }
+		// }
+		//
+		// // mProcesosT1 = tablas.receivParamsPares(demandaT.get(0),
+		// // p.getStandconv(), mLineas);
+		// // mProcesosT2 = tablas.receivParamsPares(demandaT.get(1),
+		// // p.getStandman(), mLineas);
+		// // mProcesosT3 = tablas.receivParamsPares(demandaT.get(2),
+		// // p.getStandauto(), mLineas);
+		// // mAll.put(3, mProcesosT1);
+		// // mAll.put(4, mProcesosT2);
+		// // mAll.put(5, mProcesosT3);
+		// System.out.println("Parametro codigo: "
+		// + p.getParamCodigo());
+		// orderitem2 = new Items2(p.getProceso().getProCodigo(),
+		// p.getParamCodigo(), mProcesosT1);
+		// this.orderList2.add(orderitem2);
+		//
+		// orderitem2 = new Items2(p.getProceso().getProCodigo(),
+		// p.getParamCodigo(), mProcesosT2);
+		// this.orderList2.add(orderitem2);
+		//
+		// orderitem2 = new Items2(p.getProceso().getProCodigo(),
+		// p.getParamCodigo(), mProcesosT3);
+		// this.orderList2.add(orderitem2);
+		// }
+		//
+		// } else {
+		// System.out.println("Codigo Parametro2: "
+		// + param.getParamCodigo());
+		// Tablas tablas = new Tablas();
+		// // mProcesos = tablas.receivParamsPares(
+		// // ContentParam.getTotalOrden(), param.getStandconv(),
+		// // mLineasCantidad);
+		// mAll.put(param.getProceso().getProCodigo(), mProcesos);
+		//
+		// orderitem2 = new Items2(param.getProceso().getProCodigo(),
+		// param.getParamCodigo(), mProcesos);
+		// this.orderList2.add(orderitem2);
+		// }
+		// }
 		generateCalendar(this.orderList2, this.fInicio);
 	}
 
@@ -507,14 +504,14 @@ public class ProgramDiasBean implements Serializable {
 				System.out.println(": " + a.codParam);
 
 				ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
-				Parametro param = new Parametro();
-				param.setParamCodigo(a.codParam);
-
-				this.selectedDias.setParametro(param);
-				this.selectedDias.setCanthoras(a.horas);
-				this.selectedDias.setCantpares(a.pares);
-				this.selectedDias.setFfin(a.fFin);
-				this.selectedDias.setFinicio(a.fInicio);
+				// Parametro param = new Parametro();
+				// param.setParamCodigo(a.codParam);
+				//
+				// this.selectedDias.setParametro(param);
+				// this.selectedDias.setCanthoras(a.horas);
+				// this.selectedDias.setCantpares(a.pares);
+				// this.selectedDias.setFfin(a.fFin);
+				// this.selectedDias.setFinicio(a.fInicio);
 
 				if (programDiasDao.create(this.selectedDias)) {
 					msg = "Se ha añadido en programDias";

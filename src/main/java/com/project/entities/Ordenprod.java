@@ -59,10 +59,6 @@ public class Ordenprod implements Serializable {
 	@JoinColumn(name="user_id_resp")
 	private Usuario usuario;
 
-	//bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy="ordenprod")
-	private List<Parametro> parametros;
-
 	//bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy="ordenprod")
 	private List<Procesosop> procesosops;
@@ -190,28 +186,6 @@ public class Ordenprod implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	public List<Parametro> getParametros() {
-		return this.parametros;
-	}
-
-	public void setParametros(List<Parametro> parametros) {
-		this.parametros = parametros;
-	}
-
-	public Parametro addParametro(Parametro parametro) {
-		getParametros().add(parametro);
-		parametro.setOrdenprod(this);
-
-		return parametro;
-	}
-
-	public Parametro removeParametro(Parametro parametro) {
-		getParametros().remove(parametro);
-		parametro.setOrdenprod(null);
-
-		return parametro;
 	}
 
 	public List<Procesosop> getProcesosops() {

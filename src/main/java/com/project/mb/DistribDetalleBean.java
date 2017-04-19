@@ -1,5 +1,6 @@
 package com.project.mb;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
@@ -24,9 +27,9 @@ import com.project.entities.Detalleorden;
 import com.project.entities.Distribdetalle;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;
-import com.project.mb.ProgramDiasBean.Items2;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.MyUtil;
+import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
 @ViewScoped
@@ -44,7 +47,7 @@ public class DistribDetalleBean implements Serializable {
 	private Integer codDetaOrden;
 	private List<SelectItem> selectedItemsProceso;
 	private List<SelectItem> selectedItemsTipLinea;
-	private Integer nDias;
+	private Double nDias;
 
 	private ArrayList<ItemsDistrib> orderList = new ArrayList<ItemsDistrib>();
 
@@ -59,11 +62,10 @@ public class DistribDetalleBean implements Serializable {
 
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
-		// orderitem2 = new Items2(param.getProceso().getProCodigo(),
-		// param.getParamCodigo(), mProcesos);
-		// this.orderList2.add(orderitem2);
 		System.out.println("Procesando..");
+		System.out.println("Variable  NDias: " + this.nDias);
 
+		Integer cp = null;
 		ProcesoDao proDao = new ProcesoDaoImpl();
 		List<Proceso> process = proDao.findProcesosDistribByOrden(codDetaOrden);
 
@@ -88,13 +90,26 @@ public class DistribDetalleBean implements Serializable {
 						this.orderList.add(orderList1);
 					}
 					System.out.println("PROCESO: "
-							+ p.getTipoProceso().getTprNombre());
-					System.out.println("LINEA: " + tp.getTipolinea());
+							+ p.getTipoProceso().getTprNombre() + " Codigo: "
+							+ p.getProCodigo());
+
+					System.out.println("LINEA: " + tp.getTipolinea()
+							+ " Codigo: " + tp.getCodigoTiplinea());
+
 					for (ItemsDistrib listado : orderList) {
 						System.out.println("Modelo: " + listado.getModelo()
 								+ " Talla: " + listado.getTalla()
 								+ " Cantidad: " + listado.getCantidad());
 					}
+					WriteAndReadExcel wr = new WriteAndReadExcel();
+
+					try {
+						cp = wr.GenerarEstandar(orderList, this.nDias,
+								p.getProCodigo(), tp.getCodigoTiplinea());
+					} catch (InvalidFormatException | IOException e) {
+						e.printStackTrace();
+					}
+
 				} else {
 					continue;
 				}
@@ -230,11 +245,11 @@ public class DistribDetalleBean implements Serializable {
 		this.selectedItemsTipLinea = selectedItemsTipLinea;
 	}
 
-	public Integer getnDias() {
+	public Double getnDias() {
 		return nDias;
 	}
 
-	public void setnDias(Integer nDias) {
+	public void setnDias(Double nDias) {
 		this.nDias = nDias;
 	}
 

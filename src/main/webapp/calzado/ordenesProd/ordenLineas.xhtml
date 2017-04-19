@@ -114,13 +114,15 @@
 				<p:panel id="idPanel2">
 					<h:panelGrid id="idnDias" columns="2">
 						<p:outputLabel value="Nº dias:" />
-						<p:inputText value="#{distribDetalleBean.nDias}" />
+						<p:inputText id="idDias" value="#{distribDetalleBean.nDias}"
+							required="true" />
 
 						<f:facet name="footer">
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
 								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
 
-							<p:commandButton id="btnNext" value="Procesar" process="@this"
+							<p:commandButton id="btnNext" value="Procesar"
+								process="@this, :formButttons:idDias"
 								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}" />
 						</f:facet>
 					</h:panelGrid>

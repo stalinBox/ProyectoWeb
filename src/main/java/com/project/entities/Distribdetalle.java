@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -17,6 +18,10 @@ public class Distribdetalle implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="distrib_codigo")
 	private Integer distribCodigo;
+
+	//bi-directional many-to-one association to Capacidade
+	@OneToMany(mappedBy="distribdetalle")
+	private List<Capacidade> capacidades;
 
 	//bi-directional many-to-one association to Detalleorden
 	@ManyToOne
@@ -42,6 +47,28 @@ public class Distribdetalle implements Serializable {
 
 	public void setDistribCodigo(Integer distribCodigo) {
 		this.distribCodigo = distribCodigo;
+	}
+
+	public List<Capacidade> getCapacidades() {
+		return this.capacidades;
+	}
+
+	public void setCapacidades(List<Capacidade> capacidades) {
+		this.capacidades = capacidades;
+	}
+
+	public Capacidade addCapacidade(Capacidade capacidade) {
+		getCapacidades().add(capacidade);
+		capacidade.setDistribdetalle(this);
+
+		return capacidade;
+	}
+
+	public Capacidade removeCapacidade(Capacidade capacidade) {
+		getCapacidades().remove(capacidade);
+		capacidade.setDistribdetalle(null);
+
+		return capacidade;
 	}
 
 	public Detalleorden getDetalleorden() {

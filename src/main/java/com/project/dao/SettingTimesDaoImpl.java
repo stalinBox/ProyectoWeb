@@ -132,4 +132,26 @@ public class SettingTimesDaoImpl implements SettingTimesDao {
 		}
 		return a;
 	}
+
+	@Override
+	public Double findByTs(String codMod, Integer codPro, Integer codTLinea,
+			Double nDia) {
+		Double a = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String hql = "SELECT (ROUND((1/MAX(c.tiempoTs))*8*60))* " + nDia
+				+ " FROM Confproceso c where c.modelo.modNombre = '" + codMod
+				+ "' and c.proceso1.proCodigo = " + codPro
+				+ " and c.tipLinea.codigoTiplinea = " + codTLinea;
+		try {
+			sesion.beginTransaction();
+			a = (Double) (sesion.createQuery(hql).uniqueResult());
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("Error en la consulta de tiempos: "
+					+ e.toString());
+			throw e;
+		}
+		return a;
+	}
 }

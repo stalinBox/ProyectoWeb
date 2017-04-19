@@ -22,8 +22,6 @@ import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
-import com.project.dao.ParametrizacionDao;
-import com.project.dao.ParametrizacionDaoImpl;
 import com.project.dao.ProcesosOPDao;
 import com.project.dao.ProcesosOPDaoImpl;
 import com.project.dao.ProgramTurnosDao;
@@ -34,7 +32,6 @@ import com.project.entities.Detalleorden;
 import com.project.entities.Lineasturno;
 import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
-import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Procesosop;
 import com.project.entities.Programdia;
@@ -396,22 +393,7 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectedItemsProceso() {
-		if (this.nOrden != null && !this.nOrden.equals("") && this.nOrden != 0) {
-			this.selectedItemsProceso = new ArrayList<SelectItem>();
-			ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-			List<Parametro> param = paramDao.findByOrdenProd(this.nOrden);
-			for (Parametro p : param) {
-				SelectItem selectItem = new SelectItem(p.getProceso()
-						.getProCodigo(), p.getProceso().getTipoProceso()
-						.getTprNombre());
-				this.selectedItemsProceso.add(selectItem);
-			}
-			return selectedItemsProceso;
-		} else {
-			this.selectedItemsProceso = new ArrayList<SelectItem>();
-			return selectedItemsProceso;
-		}
-
+		return selectedItemsProceso;
 	}
 
 	public void setSelectedItemsProceso(List<SelectItem> selectedItemsProceso) {
