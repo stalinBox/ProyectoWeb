@@ -32,10 +32,6 @@ public class Ordenprod implements Serializable {
 	@Column(name="f_final")
 	private Date fFinal;
 
-	//bi-directional many-to-one association to Capacidade
-	@OneToMany(mappedBy="ordenprod")
-	private List<Capacidade> capacidades;
-
 	//bi-directional many-to-one association to Costosindi
 	@OneToMany(mappedBy="ordenprod")
 	private List<Costosindi> costosindis;
@@ -58,6 +54,10 @@ public class Ordenprod implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="user_id_resp")
 	private Usuario usuario;
+
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="ordenprod")
+	private List<Parametro> parametros;
 
 	//bi-directional many-to-one association to Procesosop
 	@OneToMany(mappedBy="ordenprod")
@@ -96,28 +96,6 @@ public class Ordenprod implements Serializable {
 
 	public void setFFinal(Date fFinal) {
 		this.fFinal = fFinal;
-	}
-
-	public List<Capacidade> getCapacidades() {
-		return this.capacidades;
-	}
-
-	public void setCapacidades(List<Capacidade> capacidades) {
-		this.capacidades = capacidades;
-	}
-
-	public Capacidade addCapacidade(Capacidade capacidade) {
-		getCapacidades().add(capacidade);
-		capacidade.setOrdenprod(this);
-
-		return capacidade;
-	}
-
-	public Capacidade removeCapacidade(Capacidade capacidade) {
-		getCapacidades().remove(capacidade);
-		capacidade.setOrdenprod(null);
-
-		return capacidade;
 	}
 
 	public List<Costosindi> getCostosindis() {
@@ -186,6 +164,28 @@ public class Ordenprod implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<Parametro> getParametros() {
+		return this.parametros;
+	}
+
+	public void setParametros(List<Parametro> parametros) {
+		this.parametros = parametros;
+	}
+
+	public Parametro addParametro(Parametro parametro) {
+		getParametros().add(parametro);
+		parametro.setOrdenprod(this);
+
+		return parametro;
+	}
+
+	public Parametro removeParametro(Parametro parametro) {
+		getParametros().remove(parametro);
+		parametro.setOrdenprod(null);
+
+		return parametro;
 	}
 
 	public List<Procesosop> getProcesosops() {

@@ -30,8 +30,8 @@ import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
-import com.project.entities.Capacidade;
 import com.project.entities.Ordenprod;
+import com.project.entities.Parametro;
 import com.project.entities.Programdia;
 import com.project.utils.ContentParam;
 import com.project.utils.MyUtil;
@@ -63,7 +63,7 @@ public class ProgramDiasBean implements Serializable {
 	public void init() {
 
 		this.selectedDias = new Programdia();
-		this.selectedDias.setCapacidade(new Capacidade());
+		this.selectedDias.setParametro(new Parametro());
 		eventModel = new DefaultScheduleModel();
 
 		// *******************ENVIAR EL PARAMETRO findByProceso(1) CONSULTADO

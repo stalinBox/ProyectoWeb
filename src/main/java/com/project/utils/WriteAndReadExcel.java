@@ -71,7 +71,7 @@ public class WriteAndReadExcel implements Serializable {
 		String fileName = "contentExcel/ExcelMacro/caso1Real.xlsm";
 		String pathFile = "";
 		String pathLocationFile = "";
-		String dirNewLocationFile = "";
+		String dirNewLocationFile = null;
 
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		File configFile = new File(classLoader.getResource(fileName).getFile());
@@ -86,10 +86,10 @@ public class WriteAndReadExcel implements Serializable {
 		dirNewLocationFile = WritingExcelXLSM(pathFile, pathLocationFile,
 				orderList, nDias, codPro, codTLinea);
 
-		// File pathNewFile = new File(dirNewLocationFile);
-		// if (ExecuteMacro(pathNewFile) == true) {
-		// cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList, nDias);
-		// }
+		File pathNewFile = new File(dirNewLocationFile);
+		if (ExecuteMacro(pathNewFile) == true) {
+			cpStands = ReadingExcelXLSM(dirNewLocationFile, orderList, nDias);
+		}
 		return cpStands;
 	}
 
@@ -120,11 +120,11 @@ public class WriteAndReadExcel implements Serializable {
 			}
 		}
 
-		// Obtiene los modeos unicos
+		// OBTIENE LOS MODELOS UNICOS
 		ArrayList<String> pp = new ArrayList<String>();
 		pp = ModelosUnicos(orderList);
 
-		// INGRESAR DE CAPACIDAD DE PRODUCCION MONTAJE
+		// LLENAR LA VARIABLE pp2, MEDIANTE LA CONSULTA A LA BD
 		ArrayList<Double> pp2 = new ArrayList<Double>();
 		for (String mNombre : pp) {
 			System.out.println("MODELOS A CONSULTAR: " + mNombre);
@@ -135,18 +135,17 @@ public class WriteAndReadExcel implements Serializable {
 			pp2.add(ts);
 		}
 
+		// INGRESAR EN EL "EXCEL FILE" LAS CANTIDADES DE LA VARIABLE pp2
 		Integer m = 1;
 		for (Double key : pp2) {
 			Row r = sheet.getRow(m);
 			if (r == null) {
 				r = sheet.createRow(m);
 			}
-
 			Cell c = r.getCell(7);
 			if (c == null) {
 				c = r.createCell(7, Cell.CELL_TYPE_NUMERIC);
 			}
-
 			c.setCellValue(key);
 			m++;
 		}
@@ -171,36 +170,31 @@ public class WriteAndReadExcel implements Serializable {
 
 	// RETORNA EL VALOR RESULTANTE DEL SOLVER
 	public Integer ReadingExcelXLSM(String path,
-			ArrayList<ItemsDistrib> orderList, Integer nDias)
-			throws IOException {
+			ArrayList<ItemsDistrib> orderList, Double nDias) throws IOException {
 
 		Integer standaresProcesos = null;
 
-		// PARA MONTAJE
 		Double cpDoubleMontaje = null;
-		Integer cpInt = 0;
+		Integer cpInt = null;
 
 		FileInputStream fis = new FileInputStream(path);
 		Workbook wb = new XSSFWorkbook(fis);
 		Sheet sheet = wb.getSheetAt(0);
-		Sheet sheetApa = wb.getSheetAt(1);
-		Sheet sheetTrq = wb.getSheetAt(2);
 
 		FormulaEvaluator evaluator = wb.getCreationHelper()
 				.createFormulaEvaluator();
 
+		// Devuelve Total orden produccion
 		CellReference cellReference = new CellReference("N2");
-		CellReference cellReference1 = new CellReference("G2");
+		// Devuelve Total promedio ponderado
+		// CellReference cellReference1 = new CellReference("G2");
 
 		Row row = sheet.getRow(cellReference.getRow());
-		Row rowApa = sheetApa.getRow(cellReference1.getRow());
-		Row rowTrq = sheetTrq.getRow(cellReference1.getRow());
 
-		if (row != null && rowApa != null && rowTrq != null) {
+		if (row != null) {
 			Cell c = row.getCell(cellReference.getCol());
-			Cell c1 = rowApa.getCell(cellReference1.getCol());
 
-			// VALOR MONTAJE
+			// VALOR CP PRODUCCION POR PROCESO, TIPO LINEA, MODELO
 			switch (evaluator.evaluateFormulaCell(c)) {
 			case Cell.CELL_TYPE_NUMERIC:
 				cpDoubleMontaje = c.getNumericCellValue();
@@ -234,11 +228,9 @@ public class WriteAndReadExcel implements Serializable {
 	public boolean ExecuteMacro(File pathFile) {
 		// VARIABLE CON EL NOMBRE DE LA MACRO
 		String macroNameMontaje = "!MacroGeneral";// Ocupar esta macro pa todo
-		String macroNameAparado = "!calculoAparado";
 		PrintSolveMB execute = new PrintSolveMB();
 		try {
-			if (execute.executeMacro(pathFile, macroNameMontaje) == true
-					&& execute.executeMacro(pathFile, macroNameAparado) == true) {
+			if (execute.executeMacro(pathFile, macroNameMontaje) == true) {
 				System.out.println("MACROS SUCCESFULL");
 				return true;
 			} else {

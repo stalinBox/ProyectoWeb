@@ -18,9 +18,9 @@ import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.TurnosDao;
 import com.project.dao.TurnosDaoImpl;
-import com.project.entities.Capacidade;
 import com.project.entities.Lineasprod;
 import com.project.entities.Lineasturno;
+import com.project.entities.Parametro;
 import com.project.entities.Turno;
 import com.project.utils.ContentParam;
 
@@ -43,7 +43,7 @@ public class LineasTurnosBean implements Serializable {
 		this.selectedLineaTurn = new Lineasturno();
 		this.selectedLineaTurn.setLineasprod(new Lineasprod());
 		this.selectedLineaTurn.setTurno(new Turno());
-		this.selectedLineaTurn.setCapacidade(new Capacidade());
+		this.selectedLineaTurn.setParametro(new Parametro());
 	}
 
 	// METODOS

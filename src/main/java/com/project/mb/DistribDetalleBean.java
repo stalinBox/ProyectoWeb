@@ -28,6 +28,7 @@ import com.project.entities.Distribdetalle;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;
 import com.project.utils.ItemCodOrden;
+import com.project.utils.ItemsParams;
 import com.project.utils.MyUtil;
 import com.project.utils.WriteAndReadExcel;
 
@@ -50,6 +51,7 @@ public class DistribDetalleBean implements Serializable {
 	private Double nDias;
 
 	private ArrayList<ItemsDistrib> orderList = new ArrayList<ItemsDistrib>();
+	private ArrayList<ItemsParams> orderListParams = new ArrayList<ItemsParams>();
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -63,9 +65,9 @@ public class DistribDetalleBean implements Serializable {
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
 		System.out.println("Procesando..");
-		System.out.println("Variable  NDias: " + this.nDias);
 
-		Integer cp = null;
+		Integer cp = 0;
+
 		ProcesoDao proDao = new ProcesoDaoImpl();
 		List<Proceso> process = proDao.findProcesosDistribByOrden(codDetaOrden);
 
@@ -76,6 +78,7 @@ public class DistribDetalleBean implements Serializable {
 		List<Distribdetalle> distro = null;
 
 		ItemsDistrib orderList1 = new ItemsDistrib();
+		ItemsParams orderListParams1 = new ItemsParams();
 		for (Proceso p : process) {
 			for (TipLinea tp : tipo) {
 				distro = distribDao.findByOrderByProByTL(codDetaOrden,
@@ -89,18 +92,18 @@ public class DistribDetalleBean implements Serializable {
 								poc.getDetalleorden().getCantidad());
 						this.orderList.add(orderList1);
 					}
-					System.out.println("PROCESO: "
-							+ p.getTipoProceso().getTprNombre() + " Codigo: "
-							+ p.getProCodigo());
+					// System.out.println("PROCESO: "
+					// + p.getTipoProceso().getTprNombre() + " Codigo: "
+					// + p.getProCodigo());
+					//
+					// System.out.println("LINEA: " + tp.getTipolinea()
+					// + " Codigo: " + tp.getCodigoTiplinea());
 
-					System.out.println("LINEA: " + tp.getTipolinea()
-							+ " Codigo: " + tp.getCodigoTiplinea());
-
-					for (ItemsDistrib listado : orderList) {
-						System.out.println("Modelo: " + listado.getModelo()
-								+ " Talla: " + listado.getTalla()
-								+ " Cantidad: " + listado.getCantidad());
-					}
+					// for (ItemsDistrib listado : orderList) {
+					// System.out.println("Modelo: " + listado.getModelo()
+					// + " Talla: " + listado.getTalla()
+					// + " Cantidad: " + listado.getCantidad());
+					// }
 					WriteAndReadExcel wr = new WriteAndReadExcel();
 
 					try {
@@ -109,17 +112,27 @@ public class DistribDetalleBean implements Serializable {
 					} catch (InvalidFormatException | IOException e) {
 						e.printStackTrace();
 					}
+					orderListParams1 = new ItemsParams(p.getTipoProceso()
+							.getTprNombre(), tp.getTipolinea(), cp);
+					this.orderListParams.add(orderListParams1);
 
 				} else {
 					continue;
 				}
 				this.orderList.clear();
 			}
+
 		}
 
-		process.clear();
-		tipo.clear();
+		String ruta = "";
+		ruta = MyUtil.calzadoPath() + "parametrizacion/param.jsf";
 
+		try {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void btnReprocesar(ActionEvent actionEvent) {
@@ -185,6 +198,14 @@ public class DistribDetalleBean implements Serializable {
 		}
 		return selectedItemsTipLinea;
 
+	}
+
+	public ArrayList<ItemsParams> getOrderListParams() {
+		return orderListParams;
+	}
+
+	public void setOrderListParams(ArrayList<ItemsParams> orderListParams) {
+		this.orderListParams = orderListParams;
 	}
 
 	public ArrayList<ItemsDistrib> getOrderList() {
@@ -317,4 +338,5 @@ public class DistribDetalleBean implements Serializable {
 			this.cantidad = cantidad;
 		}
 	}
+
 }

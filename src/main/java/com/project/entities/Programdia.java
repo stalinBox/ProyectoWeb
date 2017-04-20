@@ -31,10 +31,10 @@ public class Programdia implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date finicio;
 
-	//bi-directional many-to-one association to Capacidade
+	//bi-directional many-to-one association to Parametro
 	@ManyToOne
-	@JoinColumn(name="cap_codigo")
-	private Capacidade capacidade;
+	@JoinColumn(name="param_codigo")
+	private Parametro parametro;
 
 	//bi-directional many-to-one association to Programturno
 	@OneToMany(mappedBy="programdia")
@@ -83,12 +83,12 @@ public class Programdia implements Serializable {
 		this.finicio = finicio;
 	}
 
-	public Capacidade getCapacidade() {
-		return this.capacidade;
+	public Parametro getParametro() {
+		return this.parametro;
 	}
 
-	public void setCapacidade(Capacidade capacidade) {
-		this.capacidade = capacidade;
+	public void setParametro(Parametro parametro) {
+		this.parametro = parametro;
 	}
 
 	public List<Programturno> getProgramturnos() {

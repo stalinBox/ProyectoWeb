@@ -19,10 +19,6 @@ public class Distribdetalle implements Serializable {
 	@Column(name="distrib_codigo")
 	private Integer distribCodigo;
 
-	//bi-directional many-to-one association to Capacidade
-	@OneToMany(mappedBy="distribdetalle")
-	private List<Capacidade> capacidades;
-
 	//bi-directional many-to-one association to Detalleorden
 	@ManyToOne
 	@JoinColumn(name="detaorden_codigo")
@@ -38,6 +34,10 @@ public class Distribdetalle implements Serializable {
 	@JoinColumn(name="codigo_tiplinea")
 	private TipLinea tipLinea;
 
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="distribdetalle")
+	private List<Parametro> parametros;
+
 	public Distribdetalle() {
 	}
 
@@ -47,28 +47,6 @@ public class Distribdetalle implements Serializable {
 
 	public void setDistribCodigo(Integer distribCodigo) {
 		this.distribCodigo = distribCodigo;
-	}
-
-	public List<Capacidade> getCapacidades() {
-		return this.capacidades;
-	}
-
-	public void setCapacidades(List<Capacidade> capacidades) {
-		this.capacidades = capacidades;
-	}
-
-	public Capacidade addCapacidade(Capacidade capacidade) {
-		getCapacidades().add(capacidade);
-		capacidade.setDistribdetalle(this);
-
-		return capacidade;
-	}
-
-	public Capacidade removeCapacidade(Capacidade capacidade) {
-		getCapacidades().remove(capacidade);
-		capacidade.setDistribdetalle(null);
-
-		return capacidade;
 	}
 
 	public Detalleorden getDetalleorden() {
@@ -93,6 +71,28 @@ public class Distribdetalle implements Serializable {
 
 	public void setTipLinea(TipLinea tipLinea) {
 		this.tipLinea = tipLinea;
+	}
+
+	public List<Parametro> getParametros() {
+		return this.parametros;
+	}
+
+	public void setParametros(List<Parametro> parametros) {
+		this.parametros = parametros;
+	}
+
+	public Parametro addParametro(Parametro parametro) {
+		getParametros().add(parametro);
+		parametro.setDistribdetalle(this);
+
+		return parametro;
+	}
+
+	public Parametro removeParametro(Parametro parametro) {
+		getParametros().remove(parametro);
+		parametro.setDistribdetalle(null);
+
+		return parametro;
 	}
 
 }
