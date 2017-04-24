@@ -16,19 +16,18 @@ public class ParamBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<ItemsParams> selectedParams;
 
+	private List<ItemsParams> cars;
+
 	@PostConstruct
 	public void init() {
-
+		cars = DistribDetalleBean.getOrderlistparams();
+		for (ItemsParams i : cars) {
+			System.out.println("Proceso1: " + i.getProceso() + " TpLinea1: "
+					+ i.getTipoLinea() + " Capacidad1: " + i.getCpPonderado());
+		}
 	}
 
 	public void btnEject() {
-		System.out.println("PROCESO: " + ItemsParams.getProceso());
-		System.out.println("TIPO LINEA:" + ItemsParams.getTipoLinea());
-		System.out.println("CAPACIDAD: " + ItemsParams.getCpPonderado());
-		this.selectedParams = ItemsParams;
-		for (ItemsParams p : ItemsParams) {
-
-		}
 	}
 
 	// SETTERS AND GETTERS
@@ -38,6 +37,14 @@ public class ParamBean implements Serializable {
 
 	public void setSelectedParams(List<ItemsParams> selectedParams) {
 		this.selectedParams = selectedParams;
+	}
+
+	public List<ItemsParams> getCars() {
+		return cars;
+	}
+
+	public void setCars(List<ItemsParams> cars) {
+		this.cars = cars;
 	}
 
 }

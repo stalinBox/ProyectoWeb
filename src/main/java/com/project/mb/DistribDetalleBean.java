@@ -51,7 +51,7 @@ public class DistribDetalleBean implements Serializable {
 	private Double nDias;
 
 	private ArrayList<ItemsDistrib> orderList = new ArrayList<ItemsDistrib>();
-	private ArrayList<ItemsParams> orderListParams = new ArrayList<ItemsParams>();
+	private static final ArrayList<ItemsParams> orderListParams = new ArrayList<ItemsParams>();
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -77,8 +77,6 @@ public class DistribDetalleBean implements Serializable {
 		DistribDetaDao distribDao = new DistribDetaDaoImpl();
 		List<Distribdetalle> distro = null;
 
-		ItemsDistrib orderList1 = new ItemsDistrib();
-		ItemsParams orderListParams1 = new ItemsParams();
 		for (Proceso p : process) {
 			for (TipLinea tp : tipo) {
 				distro = distribDao.findByOrderByProByTL(codDetaOrden,
@@ -86,44 +84,54 @@ public class DistribDetalleBean implements Serializable {
 
 				if (!(distro.isEmpty())) {
 					for (Distribdetalle poc : distro) {
-						orderList1 = new ItemsDistrib(poc.getDetalleorden()
-								.getModelo().getModNombre(), poc
-								.getDetalleorden().getTalla().getTalNumero(),
+						ItemsDistrib orderList1 = new ItemsDistrib(
+								poc.getDetalleorden().getModelo()
+										.getModNombre(),
+								poc.getDetalleorden().getTalla().getTalNumero(),
 								poc.getDetalleorden().getCantidad());
 						this.orderList.add(orderList1);
 					}
-					// System.out.println("PROCESO: "
-					// + p.getTipoProceso().getTprNombre() + " Codigo: "
-					// + p.getProCodigo());
-					//
-					// System.out.println("LINEA: " + tp.getTipolinea()
-					// + " Codigo: " + tp.getCodigoTiplinea());
-
-					// for (ItemsDistrib listado : orderList) {
-					// System.out.println("Modelo: " + listado.getModelo()
-					// + " Talla: " + listado.getTalla()
-					// + " Cantidad: " + listado.getCantidad());
-					// }
 					WriteAndReadExcel wr = new WriteAndReadExcel();
 
 					try {
 						cp = wr.GenerarEstandar(orderList, this.nDias,
 								p.getProCodigo(), tp.getCodigoTiplinea());
+
+						System.out
+								.println("Capacidad Ponderada en DistribDetalleBean "
+										+ cp);
+
+						System.out.println("Proceso: "
+								+ p.getTipoProceso().getTprNombre());
+
+						System.out.println("TpLinea: " + tp.getTipolinea());
+
+						System.out.println("Capacidad: " + cp);
+
+						System.out.println("Ingresando en orderListParams1");
+
+						ItemsParams orderListParams1 = new ItemsParams(p
+								.getTipoProceso().getTprNombre(),
+								tp.getTipolinea(), cp);
+						orderListParams.add(orderListParams1);
+
 					} catch (InvalidFormatException | IOException e) {
 						e.printStackTrace();
 					}
-					orderListParams1 = new ItemsParams(p.getTipoProceso()
-							.getTprNombre(), tp.getTipolinea(), cp);
-					this.orderListParams.add(orderListParams1);
 
 				} else {
 					continue;
 				}
 				this.orderList.clear();
 			}
-
 		}
 
+		for (ItemsParams i : orderListParams) {
+			System.out.println("PROCESO0: " + i.getProceso() + " TpLinea0: "
+					+ i.getTipoLinea() + " Capacidad0: " + i.getCpPonderado());
+		}
+
+		// REDIRECCIONAR A PARAMA.JSF
 		String ruta = "";
 		ruta = MyUtil.calzadoPath() + "parametrizacion/param.jsf";
 
@@ -197,15 +205,10 @@ public class DistribDetalleBean implements Serializable {
 			this.selectedItemsTipLinea.add(selectItem);
 		}
 		return selectedItemsTipLinea;
-
 	}
 
-	public ArrayList<ItemsParams> getOrderListParams() {
+	public static ArrayList<ItemsParams> getOrderlistparams() {
 		return orderListParams;
-	}
-
-	public void setOrderListParams(ArrayList<ItemsParams> orderListParams) {
-		this.orderListParams = orderListParams;
 	}
 
 	public ArrayList<ItemsDistrib> getOrderList() {

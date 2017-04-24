@@ -16,9 +16,17 @@
 
 			<h:form id="idFrmParams">
 				<p:panel id="idPanel">
-					<f:facet name="header">RESUMEN TIEMPOS PARAMETROS</f:facet>
+					<f:facet name="header" value="RESUMEN TIEMPOS PARAMETROS" />
 
-					<p:commandButton value="Aceptar"
+					<p:outputPanel id="multiCarDetail" style="text-align:center;">
+						<ui:repeat value="#{paramBean.cars}" var="car">
+							<h:outputText
+								value="#{car.proceso} -  #{car.tipoLinea} - #{car.cpPonderado}"
+								style="display:block" />
+						</ui:repeat>
+					</p:outputPanel>
+
+					<p:commandButton value="Mostrar"
 						actionListener="#{paramBean.btnEject()}" />
 				</p:panel>
 			</h:form>

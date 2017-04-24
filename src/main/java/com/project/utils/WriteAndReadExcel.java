@@ -57,7 +57,7 @@ public class WriteAndReadExcel implements Serializable {
 							i.getCantidad() });
 		}
 		cpStand = SendPathFile(orderList, nDias, codPro, codTLinea);
-		System.out.println("Capacidad Ponderada: " + cpStand);
+		System.out.println("Capacidad Ponderada en WriteAndExcel: " + cpStand);
 		return cpStand;
 	}
 
@@ -127,11 +127,11 @@ public class WriteAndReadExcel implements Serializable {
 		// LLENAR LA VARIABLE pp2, MEDIANTE LA CONSULTA A LA BD
 		ArrayList<Double> pp2 = new ArrayList<Double>();
 		for (String mNombre : pp) {
-			System.out.println("MODELOS A CONSULTAR: " + mNombre);
+			// System.out.println("MODELOS A CONSULTAR: " + mNombre);
 			Double ts = null;
 			SettingTimesDao sttDao = new SettingTimesDaoImpl();
 			ts = sttDao.findByTs(mNombre, codPro, codTLinea, nDias);
-			System.out.println("Capacidad por proceso en pp2: " + ts);
+			// System.out.println("Capacidad por proceso en pp2: " + ts);
 			pp2.add(ts);
 		}
 
@@ -204,7 +204,7 @@ public class WriteAndReadExcel implements Serializable {
 				break;
 			}
 		}
-		return standaresProcesos;
+		return cpInt;
 	}
 
 	// RETORNA VALORES SIN REPETIR

@@ -3,43 +3,40 @@ package com.project.utils;
 import java.io.Serializable;
 
 public class ItemsParams implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-	private static String proceso;
-	private static String TipoLinea;
-	private static Integer cpPonderado;
+
+	private String proceso;
+	private String TipoLinea;
+	private Integer cpPonderado;
 
 	public ItemsParams(String proceso, String TipoLinea, Integer cpPonderado) {
-		ItemsParams.proceso = proceso;
-		ItemsParams.TipoLinea = TipoLinea;
-		ItemsParams.cpPonderado = cpPonderado;
+		this.proceso = proceso;
+		this.TipoLinea = TipoLinea;
+		this.cpPonderado = cpPonderado;
 	}
 
-	public ItemsParams() {
-	}
-
-	public static String getProceso() {
+	public String getProceso() {
 		return proceso;
 	}
 
-	public static void setProceso(String proceso) {
-		ItemsParams.proceso = proceso;
+	public void setProceso(String proceso) {
+		this.proceso = proceso;
 	}
 
-	public static String getTipoLinea() {
+	public String getTipoLinea() {
 		return TipoLinea;
 	}
 
-	public static void setTipoLinea(String tipoLinea) {
+	public void setTipoLinea(String tipoLinea) {
 		TipoLinea = tipoLinea;
 	}
 
-	public static Integer getCpPonderado() {
+	public Integer getCpPonderado() {
 		return cpPonderado;
 	}
 
-	public static void setCpPonderado(Integer cpPonderado) {
-		ItemsParams.cpPonderado = cpPonderado;
+	public void setCpPonderado(Integer cpPonderado) {
+		this.cpPonderado = cpPonderado;
 	}
 
 }
