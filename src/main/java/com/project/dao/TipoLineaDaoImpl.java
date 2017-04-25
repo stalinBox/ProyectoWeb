@@ -154,4 +154,23 @@ public class TipoLineaDaoImpl implements TipoLineaDao {
 		}
 		return listado;
 	}
+
+	@Override
+	public Integer findByNombre(String nomTpLinea) {
+		Integer listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "SELECT tp.codigoTiplinea FROM TipLinea tp WHERE tp.tipolinea = '"
+				+ nomTpLinea + "'";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (Integer) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL FINDBYNOMBRE: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

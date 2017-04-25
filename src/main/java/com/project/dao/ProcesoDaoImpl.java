@@ -240,4 +240,23 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		}
 		return listado;
 	}
+
+	@Override
+	public Integer findByNameProceso(String nomProceso) {
+		Integer listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select pr.proCodigo from Proceso pr where pr.tipoProceso.tprNombre = '"
+				+ nomProceso + "'";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (Integer) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FIND FINDBYNAMEPROCESO: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

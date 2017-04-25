@@ -9,6 +9,15 @@
 <body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog header="Espere.." widgetVar="statusDialog" modal="true"
+				draggable="false" closable="false" resizable="false">
+				<p:graphicImage value="/images/loader.gif" />
+			</p:dialog>
+
 			<p:growl id="msgs" showDetail="true" />
 
 			<h:form id="idFmrDistrib">
@@ -73,7 +82,9 @@
 					update=":formDetalleOrden:checkboxDT, :formDataTable:basicDT" />
 				<br />
 			</h:form>
+
 			<br />
+
 			<h:form id="formDataTable">
 				<p:dataTable id="basicDT" var="p"
 					value="#{distribDetalleBean.distribDetalle}"
@@ -121,9 +132,11 @@
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
 								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
 
-							<p:commandButton id="btnNext" value="Procesar"
+							<p:commandButton id="btnProcesar" value="Procesar"
 								process="@this, :formButttons:idDias"
-								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}" />
+								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}"
+								oncomplete="PF('dialogParams').show()" />
+
 						</f:facet>
 					</h:panelGrid>
 				</p:panel>
@@ -145,6 +158,32 @@
 					<p:commandButton id="decline" value="No" icon="ui-icon-close"
 						oncomplete="PF('dialogDistribDelete').hide()" />
 				</p:confirmDialog>
+			</h:form>
+
+			<h:form id="formListParams">
+				<p:dialog header="Continuar Proceso" widgetVar="dialogParams"
+					modal="true" id="confirmDialog" showEffect="fade" hideEffect="fade"
+					severity="alert">
+
+					<f:facet name="header">RESUMEN CAPACIDADES PONDERARAS</f:facet>
+
+					<p:outputPanel id="multiStandarDetail" style="text-align:left;">
+						<ui:repeat value="#{distribDetalleBean.ctiempos}" var="standar">
+							<h:outputText
+								value="#{standar.proceso} -  #{standar.tipoLinea} - #{standar.cpPonderado}"
+								style="display:block" />
+						</ui:repeat>
+					</p:outputPanel>
+
+					<f:facet name="footer">
+						<p:commandButton id="confirm" value="Si" icon="ui-icon-check"
+							oncomplete="PF('dialogParams').hide()"
+							actionListener="#{paramBean.btnSave()}" />
+
+						<p:commandButton id="decline" value="No" icon="ui-icon-close"
+							oncomplete="PF('dialogParams').hide()" />
+					</f:facet>
+				</p:dialog>
 			</h:form>
 
 		</ui:define>

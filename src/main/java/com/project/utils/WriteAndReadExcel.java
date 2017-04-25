@@ -25,7 +25,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.project.dao.SettingTimesDao;
 import com.project.dao.SettingTimesDaoImpl;
-import com.project.mb.DistribDetalleBean.ItemsDistrib;
 
 public class WriteAndReadExcel implements Serializable {
 
@@ -171,8 +170,6 @@ public class WriteAndReadExcel implements Serializable {
 	// RETORNA EL VALOR RESULTANTE DEL SOLVER
 	public Integer ReadingExcelXLSM(String path,
 			ArrayList<ItemsDistrib> orderList, Double nDias) throws IOException {
-
-		Integer standaresProcesos = null;
 
 		Double cpDoubleMontaje = null;
 		Integer cpInt = null;

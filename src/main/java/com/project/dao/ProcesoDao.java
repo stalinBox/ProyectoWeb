@@ -21,6 +21,8 @@ public interface ProcesoDao {
 
 	public List<Proceso> findProcesosDistribByOrden(Integer codOrden);
 
+	public Integer findByNameProceso(String nomProceso);
+
 	public boolean create(Proceso proceso);
 
 	public boolean update(Proceso proceso);

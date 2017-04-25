@@ -36,6 +36,10 @@ public class TipLinea implements Serializable {
 	@OneToMany(mappedBy="tipLinea")
 	private List<Lineasprod> lineasprods;
 
+	//bi-directional many-to-one association to Parametro
+	@OneToMany(mappedBy="tipLinea")
+	private List<Parametro> parametros;
+
 	public TipLinea() {
 	}
 
@@ -127,6 +131,28 @@ public class TipLinea implements Serializable {
 		lineasprod.setTipLinea(null);
 
 		return lineasprod;
+	}
+
+	public List<Parametro> getParametros() {
+		return this.parametros;
+	}
+
+	public void setParametros(List<Parametro> parametros) {
+		this.parametros = parametros;
+	}
+
+	public Parametro addParametro(Parametro parametro) {
+		getParametros().add(parametro);
+		parametro.setTipLinea(this);
+
+		return parametro;
+	}
+
+	public Parametro removeParametro(Parametro parametro) {
+		getParametros().remove(parametro);
+		parametro.setTipLinea(null);
+
+		return parametro;
 	}
 
 }

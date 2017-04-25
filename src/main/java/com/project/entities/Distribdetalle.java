@@ -2,7 +2,6 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -33,10 +32,6 @@ public class Distribdetalle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="codigo_tiplinea")
 	private TipLinea tipLinea;
-
-	//bi-directional many-to-one association to Parametro
-	@OneToMany(mappedBy="distribdetalle")
-	private List<Parametro> parametros;
 
 	public Distribdetalle() {
 	}
@@ -71,28 +66,6 @@ public class Distribdetalle implements Serializable {
 
 	public void setTipLinea(TipLinea tipLinea) {
 		this.tipLinea = tipLinea;
-	}
-
-	public List<Parametro> getParametros() {
-		return this.parametros;
-	}
-
-	public void setParametros(List<Parametro> parametros) {
-		this.parametros = parametros;
-	}
-
-	public Parametro addParametro(Parametro parametro) {
-		getParametros().add(parametro);
-		parametro.setDistribdetalle(this);
-
-		return parametro;
-	}
-
-	public Parametro removeParametro(Parametro parametro) {
-		getParametros().remove(parametro);
-		parametro.setDistribdetalle(null);
-
-		return parametro;
 	}
 
 }

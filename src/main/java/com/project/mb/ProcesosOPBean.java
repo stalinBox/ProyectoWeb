@@ -2,11 +2,8 @@ package com.project.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -39,7 +36,6 @@ import com.project.entities.Programturno;
 import com.project.entities.Talla;
 import com.project.entities.Turno;
 import com.project.entities.Usuario;
-import com.project.utils.Items;
 
 @ManagedBean
 @ViewScoped

@@ -26,15 +26,20 @@ public class Parametro implements Serializable {
 	@OneToMany(mappedBy="parametro")
 	private List<Lineasturno> lineasturnos;
 
-	//bi-directional many-to-one association to Distribdetalle
-	@ManyToOne
-	@JoinColumn(name="distrib_codigo")
-	private Distribdetalle distribdetalle;
-
 	//bi-directional many-to-one association to Ordenprod
 	@ManyToOne
 	@JoinColumn(name="ordenprod_codigo")
 	private Ordenprod ordenprod;
+
+	//bi-directional many-to-one association to Proceso
+	@ManyToOne
+	@JoinColumn(name="pro_codigo")
+	private Proceso proceso;
+
+	//bi-directional many-to-one association to TipLinea
+	@ManyToOne
+	@JoinColumn(name="codigo_tiplinea")
+	private TipLinea tipLinea;
 
 	//bi-directional many-to-one association to Programdia
 	@OneToMany(mappedBy="parametro")
@@ -81,20 +86,28 @@ public class Parametro implements Serializable {
 		return lineasturno;
 	}
 
-	public Distribdetalle getDistribdetalle() {
-		return this.distribdetalle;
-	}
-
-	public void setDistribdetalle(Distribdetalle distribdetalle) {
-		this.distribdetalle = distribdetalle;
-	}
-
 	public Ordenprod getOrdenprod() {
 		return this.ordenprod;
 	}
 
 	public void setOrdenprod(Ordenprod ordenprod) {
 		this.ordenprod = ordenprod;
+	}
+
+	public Proceso getProceso() {
+		return this.proceso;
+	}
+
+	public void setProceso(Proceso proceso) {
+		this.proceso = proceso;
+	}
+
+	public TipLinea getTipLinea() {
+		return this.tipLinea;
+	}
+
+	public void setTipLinea(TipLinea tipLinea) {
+		this.tipLinea = tipLinea;
 	}
 
 	public List<Programdia> getProgramdias() {

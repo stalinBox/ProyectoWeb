@@ -28,6 +28,7 @@ import com.project.entities.Distribdetalle;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;
 import com.project.utils.ItemCodOrden;
+import com.project.utils.ItemsDistrib;
 import com.project.utils.ItemsParams;
 import com.project.utils.MyUtil;
 import com.project.utils.WriteAndReadExcel;
@@ -53,6 +54,9 @@ public class DistribDetalleBean implements Serializable {
 	private ArrayList<ItemsDistrib> orderList = new ArrayList<ItemsDistrib>();
 	private static final ArrayList<ItemsParams> orderListParams = new ArrayList<ItemsParams>();
 
+	// TIEMPOS
+	private List<ItemsParams> Ctiempos;
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
@@ -65,6 +69,7 @@ public class DistribDetalleBean implements Serializable {
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
 		System.out.println("Procesando..");
+		orderListParams.clear();
 
 		Integer cp = 0;
 
@@ -100,15 +105,10 @@ public class DistribDetalleBean implements Serializable {
 						System.out
 								.println("Capacidad Ponderada en DistribDetalleBean "
 										+ cp);
-
 						System.out.println("Proceso: "
 								+ p.getTipoProceso().getTprNombre());
-
 						System.out.println("TpLinea: " + tp.getTipolinea());
-
 						System.out.println("Capacidad: " + cp);
-
-						System.out.println("Ingresando en orderListParams1");
 
 						ItemsParams orderListParams1 = new ItemsParams(p
 								.getTipoProceso().getTprNombre(),
@@ -126,20 +126,18 @@ public class DistribDetalleBean implements Serializable {
 			}
 		}
 
+		System.out.println("FINAL PROCESAR");
 		for (ItemsParams i : orderListParams) {
-			System.out.println("PROCESO0: " + i.getProceso() + " TpLinea0: "
-					+ i.getTipoLinea() + " Capacidad0: " + i.getCpPonderado());
+			System.out.println("PROCESO1: " + i.getProceso());
+			System.out.println("TPLINEA1: " + i.getTipoLinea());
+			System.out.println("CPPONDERADO1: " + i.getCpPonderado());
 		}
 
-		// REDIRECCIONAR A PARAMA.JSF
-		String ruta = "";
-		ruta = MyUtil.calzadoPath() + "parametrizacion/param.jsf";
-
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(ruta);
-		} catch (IOException e) {
-			e.printStackTrace();
+		this.Ctiempos = orderListParams;
+		for (ItemsParams i : Ctiempos) {
+			System.out.println("PROCESO2: " + i.getProceso());
+			System.out.println("TPLINEA2: " + i.getTipoLinea());
+			System.out.println("CPPONDERADO2: " + i.getCpPonderado());
 		}
 	}
 
@@ -205,6 +203,14 @@ public class DistribDetalleBean implements Serializable {
 			this.selectedItemsTipLinea.add(selectItem);
 		}
 		return selectedItemsTipLinea;
+	}
+
+	public List<ItemsParams> getCtiempos() {
+		return Ctiempos;
+	}
+
+	public void setCtiempos(List<ItemsParams> ctiempos) {
+		Ctiempos = ctiempos;
 	}
 
 	public static ArrayList<ItemsParams> getOrderlistparams() {
@@ -299,47 +305,6 @@ public class DistribDetalleBean implements Serializable {
 
 	public void setSelectedItemsProceso(List<SelectItem> selectedItemsProceso) {
 		this.selectedItemsProceso = selectedItemsProceso;
-	}
-
-	public class ItemsDistrib implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		private String modelo;
-		private Integer talla;
-		private Integer cantidad;
-
-		public ItemsDistrib(String modelo, Integer talla, Integer cantidad) {
-			this.modelo = modelo;
-			this.talla = talla;
-			this.cantidad = cantidad;
-		}
-
-		public ItemsDistrib() {
-		}
-
-		public String getModelo() {
-			return modelo;
-		}
-
-		public void setModelo(String modelo) {
-			this.modelo = modelo;
-		}
-
-		public Integer getTalla() {
-			return talla;
-		}
-
-		public void setTalla(Integer talla) {
-			this.talla = talla;
-		}
-
-		public Integer getCantidad() {
-			return cantidad;
-		}
-
-		public void setCantidad(Integer cantidad) {
-			this.cantidad = cantidad;
-		}
 	}
 
 }

@@ -12,8 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import com.project.dao.LineasProdDao;
-import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.SettingTimesDao;
@@ -21,7 +19,6 @@ import com.project.dao.SettingTimesDaoImpl;
 import com.project.dao.TipoLineaDao;
 import com.project.dao.TipoLineaDaoImpl;
 import com.project.entities.Confproceso;
-import com.project.entities.Lineasprod;
 import com.project.entities.Modelo;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;

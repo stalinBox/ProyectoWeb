@@ -7,6 +7,8 @@ import com.project.entities.TipLinea;
 public interface TipoLineaDao {
 	public List<TipLinea> findAll();
 
+	public Integer findByNombre(String nomTpLinea);
+
 	public List<TipLinea> findbyProceso(Integer codPro);
 
 	public List<TipLinea> findTpLineaByDistrib(Integer codOrden);
