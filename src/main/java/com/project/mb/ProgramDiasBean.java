@@ -33,7 +33,7 @@ import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Programdia;
-import com.project.utils.ContentParam;
+import com.project.utils.ItemCodOrden;
 import com.project.utils.MyUtil;
 import com.project.utils.ScheduleDays;
 import com.project.utils.Tablas;
@@ -123,7 +123,7 @@ public class ProgramDiasBean implements Serializable {
 		this.eventModel = new DefaultScheduleModel();
 		ScheduleDays days = new ScheduleDays();
 		Calendar diaInicio = days.DateToCalendar(this.fInicio);
-		Integer iCodOrden = ContentParam.getCodOrden();
+		Integer iCodOrden = ItemCodOrden.getCodOrden();
 		Items2 orderitem2 = new Items2();
 		Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
 		// 1. FIN SECCION VARIABLES
@@ -185,7 +185,7 @@ public class ProgramDiasBean implements Serializable {
 		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
 
 		System.out.println("Procesando...");
-		System.out.println("Codigo Orden: " + ContentParam.getCodOrden());
+		System.out.println("Codigo Orden: " + ItemCodOrden.getCodOrden());
 
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
 		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();

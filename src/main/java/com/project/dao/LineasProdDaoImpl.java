@@ -90,12 +90,11 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Lineasprod> findByParam(Integer codParam) {
+	public List<Lineasprod> findByProceso(Integer codPro) {
 		List<Lineasprod> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Lineasprod lp WHERE lp.proceso.proCodigo IN "
-				+ "(SELECT pa.proceso.proCodigo FROM Parametro pa WHERE pa.paramCodigo = "
-				+ codParam + ")";
+		String sql = "from Lineasprod lp where lp.proceso.proCodigo = "
+				+ codPro;
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -110,11 +109,15 @@ public class LineasProdDaoImpl implements LineasProdDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Lineasprod> findByProceso(Integer codPro) {
+	public List<Lineasprod> findByParam(Integer codPro, Integer codTpLinea,
+			Integer coodOrden) {
+
 		List<Lineasprod> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from Lineasprod lp where lp.proceso.proCodigo = "
-				+ codPro;
+		String sql = "from Lineasprod lp where lp.tipLinea.codigoTiplinea "
+				+ "in ( select pr.tipLinea.codigoTiplinea from Parametro pr where pr.ordenprod = "
+				+ coodOrden + ") and lp.proceso.proCodigo = " + codPro
+				+ " and lp.tipLinea.codigoTiplinea = " + codTpLinea;
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

@@ -23,7 +23,6 @@ import com.project.entities.Modelo;
 import com.project.entities.Talla;
 import com.project.utils.Items;
 import com.project.utils.MyUtil;
-import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
 @ViewScoped
@@ -98,8 +97,6 @@ public class DetaOrdenBean implements Serializable {
 		// MATANDO PROCESO EN EXCEL
 		// KillProcessEXCEL a = new KillProcessEXCEL();
 		// a.main(null);
-
-		WriteAndReadExcel wr = new WriteAndReadExcel();
 
 		// Store la capacidad de produccion
 		// cp = wr.GenerarEstandar(orderList, nDias);

@@ -54,7 +54,6 @@ public class DistribDetalleBean implements Serializable {
 	private ArrayList<ItemsDistrib> orderList = new ArrayList<ItemsDistrib>();
 	private static final ArrayList<ItemsParams> orderListParams = new ArrayList<ItemsParams>();
 
-	// TIEMPOS
 	private List<ItemsParams> Ctiempos;
 
 	// INICIALIZADORES
@@ -125,20 +124,7 @@ public class DistribDetalleBean implements Serializable {
 				this.orderList.clear();
 			}
 		}
-
-		System.out.println("FINAL PROCESAR");
-		for (ItemsParams i : orderListParams) {
-			System.out.println("PROCESO1: " + i.getProceso());
-			System.out.println("TPLINEA1: " + i.getTipoLinea());
-			System.out.println("CPPONDERADO1: " + i.getCpPonderado());
-		}
-
-		this.Ctiempos = orderListParams;
-		for (ItemsParams i : Ctiempos) {
-			System.out.println("PROCESO2: " + i.getProceso());
-			System.out.println("TPLINEA2: " + i.getTipoLinea());
-			System.out.println("CPPONDERADO2: " + i.getCpPonderado());
-		}
+		Ctiempos = orderListParams;
 	}
 
 	public void btnReprocesar(ActionEvent actionEvent) {

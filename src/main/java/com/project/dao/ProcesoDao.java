@@ -2,6 +2,7 @@ package com.project.dao;
 
 import java.util.List;
 
+import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 
 public interface ProcesoDao {
@@ -18,6 +19,8 @@ public interface ProcesoDao {
 	public List<Proceso> findByProcesoPadreByOrden(Integer codOrden);
 
 	public List<Proceso> findByOrdenProdNotInParam(Integer codOrden);
+
+	public List<Parametro> findByOrdenParam(Integer codOrden);
 
 	public List<Proceso> findProcesosDistribByOrden(Integer codOrden);
 

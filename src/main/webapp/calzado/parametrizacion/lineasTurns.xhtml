@@ -21,11 +21,12 @@
 
 						<h:outputLabel for="idCboParam" value="Proceso:" />
 						<p:selectOneMenu id="idCboParam"
-							value="#{lineasTurnosBean.codParam}" style="width:150px">
+							value="#{lineasTurnosBean.selectedLineaTurn.parametro.paramCodigo}"
+							style="width:150px">
 
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
-							<f:selectItems value="" />
+							<f:selectItems value="#{lineasTurnosBean.selectItemsProcesos}" />
 							<p:ajax update=":idFrmConfLineas:idCboLineas" />
 						</p:selectOneMenu>
 

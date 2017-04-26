@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StandardBasicTypes;
 
+import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.utils.HibernateUtil;
 
@@ -256,6 +257,25 @@ public class ProcesoDaoImpl implements ProcesoDao {
 			sesion.getTransaction().rollback();
 			System.out.println("ERRORRRRR FIND FINDBYNAMEPROCESO: "
 					+ e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> findByOrdenParam(Integer codOrden) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Parametro param where param.ordenprod.ordenprodCodigo =  "
+				+ codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDBYORDENPARAM: " + e.toString());
 		}
 		return listado;
 	}

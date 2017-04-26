@@ -8,7 +8,8 @@ public interface LineasProdDao {
 
 	public List<Lineasprod> findAll();
 
-	public List<Lineasprod> findByParam(Integer codParam);
+	public List<Lineasprod> findByParam(Integer codPro, Integer codTpLinea,
+			Integer coodOrden);
 
 	public List<Lineasprod> findByProceso(Integer codPro);
 

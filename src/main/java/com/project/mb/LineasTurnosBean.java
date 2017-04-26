@@ -16,14 +16,20 @@ import com.project.dao.LineasProdDao;
 import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TurnosDao;
 import com.project.dao.TurnosDaoImpl;
 import com.project.entities.Lineasprod;
 import com.project.entities.Lineasturno;
 import com.project.entities.Parametro;
 import com.project.entities.Turno;
-import com.project.utils.ContentParam;
+import com.project.utils.ItemCodOrden;
 
+/**
+ * @author Stalin Ramírez
+ *
+ */
 @ManagedBean
 @ViewScoped
 public class LineasTurnosBean implements Serializable {
@@ -33,9 +39,11 @@ public class LineasTurnosBean implements Serializable {
 	// VARIABLES
 	private List<Lineasturno> lineaTurno;
 	private Lineasturno selectedLineaTurn;
+	private List<SelectItem> selectItemsProcesos;
 	private List<SelectItem> selectItemsLineas;
 	private List<SelectItem> selectItemsTurnos;
-	private Integer codParam;
+
+	private Integer codDetaOrden;
 
 	// INICIALIZADORES
 	@PostConstruct
@@ -44,6 +52,9 @@ public class LineasTurnosBean implements Serializable {
 		this.selectedLineaTurn.setLineasprod(new Lineasprod());
 		this.selectedLineaTurn.setTurno(new Turno());
 		this.selectedLineaTurn.setParametro(new Parametro());
+
+		this.codDetaOrden = 112;// ItemCodOrden.getCodOrden();
+		System.out.println("Codigo Orden: " + this.codDetaOrden);
 	}
 
 	// METODOS
@@ -85,33 +96,72 @@ public class LineasTurnosBean implements Serializable {
 	// SETTERS AND GETTERS
 
 	public List<Lineasturno> getLineaTurno() {
-		System.out.println("NUMERO DE ORDEN: " + ContentParam.getCodOrden());
+		System.out.println("NUMERO DE ORDEN: ");
 
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
-		this.lineaTurno = lineasTurnosDao.findByOrden(ContentParam
+		this.lineaTurno = lineasTurnosDao.findByOrden(ItemCodOrden
 				.getCodOrden());
 		return lineaTurno;
 	}
 
-	public Integer getCodParam() {
-		return codParam;
+	public Integer getCodDetaOrden() {
+		return codDetaOrden;
 	}
 
-	public void setCodParam(Integer codParam) {
-		this.codParam = codParam;
+	public void setCodDetaOrden(Integer codDetaOrden) {
+		this.codDetaOrden = codDetaOrden;
+	}
+
+	public List<SelectItem> getSelectItemsProcesos() {
+		this.selectItemsProcesos = new ArrayList<SelectItem>();
+		ProcesoDao procesoDao = new ProcesoDaoImpl();
+
+		List<Parametro> proceso = procesoDao.findByOrdenParam(codDetaOrden);
+
+		for (Parametro p : proceso) {
+			SelectItem selectItem = new SelectItem(p.getParamCodigo(), p
+					.getProceso().getTipoProceso().getTprNombre()
+					+ " - " + p.getTipLinea().getTipolinea());
+			this.selectItemsProcesos.add(selectItem);
+		}
+		return selectItemsProcesos;
+	}
+
+	public void setSelectItemsProcesos(List<SelectItem> selectItemsProcesos) {
+		this.selectItemsProcesos = selectItemsProcesos;
 	}
 
 	public List<SelectItem> getSelectItemsLineas() {
-		this.selectItemsLineas = new ArrayList<SelectItem>();
-		LineasProdDao lineasDao = new LineasProdDaoImpl();
+		System.out.println("Codigo Parametros: "
+				+ this.selectedLineaTurn.getParametro().getParamCodigo());
+		//
+		// if (this.selectedLineaTurn.getParametro().getParamCodigo() != null) {
+		// System.out.println("Lleno");
+		// } else {
+		// System.out.println("Nulo");
+		// }
 
-		List<Lineasprod> linea = lineasDao.findByParam(this.codParam);
-		for (Lineasprod li : linea) {
-			SelectItem selectItem = new SelectItem(li.getLineaproCodigo(),
-					li.getNomlinea());
-			this.selectItemsLineas.add(selectItem);
+		if (this.selectedLineaTurn.getParametro().getParamCodigo() != null) {
+			this.selectItemsLineas = new ArrayList<SelectItem>();
+			LineasProdDao lineasDao = new LineasProdDaoImpl();
+
+			List<Lineasprod> linea = lineasDao.findByParam(
+					this.selectedLineaTurn.getParametro().getProceso()
+							.getProCodigo(), this.selectedLineaTurn
+							.getParametro().getTipLinea().getCodigoTiplinea(),
+					this.codDetaOrden);
+
+			for (Lineasprod li : linea) {
+				SelectItem selectItem = new SelectItem(li.getLineaproCodigo(),
+						li.getNomlinea());
+				this.selectItemsLineas.add(selectItem);
+			}
+			return selectItemsLineas;
+		} else {
+			this.selectItemsLineas = new ArrayList<SelectItem>();
+			return selectItemsLineas;
 		}
-		return selectItemsLineas;
+
 	}
 
 	public void setSelectItemsLineas(List<SelectItem> selectItemsLineas) {
