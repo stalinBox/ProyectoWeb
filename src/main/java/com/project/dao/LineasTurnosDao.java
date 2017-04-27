@@ -11,6 +11,8 @@ public interface LineasTurnosDao {
 
 	public List<Lineasturno> findByOrden(Integer codOrden);
 
+	public List<Lineasturno> findByDETALLE(Integer codOrden);
+
 	public List<Lineasturno> findByOrden(Integer codOrden, Integer codProceso);
 
 	public List<Integer> GetCodProcesoByOrden(Integer codOrden);

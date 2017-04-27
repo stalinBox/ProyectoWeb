@@ -28,6 +28,8 @@ import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
+import com.project.dao.ParamDao;
+import com.project.dao.ParamDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Ordenprod;
@@ -58,9 +60,13 @@ public class ProgramDiasBean implements Serializable {
 	private ArrayList<Items> orderList = new ArrayList<Items>();
 	private ArrayList<Items2> orderList2 = new ArrayList<Items2>();
 
+	private Integer codOrden;
+
 	// CONSTRUCTOR
 	@PostConstruct
 	public void init() {
+
+		this.codOrden = 112;// ItemCodOrden.getCodOrden();
 
 		this.selectedDias = new Programdia();
 		this.selectedDias.setParametro(new Parametro());
@@ -123,7 +129,6 @@ public class ProgramDiasBean implements Serializable {
 		this.eventModel = new DefaultScheduleModel();
 		ScheduleDays days = new ScheduleDays();
 		Calendar diaInicio = days.DateToCalendar(this.fInicio);
-		Integer iCodOrden = ItemCodOrden.getCodOrden();
 		Items2 orderitem2 = new Items2();
 		Map<Integer, Object> mLineasCantidad = new HashMap<Integer, Object>();
 		// 1. FIN SECCION VARIABLES
@@ -131,67 +136,69 @@ public class ProgramDiasBean implements Serializable {
 		// LIMPIAR VARIABLES
 		this.orderList2.clear();
 
-		// 2. VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
-		// if (this.hExtras == true) {
-		// if (diaInicio.getTime().getDay() == 0) {
-		// FacesContext.getCurrentInstance().addMessage(
-		// null,
-		// new FacesMessage(
-		// "No se puede empezar a programar en domingo"));
-		// } else {
-		// System.out.println("Procesando...1");
-		// System.out.println("Codigo Orden: " + iCodOrden);
-		//
-		// }
-		// } else {
-		// if (diaInicio.getTime().getDay() == 0
-		// || diaInicio.getTime().getDay() == 6) {
-		// FacesContext
-		// .getCurrentInstance()
-		// .addMessage(
-		// null,
-		// new FacesMessage(
-		// "No se puede empezar a programar los fines de semana"));
-		// } else {
-		// System.out.println("Procesando...2");
-		// System.out.println("Codigo Orden: " + iCodOrden);
-		// // PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
-		// //
-		// // paramDao OBTIENE LOS PROCESO POR ORDEN
-		// ParametrizacionDao paramDao = new ParametrizacionDaoImpl();
-		// List<Parametro> parametros = paramDao
-		// .getProcesosbyOrden(iCodOrden);
-		//
-		// // 1. CICLO FOR
-		// for (Parametro param : parametros) {
-		// // lineasTurnosDao OBTIENE EL NUMERO DE LINEAS POR PROCESO
-		// LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
-		// List<Integer> lineasTurnos = lineasTurnosDao
-		// .getLineasByProceso(param.getProceso()
-		// .getProCodigo(), iCodOrden);
-		//
-		// for (Integer lt : lineasTurnos) {
-		// Object countLinea = lineasTurnosDao
-		// .getCountTurnosByLineas(lt, iCodOrden);
-		//
-		// mLineasCantidad.put(lt, countLinea);
-		// }
-		// } // 1. CICLO FOR
-		//
-		// System.out.println("Variable mLineasCantidad: "
-		// + mLineasCantidad);
-		// }
-		// }
-		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAS LOS FINES DE SEMANA
+		// 2. VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
+		if (this.hExtras == true) {
+			if (diaInicio.getTime().getDay() == 0) {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(
+								"No se puede empezar a programar en domingo"));
+			} else {
+				System.out.println("Procesando...1");
+				System.out.println("Codigo Orden: " + this.codOrden);
 
-		System.out.println("Procesando...");
-		System.out.println("Codigo Orden: " + ItemCodOrden.getCodOrden());
+			}
+		} else {
+			if (diaInicio.getTime().getDay() == 0
+					|| diaInicio.getTime().getDay() == 6) {
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										"No se puede empezar a programar los fines de semana"));
+			} else {
+				System.out.println("Procesando...2");
+				System.out.println("Codigo Orden: " + this.codOrden);
+
+				// PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
+
+				// paramDao OBTIENE LOS PROCESO POR ORDEN
+				// ParamDao paramDao = new ParamDaoImpl();
+				// List<Parametro> parametros = paramDao.findAll();
+
+				// // 1. CICLO FOR
+				// for (Parametro param : parametros) {
+				// // lineasTurnosDao OBTIENE EL NUMERO DE LINEAS POR PROCESO
+				// LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
+				// List<Integer> lineasTurnos = lineasTurnosDao
+				// .getLineasByProceso(param.getProceso()
+				// .getProCodigo(), iCodOrden);
+				//
+				// for (Integer lt : lineasTurnos) {
+				// Object countLinea = lineasTurnosDao
+				// .getCountTurnosByLineas(lt, iCodOrden);
+				//
+				// mLineasCantidad.put(lt, countLinea);
+				// }
+				// } // 1. CICLO FOR
+
+				// System.out.println("Variable mLineasCantidad: "
+				// + mLineasCantidad);
+			}
+		}
+		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
+
+		// System.out.println("Procesando...");
+		// System.out.println("Codigo Orden: " + ItemCodOrden.getCodOrden());
 
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE DISTRIBUCION
-		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
+		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
-		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
+		// ArrayList<ArrayList<Object>> mProcesos = new
+		// ArrayList<ArrayList<Object>>();
 
 		// for (Parametro param : parametros) {
 		// mLineasCantidad.clear();
@@ -276,7 +283,7 @@ public class ProgramDiasBean implements Serializable {
 		// this.orderList2.add(orderitem2);
 		// }
 		// }
-		generateCalendar(this.orderList2, this.fInicio);
+		// generateCalendar(this.orderList2, this.fInicio);
 	}
 
 	@SuppressWarnings({ "deprecation" })
@@ -547,6 +554,14 @@ public class ProgramDiasBean implements Serializable {
 		// ProgramacionDiasDao programDiasDao = new ProgramacionDiasDaoImpl();
 		// this.programDias = programDiasDao.findAll();
 		return programDias;
+	}
+
+	public Integer getCodOrden() {
+		return codOrden;
+	}
+
+	public void setCodOrden(Integer codOrden) {
+		this.codOrden = codOrden;
 	}
 
 	public String getD() {

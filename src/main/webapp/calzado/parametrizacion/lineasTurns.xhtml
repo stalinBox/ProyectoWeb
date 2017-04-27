@@ -38,6 +38,7 @@
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{lineasTurnosBean.selectItemsLineas}" />
+							<p:ajax update=":idFrmConfLineas:idCboTurnos" />
 						</p:selectOneMenu>
 
 						<h:outputLabel value="Turnos:" />
@@ -52,7 +53,7 @@
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalleConfL" value="Agregar"
-								update=":formDataTable"
+								update=":formDataTable:basicDT"
 								actionListener="#{lineasTurnosBean.btnCreateLT(actionListener)}" />
 						</f:facet>
 
@@ -68,7 +69,8 @@
 					<f:facet name="header">DETALLE LINEAS TURNOS</f:facet>
 
 					<p:column headerText="Proceso">
-						<h:outputText value="" />
+						<h:outputText
+							value="#{lineasT.parametro.proceso.tipoProceso.tprNombre}" />
 					</p:column>
 
 					<p:column headerText="Linea">

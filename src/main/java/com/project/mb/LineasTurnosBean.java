@@ -16,6 +16,8 @@ import com.project.dao.LineasProdDao;
 import com.project.dao.LineasProdDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
+import com.project.dao.ParamDao;
+import com.project.dao.ParamDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TurnosDao;
@@ -25,6 +27,7 @@ import com.project.entities.Lineasturno;
 import com.project.entities.Parametro;
 import com.project.entities.Turno;
 import com.project.utils.ItemCodOrden;
+import com.project.utils.RefreshPage;
 
 /**
  * @author Stalin Ramírez
@@ -43,6 +46,8 @@ public class LineasTurnosBean implements Serializable {
 	private List<SelectItem> selectItemsLineas;
 	private List<SelectItem> selectItemsTurnos;
 
+	// VERIFICAR QUE PASE EL CODIGO DE LA ORDEN POR ESTA
+	// VARIABLE*************************************************************************
 	private Integer codDetaOrden;
 
 	// INICIALIZADORES
@@ -66,6 +71,9 @@ public class LineasTurnosBean implements Serializable {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
+
+			RefreshPage oo = new RefreshPage();
+			oo.refresh();
 		} else {
 			msg = "Error al configurar la linea";
 			FacesMessage message = new FacesMessage(
@@ -99,8 +107,7 @@ public class LineasTurnosBean implements Serializable {
 		System.out.println("NUMERO DE ORDEN: ");
 
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
-		this.lineaTurno = lineasTurnosDao.findByOrden(ItemCodOrden
-				.getCodOrden());
+		this.lineaTurno = lineasTurnosDao.findByDETALLE(codDetaOrden);
 		return lineaTurno;
 	}
 
@@ -132,23 +139,18 @@ public class LineasTurnosBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectItemsLineas() {
-		System.out.println("Codigo Parametros: "
-				+ this.selectedLineaTurn.getParametro().getParamCodigo());
-		//
-		// if (this.selectedLineaTurn.getParametro().getParamCodigo() != null) {
-		// System.out.println("Lleno");
-		// } else {
-		// System.out.println("Nulo");
-		// }
+
+		ParamDao paramDao = new ParamDaoImpl();
+		Parametro pp1 = (Parametro) paramDao
+				.findbyCodParam(this.selectedLineaTurn.getParametro()
+						.getParamCodigo());
 
 		if (this.selectedLineaTurn.getParametro().getParamCodigo() != null) {
 			this.selectItemsLineas = new ArrayList<SelectItem>();
 			LineasProdDao lineasDao = new LineasProdDaoImpl();
 
-			List<Lineasprod> linea = lineasDao.findByParam(
-					this.selectedLineaTurn.getParametro().getProceso()
-							.getProCodigo(), this.selectedLineaTurn
-							.getParametro().getTipLinea().getCodigoTiplinea(),
+			List<Lineasprod> linea = lineasDao.findByParam(pp1.getProceso()
+					.getProCodigo(), pp1.getTipLinea().getCodigoTiplinea(),
 					this.codDetaOrden);
 
 			for (Lineasprod li : linea) {
@@ -171,7 +173,9 @@ public class LineasTurnosBean implements Serializable {
 	public List<SelectItem> getSelectItemsTurnos() {
 		this.selectItemsTurnos = new ArrayList<SelectItem>();
 		TurnosDao turnosDao = new TurnosDaoImpl();
-		List<Turno> turno = turnosDao.findAll();
+		List<Turno> turno = turnosDao.findByLineasByParam(
+				this.selectedLineaTurn.getParametro().getParamCodigo(),
+				this.selectedLineaTurn.getLineasprod().getLineaproCodigo());
 		for (Turno tur : turno) {
 			SelectItem selectItem = new SelectItem(tur.getTurnoCodigo(),
 					tur.getNombturno());

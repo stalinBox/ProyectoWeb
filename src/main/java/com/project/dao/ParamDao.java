@@ -7,6 +7,8 @@ import com.project.entities.Parametro;
 public interface ParamDao {
 	public List<Parametro> findAll();
 
+	public Parametro findbyCodParam(Integer codParam);
+
 	public boolean create(Parametro parametro);
 
 	public boolean update(Parametro parametro);

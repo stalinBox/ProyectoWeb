@@ -90,4 +90,25 @@ public class TurnosDaoImpl implements TurnosDao {
 		}
 		return flag;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Turno> findByLineasByParam(Integer codParam, Integer codLinea) {
+		List<Turno> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Turno tn where tn.turnoCodigo not in "
+				+ "( select lt.turno.turnoCodigo from Lineasturno "
+				+ "lt where lt.parametro.paramCodigo = " + codParam
+				+ " and lt.lineasprod.lineaproCodigo = " + codLinea + " )";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLTURNOS: " + e.toString());
+		}
+		return listado;
+	}
 }

@@ -57,4 +57,22 @@ public class ParamDaoImpl implements ParamDao {
 		return false;
 	}
 
+	@Override
+	public Parametro findbyCodParam(Integer codParam) {
+		Parametro listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Parametro param WHERE param.paramCodigo = "
+				+ codParam;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (Parametro) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETRO: " + e.toString());
+		}
+		return listado;
+	}
+
 }
