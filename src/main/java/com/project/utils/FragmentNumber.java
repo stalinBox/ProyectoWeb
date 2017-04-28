@@ -10,10 +10,10 @@ public class FragmentNumber {
 		ArrayList<Object> arrayDiasPares = new ArrayList<Object>();
 		ArrayList<Object> arrDiasHoras = new ArrayList<Object>();
 		ArrayList<ArrayList<Object>> arrayComplet = new ArrayList<ArrayList<Object>>();
-		DecimalFormat formateador = new DecimalFormat("####.###");
 
+		@SuppressWarnings("unused")
+		DecimalFormat formateador = new DecimalFormat("####.###");
 		// System.out.println("Clase FragmentNumero: ");
-		//
 		// System.out.println("Valor cp: " + cp);
 		// System.out.println("Valor Ndias: " + formateador.format(nDias));
 
@@ -47,8 +47,4 @@ public class FragmentNumber {
 		// System.out.println("Array Completo: " + arrayComplet);
 		return arrayComplet;
 	}
-	// public ArrayList<Integer> Horas() {
-	//
-	// return null;
-	// }
 }

@@ -279,4 +279,25 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findProcesosInParam(Integer codOrden) {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Proceso p WHERE p.proCodigo IN (SELECT param.proceso.proCodigo "
+				+ "FROM Parametro param WHERE param.ordenprod.ordenprodCodigo = "
+				+ codOrden
+				+ " and param.paramCodigo IN (SELECT lt.parametro.paramCodigo FROM Lineasturno lt ))";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL PROCESOS: " + e.toString());
+		}
+		return listado;
+	}
 }

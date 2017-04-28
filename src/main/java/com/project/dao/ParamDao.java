@@ -9,6 +9,8 @@ public interface ParamDao {
 
 	public Parametro findbyCodParam(Integer codParam);
 
+	public List<Parametro> getProcesosbyOrden(Integer codOrden);
+
 	public boolean create(Parametro parametro);
 
 	public boolean update(Parametro parametro);

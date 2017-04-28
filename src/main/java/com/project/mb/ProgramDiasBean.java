@@ -30,10 +30,13 @@ import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.ParamDao;
 import com.project.dao.ParamDaoImpl;
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
+import com.project.entities.Proceso;
 import com.project.entities.Programdia;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.MyUtil;
@@ -123,6 +126,7 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public void btnProcesar() {
 
 		// 1. SECCION VARIABLES
@@ -164,8 +168,9 @@ public class ProgramDiasBean implements Serializable {
 				// PARAMETROS INICIALES PARA LA PROGRAMACION DIAS
 
 				// paramDao OBTIENE LOS PROCESO POR ORDEN
-				// ParamDao paramDao = new ParamDaoImpl();
-				// List<Parametro> parametros = paramDao.findAll();
+				ParamDao paramDao = new ParamDaoImpl();
+				List<Parametro> parametros = paramDao
+						.getProcesosbyOrden(codOrden);
 
 				// // 1. CICLO FOR
 				// for (Parametro param : parametros) {
@@ -286,7 +291,6 @@ public class ProgramDiasBean implements Serializable {
 		// generateCalendar(this.orderList2, this.fInicio);
 	}
 
-	@SuppressWarnings({ "deprecation" })
 	public boolean generateCalendar(ArrayList<Items2> orderList22, Date fInicio) {
 
 		// INICIALIZADOR

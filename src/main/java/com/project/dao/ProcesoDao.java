@@ -22,6 +22,8 @@ public interface ProcesoDao {
 
 	public List<Parametro> findByOrdenParam(Integer codOrden);
 
+	public List<Proceso> findProcesosInParam(Integer codOrden);
+
 	public List<Proceso> findProcesosDistribByOrden(Integer codOrden);
 
 	public Integer findByNameProceso(String nomProceso);

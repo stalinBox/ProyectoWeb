@@ -15,9 +15,9 @@ public class Tablas {
 		cp = prodCap * LineasTurnos.size();
 		diasLab = prodTotal.doubleValue() / cp.doubleValue() * 5;
 
-		// System.out.println("PARAMETROS PARA TRABAJAR CLASE TABLAS");
+		// System.out.println("PARAMETROS PARA TRABAJAR CON LA CLASE TABLAS");
 		// System.out.println("OrdenTotal: " + prodTotal);
-		// System.out.println("Capacidad por proceso: " + cp);
+		// System.out.println("Capacidad por tipo linea: " + cp);
 		// System.out.println("Dias a laborar: " + diasLab);
 
 		FragmentNumber abc = new FragmentNumber();
