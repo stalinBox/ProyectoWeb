@@ -209,7 +209,11 @@ public class OrdenProduccionBean implements Serializable {
 		try {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(ruta);
+			System.out.println("Codigo ORden: " + Codigo);
+			System.out.println("Total Orden: " + total);
+
 			ItemCodOrden.setCodOrden(Codigo);
+			ItemCodOrden.setTotalOrden(total);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -217,11 +221,11 @@ public class OrdenProduccionBean implements Serializable {
 
 	// SETTERS AND GETTERS
 	public String getTotalsOrden() {
-		int total = 0;
+		this.total = 0;
 		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
 		this.detaOrden = detaOrdenDao.findByOrden(Codigo);
 		for (Detalleorden dt : detaOrden) {
-			total += dt.getCantidad();
+			this.total += dt.getCantidad();
 		}
 		return new DecimalFormat("###,###.###").format(total);
 	}

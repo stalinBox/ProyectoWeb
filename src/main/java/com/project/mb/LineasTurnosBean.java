@@ -58,7 +58,7 @@ public class LineasTurnosBean implements Serializable {
 		this.selectedLineaTurn.setTurno(new Turno());
 		this.selectedLineaTurn.setParametro(new Parametro());
 
-		this.codDetaOrden = 112;// ItemCodOrden.getCodOrden();
+		this.codDetaOrden = ItemCodOrden.getCodOrden();
 		System.out.println("Codigo Orden: " + this.codDetaOrden);
 	}
 
