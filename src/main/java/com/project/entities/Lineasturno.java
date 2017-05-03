@@ -2,6 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -32,6 +33,10 @@ public class Lineasturno implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="turno_codigo")
 	private Turno turno;
+
+	//bi-directional many-to-one association to Programturno
+	@OneToMany(mappedBy="lineasturno")
+	private List<Programturno> programturnos;
 
 	public Lineasturno() {
 	}
@@ -66,6 +71,28 @@ public class Lineasturno implements Serializable {
 
 	public void setTurno(Turno turno) {
 		this.turno = turno;
+	}
+
+	public List<Programturno> getProgramturnos() {
+		return this.programturnos;
+	}
+
+	public void setProgramturnos(List<Programturno> programturnos) {
+		this.programturnos = programturnos;
+	}
+
+	public Programturno addProgramturno(Programturno programturno) {
+		getProgramturnos().add(programturno);
+		programturno.setLineasturno(this);
+
+		return programturno;
+	}
+
+	public Programturno removeProgramturno(Programturno programturno) {
+		getProgramturnos().remove(programturno);
+		programturno.setLineasturno(null);
+
+		return programturno;
 	}
 
 }

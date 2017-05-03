@@ -24,6 +24,8 @@ public interface ProcesoDao {
 
 	public List<Proceso> findProcesosInParam(Integer codOrden);
 
+	public List<Proceso> findByOrdenProd(Integer codOrden);
+
 	public List<Proceso> findProcesosDistribByOrden(Integer codOrden);
 
 	public Integer findByNameProceso(String nomProceso);

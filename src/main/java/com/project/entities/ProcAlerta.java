@@ -25,6 +25,9 @@ public class ProcAlerta implements Serializable {
 
 	private String observacion;
 
+	@Column(name="ordenprod_codigo")
+	private Integer ordenprodCodigo;
+
 	@Column(name="time_llegada")
 	private String timeLlegada;
 
@@ -76,6 +79,14 @@ public class ProcAlerta implements Serializable {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+
+	public Integer getOrdenprodCodigo() {
+		return this.ordenprodCodigo;
+	}
+
+	public void setOrdenprodCodigo(Integer ordenprodCodigo) {
+		this.ordenprodCodigo = ordenprodCodigo;
 	}
 
 	public String getTimeLlegada() {

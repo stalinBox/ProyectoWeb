@@ -19,12 +19,15 @@ import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.DistribDetaDao;
 import com.project.dao.DistribDetaDaoImpl;
+import com.project.dao.ParamDao;
+import com.project.dao.ParamDaoImpl;
 import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.TipoLineaDao;
 import com.project.dao.TipoLineaDaoImpl;
 import com.project.entities.Detalleorden;
 import com.project.entities.Distribdetalle;
+import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.TipLinea;
 import com.project.utils.ItemCodOrden;
@@ -56,6 +59,8 @@ public class DistribDetalleBean implements Serializable {
 
 	private List<ItemsParams> Ctiempos;
 
+	private List<Parametro> paramInicial;
+
 	// INICIALIZADORES
 	@PostConstruct
 	public void init() {
@@ -67,64 +72,83 @@ public class DistribDetalleBean implements Serializable {
 
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
+
 		System.out.println("Procesando..");
 		orderListParams.clear();
-
 		Integer cp = 0;
 
-		ProcesoDao proDao = new ProcesoDaoImpl();
-		List<Proceso> process = proDao.findProcesosDistribByOrden(codDetaOrden);
+		ParamDao param = new ParamDaoImpl();
+		paramInicial = param.findByOrdenProd(codDetaOrden);
 
-		TipoLineaDao tipLineaDao = new TipoLineaDaoImpl();
-		List<TipLinea> tipo = tipLineaDao.findTpLineaByDistrib(codDetaOrden);
+		if (paramInicial.isEmpty()) {
 
-		DistribDetaDao distribDao = new DistribDetaDaoImpl();
-		List<Distribdetalle> distro = null;
+			ProcesoDao proDao = new ProcesoDaoImpl();
+			List<Proceso> process = proDao
+					.findProcesosDistribByOrden(codDetaOrden);
 
-		for (Proceso p : process) {
-			for (TipLinea tp : tipo) {
-				distro = distribDao.findByOrderByProByTL(codDetaOrden,
-						p.getProCodigo(), tp.getCodigoTiplinea());
+			TipoLineaDao tipLineaDao = new TipoLineaDaoImpl();
+			List<TipLinea> tipo = tipLineaDao
+					.findTpLineaByDistrib(codDetaOrden);
 
-				if (!(distro.isEmpty())) {
-					for (Distribdetalle poc : distro) {
-						ItemsDistrib orderList1 = new ItemsDistrib(
-								poc.getDetalleorden().getModelo()
-										.getModNombre(),
-								poc.getDetalleorden().getTalla().getTalNumero(),
-								poc.getDetalleorden().getCantidad());
-						this.orderList.add(orderList1);
+			DistribDetaDao distribDao = new DistribDetaDaoImpl();
+			List<Distribdetalle> distro = null;
+
+			for (Proceso p : process) {
+				for (TipLinea tp : tipo) {
+					distro = distribDao.findByOrderByProByTL(codDetaOrden,
+							p.getProCodigo(), tp.getCodigoTiplinea());
+
+					if (!(distro.isEmpty())) {
+						for (Distribdetalle poc : distro) {
+							ItemsDistrib orderList1 = new ItemsDistrib(poc
+									.getDetalleorden().getModelo()
+									.getModNombre(), poc.getDetalleorden()
+									.getTalla().getTalNumero(), poc
+									.getDetalleorden().getCantidad());
+							this.orderList.add(orderList1);
+						}
+						WriteAndReadExcel wr = new WriteAndReadExcel();
+
+						try {
+							cp = wr.GenerarEstandar(orderList, this.nDias,
+									p.getProCodigo(), tp.getCodigoTiplinea());
+
+							System.out
+									.println("Capacidad Ponderada en DistribDetalleBean "
+											+ cp);
+							System.out.println("Proceso: "
+									+ p.getTipoProceso().getTprNombre());
+							System.out.println("TpLinea: " + tp.getTipolinea());
+							System.out.println("Capacidad: " + cp);
+
+							ItemsParams orderListParams1 = new ItemsParams(p
+									.getTipoProceso().getTprNombre(),
+									tp.getTipolinea(), cp);
+							orderListParams.add(orderListParams1);
+
+						} catch (InvalidFormatException | IOException e) {
+							e.printStackTrace();
+						}
+
+					} else {
+						continue;
 					}
-					WriteAndReadExcel wr = new WriteAndReadExcel();
-
-					try {
-						cp = wr.GenerarEstandar(orderList, this.nDias,
-								p.getProCodigo(), tp.getCodigoTiplinea());
-
-						System.out
-								.println("Capacidad Ponderada en DistribDetalleBean "
-										+ cp);
-						System.out.println("Proceso: "
-								+ p.getTipoProceso().getTprNombre());
-						System.out.println("TpLinea: " + tp.getTipolinea());
-						System.out.println("Capacidad: " + cp);
-
-						ItemsParams orderListParams1 = new ItemsParams(p
-								.getTipoProceso().getTprNombre(),
-								tp.getTipolinea(), cp);
-						orderListParams.add(orderListParams1);
-
-					} catch (InvalidFormatException | IOException e) {
-						e.printStackTrace();
-					}
-
-				} else {
-					continue;
+					this.orderList.clear();
 				}
-				this.orderList.clear();
 			}
+			Ctiempos = orderListParams;
+
+		} else {
+			System.out.println("Parametros de las capacidades llenas");
+			for (Parametro oo : paramInicial) {
+				ItemsParams orderListParams1 = new ItemsParams(oo.getProceso()
+						.getTipoProceso().getTprNombre(), oo.getTipLinea()
+						.getTipolinea(), oo.getStandar());
+				orderListParams.add(orderListParams1);
+			}
+			Ctiempos = orderListParams;
 		}
-		Ctiempos = orderListParams;
+
 	}
 
 	public void btnReprocesar(ActionEvent actionEvent) {
@@ -189,6 +213,14 @@ public class DistribDetalleBean implements Serializable {
 			this.selectedItemsTipLinea.add(selectItem);
 		}
 		return selectedItemsTipLinea;
+	}
+
+	public List<Parametro> getParamInicial() {
+		return paramInicial;
+	}
+
+	public void setParamInicial(List<Parametro> paramInicial) {
+		this.paramInicial = paramInicial;
 	}
 
 	public List<ItemsParams> getCtiempos() {

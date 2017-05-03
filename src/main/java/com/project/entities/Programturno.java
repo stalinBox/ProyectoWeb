@@ -2,7 +2,9 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.Date;
+import java.sql.Timestamp;
 
 
 /**
@@ -28,6 +30,8 @@ public class Programturno implements Serializable {
 
 	private Integer dia;
 
+	private Time duracion;
+
 	@Column(name="estado_tur")
 	private String estadoTur;
 
@@ -39,11 +43,15 @@ public class Programturno implements Serializable {
 	@Column(name="f_inicio")
 	private Date fInicio;
 
-	@Temporal(TemporalType.DATE)
-	private Date hora;
+	private Timestamp hora;
 
 	@Column(name="no_plan")
-	private String noPlan;
+	private Integer noPlan;
+
+	//bi-directional many-to-one association to Lineasturno
+	@ManyToOne
+	@JoinColumn(name="ltcodigo")
+	private Lineasturno lineasturno;
 
 	//bi-directional many-to-one association to Modelo
 	@ManyToOne
@@ -105,6 +113,14 @@ public class Programturno implements Serializable {
 		this.dia = dia;
 	}
 
+	public Time getDuracion() {
+		return this.duracion;
+	}
+
+	public void setDuracion(Time duracion) {
+		this.duracion = duracion;
+	}
+
 	public String getEstadoTur() {
 		return this.estadoTur;
 	}
@@ -129,20 +145,28 @@ public class Programturno implements Serializable {
 		this.fInicio = fInicio;
 	}
 
-	public Date getHora() {
+	public Timestamp getHora() {
 		return this.hora;
 	}
 
-	public void setHora(Date hora) {
+	public void setHora(Timestamp hora) {
 		this.hora = hora;
 	}
 
-	public String getNoPlan() {
+	public Integer getNoPlan() {
 		return this.noPlan;
 	}
 
-	public void setNoPlan(String noPlan) {
+	public void setNoPlan(Integer noPlan) {
 		this.noPlan = noPlan;
+	}
+
+	public Lineasturno getLineasturno() {
+		return this.lineasturno;
+	}
+
+	public void setLineasturno(Lineasturno lineasturno) {
+		this.lineasturno = lineasturno;
 	}
 
 	public Modelo getModelo() {

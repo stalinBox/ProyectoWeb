@@ -19,6 +19,10 @@ import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
+import com.project.dao.ParamDao;
+import com.project.dao.ParamDaoImpl;
+import com.project.dao.ProcesoDao;
+import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProcesosOPDao;
 import com.project.dao.ProcesosOPDaoImpl;
 import com.project.dao.ProgramTurnosDao;
@@ -29,6 +33,7 @@ import com.project.entities.Detalleorden;
 import com.project.entities.Lineasturno;
 import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
+import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Procesosop;
 import com.project.entities.Programdia;
@@ -141,7 +146,7 @@ public class ProcesosOPBean implements Serializable {
 					msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
-			msg = "Error al eliminar un item";
+			msg = "Error al crear un item para programTurnos";
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -389,7 +394,22 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectedItemsProceso() {
-		return selectedItemsProceso;
+		if (this.nOrden != null && !this.nOrden.equals("") && this.nOrden != 0) {
+			this.selectedItemsProceso = new ArrayList<SelectItem>();
+			ParamDao paramDao = new ParamDaoImpl();
+			List<Parametro> param = paramDao.findByOrdenProd(this.nOrden);
+			for (Parametro p : param) {
+				SelectItem selectItem = new SelectItem(p.getProceso()
+						.getProCodigo(), p.getProceso().getTipoProceso()
+						.getTprNombre()
+						+ "/" + p.getTipLinea().getTipolinea());
+				this.selectedItemsProceso.add(selectItem);
+			}
+			return selectedItemsProceso;
+		} else {
+			this.selectedItemsProceso = new ArrayList<SelectItem>();
+			return selectedItemsProceso;
+		}
 	}
 
 	public void setSelectedItemsProceso(List<SelectItem> selectedItemsProceso) {

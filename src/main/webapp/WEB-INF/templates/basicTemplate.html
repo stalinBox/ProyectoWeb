@@ -42,62 +42,92 @@
 				<p:growl id="messages" />
 
 				<p:menubar>
-					<p:submenu label="Security" icon="ui-icon-document">
-						<p:menuitem value="Usuarios"
-							url="#{appBean.basePath}usuario/indexUser.jsf" />
-						<p:separator />
-						<p:menuitem value="Salir" actionListener="#{loginBean.logout()}"
-							oncomplete="handleLoginRequest(xhr, status, args)" />
-					</p:submenu>
+					<p:menuitem value="Inicio" url="#{appBean.basePath}inicio.jsf"
+						icon="ui-icon-home" />
 
-					<p:submenu label="Parameterization" icon="ui-icon-pencil">
-						<p:menuitem value="Modelos"
-							url="#{appBean.calzadoPath()}modelos/modelos.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Troqueles"
-							url="#{appBean.calzadoPath()}troqueles/troqueles.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Tallas"
-							url="#{appBean.calzadoPath()}tallas/tallas.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Conf. Procesos"
-							url="#{appBean.calzadoPath()}proceso/proceso.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Añadir procesos"
-							url="#{appBean.calzadoPath()}tipprocesos/tipprocesos.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Turnos"
-							url="#{appBean.calzadoPath()}turnos/turnos.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Programación Turnos"
-							url="#{appBean.calzadoPath()}programacionTurnos/programturnos.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Lugares"
-							url="#{appBean.calzadoPath()}lugares/lugares.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Líneas de producción"
-							url="#{appBean.calzadoPath()}lineasProd/lineasprod.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
+					<p:submenu label="Ventas" icon="ui-icon-folder-collapsed">
+						<p:submenu label="Ordenes de producción" icon="ui-icon-document">
+							<p:menuitem value="Insertar Ordenes"
+								url="#{appBean.calzadoPath()}ordenesProd/insertOrder.jsf"
+								icon="ui-icon-document" />
+							<p:menuitem value="Programación Turnos"
+								url="#{appBean.calzadoPath()}programacionTurnos/programturnos.jsf"
+								icon="ui-icon-document" />
+						</p:submenu>
 						<p:menuitem value="Clientes"
 							url="#{appBean.calzadoPath()}clientes/clientes.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Conf. Tiempos"
-							url="#{appBean.calzadoPath()}proceso/confiProceso.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Costos Indirectos"
-							url="#{appBean.costosPath()}costosindirec.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Insertar Ordenes"
-							url="#{appBean.calzadoPath()}ordenesProd/insertOrder.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
-						<p:menuitem value="Tipo de lineas"
-							url="#{appBean.calzadoPath()}lineasProd/tipoLinea.jsf"
-							icon="ui-icon-arrowreturnthick-1-e" />
+							icon="ui-icon-person" />
 					</p:submenu>
 
-					<p:submenu label="Help" icon="ui-icon-help">
+					<p:submenu label="Configuración" icon="ui-icon-gear">
+						<p:submenu label="Calzado" icon=" ui-icon-caret-1-n">
+							<p:menuitem value="Modelos"
+								url="#{appBean.calzadoPath()}modelos/modelos.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+							<p:menuitem value="Tallas"
+								url="#{appBean.calzadoPath()}tallas/tallas.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+						</p:submenu>
+
+						<p:submenu label="ERP/Procesos" icon=" ui-icon-caret-1-n">
+
+
+							<p:menuitem value="Conf. Procesos"
+								url="#{appBean.calzadoPath()}proceso/proceso.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+
+							<p:menuitem value="Conf. Tiempos"
+								url="#{appBean.calzadoPath()}proceso/confiProceso.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+						</p:submenu>
+
+						<p:submenu label="Lineas de Producción" icon=" ui-icon-caret-1-n">
+
+							<p:menuitem value="Líneas de producción"
+								url="#{appBean.calzadoPath()}lineasProd/lineasprod.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+							<p:menuitem value="Turnos"
+								url="#{appBean.calzadoPath()}turnos/turnos.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+						</p:submenu>
+
+						<p:submenu label="Andon" icon="ui-icon-caret-1-n">
+							<p:menuitem value="Monitoreo" url="#{appBean.andonMonitor}"
+								icon="fa fa-bell-o" />
+							<p:menuitem value="Alertas"
+								url="#{appBean.andonPath()}alertas.jsf" icon="fa fa-bell-o" />
+							<p:menuitem value="Dispositivos"
+								url="#{appBean.andonPath()}dispositivos.jsf"
+								icon="fa fa-android" />
+							<p:menuitem value="Maquinas"
+								url="#{appBean.andonPath()}maquinas.jsf" icon="fa fa-steam" />
+						</p:submenu>
+
+						<p:submenu label="Costos Indirectos" icon=" ui-icon-caret-1-n">
+							<p:menuitem value="Costos Indirectos"
+								url="#{appBean.costosPath()}costosindirec.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+						</p:submenu>
+					</p:submenu>
+
+					<p:submenu label="Administración" icon="ui-icon-suitcase">
+						<p:menuitem value="Usuarios"
+							url="#{appBean.basePath}usuario/indexUser.jsf"
+							icon="ui-icon-person" />
 						<p:menuitem value="Temas"
-							url="#{appBean.themePath()}changeTheme.xhtml" />
+							url="#{appBean.themePath()}changeTheme.xhtml"
+							icon="ui-icon-shuffle" />
+						<p:menuitem value="Añadir procesos"
+							url="#{appBean.calzadoPath()}tipprocesos/tipprocesos.jsf"
+							icon="ui-icon-caret-1-n" />
+						<p:menuitem value="Tipo de lineas"
+							url="#{appBean.calzadoPath()}lineasProd/tipoLinea.jsf"
+							icon="ui-icon-caret-1-n" />
+					</p:submenu>
+
+
+					<p:submenu label="Reportes" icon="ui-icon-note">
+
 						<p:submenu label="Reportes" icon="ui-icon-search">
 							<p:menuitem value="File"
 								url="#{appBean.basePath}messages/failed.xhtml" />
@@ -106,27 +136,11 @@
 						</p:submenu>
 					</p:submenu>
 
-					<p:submenu label="Andon" icon="ui-icon-gear">
-						<p:menuitem value="Monitoreo" url="#{appBean.andonMonitor}"
-							icon="fa fa-bell-o" />
-						<p:menuitem value="Alertas"
-							url="#{appBean.andonPath()}alertas.jsf" icon="fa fa-bell-o" />
-						<p:menuitem value="Dispositivos"
-							url="#{appBean.andonPath()}dispositivos.jsf" icon="fa fa-android" />
-						<p:menuitem value="Maquinas"
-							url="#{appBean.andonPath()}maquinas.jsf" icon="fa fa-steam" />
-					</p:submenu>
-
 					<p:menuitem value="Exit" actionListener="#{loginBean.logout()}"
 						oncomplete="handleLoginRequest(xhr, status, args)"
 						icon="ui-icon-close" />
-
-					<p:menuitem value="Home" url="#{appBean.basePath}inicio.jsf"
-						icon="ui-icon-home" />
-
 				</p:menubar>
 			</h:form>
-
 		</div>
 
 		<div id="content"
@@ -138,7 +152,7 @@
 
 		<div id="bottom" class="ui-widget-header ui-corner-all"
 			style="height: 15px;">
-			<ui:insert name="bottom">&copy; Universidad Técnica de Ambato</ui:insert>
+			<ui:insert name="bottom">&copy; Universidad Técnica de Ambato - 2017</ui:insert>
 		</div>
 	</div>
 	<script type="text/javascript">
