@@ -104,7 +104,6 @@ public class LineasTurnosBean implements Serializable {
 	// SETTERS AND GETTERS
 
 	public List<Lineasturno> getLineaTurno() {
-		System.out.println("NUMERO DE ORDEN: ");
 
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
 		this.lineaTurno = lineasTurnosDao.findByDETALLE(codDetaOrden);

@@ -140,13 +140,25 @@ public class DistribDetalleBean implements Serializable {
 
 		} else {
 			System.out.println("Parametros de las capacidades llenas");
+			@SuppressWarnings("unused")
+			String msg;
 			for (Parametro oo : paramInicial) {
-				ItemsParams orderListParams1 = new ItemsParams(oo.getProceso()
-						.getTipoProceso().getTprNombre(), oo.getTipLinea()
-						.getTipolinea(), oo.getStandar());
-				orderListParams.add(orderListParams1);
+				System.out.println("Codigo Param: " + oo.getParamCodigo());
+				ParamDao paramDao = new ParamDaoImpl();
+				if (paramDao.delete(oo.getParamCodigo())) {
+					System.out.println("Se elimino correctamente");
+				} else {
+					System.out.println("Ha ocurrido un error al eliminarse");
+				}
 			}
-			Ctiempos = orderListParams;
+			btnProcesar(actionEvent);
+			// for (Parametro oo : paramInicial) {
+			// ItemsParams orderListParams1 = new ItemsParams(oo.getProceso()
+			// .getTipoProceso().getTprNombre(), oo.getTipLinea()
+			// .getTipolinea(), oo.getStandar());
+			// orderListParams.add(orderListParams1);
+			// }
+			// Ctiempos = orderListParams;
 		}
 
 	}

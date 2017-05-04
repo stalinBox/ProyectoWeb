@@ -53,8 +53,21 @@ public class ParamDaoImpl implements ParamDao {
 
 	@Override
 	public boolean delete(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		try {
+			sesion.beginTransaction();
+			Parametro param = (Parametro) sesion.load(Parametro.class, id);
+			sesion.delete(param);
+			sesion.getTransaction().commit();
+			flag = true;
+		} catch (Exception e) {
+			flag = false;
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR DELETE PARAMETROS: "
+					+ e.getMessage().toString());
+		}
+		return flag;
 	}
 
 	@Override

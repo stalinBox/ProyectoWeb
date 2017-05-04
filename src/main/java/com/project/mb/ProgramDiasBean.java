@@ -212,7 +212,6 @@ public class ProgramDiasBean implements Serializable {
 						this.orderList2.add(orderitem2);
 					}
 				}
-
 			}
 		}
 		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
