@@ -176,13 +176,17 @@ public class ProgramDiasBean implements Serializable {
 			} else {
 				System.out.println("Procesando...2");
 				System.out.println("Codigo Orden: " + this.codOrden);
+				ArrayList<Integer> codigoParam = new ArrayList<Integer>();
+				// GUARDA EL CODIGO DE LINEA Y LA CANTIDAD DE TURNOS
+				this.mLineasCantidad.clear();
 
 				ParamDao paramDao = new ParamDaoImpl();
+
 				List<Parametro> parametros = paramDao
 						.getProcesosbyOrden(this.codOrden);
 
 				for (Parametro param : parametros) {
-					this.mLineasCantidad.clear();
+
 					LineasTurnosDao lienasTurnosDao = new LineasTurnosDaoImpl();
 					List<Integer> lineasTurnos = lienasTurnosDao
 							.getLineasByProceso(param.getProceso()
@@ -192,30 +196,53 @@ public class ProgramDiasBean implements Serializable {
 						Object countLinea = lienasTurnosDao
 								.getCountTurnosByLineas(lt, this.codOrden);
 						this.mLineasCantidad.put(lt, countLinea);
-						System.out.println("Esta cosa: " + mLineasCantidad);
+						codigoParam.add(param.getParamCodigo());
 					}
-					Items2 orderitem2 = new Items2();
 
-					if (this.mLineasCantidad.isEmpty()) {
-						System.out
-								.println("No hay lineas para generar la distribucion por dias");
-					} else {
-						System.out.println("Codigo Parametro2: "
-								+ param.getParamCodigo());
-						Tablas tablas = new Tablas();
-						mProcesos = tablas.receivParamsPares(this.totalOrden,
-								param.getStandar(), this.mLineasCantidad);
-						mAll.put(param.getProceso().getProCodigo(), mProcesos);
-						orderitem2 = new Items2(param.getProceso()
-								.getProCodigo(), param.getParamCodigo(),
-								mProcesos);
-						this.orderList2.add(orderitem2);
+				} // FIN CICLO 1er. FOR
+
+				System.out.println("Despues del for mLineasCantidad: "
+						+ this.mLineasCantidad);
+				System.out.println("Variable: " + codigoParam);
+
+				if (this.mLineasCantidad.isEmpty()) {
+					System.out
+							.println("No hay lineas para generar la distribucion por dias");
+				} else {
+					ParamDao paramDao1 = new ParamDaoImpl();
+
+					for (Integer p1 : codigoParam) {
+						List<Parametro> pp1 = paramDao1.findbyCodParam2(p1
+								.intValue());
+
+						for (Parametro i : pp1) {
+							Tablas tablas = new Tablas();
+							mProcesos = tablas.receivParamsPares(
+									this.totalOrden, i.getStandar(),
+									this.mLineasCantidad);
+
+							System.out.println("Variable mProcesos: "
+									+ mProcesos);
+
+							// mAll.put(i.getProceso().getProCodigo(),
+							// mProcesos);
+							// Items2 orderitem2 = new Items2(i.getProceso()
+							// .getProCodigo(), i.getParamCodigo(),
+							// mProcesos);
+							// this.orderList2.add(orderitem2);
+						}
 					}
 				}
 			}
 		}
+		// for (Items2 i : this.orderList2) {
+		// System.out.println("CodParam: " + i.getCodParam());
+		// System.out.println("CodProceso: " + i.getCodProceso());
+		// System.out.println("Matriz proceso: " + i.getmProcesos());
+		// }
+
 		// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
-		generateCalendar(this.orderList2, diaInicio.getTime());
+		// generateCalendar(this.orderList2, diaInicio.getTime());
 	}
 
 	public boolean generateCalendar(ArrayList<Items2> orderList22, Date fInicio) {

@@ -7,6 +7,8 @@
 	<packaging>war</packaging>
 	<name>ProyectoWebs</name>
 
+
+
 	<dependencies>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
@@ -152,12 +154,6 @@
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>6.4.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sf.jacob-project</groupId>
-			<artifactId>jacob</artifactId>
-			<version>1.14.3</version>
 		</dependency>
 	</dependencies>
 

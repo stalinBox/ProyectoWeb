@@ -147,4 +147,22 @@ public class ParamDaoImpl implements ParamDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> findbyCodParam2(Integer codParam) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Parametro ptro WHERE ptro.ordenprod = " + codParam;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETRO: " + e.toString());
+		}
+		return listado;
+	}
+
 }
