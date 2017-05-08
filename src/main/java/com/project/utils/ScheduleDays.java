@@ -17,48 +17,45 @@ public class ScheduleDays implements Serializable {
 		} else {
 			a.set(Calendar.AM_PM, Calendar.PM);
 			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			a.set(Calendar.HOUR, 8);
 		}
 		return a;
 	}
 
-	@SuppressWarnings("deprecation")
 	public Calendar nextDay(Calendar a) {
-		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			nextDay(a);
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			a.set(Calendar.HOUR, 8);
-		}
+		int b = a.get(Calendar.DAY_OF_WEEK);
+		// if ((b == 7) || (b == 1)) {
+		// a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+		// nextDay(a);
+		// } else {
+		// a.set(Calendar.AM_PM, Calendar.PM);
+		// a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+		// }
+
+		a.set(Calendar.AM_PM, Calendar.PM);
+		a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
 		return a;
 	}
 
-	@SuppressWarnings("deprecation")
-	public Calendar prevDayApa(Calendar a) {
-		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-			prevDayApa(a);
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-			a.set(Calendar.HOUR, 8);
-		}
+	public Calendar nextDay2(Calendar a) {
+		a.set(Calendar.AM_PM, Calendar.PM);
+		a.set(Calendar.DATE, a.get(Calendar.DATE) + 2);
 		return a;
 	}
 
-	@SuppressWarnings("deprecation")
-	public Calendar prevDayTrq(Calendar a) {
-		if (a.getTime().getDay() == 5 || a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-			prevDayTrq(a);
+	public Calendar prevDay(Calendar a) {
+		// if (b == 7) {
+		// a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
+		// prevDay(a);
 
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) - 2);
-			a.set(Calendar.HOUR, 8);
-		}
+		// } else if (b == 1) {
+		// a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
+		// prevDay(a);
+
+		// }
+		// else {
+		a.set(Calendar.AM_PM, Calendar.PM);
+		a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
+		// }
 		return a;
 	}
 

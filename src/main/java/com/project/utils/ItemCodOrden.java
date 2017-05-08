@@ -10,7 +10,7 @@ public class ItemCodOrden implements Serializable {
 	private static Integer totalOrden;
 
 	public static Integer getCodOrden() {
-		ItemCodOrden.codOrden = 122;
+		ItemCodOrden.codOrden = 124;
 		return codOrden;
 	}
 

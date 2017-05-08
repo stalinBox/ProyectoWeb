@@ -321,4 +321,26 @@ public class ProcesoDaoImpl implements ProcesoDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Proceso> findByProcesoInLT(Integer codOrden) {
+		List<Proceso> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Proceso pro  where pro.proCodigo in ( select pa.proceso.proCodigo "
+				+ "from Parametro pa where pa.ordenprod.ordenprodCodigo = "
+				+ codOrden
+				+ " and pa.paramCodigo in ( select lt.parametro.paramCodigo from Lineasturno lt))";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL FINDBYPROCESOINLT: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

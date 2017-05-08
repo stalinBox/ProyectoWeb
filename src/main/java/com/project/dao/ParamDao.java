@@ -9,7 +9,9 @@ public interface ParamDao {
 
 	public Parametro findbyCodParam(Integer codParam);
 
-	public List<Parametro> findbyCodParam2(Integer codParam);
+	public List<Parametro> findByCodLinea(Integer codLinea);
+
+	public List<Parametro> findbyCodParam2(Integer codOrden, Integer codParam);
 
 	public List<Parametro> getProcesosbyOrden(Integer codOrden);
 

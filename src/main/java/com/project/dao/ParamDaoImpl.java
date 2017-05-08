@@ -93,8 +93,9 @@ public class ParamDaoImpl implements ParamDao {
 	public List<Parametro> getProcesosbyOrden(Integer codOrden) {
 		List<Parametro> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "from Parametro pa where pa.ordenprod.ordenprodCodigo = "
-				+ codOrden;
+		String sql = "from Parametro pa  where pa.ordenprod.ordenprodCodigo = "
+				+ codOrden + " and pa.paramCodigo in "
+				+ " ( select lt.parametro.paramCodigo from Lineasturno lt)";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -149,10 +150,30 @@ public class ParamDaoImpl implements ParamDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Parametro> findbyCodParam2(Integer codParam) {
+	public List<Parametro> findbyCodParam2(Integer codOrden, Integer codParam) {
 		List<Parametro> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
-		String sql = "FROM Parametro ptro WHERE ptro.ordenprod = " + codParam;
+		String sql = "FROM Parametro ptro WHERE ptro.ordenprod = " + codOrden
+				+ " and ptro.paramCodigo = " + codParam;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETRO: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> findByCodLinea(Integer codLinea) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Parametro param where param.paramCodigo in ( select lt.parametro.paramCodigo from Lineasturno lt where lt.lineasprod.lineaproCodigo = "
+				+ codLinea + ")";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
