@@ -121,7 +121,7 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 				+ "WHERE pg.parametro.paramCodigo = "
 				+ "( SELECT pr.paramCodigo FROM Parametro pr "
 				+ "WHERE pr.ordenprod.ordenprodCodigo = " + codOrden
-				+ "AND pr.proceso.proCodigo= " + codProceso + ") "
+				+ "AND pr.paramCodigo= " + codProceso + ") "
 				+ "ORDER BY pg ASC";
 
 		System.out.println(sql);

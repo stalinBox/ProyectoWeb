@@ -42,6 +42,10 @@ import com.project.entities.Talla;
 import com.project.entities.Turno;
 import com.project.entities.Usuario;
 
+/**
+ * @author Stalin
+ *
+ */
 @ManagedBean
 @ViewScoped
 public class ProcesosOPBean implements Serializable {
@@ -71,6 +75,7 @@ public class ProcesosOPBean implements Serializable {
 	private List<SelectItem> selectedItemsTalla;
 	private List<SelectItem> selectedItemsTurno;
 	private List<SelectItem> selectedItemsFechas;
+	private List<SelectItem> selectedItemsLT;
 
 	// CONSTRUCTOR
 	@PostConstruct
@@ -168,8 +173,12 @@ public class ProcesosOPBean implements Serializable {
 	public void btnCreateProcesosOP(ActionEvent actionEvent) {
 		String msg;
 		ProcesosOPDao procesoOPDao = new ProcesosOPDaoImpl();
+
+		ParamDao paramDao = new ParamDaoImpl();
+		Integer param = paramDao.findByParam(this.nProceso);
+
 		Proceso pro = new Proceso();
-		pro.setProCodigo(this.nProceso);
+		pro.setProCodigo(param);
 
 		Ordenprod op = new Ordenprod();
 		op.setOrdenprodCodigo(this.nOrden);
@@ -187,7 +196,7 @@ public class ProcesosOPBean implements Serializable {
 			Procesosop pop = procesoOPDao.getLastResp();
 			this.codPOP = pop.getProcessopCod();
 		} else {
-			msg = "Error al eliminar un proceso operacio";
+			msg = "Error al crear un procesoOP";
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -399,9 +408,8 @@ public class ProcesosOPBean implements Serializable {
 			ParamDao paramDao = new ParamDaoImpl();
 			List<Parametro> param = paramDao.findByOrdenProd(this.nOrden);
 			for (Parametro p : param) {
-				SelectItem selectItem = new SelectItem(p.getProceso()
-						.getProCodigo(), p.getProceso().getTipoProceso()
-						.getTprNombre()
+				SelectItem selectItem = new SelectItem(p.getParamCodigo(), p
+						.getProceso().getTipoProceso().getTprNombre()
 						+ "/" + p.getTipLinea().getTipolinea());
 				this.selectedItemsProceso.add(selectItem);
 			}
@@ -450,6 +458,29 @@ public class ProcesosOPBean implements Serializable {
 
 	public void setSelectedProcesosOP(Procesosop selectedProcesosOP) {
 		this.selectedProcesosOP = selectedProcesosOP;
+	}
+
+	public List<SelectItem> getSelectedItemsLT() {
+		if (this.nOrden != null && !this.nOrden.equals("") && this.nOrden != 0) {
+			this.selectedItemsLT = new ArrayList<SelectItem>();
+			LineasTurnosDao lineasturnosDao = new LineasTurnosDaoImpl();
+			List<Lineasturno> lineast = lineasturnosDao
+					.findByOrdenBYPROCESOSOP(this.nOrden);
+			for (Lineasturno lt : lineast) {
+				SelectItem selectItem = new SelectItem(lt.getLtcodigo(), lt
+						.getLineasprod().getNomlinea());
+				this.selectedItemsLT.add(selectItem);
+			}
+			return selectedItemsLT;
+		} else {
+			this.selectedItemsLT = new ArrayList<SelectItem>();
+			return selectedItemsLT;
+		}
+
+	}
+
+	public void setSelectedItemsLT(List<SelectItem> selectedItemsLT) {
+		this.selectedItemsLT = selectedItemsLT;
 	}
 
 }

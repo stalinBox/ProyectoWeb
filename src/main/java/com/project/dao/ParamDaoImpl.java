@@ -186,4 +186,41 @@ public class ParamDaoImpl implements ParamDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Parametro> findByParamInLT(Integer codOrden) {
+		List<Parametro> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Parametro param where param.paramCodigo in ( select lt.parametro.paramCodigo from Lineasturno lt) and param.ordenprod.ordenprodCodigo = "
+				+ codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETRO: " + e.toString());
+		}
+		return listado;
+	}
+
+	@Override
+	public Integer findByParam(Integer codParam) {
+		Integer listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select param.proceso.proCodigo from Parametro param where param.paramCodigo = "
+				+ codParam;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (Integer) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPARAMETRO: " + e.toString());
+		}
+		return listado;
+	}
+
 }

@@ -11,6 +11,8 @@ public interface ParamDao {
 
 	public List<Parametro> findByCodLinea(Integer codLinea);
 
+	public List<Parametro> findByParamInLT(Integer codOrden);
+
 	public List<Parametro> findbyCodParam2(Integer codOrden, Integer codParam);
 
 	public List<Parametro> getProcesosbyOrden(Integer codOrden);
@@ -19,6 +21,8 @@ public interface ParamDao {
 			Integer codProceso);
 
 	public List<Parametro> findByOrdenProd(Integer codOrden);
+
+	public Integer findByParam(Integer codParam);
 
 	public boolean create(Parametro parametro);
 

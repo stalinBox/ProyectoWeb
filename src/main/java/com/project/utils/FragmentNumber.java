@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 public class FragmentNumber {
 
-	public ArrayList<ArrayList<Object>> Number(Integer cp, double nDias) {
+	public ArrayList<ArrayList<Object>> Number(Integer cp, double nDias,
+			Double nDias2) {
+		System.out.println("Ndias FragmentNumber: " + nDias2);
+
 		// VARIABLES
 		ArrayList<Object> arrayDiasPares = new ArrayList<Object>();
 		ArrayList<Object> arrDiasHoras = new ArrayList<Object>();
@@ -25,17 +28,17 @@ public class FragmentNumber {
 		// System.out.println("Parte decimal: " + formateador.format(a));
 
 		for (int i = 0; i < b; i++) {
-			int j = cp / 5;
+			int j = cp / nDias2.intValue();
 			arrayDiasPares.add(j);
 		}
 
 		// calculo independiente para la capacidad por dia
-		double k = cp * a / 5;
+		double k = cp * a / nDias2;
 		arrayDiasPares.add((int) Math.round(k));
 
 		double totHoras = 0;
 		for (Object z : arrayDiasPares) {
-			totHoras = (Double.parseDouble(z.toString()) / cp) * 8 * 5;
+			totHoras = (Double.parseDouble(z.toString()) / cp) * 8 * nDias2;
 			arrDiasHoras.add(totHoras);
 		}
 		// System.out.println("Pares: " + arrayDiasPares);

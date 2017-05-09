@@ -104,6 +104,16 @@
 						<f:selectItems value="#{procesosOPBean.selectedItemsTurno}" />
 					</p:selectOneMenu>
 
+					<p:outputLabel value="Línea producción" />
+					<p:selectOneMenu id="idCbxlT"
+						value="#{procesosOPBean.selectedProgramTurno.lineasturno.ltcodigo}"
+						required="true" style="width:150px">
+						<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+							itemValue="0" />
+						<f:selectItems value="#{procesosOPBean.selectedItemsLT}" />
+					</p:selectOneMenu>
+
+
 					<p:outputLabel value="Estimated Amount: " />
 					<p:inputText value="#{procesosOPBean.cantEstim}" size="2" />
 

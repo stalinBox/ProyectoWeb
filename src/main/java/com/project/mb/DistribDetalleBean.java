@@ -34,6 +34,7 @@ import com.project.utils.ItemCodOrden;
 import com.project.utils.ItemsDistrib;
 import com.project.utils.ItemsParams;
 import com.project.utils.MyUtil;
+import com.project.utils.NdiasLab;
 import com.project.utils.WriteAndReadExcel;
 
 @ManagedBean
@@ -72,6 +73,8 @@ public class DistribDetalleBean implements Serializable {
 
 	// DML
 	public void btnProcesar(ActionEvent actionEvent) {
+		// Settear la variable nDias
+		NdiasLab.setnDias(nDias);
 
 		System.out.println("Procesando..");
 		orderListParams.clear();

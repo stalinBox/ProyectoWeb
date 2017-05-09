@@ -223,7 +223,7 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasturno lt where lt.parametro.paramCodigo = "
 				+ " (select p.paramCodigo from Parametro p where p.ordenprod = "
-				+ codOrden + " and p.proceso.proCodigo = " + codProceso + " )";
+				+ codOrden + " and p.paramCodigo = " + codProceso + " )";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();
@@ -242,6 +242,46 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		List<Lineasturno> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Lineasturno lt WHERE lt.parametro.ordenprod.ordenprodCodigo = "
+				+ codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL LINEASTURNOS: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasturno> findByParam(Integer codParam) {
+		List<Lineasturno> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Lineasturno lt where lt.parametro.paramCodigo = "
+				+ codParam;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL LINEASTURNOS: "
+					+ e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Lineasturno> findByOrdenBYPROCESOSOP(Integer codOrden) {
+		List<Lineasturno> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Lineasturno lt where lt.parametro.ordenprod.ordenprodCodigo = "
 				+ codOrden;
 		System.out.println(sql);
 		try {
