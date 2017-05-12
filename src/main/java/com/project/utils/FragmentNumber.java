@@ -5,10 +5,8 @@ import java.util.ArrayList;
 
 public class FragmentNumber {
 
-	public ArrayList<ArrayList<Object>> Number(Integer cp, double nDias,
-			Double nDias2) {
-		System.out.println("Ndias FragmentNumber: " + nDias2);
-
+	public ArrayList<ArrayList<Object>> Number(Integer cp, double diasLab,
+			Double nDias, Integer prodTotal) {
 		// VARIABLES
 		ArrayList<Object> arrayDiasPares = new ArrayList<Object>();
 		ArrayList<Object> arrDiasHoras = new ArrayList<Object>();
@@ -20,29 +18,42 @@ public class FragmentNumber {
 		// System.out.println("Valor cp: " + cp);
 		// System.out.println("Valor Ndias: " + formateador.format(nDias));
 
-		double a = nDias % 1;
+		double a = diasLab % 1;
 
-		int b = (int) (nDias);
+		int b = (int) (diasLab);
 
-		// System.out.println("Parte entera: " + b);
-		// System.out.println("Parte decimal: " + formateador.format(a));
+		System.out.println("2- Parte entera (b): " + b);
+		System.out.println("2- Parte decimal (a): " + a);
 
+		int acum = 0;
+		// Calculo para la parte entera de diasLab(b)
 		for (int i = 0; i < b; i++) {
-			int j = cp / nDias2.intValue();
+			int j = (int) (cp / nDias);
+			acum += j;
+			System.out.println("parte entera var j: " + j);
 			arrayDiasPares.add(j);
 		}
 
-		// calculo independiente para la capacidad por dia
-		double k = cp * a / nDias2;
-		arrayDiasPares.add((int) Math.round(k));
+		// Calculo para la parte flotante de diasLab(a)
+		System.out.println("Sumatoria: " + acum);
+		System.out.println("cp: " + cp);
+		if (acum != prodTotal) {
+			arrayDiasPares.add((prodTotal - acum));
+		}
 
+		// double k = cp * a / nDias;
+
+		// System.out.println("parte decimal var k: " + k);
+		// arrayDiasPares.add((int) Math.round(k));
+
+		// Calculo de horas
 		double totHoras = 0;
 		for (Object z : arrayDiasPares) {
-			totHoras = (Double.parseDouble(z.toString()) / cp) * 8 * nDias2;
+			totHoras = (Double.parseDouble(z.toString()) / cp) * 8 * nDias;
 			arrDiasHoras.add(totHoras);
 		}
-		// System.out.println("Pares: " + arrayDiasPares);
-		// System.out.println("Horas: " + arrDiasHoras);
+		System.out.println("2- Pares: " + arrayDiasPares);
+		System.out.println("2- Horas: " + arrDiasHoras);
 
 		arrayComplet.add(arrayDiasPares);
 		arrayComplet.add(arrDiasHoras);

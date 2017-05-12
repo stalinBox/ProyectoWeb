@@ -266,6 +266,7 @@ public class ProgramDiasBean implements Serializable {
 
 							// ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
 							// SCHEDULE
+
 							Items2 orderitem2 = new Items2(j.getProceso()
 									.getProCodigo(), j.getParamCodigo(),
 									mProcesos);
@@ -286,7 +287,7 @@ public class ProgramDiasBean implements Serializable {
 			oo++;
 		}
 
-		generateCalendar(this.orderList2, diaInicio.getTime());
+		// generateCalendar(this.orderList2, diaInicio.getTime());
 	}
 
 	public boolean generateCalendar(ArrayList<Items2> orderList22, Date fInicio) {

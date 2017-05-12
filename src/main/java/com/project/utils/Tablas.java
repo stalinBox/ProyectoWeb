@@ -9,6 +9,7 @@ public class Tablas {
 			Integer cantLineas) {
 
 		System.out.println("nDias: " + nDias);
+		nDias = 6.0;
 		ArrayList<ArrayList<Object>> arrayCompleto = new ArrayList<ArrayList<Object>>();
 		double diasLab = 0;
 		Integer cp = 0;
@@ -16,13 +17,13 @@ public class Tablas {
 		cp = prodCap * Integer.parseInt(countLineas.toString()) * cantLineas;
 		diasLab = prodTotal.doubleValue() / cp.doubleValue() * nDias;
 
-		// System.out.println("PARAMETROS PARA TRABAJAR CON LA CLASE TABLAS");
-		// System.out.println("OrdenTotal: " + prodTotal);
-		// System.out.println("Capacidad por tipo linea: " + cp);
-		// System.out.println("Dias a laborar: " + diasLab);
+		System.out.println("1- PARAMETROS PARA TRABAJAR CON LA CLASE TABLAS");
+		System.out.println("1- OrdenTotal: " + prodTotal);
+		System.out.println("1- Capacidad por tipo linea: " + cp);
+		System.out.println("1- Dias a laborar: " + diasLab);
 
 		FragmentNumber abc = new FragmentNumber();
-		arrayCompleto = abc.Number(cp, diasLab, nDias);
+		arrayCompleto = abc.Number(cp, diasLab, nDias, prodTotal);
 
 		return arrayCompleto;
 	}

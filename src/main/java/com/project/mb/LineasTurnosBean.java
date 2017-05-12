@@ -63,6 +63,26 @@ public class LineasTurnosBean implements Serializable {
 	}
 
 	// METODOS
+
+	public void cleanProceso() {
+		this.selectItemsProcesos = new ArrayList<SelectItem>();
+	}
+
+	public void cleanLineas() {
+		this.selectItemsLineas = new ArrayList<SelectItem>();
+		cleanTurnos();
+	}
+
+	public void cleanTurnos() {
+		this.selectItemsTurnos = new ArrayList<SelectItem>();
+	}
+
+	public void cleanAllDropDown() {
+		cleanProceso();
+		cleanLineas();
+		cleanTurnos();
+	}
+
 	public void btnCreateLT(ActionListener actionListener) {
 		String msg = "";
 		LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();

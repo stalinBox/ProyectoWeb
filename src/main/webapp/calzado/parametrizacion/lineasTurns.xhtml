@@ -12,7 +12,7 @@
 		<f:loadBundle basename="messages.properties" var="msg" />
 		<ui:define name="content">
 
-			<p:messages id="msgs" autoUpdate="true" />
+			<p:growl id="msgs" showDetail="true" />
 
 			<h:form id="idFrmConfLineas">
 				<p:panel id="idPanel">
@@ -27,7 +27,9 @@
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="true" />
 							<f:selectItems value="#{lineasTurnosBean.selectItemsProcesos}" />
-							<p:ajax update=":idFrmConfLineas:idCboLineas" />
+							<p:ajax
+								update=":idFrmConfLineas:idCboLineas :idFrmConfLineas:idCboTurnos"
+								listener="#{lineasTurnosBean.cleanLineas()}" />
 						</p:selectOneMenu>
 
 						<h:outputLabel for="idCboLineas" value="Lineas:" />
@@ -53,8 +55,12 @@
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalleConfL" value="Agregar"
-								update=":formDataTable:basicDT"
-								actionListener="#{lineasTurnosBean.btnCreateLT(actionListener)}" />
+								update=":formDataTable:basicDT, 
+								:idFrmConfLineas:idCboParam, 
+								:idFrmConfLineas:idCboLineas,
+								:idFrmConfLineas:idCboTurnos, :msgs"
+								actionListener="#{lineasTurnosBean.btnCreateLT(actionListener)}"
+								action="#{lineasTurnosBean.cleanAllDropDown()}" />
 						</f:facet>
 
 					</h:panelGrid>
@@ -96,7 +102,7 @@
 			<p:separator />
 
 			<h:form id="idFmrButtons">
-				<p:growl id="msgs" showDetail="true" />
+
 
 				<p:panel id="idPanel">
 					<h:panelGrid id="idPngConLineas" columns="2">
@@ -112,7 +118,7 @@
 						<f:facet name="footer">
 							<p:commandButton id="btnGenerarPedido" value="Buil"
 								actionListener="#{programDiasBean.btnProcesar()}"
-								update=":idTblFechas, :idFmrButtons:msgs" />
+								update=":idTblFechas, msgs" />
 
 							<p:commandButton id="btnReProcesarPedido" value="Rebuild"
 								actionListener="#{programDiasBean.btnReProcesar()}"
