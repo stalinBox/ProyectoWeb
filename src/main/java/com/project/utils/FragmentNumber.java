@@ -18,12 +18,12 @@ public class FragmentNumber {
 		// System.out.println("Valor cp: " + cp);
 		// System.out.println("Valor Ndias: " + formateador.format(nDias));
 
-		double a = diasLab % 1;
+		// double a = diasLab % 1;
 
 		int b = (int) (diasLab);
 
-		System.out.println("2- Parte entera (b): " + b);
-		System.out.println("2- Parte decimal (a): " + a);
+		// System.out.println("2- Parte entera (b): " + b);
+		// System.out.println("2- Parte decimal (a): " + a);
 
 		int acum = 0;
 		// Calculo para la parte entera de diasLab(b)
@@ -35,16 +35,9 @@ public class FragmentNumber {
 		}
 
 		// Calculo para la parte flotante de diasLab(a)
-		System.out.println("Sumatoria: " + acum);
-		System.out.println("cp: " + cp);
 		if (acum != prodTotal) {
 			arrayDiasPares.add((prodTotal - acum));
 		}
-
-		// double k = cp * a / nDias;
-
-		// System.out.println("parte decimal var k: " + k);
-		// arrayDiasPares.add((int) Math.round(k));
 
 		// Calculo de horas
 		double totHoras = 0;
@@ -58,7 +51,6 @@ public class FragmentNumber {
 		arrayComplet.add(arrayDiasPares);
 		arrayComplet.add(arrDiasHoras);
 
-		// System.out.println("Array Completo: " + arrayComplet);
 		return arrayComplet;
 	}
 }

@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,8 +24,6 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
-import com.project.dao.DetaOrdenDao;
-import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
 import com.project.dao.ParamDao;
@@ -36,7 +33,6 @@ import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Lineasturno;
-import com.project.entities.Ordenprod;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
@@ -259,9 +255,6 @@ public class ProgramDiasBean implements Serializable {
 									this.totalOrden, j.getStandar(),
 									countLineas, this.nDias, cantLineas);
 
-							// System.out.println("VAR** mProcesos: "
-							// + mProcesos);
-
 							mAll.put(j.getProceso().getProCodigo(), mProcesos);
 
 							// ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
@@ -287,7 +280,7 @@ public class ProgramDiasBean implements Serializable {
 			oo++;
 		}
 
-		// generateCalendar(this.orderList2, diaInicio.getTime());
+		generateCalendar(this.orderList2, diaInicio.getTime());
 	}
 
 	public boolean generateCalendar(ArrayList<Items2> orderList22, Date fInicio) {
