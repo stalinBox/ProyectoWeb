@@ -138,4 +138,31 @@ public class DistribDetaDaoImpl implements DistribDetaDao {
 		return listado;
 	}
 
+	@Override
+	public Object getSumByProTip(Integer codOrden, Integer codPro,
+			Integer codTLinea) {
+
+		Object listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select SUM(dtt.detalleorden.cantidad) from Distribdetalle "
+				+ " dtt where dtt.detalleorden.detaordenCodigo in "
+				+ " ( select dto.detaordenCodigo from Detalleorden dto "
+				+ " where dto.ordenprod.ordenprodCodigo = "
+				+ codOrden
+				+ ") and "
+				+ " dtt.proceso.proCodigo = "
+				+ codPro
+				+ "and dtt.tipLinea.codigoTiplinea = " + codTLinea;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETSUMBYPROTIP: " + e.toString());
+		}
+		return listado;
+	}
+
 }

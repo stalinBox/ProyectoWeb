@@ -4,7 +4,7 @@ public class NdiasLab {
 	private static Double nDias;
 
 	public static Double getnDias() {
-		// NdiasLab.nDias = 5.0;
+		NdiasLab.nDias = 1.0;
 		return nDias;
 	}
 

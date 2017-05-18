@@ -190,17 +190,23 @@ public class LineasTurnosBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectItemsTurnos() {
+
 		this.selectItemsTurnos = new ArrayList<SelectItem>();
 		TurnosDao turnosDao = new TurnosDaoImpl();
-		List<Turno> turno = turnosDao.findByLineasByParam(
-				this.selectedLineaTurn.getParametro().getParamCodigo(),
-				this.selectedLineaTurn.getLineasprod().getLineaproCodigo());
-		for (Turno tur : turno) {
-			SelectItem selectItem = new SelectItem(tur.getTurnoCodigo(),
-					tur.getNombturno());
-			this.selectItemsTurnos.add(selectItem);
+		if (this.selectedLineaTurn.getLineasprod().getLineaproCodigo() != null) {
+			List<Turno> turno = turnosDao.findByLineasByParam(
+					this.selectedLineaTurn.getParametro().getParamCodigo(),
+					this.selectedLineaTurn.getLineasprod().getLineaproCodigo());
+			for (Turno tur : turno) {
+				SelectItem selectItem = new SelectItem(tur.getTurnoCodigo(),
+						tur.getNombturno());
+				this.selectItemsTurnos.add(selectItem);
+			}
+			return selectItemsTurnos;
+		} else {
+			this.selectItemsTurnos = new ArrayList<SelectItem>();
+			return selectItemsTurnos;
 		}
-		return selectItemsTurnos;
 	}
 
 	public void setSelectItemsTurnos(List<SelectItem> selectItemsTurnos) {

@@ -22,11 +22,9 @@
 			</p:dialog>
 
 			<p:growl id="msgs" showDetail="true" />
-
 			<h:form id="idFmrDistrib">
 				<p:panel id="idPanel">
-					<p:messages autoUpdate="true" />
-					<f:facet name="header">Distribución Modelos por Línea</f:facet>
+					<f:facet name="header">DISTRIBUCIÓN MODELOS POR LÍNEAS</f:facet>
 
 					<h:panelGrid id="idProc" columns="2">
 						<h:outputLabel value="Proceso:" />
@@ -37,7 +35,8 @@
 							<f:selectItem itemLabel="- Seleccione -" itemValue=""
 								noSelectionOption="false" />
 							<f:selectItems value="#{distribDetalleBean.selectedItemsProceso}" />
-							<p:ajax update=":idFmrDistrib:idCboLineasPros" />
+							<p:ajax listener="#{distribDetalleBean.onChangeProceso()}"
+								update=":idFmrDistrib:idCboLineasPros" />
 						</p:selectOneMenu>
 
 						<h:outputLabel value="Tipo Línea: " />
@@ -57,33 +56,35 @@
 			</h:form>
 
 			<h:form id="formDetalleOrden">
-				<p:dataTable id="checkboxDT" var="dt"
-					value="#{distribDetalleBean.detalleOrden}"
-					selection="#{distribDetalleBean.selectedDeta}"
-					rowKey="#{dt.detaordenCodigo}" style="margin-bottom:0"
-					emptyMessage="Ningun registro encontrado">
-					<f:facet name="header">DETALLE</f:facet>
+				<p:panel id="idPanel2">
+					<p:dataTable id="checkboxDT" var="dt"
+						value="#{distribDetalleBean.detalleOrden}"
+						selection="#{distribDetalleBean.selectedDeta}"
+						rowKey="#{dt.detaordenCodigo}" style="margin-bottom:0"
+						emptyMessage="Ningun registro encontrado">
 
-					<p:column selectionMode="multiple"
-						style="width:16px;text-align:center" />
+						<p:column selectionMode="multiple"
+							style="width:16px;text-align:center" />
 
-					<p:column headerText="Modelos">
-						<h:outputText value="#{dt.modelo.modNombre}" />
-					</p:column>
+						<p:column headerText="Modelos">
+							<h:outputText value="#{dt.modelo.modNombre}" />
+						</p:column>
 
-					<p:column headerText="Tallas">
-						<h:outputText value="#{dt.talla.talNumero}" />
-					</p:column>
+						<p:column headerText="Tallas">
+							<h:outputText value="#{dt.talla.talNumero}" />
+						</p:column>
 
-					<p:column headerText="Cantidad">
-						<h:outputText value="#{dt.cantidad}" />
-					</p:column>
-				</p:dataTable>
-				<br />
-				<p:commandButton id="btnAgregarDetalle" value="Agregar"
-					actionListener="#{distribDetalleBean.btnCrear()}"
-					update=":formDetalleOrden:checkboxDT, :formDataTable:basicDT" />
-				<br />
+						<p:column headerText="Cantidad">
+							<h:outputText value="#{dt.cantidad}" />
+						</p:column>
+					</p:dataTable>
+					<br />
+					<p:commandButton id="btnAgregarDetalle" value="Agregar"
+						actionListener="#{distribDetalleBean.btnCrear()}"
+						update=":formDetalleOrden:checkboxDT, :idFmrDistrib:idCboProPadre, :idFmrDistrib:idCboLineasPros, :formDataTable:basicDT,	:msgs"
+						action="#{distribDetalleBean.onChangeAll()}" />
+					<br />
+				</p:panel>
 			</h:form>
 
 			<br />
@@ -127,16 +128,16 @@
 			<h:form id="formButttons">
 				<p:panel id="idPanel2">
 					<h:panelGrid id="idnDias" columns="2">
-						<p:outputLabel value="Nº dias:" />
+						<!-- <p:outputLabel value="Nº dias:" />
 						<p:inputText id="idDias" value="#{distribDetalleBean.nDias}"
-							required="true" />
+							required="true" /> -->
 
 						<f:facet name="footer">
 							<p:commandButton id="btnBack" value="Anterior" process="@this"
 								actionListener="#{distribDetalleBean.btnReprocesar(actionEvent)}" />
 
 							<p:commandButton id="btnProcesar" value="Procesar"
-								process="@this, :formButttons:idDias"
+								process="@this"
 								actionListener="#{distribDetalleBean.btnProcesar(actionEvent)}"
 								oncomplete="PF('dialogParams').show()"
 								update=":formListParams:multiStandarDetail" />

@@ -9,28 +9,13 @@ public class ScheduleDays implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// ***************RECORRER DIAS EN EL CALENDAR*************
-	@SuppressWarnings("deprecation")
 	public Calendar nextDayExtras(Calendar a) {
-		if (a.getTime().getDay() == 6) {
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-			nextDayExtras(a);
-		} else {
-			a.set(Calendar.AM_PM, Calendar.PM);
-			a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-		}
+		a.set(Calendar.AM_PM, Calendar.PM);
+		a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
 		return a;
 	}
 
 	public Calendar nextDay(Calendar a) {
-		int b = a.get(Calendar.DAY_OF_WEEK);
-		// if ((b == 7) || (b == 1)) {
-		// a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-		// nextDay(a);
-		// } else {
-		// a.set(Calendar.AM_PM, Calendar.PM);
-		// a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-		// }
-
 		a.set(Calendar.AM_PM, Calendar.PM);
 		a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
 		return a;
@@ -63,5 +48,21 @@ public class ScheduleDays implements Serializable {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal;
+	}
+
+	private Calendar today() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.DATE), 0, 0, 0);
+
+		return calendar;
+	}
+
+	public Date CalendarToDay(Calendar a) {
+		Calendar t = (Calendar) today().clone();
+		t.set(Calendar.AM_PM, Calendar.PM);
+		t.set(Calendar.DATE, t.get(Calendar.DATE));
+
+		return t.getTime();
 	}
 }

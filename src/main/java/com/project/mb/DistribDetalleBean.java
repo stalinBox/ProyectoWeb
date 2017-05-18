@@ -69,9 +69,21 @@ public class DistribDetalleBean implements Serializable {
 		this.selectedDT.setProceso(new Proceso());
 		this.selectedDT.setTipLinea(new TipLinea());
 		this.codDetaOrden = ItemCodOrden.getCodOrden();
+
+		this.nDias = 1.0;
 	}
 
 	// DML
+
+	public void onChangeProceso() {
+		this.selectedItemsTipLinea = new ArrayList<SelectItem>();
+	}
+
+	public void onChangeAll() {
+		this.selectedItemsProceso = new ArrayList<SelectItem>();
+		onChangeProceso();
+	}
+
 	public void btnProcesar(ActionEvent actionEvent) {
 		// Settear la variable nDias
 		NdiasLab.setnDias(nDias);

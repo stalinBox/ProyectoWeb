@@ -12,6 +12,9 @@ public interface DistribDetaDao {
 	public List<Distribdetalle> findByOrderByProByTL(Integer codOrden,
 			Integer codPro, Integer codTLinea);
 
+	public Object getSumByProTip(Integer codOrden, Integer codPro,
+			Integer codTLinea);
+
 	public boolean create(Distribdetalle distribDeta);
 
 	public boolean update(Distribdetalle distribDeta);

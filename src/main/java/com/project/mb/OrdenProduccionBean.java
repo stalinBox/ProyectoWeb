@@ -77,6 +77,10 @@ public class OrdenProduccionBean implements Serializable {
 		this.selectedDetaOrden = new Detalleorden();
 		this.selectedDetaOrden.setModelo(new Modelo());
 		this.selectedDetaOrden.setTalla(new Talla());
+
+		// Iniciar en cero la orden
+		// ItemCodOrden.setCodOrden(0);
+		// ItemCodOrden.setTotalOrden(0);
 	}
 
 	// METODOS
