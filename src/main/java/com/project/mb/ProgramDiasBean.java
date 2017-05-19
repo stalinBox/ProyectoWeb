@@ -268,10 +268,16 @@ public class ProgramDiasBean implements Serializable {
 							System.out
 									.println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
 											+ sumatoria.toString());
+							// ANTIGUO
+							// mProcesos = tablas.receivParamsPares(
+							// this.totalOrden, j.getStandar(),
+							// countLineas, this.nDias, cantLineas);
 
+							// NUEVO
 							mProcesos = tablas.receivParamsPares(
-									this.totalOrden, j.getStandar(),
-									countLineas, this.nDias, cantLineas);
+									Integer.parseInt(sumatoria.toString()),
+									j.getStandar(), countLineas, this.nDias,
+									cantLineas);
 
 							mAll.put(j.getProceso().getProCodigo(), mProcesos);
 
@@ -290,16 +296,16 @@ public class ProgramDiasBean implements Serializable {
 		}// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
 
 		// IMPRIME LOS VALORES A DIBUJARSE
-		// int oo = 0;
-		// for (Items2 i : this.orderList2) {
-		// System.out.println("indice: " + oo + " CodParam: "
-		// + i.getCodParam() + " CodProceso: " + i.getCodProceso()
-		// + " codLinea: " + i.getCodLinea() + " Matriz proceso: "
-		// + i.getmProcesos());
-		// oo++;
-		// }
+		int oo = 0;
+		for (Items2 i : this.orderList2) {
+			System.out.println("indice: " + oo + " CodParam: "
+					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
+					+ " codLinea: " + i.getCodLinea() + " Matriz proceso: "
+					+ i.getmProcesos());
+			oo++;
+		}
 
-		generateCalendar(this.orderList2, diaInicio.getTime());
+		// generateCalendar(this.orderList2, diaInicio.getTime());
 	}
 
 	public boolean generateCalendar(ArrayList<Items2> orderList22, Date fInicio) {
