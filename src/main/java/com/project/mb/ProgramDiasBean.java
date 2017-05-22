@@ -24,10 +24,14 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import com.project.dao.DetaOrdenDao;
+import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.DistribDetaDao;
 import com.project.dao.DistribDetaDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
+import com.project.dao.ModelosDao;
+import com.project.dao.ModelosDaoImpl;
 import com.project.dao.ParamDao;
 import com.project.dao.ParamDaoImpl;
 import com.project.dao.ProcesoDao;
@@ -35,6 +39,7 @@ import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.entities.Lineasturno;
+import com.project.entities.Modelo;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
@@ -260,34 +265,56 @@ public class ProgramDiasBean implements Serializable {
 						for (Parametro j : pp1) {
 							Tablas tablas = new Tablas();
 
-							// AQUI LA CONSULTA DE SUMA
-							DistribDetaDao distribDao = new DistribDetaDaoImpl();
-							Object sumatoria = distribDao.getSumByProTip(
-									codOrden, j.getProceso().getProCodigo(), j
-											.getTipLinea().getCodigoTiplinea());
-							System.out
-									.println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
-											+ sumatoria.toString());
-							// ANTIGUO
-							// mProcesos = tablas.receivParamsPares(
-							// this.totalOrden, j.getStandar(),
-							// countLineas, this.nDias, cantLineas);
+							// CONSULTA DE MODELOS
+							ModelosDao modelosDao = new ModelosDaoImpl();
 
-							// NUEVO
-							mProcesos = tablas.receivParamsPares(
-									Integer.parseInt(sumatoria.toString()),
-									j.getStandar(), countLineas, this.nDias,
-									cantLineas);
+							List<Modelo> modelo = modelosDao
+									.findByDistrib(this.codOrden);
 
+							for (Modelo mo : modelo) {
+								DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+								Object detalle = detalleDao.sumByMod(
+										mo.getModCodigo(), this.codOrden);
+
+								System.out
+										.println("**Cantidades por modelos en el DETALLE**: "
+												+ detalle.toString());
+
+								// ANTIGUO CON SUMATORIA
+								// DistribDetaDao distribDao = new
+								// DistribDetaDaoImpl();
+								// Object sumatoria = distribDao.getSumByProTip(
+								// codOrden, j.getProceso().getProCodigo(), j
+								// .getTipLinea().getCodigoTiplinea());
+								// System.out
+								// .println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
+								// + sumatoria.toString());
+								// ANTIGUO
+								// mProcesos = tablas.receivParamsPares(
+								// this.totalOrden, j.getStandar(),
+								// countLineas, this.nDias, cantLineas);
+
+								// NUEVO
+								// COMENTARIO TEMPORAL
+								mProcesos = tablas.receivParamsPares(
+										Integer.parseInt(detalle.toString()),
+										j.getStandar(), countLineas,
+										this.nDias, cantLineas);
+							}
 							mAll.put(j.getProceso().getProCodigo(), mProcesos);
+
+							// COMENTARIO TEMPORAL
 
 							// ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
 							// SCHEDULE
+							// COMENTARIO TEMPORAL
 							Items2 orderitem2 = new Items2(j.getProceso()
 									.getProCodigo(), j.getTipLinea()
 									.getCodigoTiplinea(), j.getParamCodigo(),
 									mProcesos);
 							this.orderList2.add(orderitem2);
+							// COMENTARIO TEMPORAL
+
 						} // FIN SEGUNDO CICLO
 					} // FIN PRIMER CICLO
 

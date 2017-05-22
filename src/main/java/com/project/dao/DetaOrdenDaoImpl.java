@@ -239,4 +239,22 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		}
 		return listado;
 	}
+
+	@Override
+	public Object sumByMod(Integer codMod, Integer codOrden) {
+		Object listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select sum(dto.cantidad) from Detalleorden dto where  dto.ordenprod.ordenprodCodigo = "
+				+ codOrden + " and dto.modelo.modCodigo = " + codMod;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL DETAORDER: " + e.toString());
+		}
+		return listado;
+	}
 }
