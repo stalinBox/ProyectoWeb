@@ -231,93 +231,113 @@ public class ProgramDiasBean implements Serializable {
 											""));
 
 				} else {
-					// OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA TABLA
-					// LINEASTURNOS
-					ParamDao parametroDao = new ParamDaoImpl();
-					List<Parametro> param = parametroDao
-							.findByParamInLT(codOrden);
+					// CONSULTA DE MODELOS
+					ModelosDao modelosDao = new ModelosDaoImpl();
+					List<Modelo> modelo = modelosDao
+							.findByDistrib(this.codOrden);
+					Object detalle = null;
 
-					for (Parametro k : param) {
-						// OBTIENE LAS TUPLAS PARA LA CANTIDAD DE LINEAS
-						// PROGRAMADAS EN BASE AL CODIGO DE PARAMETROS
-						LineasTurnosDao ltDao = new LineasTurnosDaoImpl();
-						List<Lineasturno> lineastt = ltDao.findByParam(k
-								.getParamCodigo());
-						Integer cantLineas = lineastt.size();
-						Integer countLineas = null;
-						for (Mlineas codLineas : mlineas) {
-							for (Lineasturno i1 : lineastt) {
-								if (codLineas
-										.getCodLinea()
-										.toString()
-										.equals(i1.getLineasprod()
-												.getLineaproCodigo().toString())) {
+					for (Modelo mo : modelo) {
+						DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+						detalle = detalleDao.sumByMod(mo.getModCodigo(),
+								this.codOrden);
+						System.out
+								.println("**Cantidades por modelos en el DETALLE**: "
+										+ detalle.toString());
 
-									countLineas = Integer.parseInt(codLineas
-											.getCountLinea().toString());
+						// OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA TABLA
+						// LINEASTURNOS
+						ParamDao parametroDao = new ParamDaoImpl();
+						List<Parametro> param = parametroDao
+								.findByParamInLT(codOrden);
+
+						for (Parametro k : param) {
+							// OBTIENE LAS TUPLAS PARA LA CANTIDAD DE LINEAS
+							// PROGRAMADAS EN BASE AL CODIGO DE PARAMETROS
+							LineasTurnosDao ltDao = new LineasTurnosDaoImpl();
+							List<Lineasturno> lineastt = ltDao.findByParam(k
+									.getParamCodigo());
+
+							// TAMAÑO DE LAS LINEAS PARA SABER CUENTAS EXISTEN
+							Integer cantLineas = lineastt.size();
+
+							Integer countLineas = null;
+							for (Mlineas codLineas : mlineas) {
+								for (Lineasturno i1 : lineastt) {
+									if (codLineas
+											.getCodLinea()
+											.toString()
+											.equals(i1.getLineasprod()
+													.getLineaproCodigo()
+													.toString())) {
+
+										countLineas = Integer
+												.parseInt(codLineas
+														.getCountLinea()
+														.toString());
+									}
 								}
 							}
-						}
 
-						List<Parametro> pp1 = parametroDao.findbyCodParam2(
-								this.codOrden, k.getParamCodigo());
+							System.out.println("Variable  countLineas: "
+									+ countLineas);
+							List<Parametro> pp1 = parametroDao.findbyCodParam2(
+									this.codOrden, k.getParamCodigo());
 
-						for (Parametro j : pp1) {
-							Tablas tablas = new Tablas();
-
-							// CONSULTA DE MODELOS
-							ModelosDao modelosDao = new ModelosDaoImpl();
-
-							List<Modelo> modelo = modelosDao
-									.findByDistrib(this.codOrden);
-
-							for (Modelo mo : modelo) {
-								DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
-								Object detalle = detalleDao.sumByMod(
-										mo.getModCodigo(), this.codOrden);
-
-								System.out
-										.println("**Cantidades por modelos en el DETALLE**: "
-												+ detalle.toString());
+							for (Parametro j : pp1) {
+								Tablas tablas = new Tablas();
 
 								// ANTIGUO CON SUMATORIA
-								// DistribDetaDao distribDao = new
-								// DistribDetaDaoImpl();
-								// Object sumatoria = distribDao.getSumByProTip(
-								// codOrden, j.getProceso().getProCodigo(), j
-								// .getTipLinea().getCodigoTiplinea());
-								// System.out
-								// .println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
-								// + sumatoria.toString());
-								// ANTIGUO
-								// mProcesos = tablas.receivParamsPares(
-								// this.totalOrden, j.getStandar(),
-								// countLineas, this.nDias, cantLineas);
+								DistribDetaDao distribDao = new DistribDetaDaoImpl();
+								Object sumatoria = distribDao.getSumByProTip(
+										codOrden,
+										j.getProceso().getProCodigo(), j
+												.getTipLinea()
+												.getCodigoTiplinea(), mo
+												.getModCodigo());
 
-								// NUEVO
-								// COMENTARIO TEMPORAL
-								mProcesos = tablas.receivParamsPares(
-										Integer.parseInt(detalle.toString()),
-										j.getStandar(), countLineas,
-										this.nDias, cantLineas);
-							}
-							mAll.put(j.getProceso().getProCodigo(), mProcesos);
+								if (sumatoria != null) {
 
-							// COMENTARIO TEMPORAL
+									System.out
+											.println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
+													+ sumatoria.toString());
 
-							// ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
-							// SCHEDULE
-							// COMENTARIO TEMPORAL
-							Items2 orderitem2 = new Items2(j.getProceso()
-									.getProCodigo(), j.getTipLinea()
-									.getCodigoTiplinea(), j.getParamCodigo(),
-									mProcesos);
-							this.orderList2.add(orderitem2);
-							// COMENTARIO TEMPORAL
+									// ANTIGUO
+									// mProcesos = tablas.receivParamsPares(
+									// this.totalOrden, j.getStandar(),
+									// countLineas, this.nDias, cantLineas);
 
-						} // FIN SEGUNDO CICLO
-					} // FIN PRIMER CICLO
+									// NUEVO
+									// COMENTARIO TEMPORAL
+									mProcesos = tablas
+											.receivParamsPares(Integer
+													.parseInt(detalle
+															.toString()), j
+													.getStandar(), countLineas,
+													this.nDias, cantLineas);
+									// }
+									mAll.put(j.getProceso().getProCodigo(),
+											mProcesos);
 
+									// COMENTARIO TEMPORAL
+
+									// ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
+									// SCHEDULE
+									// COMENTARIO TEMPORAL
+									Items2 orderitem2 = new Items2(j
+											.getProceso().getProCodigo(), j
+											.getTipLinea().getCodigoTiplinea(),
+											j.getParamCodigo(), mProcesos);
+
+									this.orderList2.add(orderitem2);
+									// COMENTARIO TEMPORAL
+								} else {
+									continue;
+								}
+							} // FIN SEGUNDO CICLO
+						} // FIN PRIMER CICLO
+
+					}
 				}
 			}
 		}// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA

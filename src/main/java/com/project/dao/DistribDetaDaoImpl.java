@@ -140,7 +140,7 @@ public class DistribDetaDaoImpl implements DistribDetaDao {
 
 	@Override
 	public Object getSumByProTip(Integer codOrden, Integer codPro,
-			Integer codTLinea) {
+			Integer codTLinea, Integer codMod) {
 
 		Object listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -149,6 +149,8 @@ public class DistribDetaDaoImpl implements DistribDetaDao {
 				+ " ( select dto.detaordenCodigo from Detalleorden dto "
 				+ " where dto.ordenprod.ordenprodCodigo = "
 				+ codOrden
+				+ "and dto.modelo.modCodigo = "
+				+ codMod
 				+ ") and "
 				+ " dtt.proceso.proCodigo = "
 				+ codPro

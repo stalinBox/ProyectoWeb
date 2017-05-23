@@ -13,7 +13,7 @@ public interface DistribDetaDao {
 			Integer codPro, Integer codTLinea);
 
 	public Object getSumByProTip(Integer codOrden, Integer codPro,
-			Integer codTLinea);
+			Integer codTLinea, Integer codMod);
 
 	public boolean create(Distribdetalle distribDeta);
 
