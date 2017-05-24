@@ -8,14 +8,24 @@ public class Items2 implements Serializable {
 	private Integer codProceso;
 	private Integer codParam;
 	private Integer codLinea;
+	private Integer codMod;
 	private ArrayList<ArrayList<Object>> mProcesos;
 
 	public Items2(Integer codProceso, Integer codLinea, Integer codParam,
-			ArrayList<ArrayList<Object>> mProcesos) {
+			Integer codMod, ArrayList<ArrayList<Object>> mProcesos) {
 		this.codProceso = codProceso;
 		this.codLinea = codLinea;
 		this.codParam = codParam;
 		this.mProcesos = mProcesos;
+		this.codMod = codMod;
+	}
+
+	public Integer getCodMod() {
+		return codMod;
+	}
+
+	public void setCodMod(Integer codMod) {
+		this.codMod = codMod;
 	}
 
 	public Integer getCodLinea() {
