@@ -13,6 +13,8 @@ public interface ParamDao {
 
 	public List<Parametro> findByParamInLT(Integer codOrden);
 
+	public List<Parametro> findByParamInLT(Integer codOrden, Integer codPro);
+
 	public List<Parametro> findbyCodParam2(Integer codOrden, Integer codParam);
 
 	public List<Parametro> getProcesosbyOrden(Integer codOrden);

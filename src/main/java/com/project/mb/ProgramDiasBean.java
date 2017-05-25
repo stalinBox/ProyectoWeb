@@ -137,7 +137,6 @@ public class ProgramDiasBean implements Serializable {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public void btnProcesar() {
 		eventModel = new DefaultScheduleModel();
 
@@ -206,18 +205,18 @@ public class ProgramDiasBean implements Serializable {
 				});
 				// ORDENA LA VARIABLE "pro" DESCENDENTEMENTE
 				Collections.reverse(pro);
-
+				Items2 orderitem2 = new Items2();
+				Mlineas mmlineas = null;
 				// VARIABLE QUE RECOGE LOS TOTALES
-				// ArrayList<>
 				// EMPEZAR A TRABAJAR CON LOS CODIGOS ORDENADOS
 				Integer contGeneral = 0;
 				for (Proceso p : pro) {
-					System.out.println("Procesos invertidos desde el mayor: "
-							+ p.getProCodigo());
-					if (contGeneral != 0) {
-						System.out.println("Por todos los procesos");
-					} else {
-						System.out.println("Solo por troquelado");
+					if (p.getProCodigo() == 3) {
+						/**
+						 * SOLO POR TROQUELADO
+						 */
+						System.out.println("///CODIGO SOLO TROQ: "
+								+ p.getProCodigo());
 
 						// CONSULTAR LOS TOTALES A TRABAJAR
 						// CONSULTA DE MODELOS
@@ -230,39 +229,221 @@ public class ProgramDiasBean implements Serializable {
 							DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
 							detalle = detalleDao.sumByMod(mo.getModCodigo(),
 									this.codOrden);
-							System.out
-									.println("**Cantidades por modelos en el DETALLE**: "
-											+ detalle.toString());
+							// System.out
+							// .println("Cantidades por modelos en el DETALLE**: "
+							// + detalle.toString());
 						}
+
+						// OBTIENE LAS LINEAS POR PROCESO DE LA TABLA
+						// LINEASTURNOS
+
+						LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
+						List<Integer> lineasTurnos = lineasTurnosDao
+								.getLineasByProceso(p.getProCodigo(),
+										this.codOrden);
+
+						// RECORRE LA VARIABLE lineasTurnos OBTENIENDO LA
+						// CANTIDAD
+						// DE TURNOS ASIGNADO
+						for (Integer lt : lineasTurnos) {
+							// GUARDA EL CODIGO DE LINEA Y LA CANTIDAD DE TURNOS
+							Object countLinea = lineasTurnosDao
+									.getCountTurnosByLineas(lt, this.codOrden,
+											p.getProCodigo());
+
+							// GUARDA LA LINEA Y NUMERO DE TURNOS POR LINEA
+							mmlineas = new Mlineas(lt, countLinea);
+							mlineas.add(mmlineas);
+						}
+
+						// PRUEBAS VISUALIZACION
+						for (Mlineas iii : mlineas) {
+							System.out.println(" codLinea: "
+									+ iii.getCodLinea() + " CountTurnos: "
+									+ iii.getCountLinea());
+						}
+						// FIN PRUEBAS VISUALIZACION
+
+						if (mlineas.isEmpty()) {
+							FacesContext
+									.getCurrentInstance()
+									.addMessage(
+											null,
+											new FacesMessage(
+													"No hay lineas para generar la distribucion por dias",
+													" "));
+
+						} else {
+							// CONSULTA DE MODELOS
+							for (Modelo mo : modelo) {
+								DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+								detalle = detalleDao.sumByMod(
+										mo.getModCodigo(), this.codOrden);
+								System.out
+										.println("**Cantidades por modelos en el DETALLE**: "
+												+ detalle.toString());
+
+								// OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA
+								// TABLA LINEASTURNOS
+								ParamDao parametroDao = new ParamDaoImpl();
+								List<Parametro> param = parametroDao
+										.findByParamInLT(codOrden,
+												p.getProCodigo());
+
+								for (Parametro k : param) {
+									// OBTIENE LAS TUPLAS PARA LA CANTIDAD DE
+									// LINEAS
+									// PROGRAMADAS EN BASE AL CODIGO DE
+									// PARAMETROS
+									LineasTurnosDao ltDao = new LineasTurnosDaoImpl();
+									List<Lineasturno> lineastt = ltDao
+											.findByParam(k.getParamCodigo());
+
+									// TAMAÑO DE LAS LINEAS PARA SABER CUENTAS
+									// EXISTEN
+									Integer cantLineas = lineastt.size();
+
+									Integer countLineas = null;
+									for (Mlineas codLineas : mlineas) {
+										for (Lineasturno i1 : lineastt) {
+											if (codLineas
+													.getCodLinea()
+													.toString()
+													.equals(i1
+															.getLineasprod()
+															.getLineaproCodigo()
+															.toString())) {
+
+												countLineas = Integer
+														.parseInt(codLineas
+																.getCountLinea()
+																.toString());
+											}
+										}
+									}
+
+									System.out
+											.println("Variable  countLineas: "
+													+ countLineas);
+									List<Parametro> pp1 = parametroDao
+											.findbyCodParam2(this.codOrden,
+													k.getParamCodigo());
+
+									for (Parametro j : pp1) {
+										Tablas tablas = new Tablas();
+
+										// ANTIGUO CON SUMATORIA
+										DistribDetaDao distribDao = new DistribDetaDaoImpl();
+										Object sumatoria = distribDao
+												.getSumByProTip(codOrden, j
+														.getProceso()
+														.getProCodigo(), j
+														.getTipLinea()
+														.getCodigoTiplinea(),
+														mo.getModCodigo());
+
+										if (sumatoria != null) {
+
+											System.out
+													.println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
+															+ sumatoria
+																	.toString());
+
+											// NUEVO
+											// COMENTARIO TEMPORAL
+											mProcesos = tablas
+													.receivParamsPares(
+															Integer.parseInt(sumatoria
+																	.toString()),
+															j.getStandar(),
+															countLineas,
+															this.nDias,
+															cantLineas);
+
+											mAll.put(j.getProceso()
+													.getProCodigo(), mProcesos);
+
+											// COMENTARIO TEMPORAL
+
+											// ARMA EL OBJETO PARA SER
+											// INTRODUCIDO EN EL
+											// SCHEDULE
+											// COMENTARIO TEMPORAL
+											orderitem2 = new Items2(j
+													.getProceso()
+													.getProCodigo(), j
+													.getTipLinea()
+													.getCodigoTiplinea(),
+													j.getParamCodigo(),
+													mo.getModCodigo(),
+													mProcesos);
+
+											this.orderList2.add(orderitem2);
+
+										} else {
+											continue;
+										} // FIN ELSE CONTINUE
+									} // FIN ULTIMO CICLO POR
+								} // FIN SEGUNDO CICLO
+							}// FIN PRIMER CICLO
+
+						}// FIN ELSE MLINEAS EMPTY()
+
+					} else {
+						/**
+						 * RESTO DE PROCESOS
+						 */
+						// AUN NOOOOOOOOOOOOOOOO
+						System.out.println("///RESTO DE CODIGOS: "
+								+ p.getProCodigo());
+						int increment = 0;
+						if (this.orderList2.isEmpty()) {
+							System.out.println(" NO hay nada en troquelado");
+						} else {
+							System.out.println("Sumar el otro array");
+							for (Items2 i : this.orderList2) {
+								// VISuALIZACION
+								System.out.println("indice: " + increment
+										+ " CodParam: " + i.getCodParam()
+										+ " CodProceso: " + i.getCodProceso()
+										+ " codLinea: " + i.getCodLinea()
+										+ " codModelo: " + i.getCodMod()
+										+ " Matriz proceso: "
+										+ i.getmProcesos());
+								// FIN VISuALIZACION
+								increment++;
+							}
+						}
+
 					} // FIN ELSE
 					contGeneral++;
 				}
 				// for (Proceso p : pro) {
-				// // CONSULTA DE MODELOS DE DETALLE ORDEN
+				// CONSULTA DE MODELOS DE DETALLE ORDEN
 				// ModelosDao modelosDAO = new ModelosDaoImpl();
 				// List<Modelo> models = modelosDAO
 				// .findByDistrib(this.codOrden);
 				//
-				// // OBTIENE LAS LINEAS POR PROCESO DE LA TABLA LINEASTURNOS
+				// OBTIENE LAS LINEAS POR PROCESO DE LA TABLA LINEASTURNOS
 				// LineasTurnosDao lineasTurnosDao = new LineasTurnosDaoImpl();
 				// List<Integer> lineasTurnos = lineasTurnosDao
 				// .getLineasByProceso(p.getProCodigo(), this.codOrden);
 				//
-				// // RECORRE LA VARIABLE lineasTurnos OBTENIENDO LA CANTIDAD
-				// // DE TURNOS ASIGNADO
+				// RECORRE LA VARIABLE lineasTurnos OBTENIENDO LA CANTIDAD
+				// DE TURNOS ASIGNADO
 				// for (Integer lt : lineasTurnos) {
 				// // GUARDA EL CODIGO DE LINEA Y LA CANTIDAD DE TURNOS
 				// Object countLinea = lineasTurnosDao
 				// .getCountTurnosByLineas(lt, this.codOrden);
 				//
-				// // GUARDA LA LINEA Y NUMERO DE TURNOS POR LINEA
+				// GUARDA LA LINEA Y NUMERO DE TURNOS POR LINEA
 				// Mlineas mmlineas = new Mlineas(lt, countLinea);
 				// mlineas.add(mmlineas);
 				// }
 				// contGeneral++;
 				// } // FIN CICLO 1er. FOR
 				//
-				// // // PRUEBAS VISUALIZACION
+				// PRUEBAS VISUALIZACION
 				// for (Mlineas iii : mlineas) {
 				// System.out.println(" codLinea: " + iii.getCodLinea()
 				// + " CountTurnos: " + iii.getCountLinea());
@@ -280,7 +461,7 @@ public class ProgramDiasBean implements Serializable {
 				// ""));
 				//
 				// } else {
-				// // CONSULTA DE MODELOS
+				// CONSULTA DE MODELOS
 				// ModelosDao modelosDao = new ModelosDaoImpl();
 				// List<Modelo> modelo = modelosDao
 				// .findByDistrib(this.codOrden);
@@ -294,20 +475,20 @@ public class ProgramDiasBean implements Serializable {
 				// .println("**Cantidades por modelos en el DETALLE**: "
 				// + detalle.toString());
 				//
-				// // OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA TABLA
-				// // LINEASTURNOS
+				// OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA TABLA
+				// LINEASTURNOS
 				// ParamDao parametroDao = new ParamDaoImpl();
 				// List<Parametro> param = parametroDao
 				// .findByParamInLT(codOrden);
 				//
 				// for (Parametro k : param) {
-				// // OBTIENE LAS TUPLAS PARA LA CANTIDAD DE LINEAS
-				// // PROGRAMADAS EN BASE AL CODIGO DE PARAMETROS
+				// OBTIENE LAS TUPLAS PARA LA CANTIDAD DE LINEAS
+				// PROGRAMADAS EN BASE AL CODIGO DE PARAMETROS
 				// LineasTurnosDao ltDao = new LineasTurnosDaoImpl();
 				// List<Lineasturno> lineastt = ltDao.findByParam(k
 				// .getParamCodigo());
 				//
-				// // TAMAÑO DE LAS LINEAS PARA SABER CUENTAS EXISTEN
+				// TAMAÑO DE LAS LINEAS PARA SABER CUENTAS EXISTEN
 				// Integer cantLineas = lineastt.size();
 				//
 				// Integer countLineas = null;
@@ -336,7 +517,7 @@ public class ProgramDiasBean implements Serializable {
 				// for (Parametro j : pp1) {
 				// Tablas tablas = new Tablas();
 				//
-				// // ANTIGUO CON SUMATORIA
+				// ANTIGUO CON SUMATORIA
 				// DistribDetaDao distribDao = new DistribDetaDaoImpl();
 				// Object sumatoria = distribDao.getSumByProTip(
 				// codOrden,
@@ -351,8 +532,8 @@ public class ProgramDiasBean implements Serializable {
 				// .println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
 				// + sumatoria.toString());
 				//
-				// // NUEVO
-				// // COMENTARIO TEMPORAL
+				// NUEVO
+				// COMENTARIO TEMPORAL
 				// mProcesos = tablas.receivParamsPares(
 				// Integer.parseInt(sumatoria
 				// .toString()), j
@@ -362,11 +543,11 @@ public class ProgramDiasBean implements Serializable {
 				// mAll.put(j.getProceso().getProCodigo(),
 				// mProcesos);
 				//
-				// // COMENTARIO TEMPORAL
+				// COMENTARIO TEMPORAL
 				//
-				// // ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
-				// // SCHEDULE
-				// // COMENTARIO TEMPORAL
+				// ARMA EL OBJETO PARA SER INTRODUCIDO EN EL
+				// SCHEDULE
+				// COMENTARIO TEMPORAL
 				// Items2 orderitem2 = new Items2(j
 				// .getProceso().getProCodigo(), j
 				// .getTipLinea().getCodigoTiplinea(),

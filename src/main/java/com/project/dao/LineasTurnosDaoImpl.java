@@ -295,4 +295,28 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 		}
 		return listado;
 	}
+
+	@Override
+	public Object getCountTurnosByLineas(Integer lineaCod, Integer codOrden,
+			Integer codPro) {
+		Object listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select count(lt.lineasprod.lineaproCodigo)from Lineasturno lt "
+				+ "inner join lt.parametro pa where lt.lineasprod.lineaproCodigo = "
+				+ lineaCod
+				+ " and pa.ordenprod.ordenprodCodigo = "
+				+ codOrden
+				+ " and pa.proceso.proCodigo = " + codPro;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETCOUNTTURNOSBYLINEAS: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

@@ -29,6 +29,9 @@ public interface LineasTurnosDao {
 
 	public Object getCountTurnosByLineas(Integer lineaCod, Integer codOrden);
 
+	public Object getCountTurnosByLineas(Integer lineaCod, Integer codOrden,
+			Integer codPro);
+
 	public boolean create(Lineasturno lienasTurnos);
 
 	public boolean update(Lineasturno lienasTurnos);

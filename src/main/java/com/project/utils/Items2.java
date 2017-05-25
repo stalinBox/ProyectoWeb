@@ -20,6 +20,9 @@ public class Items2 implements Serializable {
 		this.codMod = codMod;
 	}
 
+	public Items2() {
+	}
+
 	public Integer getCodMod() {
 		return codMod;
 	}
