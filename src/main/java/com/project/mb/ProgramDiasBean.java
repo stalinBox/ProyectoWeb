@@ -38,11 +38,14 @@ import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
+import com.project.dao.TipoLineaDao;
+import com.project.dao.TipoLineaDaoImpl;
 import com.project.entities.Lineasturno;
 import com.project.entities.Modelo;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
+import com.project.entities.TipLinea;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.Items2;
 import com.project.utils.MyUtil;
@@ -393,30 +396,93 @@ public class ProgramDiasBean implements Serializable {
 						/**
 						 * RESTO DE PROCESOS
 						 */
-						// AUN NOOOOOOOOOOOOOOOO
+						String strTipLinea = null;
+						Integer cc2 = 0;
+						// ARRAY
+						ArrayList<ArrayList<Integer>> segundaMatriz = new ArrayList<ArrayList<Integer>>();
 						System.out.println("///RESTO DE CODIGOS: "
 								+ p.getProCodigo());
 						int increment = 0;
 						if (this.orderList2.isEmpty()) {
 							System.out.println(" NO hay nada en troquelado");
 						} else {
-							System.out.println("Sumar el otro array");
+
 							for (Items2 i : this.orderList2) {
 								// VISuALIZACION
 								System.out.println("indice: " + increment
 										+ " CodParam: " + i.getCodParam()
 										+ " CodProceso: " + i.getCodProceso()
-										+ " codLinea: " + i.getCodLinea()
+										+ " codTipLinea: " + i.getCodLinea()
 										+ " codModelo: " + i.getCodMod()
 										+ " Matriz proceso: "
 										+ i.getmProcesos());
 								// FIN VISuALIZACION
-								increment++;
-							}
-						}
 
-					} // FIN ELSE
+								// DEVUELVE LOS TIPOS DE LINEAS PARA COMPARAR
+								TipoLineaDao tplDao = new TipoLineaDaoImpl();
+								String tpl = tplDao.findByModAndPro(
+										i.getCodMod(), p.getProCodigo());
+
+								// GENERACION DE UNA MATRIZ BASE
+								if (strTipLinea == null) {
+
+									segundaMatriz.add(new ArrayList<Integer>());
+									// segundaMatriz.get(cc2).add(1);
+									strTipLinea = tpl;
+								} else if (strTipLinea.equals(tpl)) {
+									// segundaMatriz.get(cc2).add(0);
+									strTipLinea = tpl;
+								} else {
+
+									cc2++;
+									segundaMatriz.add(new ArrayList<Integer>());
+									// segundaMatriz.get(cc2).add(11);
+									strTipLinea = tpl;
+								}
+								// FIN GENERACION DE UNA MATRIZ BASE
+								increment++;
+
+							}
+
+							System.out.println("Segunda matriz BASE: "
+									+ segundaMatriz);
+
+							for (Items2 i : this.orderList2) {
+								ArrayList<ArrayList<Object>> matriz1 = i
+										.getmProcesos();
+								System.out.println("matriz 1: " + matriz1);
+							}
+
+							int max = 0;
+							for (Items2 i : this.orderList2) {
+								if (max > i.getmProcesos().get(0).size()) {
+									max = i.getmProcesos().get(0).size();
+								}
+							}
+
+							int cc = 0;
+							for (int n = 0; n < this.orderList2.size(); n++) {
+								for (int m = 0; m < this.orderList2.size(); m++) {
+									if (this.orderList2.get(m).getmProcesos()
+											.get(0).size() > cc) {
+
+										System.out.println("VALORES: "
+												+ this.orderList2.get(m)
+														.getmProcesos().get(0)
+														.get(cc));
+									} else {
+										continue;
+									}
+								}
+								System.out.println("Otra Columna");
+								cc++;
+							}
+
+						} // 2do. FIN ELSE
+
+					} // 1er. FIN ELSE
 					contGeneral++;
+
 				}
 				// for (Proceso p : pro) {
 				// CONSULTA DE MODELOS DE DETALLE ORDEN

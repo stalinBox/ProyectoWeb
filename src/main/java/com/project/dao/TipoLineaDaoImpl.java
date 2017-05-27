@@ -173,4 +173,25 @@ public class TipoLineaDaoImpl implements TipoLineaDao {
 		}
 		return listado;
 	}
+
+	@Override
+	public String findByModAndPro(Integer codMod, Integer codPro) {
+		String listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "select  tpl.tipolinea from TipLinea tpl where tpl.codigoTiplinea in "
+				+ " ( select dtt.tipLinea.codigoTiplinea "
+				+ " from Distribdetalle dtt where dtt.detalleorden.modelo.modCodigo = "
+				+ codMod + " and dtt.proceso.proCodigo = " + codPro + ")";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (String) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL TIPO DE LINEA: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

@@ -107,4 +107,21 @@ public class ModelosDaoImpl implements ModelosDao {
 		}
 		return listado;
 	}
+
+	@Override
+	public List<Modelo> findByModelByFindTipLinea(Integer codMod) {
+		List<Modelo> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Modelo order by modNombre";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLMODELOS: " + e.toString());
+		}
+		return listado;
+	}
 }
