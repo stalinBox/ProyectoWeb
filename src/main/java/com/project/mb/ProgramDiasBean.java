@@ -402,6 +402,7 @@ public class ProgramDiasBean implements Serializable {
 						// ARRAY
 						ArrayList<ArrayList<Integer>> segundaMatriz = new ArrayList<ArrayList<Integer>>();
 						ArrayList<ArrayList<Integer>> terceraMatriz = new ArrayList<ArrayList<Integer>>();
+
 						System.out.println("///RESTO DE CODIGOS: "
 								+ p.getProCodigo());
 						int increment = 0;
@@ -426,9 +427,12 @@ public class ProgramDiasBean implements Serializable {
 								String tpl = tplDao.findByModAndPro(
 										i.getCodMod(), p.getProCodigo());
 
-								// GENERACION DE UNA MATRIZ BASE
-								// COMPARANDO TIPOS DE LINEAS SEGUN EL PROCESO Y
-								// EL CODIGO DE MODELO
+								/**
+								 * GENERACION DE UNA MATRIZ BASE COMPARANDO
+								 * TIPOS DE LINEAS SEGUN EL PROCESO Y EL CODIGO
+								 * DE MODELO RECOGE TODOS LOS INDICES DEL OBJETO
+								 * RECORRIDO
+								 */
 								if (strTipLinea == null) {
 									segundaMatriz.add(new ArrayList<Integer>());
 									segundaMatriz.get(cc2).add(increment);
@@ -444,36 +448,47 @@ public class ProgramDiasBean implements Serializable {
 								}
 								// FIN GENERACION DE UNA MATRIZ BASE
 								increment++;
+							}// FIN CICLO FOR
 
-							}
 							// PRUEBAS DE ACTUALIZACION DE CAMPO
 							System.out.println("Segunda matriz BASE: "
 									+ segundaMatriz);
-							// System.out.println("actualizacion");
-							// segundaMatriz.get(0).set(0, 01);
+
+							// COPIAR LA MATRIZ ORIGINAL
+							int s = 0;
+							for (ArrayList<Integer> i : segundaMatriz) {
+								terceraMatriz.add(new ArrayList<Integer>());
+								terceraMatriz.get(s).addAll(i);
+								s++;
+							}
+							// LIMPIAR LA SEGUNDA MATRIZ
+							for (int i = 0; i < terceraMatriz.size(); i++) {
+								terceraMatriz.get(i).clear();
+							}
+							System.out.println("Segunda Matriz: "
+									+ segundaMatriz);
+							System.out.println("Tercera Matriz: "
+									+ terceraMatriz);
 							// FIN PRUEBAS DE ACTUALIZACION DE CAMPO
 
 							// PRUEBAS VISUALIZACION
-							for (Items2 i : this.orderList2) {
-								ArrayList<ArrayList<Object>> matriz1 = i
-										.getmProcesos();
-								System.out.println("matriz 1: " + matriz1);
-							}// FIN PRUEBAS VISUALIZACION
-
-							terceraMatriz = segundaMatriz;
+							// for (Items2 i : this.orderList2) {
+							// ArrayList<ArrayList<Object>> matriz1 = i
+							// .getmProcesos();
+							// System.out.println("matriz 1: " + matriz1);
+							// }// FIN PRUEBAS VISUALIZACION
 
 							// RECORRER EL OBJETO DE LAS POSICIONES CON CICLO
 							// FOR
+							// for (int i = 0; i < segundaMatriz.size(); i++) {
+							// for (int j = 0; j < segundaMatriz.get(i).size();
+							// j++) {
+							// System.out.println("Contenido: "
+							// + segundaMatriz.get(i).get(j));
+							// }
+							// }
 
-							for (int i = 0; i < segundaMatriz.size(); i++) {
-								for (int j = 0; j < segundaMatriz.get(i).size(); j++) {
-									System.out.println("Contenido: "
-											+ segundaMatriz.get(i).get(j));
-
-								}
-							}
-
-							// OBTENER EL TAMAÑO MAXIMO DE MATRICES 
+							// OBTENER EL TAMAÑO MAXIMO DE MATRICES
 							for (Items2 i : this.orderList2) {
 								if (i.getmProcesos().get(0).size() >= max) {
 									max = i.getmProcesos().get(0).size();
@@ -483,10 +498,46 @@ public class ProgramDiasBean implements Serializable {
 							// RECORRER LOS VALORES DEL OBJETO
 							int cc = 0;
 							for (int n = 0; n < max; n++) {
+								int acum = 0;
+								int acum2 = 0;
 								for (int m = 0; m < this.orderList2.size(); m++) {
 									if (this.orderList2.get(m).getmProcesos()
 											.get(0).size() > cc) {
-
+										if (m != 3) {
+											System.out
+													.println("acumular1: "
+															+ Integer
+																	.parseInt(this.orderList2
+																			.get(m)
+																			.getmProcesos()
+																			.get(0)
+																			.get(cc)
+																			.toString()));
+											// acum += Integer
+											// .parseInt(this.orderList2
+											// .get(m)
+											// .getmProcesos()
+											// .get(0).get(cc)
+											// .toString());
+											// terceraMatriz.get(0).add(acum);
+										} else {
+											System.out
+													.println("acumular2: "
+															+ Integer
+																	.parseInt(this.orderList2
+																			.get(m)
+																			.getmProcesos()
+																			.get(0)
+																			.get(cc)
+																			.toString()));
+											// acum2 += Integer
+											// .parseInt(this.orderList2
+											// .get(m)
+											// .getmProcesos()
+											// .get(0).get(cc)
+											// .toString());
+											// terceraMatriz.get(1).add(acum2);
+										}
 										System.out.println("VALORES: "
 												+ this.orderList2.get(m)
 														.getmProcesos().get(0)
@@ -496,8 +547,12 @@ public class ProgramDiasBean implements Serializable {
 										continue;
 									}
 								}
+
 								cc++;
-							}
+							}// FIN CICLO FOR
+
+							//
+							//
 						} // 2do. FIN ELSE
 					} // 1er. FIN ELSE
 					contGeneral++;
