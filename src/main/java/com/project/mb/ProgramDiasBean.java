@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,6 +47,7 @@ import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
 import com.project.entities.TipLinea;
+import com.project.utils.CheckIn2;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.Items2;
 import com.project.utils.MyUtil;
@@ -470,6 +472,18 @@ public class ProgramDiasBean implements Serializable {
 							System.out.println("Tercera Matriz: "
 									+ terceraMatriz);
 							// FIN PRUEBAS DE ACTUALIZACION DE CAMPO
+							int a = 0;
+
+							for (int m = 0; m < 4; m++) {
+								for (ArrayList<Integer> i : segundaMatriz) {
+									boolean flat;
+									flat = CheckIn2.estaEnArray(i, m);
+									System.out.println("::**:: " + flat);
+									if (flat == true) {
+										break;
+									}
+								}
+							}
 
 							// PRUEBAS VISUALIZACION
 							// for (Items2 i : this.orderList2) {
@@ -478,13 +492,16 @@ public class ProgramDiasBean implements Serializable {
 							// System.out.println("matriz 1: " + matriz1);
 							// }// FIN PRUEBAS VISUALIZACION
 
-							// RECORRER EL OBJETO DE LAS POSICIONES CON CICLO
-							// FOR
-							// for (int i = 0; i < segundaMatriz.size(); i++) {
-							// for (int j = 0; j < segundaMatriz.get(i).size();
-							// j++) {
-							// System.out.println("Contenido: "
-							// + segundaMatriz.get(i).get(j));
+							// VERFICAR SI CONTIENE EL NUMERO EN EL ARRAY
+							// SEGUNDAMATRIZ
+
+							// for (ArrayList<Integer> i : segundaMatriz) {
+							// if (i.contains(0)) {
+							// System.out.println("vector i: " + i);
+							// System.out.println("contiene el: " + 0);
+							// } else {
+							// System.out.println("vector i: " + i);
+							// System.out.println("no lo contiene");
 							// }
 							// }
 
@@ -497,64 +514,71 @@ public class ProgramDiasBean implements Serializable {
 
 							// RECORRER LOS VALORES DEL OBJETO
 							int cc = 0;
+							int acum = 0;
 							for (int n = 0; n < max; n++) {
-								int acum = 0;
+								acum = 0;
 								int acum2 = 0;
+								int cc1 = 0;
+								System.out.println("------");
 								for (int m = 0; m < this.orderList2.size(); m++) {
-									if (this.orderList2.get(m).getmProcesos()
-											.get(0).size() > cc) {
-										if (m != 3) {
-											System.out
-													.println("acumular1: "
-															+ Integer
-																	.parseInt(this.orderList2
-																			.get(m)
-																			.getmProcesos()
-																			.get(0)
-																			.get(cc)
-																			.toString()));
-											// acum += Integer
-											// .parseInt(this.orderList2
-											// .get(m)
-											// .getmProcesos()
-											// .get(0).get(cc)
-											// .toString());
-											// terceraMatriz.get(0).add(acum);
+									// PRUEBA
+									// for (ArrayList<Integer> i :
+									// segundaMatriz) {
+									// boolean flat;
+									// flat = CheckIn2.estaEnArray(i, m);
+									// System.out.println(":: " + flat);
+									// }
+									// FIN PRUEBA
+
+									// System.out.println("var m: " + m);
+									if (m != 3) {
+										if (this.orderList2.get(m)
+												.getmProcesos().get(0).size() > cc) {
+
+											acum += Integer
+													.parseInt(this.orderList2
+															.get(m)
+															.getmProcesos()
+															.get(0).get(cc)
+															.toString());
+											cc1++;
 										} else {
-											System.out
-													.println("acumular2: "
-															+ Integer
-																	.parseInt(this.orderList2
-																			.get(m)
-																			.getmProcesos()
-																			.get(0)
-																			.get(cc)
-																			.toString()));
-											// acum2 += Integer
-											// .parseInt(this.orderList2
-											// .get(m)
-											// .getmProcesos()
-											// .get(0).get(cc)
-											// .toString());
-											// terceraMatriz.get(1).add(acum2);
+											cc1++;
+											continue;
+
 										}
-										System.out.println("VALORES: "
-												+ this.orderList2.get(m)
-														.getmProcesos().get(0)
-														.get(cc));
-
 									} else {
-										continue;
-									}
-								}
+										if (this.orderList2.get(m)
+												.getmProcesos().get(0).size() > cc) {
 
+											acum2 += Integer
+													.parseInt(this.orderList2
+															.get(m)
+															.getmProcesos()
+															.get(0).get(cc)
+															.toString());
+											cc1++;
+										} else {
+											cc1++;
+											continue;
+
+										}
+									}
+
+								} // FIN CICLO FOR
+									// System.out.println("acum: " + acum);
+								terceraMatriz.get(0).add(acum);
+								// System.out.println("acum2: " + acum2);
+								terceraMatriz.get(1).add(acum2);
 								cc++;
 							}// FIN CICLO FOR
 
 							//
 							//
 						} // 2do. FIN ELSE
+						System.out.println("Resultante: " + terceraMatriz);
 					} // 1er. FIN ELSE
+
 					contGeneral++;
 				}
 				// for (Proceso p : pro) {
