@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -39,17 +38,14 @@ import com.project.dao.ProcesoDao;
 import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
-import com.project.dao.TipoLineaDao;
-import com.project.dao.TipoLineaDaoImpl;
 import com.project.entities.Lineasturno;
 import com.project.entities.Modelo;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
-import com.project.entities.TipLinea;
-import com.project.utils.CheckIn2;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.Items2;
+import com.project.utils.Items3;
 import com.project.utils.MyUtil;
 import com.project.utils.NdiasLab;
 import com.project.utils.ScheduleDays;
@@ -406,12 +402,12 @@ public class ProgramDiasBean implements Serializable {
 		boolean flat = false;
 		Calendar tConvertCal = null;
 		Calendar tConvertCal2 = null;
-
 		Object dhora = null;
 		tConvertCal = days.DateToCalendar(fInicio);
-		// tConvertCal2 = days.DateToCalendar(fInicio);
 		Object lastElem = null;
 
+		ArrayList<Items3> orderListFinal = new ArrayList<Items3>();
+		Items3 orderitemFinal = new Items3();
 		// ORDENA POR CODIGO PROCESO
 		// LOS PROCESOS SIEMPRE DEBEN ESTAR ORDENADOS DESDE EL MENOR AL MAYOR
 		Collections.sort(orderList22, new Comparator<Items2>() {
@@ -425,119 +421,234 @@ public class ProgramDiasBean implements Serializable {
 		Collections.reverse(orderList22);
 
 		int j = 0;
+		int codProceso = 0;
+		int codTpLinea = 0;
 		// IMPRIME LA MATRIZ A DIBUJARSE
 		for (Items2 i : orderList22) {
-			System.out.println("indice: " + j + " CodParam: " + i.getCodParam()
+			System.out.println("*1*: indice: " + j + " CodModelo: "
+					+ i.getCodMod() + " CodParam: " + i.getCodParam()
 					+ " CodProceso: " + i.getCodProceso() + " CodLinea: "
 					+ i.getCodLinea() + " Matriz proceso: " + i.getmProcesos());
+
+			if (j == 0) {
+				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
+						i.getCodParam(), i.getCodMod(), i.getmProcesos());
+				orderListFinal.add(orderitemFinal);
+				System.out.println("Añadido");
+				codProceso = i.getCodProceso();
+				codTpLinea = i.getCodLinea();
+			} else if (i.getCodProceso().equals(codProceso)
+					&& i.getCodLinea().equals(codTpLinea)) {
+				System.out.println("Procesos Iguales: " + codProceso);
+				System.out.println("Tipo Lineas Iguales: " + codTpLinea);
+
+				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
+						i.getCodParam(), i.getCodMod(), i.getmProcesos());
+
+				orderListFinal.add(orderitemFinal);
+				codProceso = i.getCodProceso();
+				codTpLinea = i.getCodLinea();
+			} else {
+				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
+						i.getCodParam(), i.getCodMod(), i.getmProcesos());
+				orderListFinal.add(orderitemFinal);
+				System.out.println("Añadido");
+				codProceso = i.getCodProceso();
+				codTpLinea = i.getCodLinea();
+			}
 			j++;
 		}
 
-		int c = 0;
-		int cpro = 0;
-		int lpro = 0;
-		int acum = 0;
-		int acum2 = 0;
-		for (Items2 o : orderList22) {
-			ArrayList<ArrayList<Object>> a = o.getmProcesos();
-			lastElem = a.get(1).get(a.get(1).size() - 1);
+		Integer items3 = 0;
+		for (Items3 i : orderListFinal) {
+			System.out.println("*2*: indice: " + items3 + " CodModelo: "
+					+ i.getCodMod() + " CodParam: " + i.getCodParam()
+					+ " CodProceso: " + i.getCodProceso() + " CodLinea: "
+					+ i.getCodLinea() + " Matriz proceso: " + i.getmProcesos());
+			items3++;
+		}
 
-			// ENVIAR PARA DIBUJAR EN EL SCHEDULE
-			if (c == 0) {
-				// PRIMER CICLO PROCESO
-				for (int i = 0; i < a.get(0).size(); i++) {
-					withOutHextras(
-							Integer.parseInt(a.get(0).get(i).toString()),
-							tConvertCal, o.getCodProceso(),
-							Double.parseDouble(a.get(1).get(i).toString()),
-							o.getCodParam(), o.getCodLinea());
-				}
-
-				System.out.println("Matriz: " + o.getmProcesos().get(0));
-
-				for (Object iii : o.getmProcesos().get(0)) {
-					acum += Integer.parseInt(iii.toString());
-				}
-				cpro = o.getCodProceso();
-				lpro = o.getCodLinea();
-				System.out.println("***cod Proceso: " + cpro);
-				System.out.println("***cod Linea: " + lpro);
-				System.out.println("***suma total de pares: " + acum);
-				System.out.println("------");
-
-			} else if (cpro == o.getCodProceso()) {
-				// PROCESOS A REPETIR
-				System.out.println("Matriz: " + o.getmProcesos().get(0));
-				acum2 = 0;
-				for (Object iii : o.getmProcesos().get(0)) {
-					acum2 += Integer.parseInt(iii.toString());
-				}
-
-				System.out.println("acum1: " + acum);
-				System.out.println("acum2: " + acum2);
-
-				if (lpro != o.getCodLinea()) {
-					// NO ES IGUAL
-					tConvertCal = days.DateToCalendar(fInicio);
-					for (int i = 0; i < a.get(0).size(); i++) {
-						withOutHextras(
-								Integer.parseInt(a.get(0).get(i).toString()),
-								tConvertCal, o.getCodProceso(),
-								Double.parseDouble(a.get(1).get(i).toString()),
-								o.getCodParam(), o.getCodLinea());
-					}
-
-					cpro = o.getCodProceso();
-					lpro = o.getCodLinea();
-					System.out.println("***cod Proceso: " + cpro);
-					System.out.println("***cod Linea: " + lpro);
-					System.out.println("***suma total de pares: " + acum);
-					System.out.println("------");
-
-				} else {
-					// ES IGUAL
-					tConvertCal = days.DateToCalendar(fInicio);
-					tConvertCal = days.nextDay(tConvertCal);
-					for (int i = 0; i < a.get(0).size(); i++) {
-						withOutHextras(
-								Integer.parseInt(a.get(0).get(i).toString()),
-								tConvertCal, o.getCodProceso(),
-								Double.parseDouble(a.get(1).get(i).toString()),
-								o.getCodParam(), o.getCodLinea());
-					}
-					System.out.println("Matriz: " + o.getmProcesos().get(0));
-					acum = 0;
-					for (Object iii : o.getmProcesos().get(0)) {
-						acum += Integer.parseInt(iii.toString());
-					}
-					cpro = o.getCodProceso();
-					lpro = o.getCodLinea();
-					System.out.println("***cod Proceso: " + cpro);
-					System.out.println("***cod Linea: " + lpro);
-					System.out.println("***suma total de pares: " + acum);
-					System.out.println("------");
-				}
-
-			} else {
-				// PROCESOS DIFERENTES
-				// System.out.println("Procesos diferentes: "
-				// + tConvertCal.getTime());
-				// System.out.println(c + " - Var a: " + a);
-				//
-				// tConvertCal = days.DateToCalendar(fInicio);
-				// tConvertCal = days.nextDay(tConvertCal);
-				// for (int i = 0; i < a.get(0).size(); i++) {
-				// withOutHextras(
-				// Integer.parseInt(a.get(0).get(i).toString()),
-				// tConvertCal, o.getCodProceso(),
-				// Double.parseDouble(a.get(1).get(i).toString()),
-				// o.getCodParam(), o.getCodLinea());
-				// }
-				// cpro = o.getCodProceso();
-			}
-			dhora = lastElem;
-			c++;
-		} // FIN 1er. CICLO
+		// int c = 0;
+		// int cpro = 0;
+		// int lpro = 0;
+		// int acum = 0;
+		// int acum2 = 0;
+		// for (Items2 o : orderList22) {
+		// ArrayList<ArrayList<Object>> a = o.getmProcesos();
+		// lastElem = a.get(1).get(a.get(1).size() - 1);
+		//
+		// // ENVIAR PARA DIBUJAR EN EL SCHEDULE
+		// if (c == 0) {
+		// // PRIMER CICLO PROCESO
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(
+		// Integer.parseInt(a.get(0).get(i).toString()),
+		// tConvertCal, o.getCodProceso(),
+		// Double.parseDouble(a.get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		//
+		// System.out.println("Matriz: " + o.getmProcesos().get(0));
+		//
+		// for (Object iii : o.getmProcesos().get(0)) {
+		// acum += Integer.parseInt(iii.toString());
+		// }
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		//
+		// } else if (cpro == o.getCodProceso()) {
+		// // PROCESOS A REPETIR
+		// System.out.println("Matriz: " + o.getmProcesos().get(0));
+		// acum2 = 0;
+		// for (Object iii : o.getmProcesos().get(0)) {
+		// acum2 += Integer.parseInt(iii.toString());
+		// }
+		// System.out.println("acum1: " + acum);
+		// System.out.println("acum2: " + acum2);
+		// if (lpro != o.getCodLinea()) {
+		// if (cpro == 1) {
+		// tConvertCal = days.DateToCalendar(fInicio);
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(Integer.parseInt(a.get(0).get(i)
+		// .toString()), tConvertCal,
+		// o.getCodProceso(), Double.parseDouble(a
+		// .get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		//
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		// } else {
+		// // NO ES IGUAL
+		// tConvertCal = days.DateToCalendar(fInicio);
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(Integer.parseInt(a.get(0).get(i)
+		// .toString()), tConvertCal,
+		// o.getCodProceso(), Double.parseDouble(a
+		// .get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		//
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		// }
+		// } else {
+		// // ES IGUAL
+		//
+		// if (cpro == 1) {
+		// tConvertCal = days.DateToCalendar(fInicio);
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(Integer.parseInt(a.get(0).get(i)
+		// .toString()), tConvertCal,
+		// o.getCodProceso(), Double.parseDouble(a
+		// .get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		// System.out
+		// .println("Matriz: " + o.getmProcesos().get(0));
+		// acum = 0;
+		// for (Object iii : o.getmProcesos().get(0)) {
+		// acum += Integer.parseInt(iii.toString());
+		// }
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		// } else {
+		//
+		// tConvertCal = days.DateToCalendar(fInicio);
+		// tConvertCal = days.nextDay(tConvertCal);
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(Integer.parseInt(a.get(0).get(i)
+		// .toString()), tConvertCal,
+		// o.getCodProceso(), Double.parseDouble(a
+		// .get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		// System.out
+		// .println("Matriz: " + o.getmProcesos().get(0));
+		// acum = 0;
+		// for (Object iii : o.getmProcesos().get(0)) {
+		// acum += Integer.parseInt(iii.toString());
+		// }
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		// }
+		// }
+		//
+		// } else {
+		// // PROCESOS DIFERENTES
+		// if (o.getCodProceso() == 1) {
+		// tConvertCal = days.DateToCalendar(fInicio);
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// System.out.println("Fecha procesos diferentes : "
+		// + tConvertCal);
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(
+		// Integer.parseInt(a.get(0).get(i).toString()),
+		// tConvertCal, o.getCodProceso(),
+		// Double.parseDouble(a.get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		// System.out.println("Matriz: " + o.getmProcesos().get(0));
+		// acum = 0;
+		// for (Object iii : o.getmProcesos().get(0)) {
+		// acum += Integer.parseInt(iii.toString());
+		// }
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		// } else {
+		// tConvertCal = days.DateToCalendar(fInicio);
+		// tConvertCal = days.nextDay(tConvertCal);
+		// System.out.println("Fecha procesos diferentes : "
+		// + tConvertCal);
+		// for (int i = 0; i < a.get(0).size(); i++) {
+		// withOutHextras(
+		// Integer.parseInt(a.get(0).get(i).toString()),
+		// tConvertCal, o.getCodProceso(),
+		// Double.parseDouble(a.get(1).get(i).toString()),
+		// o.getCodParam(), o.getCodLinea());
+		// }
+		// System.out.println("Matriz: " + o.getmProcesos().get(0));
+		// acum = 0;
+		// for (Object iii : o.getmProcesos().get(0)) {
+		// acum += Integer.parseInt(iii.toString());
+		// }
+		// cpro = o.getCodProceso();
+		// lpro = o.getCodLinea();
+		// System.out.println("***cod Proceso: " + cpro);
+		// System.out.println("***cod Linea: " + lpro);
+		// System.out.println("***suma total de pares: " + acum);
+		// System.out.println("------");
+		// }
+		// }
+		// dhora = lastElem;
+		// c++;
+		// } // FIN 1er. CICLO
 		return flat;
 	}// FIN FUNCION
 
