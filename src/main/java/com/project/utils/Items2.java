@@ -9,15 +9,18 @@ public class Items2 implements Serializable {
 	private Integer codParam;
 	private Integer codLinea;
 	private Integer codMod;
+	private Integer standar;
 	private ArrayList<ArrayList<Object>> mProcesos;
 
 	public Items2(Integer codProceso, Integer codLinea, Integer codParam,
-			Integer codMod, ArrayList<ArrayList<Object>> mProcesos) {
+			Integer codMod, Integer standar,
+			ArrayList<ArrayList<Object>> mProcesos) {
 		this.codProceso = codProceso;
 		this.codLinea = codLinea;
 		this.codParam = codParam;
 		this.mProcesos = mProcesos;
 		this.codMod = codMod;
+		this.standar = standar;
 	}
 
 	public Items2() {
@@ -25,6 +28,14 @@ public class Items2 implements Serializable {
 
 	public Integer getCodMod() {
 		return codMod;
+	}
+
+	public Integer getStandar() {
+		return standar;
+	}
+
+	public void setStandar(Integer standar) {
+		this.standar = standar;
 	}
 
 	public void setCodMod(Integer codMod) {

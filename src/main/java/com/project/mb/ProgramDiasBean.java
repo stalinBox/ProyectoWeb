@@ -356,7 +356,8 @@ public class ProgramDiasBean implements Serializable {
 												.getTipLinea()
 												.getCodigoTiplinea(),
 												j.getParamCodigo(),
-												mo.getModCodigo(), mProcesos);
+												mo.getModCodigo(),
+												j.getStandar(), mProcesos);
 
 										this.orderList2.add(orderitem2);
 
@@ -401,12 +402,16 @@ public class ProgramDiasBean implements Serializable {
 		// VARIABLES
 		boolean flat = false;
 		Calendar tConvertCal = null;
-		Calendar tConvertCal2 = null;
+		Calendar tConvertCal2 = null; // SIN USAR
 		Object dhora = null;
 		tConvertCal = days.DateToCalendar(fInicio);
 		Object lastElem = null;
+		Object lastElem2 = null;
+		Object lastElem3 = null;
+		ArrayList<ArrayList<Object>> mProcesosFinal = new ArrayList<ArrayList<Object>>();
 
 		ArrayList<Items3> orderListFinal = new ArrayList<Items3>();
+
 		Items3 orderitemFinal = new Items3();
 		// ORDENA POR CODIGO PROCESO
 		// LOS PROCESOS SIEMPRE DEBEN ESTAR ORDENADOS DESDE EL MENOR AL MAYOR
@@ -423,38 +428,105 @@ public class ProgramDiasBean implements Serializable {
 		int j = 0;
 		int codProceso = 0;
 		int codTpLinea = 0;
+
 		// IMPRIME LA MATRIZ A DIBUJARSE
+		/***
+		 * ENVIAR ESTA PARTE A UNA CLASE
+		 * */
+
 		for (Items2 i : orderList22) {
 			System.out.println("*1*: indice: " + j + " CodModelo: "
 					+ i.getCodMod() + " CodParam: " + i.getCodParam()
 					+ " CodProceso: " + i.getCodProceso() + " CodLinea: "
-					+ i.getCodLinea() + " Matriz proceso: " + i.getmProcesos());
+					+ i.getCodLinea() + " Standar: " + i.getStandar()
+					+ " Matriz proceso: " + i.getmProcesos());
 
 			if (j == 0) {
+				// PRIMER PROCESO
+
 				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
-						i.getCodParam(), i.getCodMod(), i.getmProcesos());
+						i.getCodParam(), i.getCodMod(), i.getStandar(),
+						i.getmProcesos());
 				orderListFinal.add(orderitemFinal);
+
 				System.out.println("Añadido");
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
+
+				lastElem2 = i.getmProcesos().get(0)
+						.get(i.getmProcesos().get(0).size() - 1);
+				System.out.println("Ultimo Elementos: " + lastElem2);
+
 			} else if (i.getCodProceso().equals(codProceso)
 					&& i.getCodLinea().equals(codTpLinea)) {
+				// PROCESOS IGUALES
+				Object newMatriz = null;
+				Object newMatriz2 = null;
+				mProcesosFinal.clear();
+				ArrayList<Object> dias = new ArrayList<Object>();
+				ArrayList<Object> horas = new ArrayList<Object>();
+
 				System.out.println("Procesos Iguales: " + codProceso);
 				System.out.println("Tipo Lineas Iguales: " + codTpLinea);
 
-				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
-						i.getCodParam(), i.getCodMod(), i.getmProcesos());
+				System.out.println("Anterior: " + lastElem2);
+				lastElem3 = i.getmProcesos().get(0)
+						.get(i.getmProcesos().get(0).size() - 1);
+				System.out.println("Actual: " + lastElem3);
 
+				if (Integer.parseInt(lastElem2.toString()) < Integer.parseInt(i
+						.getStandar().toString())) {
+					newMatriz = Integer.parseInt(i.getStandar().toString())
+							- Integer.parseInt(lastElem2.toString());
+				}
+				dias.add(Math.abs(Integer.parseInt(newMatriz.toString())));
+				for (int ij = 0; ij < i.getmProcesos().get(0).size(); ij++) {
+					if (ij == i.getmProcesos().get(0).size() - 1) {
+						break;
+					} else {
+						System.out.println("ELEMENTS INTERNOS: "
+								+ i.getmProcesos().get(0).get(ij));
+						dias.add(i.getmProcesos().get(0).get(ij));
+					}
+				}
+				newMatriz2 = Integer.parseInt(i.getmProcesos().get(0)
+						.get(i.getmProcesos().get(1).size() - 1).toString())
+						- Integer.parseInt(newMatriz.toString());
+				dias.add(Math.abs(Integer.parseInt(newMatriz2.toString())));
+
+				mProcesosFinal.add(dias);
+				// mProcesosFinal.add(horas);
+
+				System.out.println("****MatrizOriginal: "
+						+ i.getmProcesos().get(0));
+				System.out.println("////MatrizFinal: " + mProcesosFinal);
+
+				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
+						i.getCodParam(), i.getCodMod(), i.getStandar(),
+						mProcesosFinal);
 				orderListFinal.add(orderitemFinal);
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
+
+				lastElem2 = lastElem3;
+
 			} else {
+				// PROCESOS DIFERENTES
+				System.out.println("Anterior: " + lastElem2);
+				lastElem3 = i.getmProcesos().get(0)
+						.get(i.getmProcesos().get(0).size() - 1);
+				System.out.println("Actual: " + lastElem3);
+
 				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
-						i.getCodParam(), i.getCodMod(), i.getmProcesos());
+						i.getCodParam(), i.getCodMod(), i.getStandar(),
+						i.getmProcesos());
 				orderListFinal.add(orderitemFinal);
+
 				System.out.println("Añadido");
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
+
+				lastElem2 = lastElem3;
 			}
 			j++;
 		}
@@ -464,7 +536,8 @@ public class ProgramDiasBean implements Serializable {
 			System.out.println("*2*: indice: " + items3 + " CodModelo: "
 					+ i.getCodMod() + " CodParam: " + i.getCodParam()
 					+ " CodProceso: " + i.getCodProceso() + " CodLinea: "
-					+ i.getCodLinea() + " Matriz proceso: " + i.getmProcesos());
+					+ i.getCodLinea() + " Standar: " + i.getStandar()
+					+ " Matriz proceso: " + i.getmProcesos());
 			items3++;
 		}
 
@@ -473,7 +546,7 @@ public class ProgramDiasBean implements Serializable {
 		// int lpro = 0;
 		// int acum = 0;
 		// int acum2 = 0;
-		// for (Items2 o : orderList22) {
+		// for (Items3 o : orderListFinal) {
 		// ArrayList<ArrayList<Object>> a = o.getmProcesos();
 		// lastElem = a.get(1).get(a.get(1).size() - 1);
 		//
@@ -511,8 +584,16 @@ public class ProgramDiasBean implements Serializable {
 		// System.out.println("acum2: " + acum2);
 		// if (lpro != o.getCodLinea()) {
 		// if (cpro == 1) {
+		//
 		// tConvertCal = days.DateToCalendar(fInicio);
 		// tConvertCal = days.nextDay2(tConvertCal);
+		//
+		// if (tConvertCal.get(Calendar.DAY_OF_WEEK) == 1) {
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// } else if (tConvertCal.get(Calendar.DAY_OF_WEEK) == 7) {
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// }
+		//
 		// for (int i = 0; i < a.get(0).size(); i++) {
 		// withOutHextras(Integer.parseInt(a.get(0).get(i)
 		// .toString()), tConvertCal,
@@ -551,6 +632,13 @@ public class ProgramDiasBean implements Serializable {
 		// if (cpro == 1) {
 		// tConvertCal = days.DateToCalendar(fInicio);
 		// tConvertCal = days.nextDay2(tConvertCal);
+		//
+		// if (tConvertCal.get(Calendar.DAY_OF_WEEK) == 1) {
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// } else if (tConvertCal.get(Calendar.DAY_OF_WEEK) == 7) {
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// }
+		//
 		// for (int i = 0; i < a.get(0).size(); i++) {
 		// withOutHextras(Integer.parseInt(a.get(0).get(i)
 		// .toString()), tConvertCal,
@@ -601,6 +689,13 @@ public class ProgramDiasBean implements Serializable {
 		// if (o.getCodProceso() == 1) {
 		// tConvertCal = days.DateToCalendar(fInicio);
 		// tConvertCal = days.nextDay2(tConvertCal);
+		//
+		// if (tConvertCal.get(Calendar.DAY_OF_WEEK) == 1) {
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// } else if (tConvertCal.get(Calendar.DAY_OF_WEEK) == 7) {
+		// tConvertCal = days.nextDay2(tConvertCal);
+		// }
+		//
 		// System.out.println("Fecha procesos diferentes : "
 		// + tConvertCal);
 		// for (int i = 0; i < a.get(0).size(); i++) {

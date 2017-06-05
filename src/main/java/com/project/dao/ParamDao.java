@@ -7,6 +7,8 @@ import com.project.entities.Parametro;
 public interface ParamDao {
 	public List<Parametro> findAll();
 
+	public List<Parametro> findByCodProByCodTpl(Integer codPro, Integer codTpl);
+
 	public Parametro findbyCodParam(Integer codParam);
 
 	public List<Parametro> findByCodLinea(Integer codLinea);
