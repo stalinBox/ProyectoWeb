@@ -1,6 +1,7 @@
 package com.project.mb;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,8 +22,6 @@ import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
 import com.project.dao.ParamDao;
 import com.project.dao.ParamDaoImpl;
-import com.project.dao.ProcesoDao;
-import com.project.dao.ProcesoDaoImpl;
 import com.project.dao.ProcesosOPDao;
 import com.project.dao.ProcesosOPDaoImpl;
 import com.project.dao.ProgramTurnosDao;
@@ -77,6 +76,9 @@ public class ProcesosOPBean implements Serializable {
 	private List<SelectItem> selectedItemsFechas;
 	private List<SelectItem> selectedItemsLT;
 
+	private List<Detalleorden> detalleOrden;
+	private Integer total;
+
 	// CONSTRUCTOR
 	@PostConstruct
 	public void init() {
@@ -90,6 +92,8 @@ public class ProcesosOPBean implements Serializable {
 		this.selectedProgramTurno.setTalla(new Talla());
 		this.selectedProgramTurno.setModelo(new Modelo());
 		this.selectedProgramTurno.setTurno(new Turno());
+		this.selectedProgramTurno.setLineasturno(new Lineasturno());
+
 	}
 
 	// METODOS
@@ -201,6 +205,8 @@ public class ProcesosOPBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+
+		System.out.println("******N Orden: " + this.nOrden);
 	}
 
 	public void btnDeleteProcesoOP(Integer codPop) {
@@ -224,11 +230,16 @@ public class ProcesosOPBean implements Serializable {
 		ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
 		List<Programdia> pp = programDias.getOrderDates(this.nOrden,
 				this.nProceso);
-		this.fInicio = pp.get(0).getFinicio();
-		this.fFin = pp.get(pp.size() - 1).getFfin();
+		if (pp.isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("No se ha programado esta linea", " "));
+		} else {
+			this.fInicio = pp.get(0).getFinicio();
+			this.fFin = pp.get(pp.size() - 1).getFfin();
 
-		for (Programdia p : pp) {
-			System.out.println("cantidad pares: " + p.getCantpares());
+			for (Programdia p : pp) {
+				System.out.println("cantidad pares: " + p.getCantpares());
+			}
 		}
 	}
 
@@ -438,7 +449,8 @@ public class ProcesosOPBean implements Serializable {
 		List<Ordenprod> ordenes = ordenesDao.getAllOrderN();
 		for (Ordenprod ord : ordenes) {
 			SelectItem selectItem = new SelectItem(ord.getOrdenprodCodigo(),
-					ord.getCliente().getNombrecli());
+					ord.getOrdenprodCodigo() + " - "
+							+ ord.getCliente().getNombrecli());
 			this.selectedItemsOrdenes.add(selectItem);
 		}
 		return selectedItemsOrdenes;
@@ -461,7 +473,8 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectedItemsLT() {
-		if (this.nOrden != null && !this.nOrden.equals("") && this.nOrden != 0) {
+		if (this.nOrden != null) {
+
 			this.selectedItemsLT = new ArrayList<SelectItem>();
 			LineasTurnosDao lineasturnosDao = new LineasTurnosDaoImpl();
 			List<Lineasturno> lineast = lineasturnosDao
@@ -476,11 +489,43 @@ public class ProcesosOPBean implements Serializable {
 			this.selectedItemsLT = new ArrayList<SelectItem>();
 			return selectedItemsLT;
 		}
-
 	}
 
 	public void setSelectedItemsLT(List<SelectItem> selectedItemsLT) {
 		this.selectedItemsLT = selectedItemsLT;
+	}
+
+	public List<Detalleorden> getDetalleOrden() {
+		if (this.nOrden != null) {
+			DetaOrdenDao detaDAO = new DetaOrdenDaoImpl();
+			this.detalleOrden = detaDAO.findByOrden(this.nOrden);
+			return detalleOrden;
+		} else {
+			this.detalleOrden = new ArrayList<Detalleorden>();
+			return detalleOrden;
+		}
+	}
+
+	public void setDetalleOrden(List<Detalleorden> detalleOrden) {
+		this.detalleOrden = detalleOrden;
+	}
+
+	public String getTotalsOrden() {
+		this.total = 0;
+		DetaOrdenDao detaOrdenDao = new DetaOrdenDaoImpl();
+		this.detalleOrden = detaOrdenDao.findByOrden(this.nOrden);
+		for (Detalleorden dt : detalleOrden) {
+			this.total += dt.getCantidad();
+		}
+		return new DecimalFormat("###,###.###").format(total);
+	}
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
 	}
 
 }

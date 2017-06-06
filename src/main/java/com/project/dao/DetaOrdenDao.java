@@ -26,6 +26,8 @@ public interface DetaOrdenDao {
 
 	public List<Detalleorden> findByOrden(Integer idOrden);
 
+	public List<Detalleorden> findByOrden3(Integer idOrden);
+
 	public List<Detalleorden> findByOrdenByMod(Integer idOrden, Integer codMod);
 
 	public List<Detalleorden> findByCCO(Integer idOrden, Integer codPro,

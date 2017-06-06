@@ -7,7 +7,7 @@ public class MyUtil {
 	public static String ip = "localhost";
 
 	public static String andonMonitor() {
-		return "http://172.21.123.55/webandon/";
+		return "http://172.21.123.197/PantallaAndon/Prueba.aspx";
 	}
 
 	public static String baseurl() {

@@ -118,11 +118,11 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 		List<Programdia> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "FROM Programdia pg "
-				+ "WHERE pg.parametro.paramCodigo = "
-				+ "( SELECT pr.paramCodigo FROM Parametro pr "
-				+ "WHERE pr.ordenprod.ordenprodCodigo = " + codOrden
-				+ "AND pr.paramCodigo= " + codProceso + ") "
-				+ "ORDER BY pg ASC";
+				+ " WHERE pg.parametro.paramCodigo = "
+				+ " ( SELECT pr.paramCodigo FROM Parametro pr "
+				+ " WHERE pr.ordenprod.ordenprodCodigo = " + codOrden
+				+ " AND pr.paramCodigo= " + codProceso + ") "
+				+ " ORDER BY pg ASC";
 
 		System.out.println(sql);
 		try {

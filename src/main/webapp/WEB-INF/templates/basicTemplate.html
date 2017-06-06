@@ -92,8 +92,14 @@
 						</p:submenu>
 
 						<p:submenu label="Andon" icon="ui-icon-caret-1-n">
-							<p:menuitem value="Monitoreo" url="#{appBean.andonMonitor}"
-								icon="fa fa-bell-o" />
+
+							<p:menuitem value="Monitor" url="#{appBean.andonMonitor}"
+								icon="fa fa-bell-o" target="_blank">
+								<h:outputLink
+									value="http://172.21.123.55/PantallaAndon/Prueba.aspx"
+									target="_blank">URL</h:outputLink>
+							</p:menuitem>
+
 							<p:menuitem value="Alertas"
 								url="#{appBean.andonPath()}alertas.jsf" icon="fa fa-bell-o" />
 							<p:menuitem value="Dispositivos"

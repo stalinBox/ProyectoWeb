@@ -43,6 +43,8 @@ import com.project.entities.Modelo;
 import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
+import com.project.utils.FragmentNumber;
+import com.project.utils.FragmentNumber2;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.Items2;
 import com.project.utils.Items3;
@@ -412,7 +414,6 @@ public class ProgramDiasBean implements Serializable {
 
 		ArrayList<Items3> orderListFinal = new ArrayList<Items3>();
 
-		Items3 orderitemFinal = new Items3();
 		// ORDENA POR CODIGO PROCESO
 		// LOS PROCESOS SIEMPRE DEBEN ESTAR ORDENADOS DESDE EL MENOR AL MAYOR
 		Collections.sort(orderList22, new Comparator<Items2>() {
@@ -430,9 +431,30 @@ public class ProgramDiasBean implements Serializable {
 		int codTpLinea = 0;
 
 		// IMPRIME LA MATRIZ A DIBUJARSE
+		Integer ca1 = 0;
+		for (Items2 k : orderList22) {
+			System.out.println("*BASE*: indice: " + ca1 + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			ca1++;
+		}
 		/***
 		 * ENVIAR ESTA PARTE A UNA CLASE
 		 * */
+		orderListFinal.clear();
+		Integer items3 = 0;
+		System.out.println("IMPRESION ORDERLISTFINAL");
+		for (Items3 k : orderListFinal) {
+			System.out.println("*2*: indice: " + items3 + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			items3++;
+		}
+		System.out.println("FIN IMPRESION ORDERLISTFINAL");
 
 		for (Items2 i : orderList22) {
 			System.out.println("*1*: indice: " + j + " CodModelo: "
@@ -441,12 +463,19 @@ public class ProgramDiasBean implements Serializable {
 					+ i.getCodLinea() + " Standar: " + i.getStandar()
 					+ " Matriz proceso: " + i.getmProcesos());
 
+			Object newMatriz = null;
+			Object newMatriz2 = null;
+			mProcesosFinal.clear();
+			ArrayList<Object> dias = new ArrayList<Object>();
+			ArrayList<Object> horas = new ArrayList<Object>();
+
 			if (j == 0) {
 				// PRIMER PROCESO
+				System.out.println("PRIMER PROCESO");
 
-				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
-						i.getCodParam(), i.getCodMod(), i.getStandar(),
-						i.getmProcesos());
+				Items3 orderitemFinal = new Items3(i.getCodProceso(),
+						i.getCodLinea(), i.getCodParam(), i.getCodMod(),
+						i.getStandar(), i.getmProcesos());
 				orderListFinal.add(orderitemFinal);
 
 				System.out.println("Añadido");
@@ -457,29 +486,37 @@ public class ProgramDiasBean implements Serializable {
 						.get(i.getmProcesos().get(0).size() - 1);
 				System.out.println("Ultimo Elementos: " + lastElem2);
 
+				System.out.println("///CONTENIDO PRIMER PROCESO///");
+				for (Items3 k : orderListFinal) {
+					System.out.println("CodModelo: " + k.getCodMod()
+							+ " CodParam: " + k.getCodParam() + " CodProceso: "
+							+ k.getCodProceso() + " CodLinea: "
+							+ k.getCodLinea() + " Standar: " + k.getStandar()
+							+ " Matriz proceso: " + k.getmProcesos());
+				}
+				System.out.println("///FIN CONTENIDO PRIMER PROCESO///");
+
 			} else if (i.getCodProceso().equals(codProceso)
 					&& i.getCodLinea().equals(codTpLinea)) {
+
 				// PROCESOS IGUALES
-				Object newMatriz = null;
-				Object newMatriz2 = null;
-				mProcesosFinal.clear();
-				ArrayList<Object> dias = new ArrayList<Object>();
-				ArrayList<Object> horas = new ArrayList<Object>();
+				System.out.println("PROCESOS IGUALES");
 
-				System.out.println("Procesos Iguales: " + codProceso);
-				System.out.println("Tipo Lineas Iguales: " + codTpLinea);
-
-				System.out.println("Anterior: " + lastElem2);
+				System.out.println("Anterior OLD: " + lastElem2);
 				lastElem3 = i.getmProcesos().get(0)
 						.get(i.getmProcesos().get(0).size() - 1);
-				System.out.println("Actual: " + lastElem3);
+				System.out.println("Actual OLD: " + lastElem3);
 
 				if (Integer.parseInt(lastElem2.toString()) < Integer.parseInt(i
 						.getStandar().toString())) {
 					newMatriz = Integer.parseInt(i.getStandar().toString())
 							- Integer.parseInt(lastElem2.toString());
+				} else {
+					newMatriz = Integer.parseInt(i.getStandar().toString());
 				}
+
 				dias.add(Math.abs(Integer.parseInt(newMatriz.toString())));
+
 				for (int ij = 0; ij < i.getmProcesos().get(0).size(); ij++) {
 					if (ij == i.getmProcesos().get(0).size() - 1) {
 						break;
@@ -494,32 +531,56 @@ public class ProgramDiasBean implements Serializable {
 						- Integer.parseInt(newMatriz.toString());
 				dias.add(Math.abs(Integer.parseInt(newMatriz2.toString())));
 
+				FragmentNumber2 mDias = new FragmentNumber2();
+				horas = mDias.Number(i.getStandar(), dias);
 				mProcesosFinal.add(dias);
-				// mProcesosFinal.add(horas);
+				mProcesosFinal.add(horas);
 
 				System.out.println("****MatrizOriginal: "
 						+ i.getmProcesos().get(0));
 				System.out.println("////MatrizFinal: " + mProcesosFinal);
 
-				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
-						i.getCodParam(), i.getCodMod(), i.getStandar(),
-						mProcesosFinal);
+				Items3 orderitemFinal = new Items3(i.getCodProceso(),
+						i.getCodLinea(), i.getCodParam(), i.getCodMod(),
+						i.getStandar(), new ArrayList<ArrayList<Object>>(
+								mProcesosFinal));
 				orderListFinal.add(orderitemFinal);
+
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
 
+				System.out.println("Anterior new: " + lastElem2);
+				lastElem3 = mProcesosFinal.get(0).get(
+						mProcesosFinal.get(0).size() - 1);
+				System.out.println("Actual new: " + lastElem3);
+
 				lastElem2 = lastElem3;
+
+				// FIN PROCESOS IGUALES
+
+				System.out.println("///CONTENIDO PROCESOS IGUALES///");
+				for (Items3 k : orderListFinal) {
+					System.out.println("CodModelo: " + k.getCodMod()
+							+ " CodParam: " + k.getCodParam() + " CodProceso: "
+							+ k.getCodProceso() + " CodLinea: "
+							+ k.getCodLinea() + " Standar: " + k.getStandar()
+							+ " Matriz proceso: " + k.getmProcesos());
+				}
+				System.out.println("///FIN CONTENIDO PROCESOS IGUALES///");
 
 			} else {
 				// PROCESOS DIFERENTES
+				System.out.println("PROCESOS DIFERENTES");
 				System.out.println("Anterior: " + lastElem2);
+
 				lastElem3 = i.getmProcesos().get(0)
 						.get(i.getmProcesos().get(0).size() - 1);
 				System.out.println("Actual: " + lastElem3);
 
-				orderitemFinal = new Items3(i.getCodProceso(), i.getCodLinea(),
-						i.getCodParam(), i.getCodMod(), i.getStandar(),
-						i.getmProcesos());
+				Items3 orderitemFinal = new Items3(i.getCodProceso(),
+						i.getCodLinea(), i.getCodParam(), i.getCodMod(),
+						i.getStandar(), i.getmProcesos());
+
 				orderListFinal.add(orderitemFinal);
 
 				System.out.println("Añadido");
@@ -527,18 +588,29 @@ public class ProgramDiasBean implements Serializable {
 				codTpLinea = i.getCodLinea();
 
 				lastElem2 = lastElem3;
+				// FIN PROCESOS DIFERENTES
+				System.out.println("///CONTENIDO PROCESOS DIFERENTES///");
+				for (Items3 k : orderListFinal) {
+					System.out.println("CodModelo: " + k.getCodMod()
+							+ " CodParam: " + k.getCodParam() + " CodProceso: "
+							+ k.getCodProceso() + " CodLinea: "
+							+ k.getCodLinea() + " Standar: " + k.getStandar()
+							+ " Matriz proceso: " + k.getmProcesos());
+				}
+				System.out.println("///FIN CONTENIDO PROCESOS DIFERENTES///");
 			}
 			j++;
+
 		}
 
-		Integer items3 = 0;
-		for (Items3 i : orderListFinal) {
-			System.out.println("*2*: indice: " + items3 + " CodModelo: "
-					+ i.getCodMod() + " CodParam: " + i.getCodParam()
-					+ " CodProceso: " + i.getCodProceso() + " CodLinea: "
-					+ i.getCodLinea() + " Standar: " + i.getStandar()
-					+ " Matriz proceso: " + i.getmProcesos());
-			items3++;
+		Integer citems = 0;
+		for (Items3 k : orderListFinal) {
+			System.out.println("*RESULT*: indice: " + citems + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			citems++;
 		}
 
 		// int c = 0;
@@ -874,8 +946,8 @@ public class ProgramDiasBean implements Serializable {
 		String msg = "";
 		ruta = MyUtil.baseurl() + "inicio.xhtml";
 		try {
-			// FacesContext.getCurrentInstance().getExternalContext()
-			// .redirect(ruta);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(ruta);
 
 			// GUARDAR
 			System.out.println("ESTO SE VA A GUARDAR");

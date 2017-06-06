@@ -9,9 +9,11 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 			<p:messages id="msg" autoUpdate="true" />
+
 			<h:form id="ordenProceso">
 				<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
 					<h:panelGrid id="ordenProd" columns="2" cellpadding="2">
+
 						<p:outputLabel value="Sale Nº:" />
 						<p:selectOneMenu id="idCbxOrdenes"
 							value="#{procesosOPBean.nOrden}" required="true"
@@ -19,7 +21,7 @@
 							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
-							<p:ajax update=":ordenProceso:idCbxProceso" />
+							<p:ajax update=":ordenProceso:idCbxProceso,:fmrItems:basicDT" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="Process:" />
@@ -31,7 +33,7 @@
 							<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
 							<p:ajax
 								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
-								update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin" />
+								update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin, :msg" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="User:" />
@@ -54,7 +56,7 @@
 					</h:panelGrid>
 				</h:panelGrid>
 				<p:commandButton value="Submit"
-					update=":fmrItems:idCbxModelo, :fmrItems:idCbxFechas"
+					update=":fmrItems:idCbxModelo, :fmrItems:idCbxFechas, :fmrItems:idCbxlT"
 					actionListener="#{procesosOPBean.btnCreateProcesosOP(actionEvent)}" />
 
 				<p:commandButton value="Delete"
@@ -65,63 +67,94 @@
 			<p:separator />
 
 			<h:form id="fmrItems">
-				<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
+				<h:panelGrid id="gridGeneral2" columns="2" cellpadding="2">
+					<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
 
-					<p:outputLabel value="Day:" />
-					<p:selectOneMenu id="idCbxFechas"
-						value="#{procesosOPBean.codProgramD}" required="true"
-						style="width:150px">
-						<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-							itemValue="0" />
-						<f:selectItems value="#{procesosOPBean.selectedItemsFechas}" />
-					</p:selectOneMenu>
+						<p:outputLabel value="Day:" />
+						<p:selectOneMenu id="idCbxFechas"
+							value="#{procesosOPBean.codProgramD}" required="true"
+							style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsFechas}" />
+						</p:selectOneMenu>
 
-					<p:outputLabel value="Model:" />
-					<p:selectOneMenu id="idCbxModelo" value="#{procesosOPBean.codMod}"
-						required="true" style="width:150px">
-						<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-							itemValue="0" />
-						<f:selectItems value="#{procesosOPBean.selectedItemsModelo}" />
-						<p:ajax update=":fmrItems:idCbxTalla" />
-					</p:selectOneMenu>
+						<p:outputLabel value="Model:" />
+						<p:selectOneMenu id="idCbxModelo" value="#{procesosOPBean.codMod}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsModelo}" />
+							<p:ajax update=":fmrItems:idCbxTalla" />
+						</p:selectOneMenu>
 
-					<p:outputLabel value="Size" />
-					<p:selectOneMenu id="idCbxTalla"
-						value="#{procesosOPBean.selectedProgramTurno.talla.talCodigo}"
-						required="true" style="width:150px">
-						<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-							itemValue="0" />
-						<f:selectItems value="#{procesosOPBean.selectedItemsTalla}" />
-						<p:ajax update=":fmrItems:idCbxTurno" />
-					</p:selectOneMenu>
+						<p:outputLabel value="Size" />
+						<p:selectOneMenu id="idCbxTalla"
+							value="#{procesosOPBean.selectedProgramTurno.talla.talCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsTalla}" />
+							<p:ajax update=":fmrItems:idCbxTurno" />
+						</p:selectOneMenu>
 
-					<p:outputLabel value="Turn:" />
-					<p:selectOneMenu id="idCbxTurno"
-						value="#{procesosOPBean.selectedProgramTurno.turno.turnoCodigo}"
-						required="true" style="width:150px">
-						<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-							itemValue="0" />
-						<f:selectItems value="#{procesosOPBean.selectedItemsTurno}" />
-					</p:selectOneMenu>
+						<p:outputLabel value="Turn:" />
+						<p:selectOneMenu id="idCbxTurno"
+							value="#{procesosOPBean.selectedProgramTurno.turno.turnoCodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsTurno}" />
+						</p:selectOneMenu>
 
-					<p:outputLabel value="Línea producción" />
-					<p:selectOneMenu id="idCbxlT"
-						value="#{procesosOPBean.selectedProgramTurno.lineasturno.ltcodigo}"
-						required="true" style="width:150px">
-						<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-							itemValue="0" />
-						<f:selectItems value="#{procesosOPBean.selectedItemsLT}" />
-					</p:selectOneMenu>
+						<p:outputLabel value="Línea producción" />
+						<p:selectOneMenu id="idCbxlT"
+							value="#{procesosOPBean.selectedProgramTurno.lineasturno.ltcodigo}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsLT}" />
+						</p:selectOneMenu>
 
 
-					<p:outputLabel value="Estimated Amount: " />
-					<p:inputText value="#{procesosOPBean.cantEstim}" size="2" />
+						<p:outputLabel value="Estimated Amount: " />
+						<p:inputText value="#{procesosOPBean.cantEstim}" size="2" />
 
-					<f:facet name="footer">
-						<p:commandButton id="btnAgregarDetalle" value="Add"
-							update=":formDataTable"
-							actionListener="#{procesosOPBean.btnCreateProgramTurnos(actionEvent)}" />
-					</f:facet>
+						<f:facet name="footer">
+							<p:commandButton id="btnAgregarDetalle" value="Add"
+								update=":formDataTable"
+								actionListener="#{procesosOPBean.btnCreateProgramTurnos(actionEvent)}" />
+						</f:facet>
+					</h:panelGrid>
+
+					<h:panelGrid id="gridDetalle" columns="2" cellpadding="2">
+						<p:dataTable id="basicDT" var="detaO"
+							value="#{procesosOPBean.detalleOrden}"
+							emptyMessage="Ningun registro encontrado" style="width:500px;">
+
+							<f:facet name="header">Detalle Orden</f:facet>
+
+							<p:column headerText="Modelo">
+								<h:outputText value="#{detaO.modelo.modNombre}" />
+							</p:column>
+
+							<p:column headerText="Talla">
+								<h:outputText value="#{detaO.talla.talNumero}" />
+							</p:column>
+
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detaO.cantidad}" />
+							</p:column>
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="2" style="text-align:right"
+										footerText="Total:" />
+									<p:column footerText="#{procesosOPBean.totalsOrden}" />
+
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>
 
@@ -150,6 +183,10 @@
 
 					<p:column headerText="Turn">
 						<h:outputText value="#{pgTurn.turno.nombturno}" />
+					</p:column>
+
+					<p:column headerText="línea">
+						<h:outputText value="#{pgTurn.lineasturno.lineasprod.nomlinea}" />
 					</p:column>
 
 					<p:column headerText="Estim. Amount">
@@ -196,6 +233,28 @@
 						oncomplete="PF('dialogPgTurnosDelete').hide()" />
 				</p:confirmDialog>
 			</h:form>
+
+			<!-- <h:form id="formDataTable2">
+				<p:dataTable id="basicDT" var="detaO"
+					value="#{procesosOPBean.detalleOrden}"
+					emptyMessage="Ningun registro encontrado">
+
+					<f:facet name="header">Detalle Orden</f:facet>
+
+					<p:column headerText="Modelo">
+						<h:outputText value="#{detaO.modelo.modNombre}" />
+					</p:column>
+
+					<p:column headerText="Talla">
+						<h:outputText value="#{detaO.talla.talNumero}" />
+					</p:column>
+
+					<p:column headerText="Cantidad">
+						<h:outputText value="#{detaO.cantidad}" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form> -->
 		</ui:define>
 	</ui:composition>
 </h:body>

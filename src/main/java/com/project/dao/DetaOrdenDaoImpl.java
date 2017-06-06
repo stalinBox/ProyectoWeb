@@ -257,4 +257,24 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Detalleorden> findByOrden3(Integer idOrden) {
+		List<Detalleorden> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Detalleorden d WHERE d.ordenprod.ordenprodCodigo = "
+				+ idOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FIND BY ORDEN DETAORDER: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }
