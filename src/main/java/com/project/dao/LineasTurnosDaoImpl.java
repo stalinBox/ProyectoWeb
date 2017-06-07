@@ -278,11 +278,12 @@ public class LineasTurnosDaoImpl implements LineasTurnosDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Lineasturno> findByOrdenBYPROCESOSOP(Integer codOrden) {
+	public List<Lineasturno> findByOrdenBYPROCESOSOP(Integer codOrden,
+			Integer codParam) {
 		List<Lineasturno> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "from Lineasturno lt where lt.parametro.ordenprod.ordenprodCodigo = "
-				+ codOrden;
+				+ codOrden + " and lt.parametro.paramCodigo = " + codParam;
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

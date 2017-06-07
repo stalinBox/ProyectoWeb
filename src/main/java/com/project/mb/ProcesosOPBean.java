@@ -77,6 +77,8 @@ public class ProcesosOPBean implements Serializable {
 	private List<SelectItem> selectedItemsLT;
 
 	private List<Detalleorden> detalleOrden;
+
+	private List<Parametro> detallePrametro;
 	private Integer total;
 
 	// CONSTRUCTOR
@@ -478,7 +480,7 @@ public class ProcesosOPBean implements Serializable {
 			this.selectedItemsLT = new ArrayList<SelectItem>();
 			LineasTurnosDao lineasturnosDao = new LineasTurnosDaoImpl();
 			List<Lineasturno> lineast = lineasturnosDao
-					.findByOrdenBYPROCESOSOP(this.nOrden);
+					.findByOrdenBYPROCESOSOP(this.nOrden, this.nProceso);
 			for (Lineasturno lt : lineast) {
 				SelectItem selectItem = new SelectItem(lt.getLtcodigo(), lt
 						.getLineasprod().getNomlinea());
@@ -526,6 +528,21 @@ public class ProcesosOPBean implements Serializable {
 
 	public void setTotal(Integer total) {
 		this.total = total;
+	}
+
+	public List<Parametro> getDetallePrametro() {
+		if (this.nOrden != null) {
+			ParamDao paraDAO = new ParamDaoImpl();
+			this.detallePrametro = paraDAO.findByOrdenProd(this.nOrden);
+			return detallePrametro;
+		} else {
+			this.detalleOrden = new ArrayList<Detalleorden>();
+			return detallePrametro;
+		}
+	}
+
+	public void setDetallePrametro(List<Parametro> detallePrametro) {
+		this.detallePrametro = detallePrametro;
 	}
 
 }

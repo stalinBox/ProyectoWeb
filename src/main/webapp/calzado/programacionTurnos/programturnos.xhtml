@@ -21,7 +21,8 @@
 							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
-							<p:ajax update=":ordenProceso:idCbxProceso,:fmrItems:basicDT" />
+							<p:ajax
+								update=":ordenProceso:idCbxProceso,:fmrItems:basicDT, :fmrItems:basicDTCapacidades" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="Process:" />
@@ -56,7 +57,7 @@
 					</h:panelGrid>
 				</h:panelGrid>
 				<p:commandButton value="Submit"
-					update=":fmrItems:idCbxModelo, :fmrItems:idCbxFechas, :fmrItems:idCbxlT"
+					update=":fmrItems:idCbxModelo, :fmrItems:idCbxFechas, :fmrItems:idCbxlT, :formDataTable"
 					actionListener="#{procesosOPBean.btnCreateProcesosOP(actionEvent)}" />
 
 				<p:commandButton value="Delete"
@@ -67,7 +68,8 @@
 			<p:separator />
 
 			<h:form id="fmrItems">
-				<h:panelGrid id="gridGeneral2" columns="2" cellpadding="2">
+
+				<h:panelGrid id="gridGeneral2" columns="3" cellpadding="2">
 					<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
 
 						<p:outputLabel value="Day:" />
@@ -130,7 +132,7 @@
 					<h:panelGrid id="gridDetalle" columns="2" cellpadding="2">
 						<p:dataTable id="basicDT" var="detaO"
 							value="#{procesosOPBean.detalleOrden}"
-							emptyMessage="Ningun registro encontrado" style="width:500px;">
+							emptyMessage="Ningun registro encontrado" tableStyle="width:auto">
 
 							<f:facet name="header">Detalle Orden</f:facet>
 
@@ -155,15 +157,37 @@
 							</p:columnGroup>
 						</p:dataTable>
 					</h:panelGrid>
+
+					<h:panelGrid id="gridCapacidades" columns="2" cellpadding="2">
+						<p:dataTable id="basicDTCapacidades" var="paramO"
+							value="#{procesosOPBean.detallePrametro}"
+							emptyMessage="Ningun registro encontrado" tableStyle="width:auto">
+
+							<f:facet name="header">Capacidades</f:facet>
+
+							<p:column headerText="Proceso">
+								<h:outputText value="#{paramO.proceso.tipoProceso.tprNombre}" />
+							</p:column>
+
+							<p:column headerText="Tipo de Linea">
+								<h:outputText value="#{paramO.tipLinea.tipolinea}" />
+							</p:column>
+
+							<p:column headerText="Estandar">
+								<h:outputText value="#{paramO.standar}" />
+							</p:column>
+
+						</p:dataTable>
+					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>
 
 			<p:separator />
 
 			<h:form id="formDataTable">
-				<p:growl id="msg" showDetail="true" />
 				<p:dataTable id="basicDT" var="pgTurn"
-					value="#{procesosOPBean.programTurnos}">
+					value="#{procesosOPBean.programTurnos}"
+					tableStyle="width:auto;margin: 0 auto;">
 
 					<p:column headerText="Day">
 						<h:outputText value="#{pgTurn.dia}" />
