@@ -77,7 +77,6 @@ public class ProcesosOPBean implements Serializable {
 	private List<SelectItem> selectedItemsLT;
 
 	private List<Detalleorden> detalleOrden;
-
 	private List<Parametro> detallePrametro;
 	private Integer total;
 
@@ -229,20 +228,30 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public void getFechas() {
-		ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
-		List<Programdia> pp = programDias.getOrderDates(this.nOrden,
-				this.nProceso);
-		if (pp.isEmpty()) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("No se ha programado esta linea", " "));
-		} else {
-			this.fInicio = pp.get(0).getFinicio();
-			this.fFin = pp.get(pp.size() - 1).getFfin();
+		if (this.nProceso != 0) {
+			ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
+			List<Programdia> pp = programDias.getOrderDates(this.nOrden,
+					this.nProceso);
+			if (pp.isEmpty()) {
+				FacesContext.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										"No se ha programado esta linea", " "));
+			} else {
+				this.fInicio = pp.get(0).getFinicio();
+				this.fFin = pp.get(pp.size() - 1).getFfin();
 
-			for (Programdia p : pp) {
-				System.out.println("cantidad pares: " + p.getCantpares());
+				for (Programdia p : pp) {
+					System.out.println("cantidad pares: " + p.getCantpares());
+				}
+
 			}
+		} else {
+			this.fInicio = null;
+			this.fFin = null;
 		}
+
 	}
 
 	// SETTERS AND GETTERS

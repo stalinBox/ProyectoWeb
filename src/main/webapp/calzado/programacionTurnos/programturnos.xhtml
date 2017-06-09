@@ -16,8 +16,7 @@
 
 						<p:outputLabel value="Sale Nº:" />
 						<p:selectOneMenu id="idCbxOrdenes"
-							value="#{procesosOPBean.nOrden}" required="true"
-							style="width:150px">
+							value="#{procesosOPBean.nOrden}" style="width:150px">
 							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
@@ -27,8 +26,7 @@
 
 						<p:outputLabel value="Process:" />
 						<p:selectOneMenu id="idCbxProceso"
-							value="#{procesosOPBean.nProceso}" required="true"
-							style="width:150px">
+							value="#{procesosOPBean.nProceso}" style="width:150px">
 							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
@@ -40,7 +38,7 @@
 						<p:outputLabel value="User:" />
 						<p:selectOneMenu id="idResponsable"
 							value="#{procesosOPBean.selectedProcesosOP.usuario.userId}"
-							required="true" style="width:150px">
+							style="width:150px">
 							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
 								itemValue="0" />
 							<f:selectItems
@@ -63,7 +61,6 @@
 				<p:commandButton value="Delete"
 					actionListener="#{procesosOPBean.btnConsultar()}" />
 			</h:form>
-
 
 			<p:separator />
 
