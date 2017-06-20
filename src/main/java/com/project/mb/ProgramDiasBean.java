@@ -49,6 +49,7 @@ import com.project.utils.FragmentNumber2;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.Items2;
 import com.project.utils.Items3;
+import com.project.utils.MallObject;
 import com.project.utils.MyUtil;
 import com.project.utils.NdiasLab;
 import com.project.utils.ScheduleDays;
@@ -157,7 +158,7 @@ public class ProgramDiasBean implements Serializable {
 
 		// REEMPLAZO DE MLINEASCANTIDAD
 		ArrayList<Mlineas> mlineas = new ArrayList<Mlineas>();
-
+		ArrayList<MallObject> objectMal = new ArrayList<MallObject>();
 		// 1. FIN SECCION VARIABLES
 
 		// LIMPIAR VARIABLES
@@ -350,20 +351,35 @@ public class ProgramDiasBean implements Serializable {
 										mAll.put(j.getProceso().getProCodigo(),
 												mProcesos);
 
+										// PRUEBAS
+										MallObject mal = new MallObject(
+												Integer.parseInt(sumatoria
+														.toString()),
+												j.getStandar(), countLineas,
+												cantLineas, j.getProceso()
+														.getProCodigo(), j
+														.getTipLinea()
+														.getCodigoTiplinea(),
+												mo.getModCodigo());
+										objectMal.add(mal);
+										// FIN PRUEBAS
 										// ARMA EL OBJETO PARA SER
 										// INTRODUCIDO EN EL
 										// SCHEDULE
 										// COMENTARIO TEMPORAL
-										orderitem2 = new Items2(j.getProceso()
-												.getProCodigo(), j
-												.getTipLinea()
-												.getCodigoTiplinea(),
-												j.getParamCodigo(),
-												mo.getModCodigo(),
-												j.getStandar(), mProcesos);
 
-										this.orderList2.add(orderitem2);
+										if (j.getProceso().getProCodigo() == 3) {
+											orderitem2 = new Items2(j
+													.getProceso()
+													.getProCodigo(), j
+													.getTipLinea()
+													.getCodigoTiplinea(),
+													j.getParamCodigo(),
+													mo.getModCodigo(),
+													j.getStandar(), mProcesos);
 
+											this.orderList2.add(orderitem2);
+										}
 									} else {
 										continue;
 									} // FIN ELSE CONTINUE
@@ -378,23 +394,43 @@ public class ProgramDiasBean implements Serializable {
 			}// 2do. FIN ELSE
 		}// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
 
-		// IMPRIME LOS VALORES A DIBUJARSE
-		// int oo = 0;
-		// for (Items2 i : this.orderList2) {
-		// System.out.println("indice: " + oo + " CodParam: "
-		// + i.getCodParam() + " CodProceso: " + i.getCodProceso()
-		// + " codLinea: " + i.getCodLinea() + " codModelo: "
-		// + i.getCodMod() + " Matriz proceso: " + i.getmProcesos());
-		// oo++;
-		// }
-
-		if (generateCalendar(this.orderList2, diaInicio.getTime()) == true) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("Calendario Generado", " "));
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("Calendario Generado Exitosamente", ""));
+		for (MallObject j : objectMal) {
+			System.out.println("codModel: " + j.getCodMod() + " Proceso: "
+					+ j.getCodPro() + " CodTpl: " + j.getCodTpl()
+					+ " Sumatoria: " + j.getSumatoria() + " Standar: "
+					+ j.getStand() + " CountLineas: " + j.getCountLineas()
+					+ " CantLineas: " + j.getCantLineas());
 		}
+		// IMPRIME LOS VALORES A DIBUJARSE
+		int oo = 0;
+		for (Items2 i : this.orderList2) {
+			System.out.println("indice: " + oo + " CodParam: "
+					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
+					+ " codLinea: " + i.getCodLinea() + " codModelo: "
+					+ i.getCodMod() + " Matriz proceso: " + i.getmProcesos());
+			oo++;
+		}
+		ArrayList<Items3> result = new ArrayList<Items3>();
+		DistribResult dis = new DistribResult();
+		result = dis.generateDistribDias(orderList2);
+
+		Integer citems = 0;
+		for (Items3 k : result) {
+			System.out.println("*RESULTANTE*: indice: " + citems
+					+ " CodModelo: " + k.getCodMod() + " CodParam: "
+					+ k.getCodParam() + " CodProceso: " + k.getCodProceso()
+					+ " CodLinea: " + k.getCodLinea() + " Standar: "
+					+ k.getStandar() + " Matriz proceso: " + k.getmProcesos());
+			citems++;
+		}
+
+		// if (generateCalendar(this.orderList2, diaInicio.getTime()) == true) {
+		// FacesContext.getCurrentInstance().addMessage(null,
+		// new FacesMessage("Calendario Generado", " "));
+		// } else {
+		// FacesContext.getCurrentInstance().addMessage(null,
+		// new FacesMessage("Calendario Generado Exitosamente", ""));
+		// }
 	}
 
 	public boolean generateCalendar(ArrayList<Items2> orderList22, Date fInicio) {
@@ -437,7 +473,7 @@ public class ProgramDiasBean implements Serializable {
 		DistribResult dis = new DistribResult();
 		// orderListFinal = dis.generateDistribDias(orderList22);
 		dis.generateDistribDias(orderList22);
-		
+
 		/***
 		 * DE AQUI PARA ABAJO ES SOLO PARA DIBUJAR EN SCHEDULE
 		 * */

@@ -19,15 +19,15 @@ public class DistribResult {
 		// ORDENA DESCENDENTEMENTE
 		// Collections.reverse(orderList22);
 
-		Integer ca1 = 0;
-		for (Items2 k : orderList22) {
-			System.out.println("*BASE 1*: indice: " + ca1 + " CodModelo: "
-					+ k.getCodMod() + " CodParam: " + k.getCodParam()
-					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
-					+ k.getCodLinea() + " Standar: " + k.getStandar()
-					+ " Matriz proceso: " + k.getmProcesos());
-			ca1++;
-		}
+		// Integer ca1 = 0;
+		// for (Items2 k : orderList22) {
+		// System.out.println("*BASE 1*: indice: " + ca1 + " CodModelo: "
+		// + k.getCodMod() + " CodParam: " + k.getCodParam()
+		// + " CodProceso: " + k.getCodProceso() + " CodLinea: "
+		// + k.getCodLinea() + " Standar: " + k.getStandar()
+		// + " Matriz proceso: " + k.getmProcesos());
+		// ca1++;
+		// }
 
 		// VARIABLES
 		ArrayList<Items3> orderListFinal = new ArrayList<Items3>();
@@ -218,15 +218,15 @@ public class DistribResult {
 		//
 		// }
 
-		Integer citems = 0;
-		for (Items3 k : orderListFinal) {
-			System.out.println("*RESULTANTE*: indice: " + citems
-					+ " CodModelo: " + k.getCodMod() + " CodParam: "
-					+ k.getCodParam() + " CodProceso: " + k.getCodProceso()
-					+ " CodLinea: " + k.getCodLinea() + " Standar: "
-					+ k.getStandar() + " Matriz proceso: " + k.getmProcesos());
-			citems++;
-		}
+		// Integer citems = 0;
+		// for (Items3 k : orderListFinal) {
+		// System.out.println("*RESULTANTE*: indice: " + citems
+		// + " CodModelo: " + k.getCodMod() + " CodParam: "
+		// + k.getCodParam() + " CodProceso: " + k.getCodProceso()
+		// + " CodLinea: " + k.getCodLinea() + " Standar: "
+		// + k.getStandar() + " Matriz proceso: " + k.getmProcesos());
+		// citems++;
+		// }
 		return orderListFinal;
 	}
 }
