@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.project.dao.ModelosDao;
@@ -35,7 +37,7 @@ public class ReporteBean implements Serializable {
 
 	public void exportPDF() throws JRException, IOException {
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("txtUsuario", "HOLAMUNDO");
+		parametros.put("txtUsuario", "HOLA MUNDO");
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/rptJSF.jasper"));
 
@@ -54,7 +56,24 @@ public class ReporteBean implements Serializable {
 		stream.flush();
 		stream.close();
 		FacesContext.getCurrentInstance().responseComplete();
+	}
 
+	public void verPDF(ActionEvent actionEvent) throws Exception {
+		File jasper = new File(FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath("/rpJSF.jasper"));
+
+		byte[] bytes = JasperRunManager.runReportToPdf(jasper.getPath(), null,
+				new JRBeanCollectionDataSource(this.getModelo()));
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("application/pdf");
+		response.setContentLength(bytes.length);
+		ServletOutputStream outStream = response.getOutputStream();
+		outStream.write(bytes, 0, bytes.length);
+		outStream.flush();
+		outStream.close();
+
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 	// SETTERS AND GETTERS

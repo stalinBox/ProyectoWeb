@@ -8,9 +8,11 @@ public class MallObject {
 	private Integer codPro;
 	private Integer codTpl;
 	private Integer codMod;
+	private Integer codParam;
 
 	public MallObject(Integer sumatoria, Integer stand, Integer countLineas,
-			Integer cantLineas, Integer codPro, Integer codTpl, Integer codMod) {
+			Integer cantLineas, Integer codPro, Integer codTpl, Integer codMod,
+			Integer codParam) {
 		this.sumatoria = sumatoria;
 		this.stand = stand;
 		this.countLineas = countLineas;
@@ -18,6 +20,15 @@ public class MallObject {
 		this.codPro = codPro;
 		this.codTpl = codTpl;
 		this.codMod = codMod;
+		this.codParam = codParam;
+	}
+
+	public Integer getCodParam() {
+		return codParam;
+	}
+
+	public void setCodParam(Integer codParam) {
+		this.codParam = codParam;
 	}
 
 	public Integer getCodMod() {

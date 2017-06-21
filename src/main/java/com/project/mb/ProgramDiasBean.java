@@ -360,9 +360,11 @@ public class ProgramDiasBean implements Serializable {
 														.getProCodigo(), j
 														.getTipLinea()
 														.getCodigoTiplinea(),
-												mo.getModCodigo());
+												mo.getModCodigo(),
+												j.getParamCodigo());
 										objectMal.add(mal);
 										// FIN PRUEBAS
+
 										// ARMA EL OBJETO PARA SER
 										// INTRODUCIDO EN EL
 										// SCHEDULE
@@ -394,6 +396,7 @@ public class ProgramDiasBean implements Serializable {
 			}// 2do. FIN ELSE
 		}// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
 
+		// PRUEBAS VISUALIZACION
 		for (MallObject j : objectMal) {
 			System.out.println("codModel: " + j.getCodMod() + " Proceso: "
 					+ j.getCodPro() + " CodTpl: " + j.getCodTpl()
@@ -401,30 +404,91 @@ public class ProgramDiasBean implements Serializable {
 					+ j.getStand() + " CountLineas: " + j.getCountLineas()
 					+ " CantLineas: " + j.getCantLineas());
 		}
-		// IMPRIME LOS VALORES A DIBUJARSE
+		// FIN PRUEBAS VISUALIZACION
+
+		// PRUEBAS VISUALIZACION
 		int oo = 0;
 		for (Items2 i : this.orderList2) {
 			System.out.println("indice: " + oo + " CodParam: "
 					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
 					+ " codLinea: " + i.getCodLinea() + " codModelo: "
-					+ i.getCodMod() + " Matriz proceso: " + i.getmProcesos());
+					+ i.getCodMod() + " Stand: " + i.getStandar()
+					+ " Matriz proceso: " + i.getmProcesos());
 			oo++;
 		}
+		// FIN PRUEBAS VISUALIZACION
+
+		// VARIABLES
 		ArrayList<Items3> result = new ArrayList<Items3>();
 		DistribResult dis = new DistribResult();
+
+		Tablas tablas = new Tablas();
 		result = dis.generateDistribDias(orderList2);
 
-		Integer citems = 0;
-		for (Items3 k : result) {
-			System.out.println("*RESULTANTE*: indice: " + citems
-					+ " CodModelo: " + k.getCodMod() + " CodParam: "
-					+ k.getCodParam() + " CodProceso: " + k.getCodProceso()
-					+ " CodLinea: " + k.getCodLinea() + " Standar: "
-					+ k.getStandar() + " Matriz proceso: " + k.getmProcesos());
-			citems++;
+		orderList2.clear();
+		int citems = 0;
+		for (MallObject j : objectMal) {
+
+			for (Items3 k : result) {
+				if (j.getCodPro() == 2 && k.getCodMod() == j.getCodMod()) {
+					System.out
+							.println("*RESULTANTE DE TROQUELADO A APARADO*: indice: "
+									+ citems
+									+ " CodModelo: "
+									+ k.getCodMod()
+									+ " CodParam: "
+									+ k.getCodParam()
+									+ " CodProceso: "
+									+ k.getCodProceso()
+									+ " CodLinea: "
+									+ k.getCodLinea()
+									+ " Standar: "
+									+ k.getStandar()
+									+ " Matriz proceso: " + k.getmProcesos());
+
+					for (int h = 0; h < k.getmProcesos().get(0).size(); h++) {
+						System.out.println("pares troquelado: "
+								+ k.getmProcesos().get(0).get(h));
+
+						mProcesos = tablas.receivParamsPares(
+								Integer.parseInt(k.getmProcesos().get(0).get(h)
+										.toString()), j.getStand(),
+								j.getCountLineas(), this.nDias,
+								j.getCantLineas());
+
+						Items2 orderitem2 = new Items2(j.getCodPro(),
+								j.getCodTpl(), j.getCodParam(), j.getCodMod(),
+								j.getStand(), mProcesos);
+						orderList2.add(orderitem2);
+					}
+					citems++;
+					break;
+				}
+			}
 		}
 
-		// if (generateCalendar(this.orderList2, diaInicio.getTime()) == true) {
+		int h1 = 0;
+		for (Items2 i : this.orderList2) {
+			System.out.println("indice: " + h1 + " CodParam: "
+					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
+					+ " codLinea: " + i.getCodLinea() + " codModelo: "
+					+ i.getCodMod() + " Stand: " + i.getStandar()
+					+ " Matriz proceso: " + i.getmProcesos());
+			h1++;
+		}
+
+		result = dis.generateDistribDias(orderList2);
+
+		// result = dis.generateDistribDias(orderList2);
+		// for (Items3 k : result) {
+		// System.out.println("*RESULTANTE DE TROQUELADO A APARADO*: indice: "
+		// + citems + " CodModelo: " + k.getCodMod() + " CodParam: "
+		// + k.getCodParam() + " CodProceso: " + k.getCodProceso()
+		// + " CodLinea: " + k.getCodLinea() + " Standar: "
+		// + k.getStandar() + " Matriz proceso: " + k.getmProcesos());
+
+		// if (generateCalendar(this.orderList2, diaInicio.getTime()) ==
+		// true) {
 		// FacesContext.getCurrentInstance().addMessage(null,
 		// new FacesMessage("Calendario Generado", " "));
 		// } else {
