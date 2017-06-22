@@ -28,7 +28,10 @@ import com.project.dao.ProgramTurnosDao;
 import com.project.dao.ProgramTurnosDaoImpl;
 import com.project.dao.ProgramacionDiasDao;
 import com.project.dao.ProgramacionDiasDaoImpl;
+import com.project.dao.UsuarioDao;
+import com.project.dao.UsuarioDaoImpl;
 import com.project.entities.Detalleorden;
+import com.project.entities.Lineasprod;
 import com.project.entities.Lineasturno;
 import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
@@ -75,6 +78,7 @@ public class ProcesosOPBean implements Serializable {
 	private List<SelectItem> selectedItemsTurno;
 	private List<SelectItem> selectedItemsFechas;
 	private List<SelectItem> selectedItemsLT;
+	private List<SelectItem> selectedItemsUser;
 
 	private List<Detalleorden> detalleOrden;
 	private List<Parametro> detallePrametro;
@@ -258,6 +262,45 @@ public class ProcesosOPBean implements Serializable {
 
 	public Integer getnProceso() {
 		return nProceso;
+	}
+
+	public List<SelectItem> getSelectedItemsUser() {
+		// System.out.println("nProceso: " + this.nProceso);
+		ParamDao paramDao = new ParamDaoImpl();
+		List<?> param = paramDao.findParamAndLineaProd(this.nProceso);
+
+		// System.out.println("Tamaño: " + param.size());
+
+		for (int i = 0; i < param.size(); i++) {
+			Object[] row = (Object[]) param.get(i);
+			Parametro parametro = (Parametro) row[0];
+			Lineasturno lp = (Lineasturno) row[1];
+
+			this.selectedItemsUser = new ArrayList<SelectItem>();
+			UsuarioDao usuarioDAO = new UsuarioDaoImpl();
+			List<Usuario> usuario = usuarioDAO.findByProcesAndLP(parametro
+					.getProceso().getProCodigo(), lp.getLineasprod()
+					.getLineaproCodigo());
+			for (Usuario us : usuario) {
+				SelectItem selectItem = new SelectItem(us.getUserId(),
+						us.getUserName());
+				this.selectedItemsUser.add(selectItem);
+			}
+		}
+
+		// this.selectedItemsUser = new ArrayList<SelectItem>();
+		// UsuarioDao usuarioDAO = new UsuarioDaoImpl();
+		// List<Usuario> usuario = usuarioDAO.findByProcesAndLP(1, 12);
+		// for (Usuario us : usuario) {
+		// SelectItem selectItem = new SelectItem(us.getUserId(),
+		// us.getUserName());
+		// this.selectedItemsUser.add(selectItem);
+		// }
+		return selectedItemsUser;
+	}
+
+	public void setSelectedItemsUser(List<SelectItem> selectedItemsUser) {
+		this.selectedItemsUser = selectedItemsUser;
 	}
 
 	public Integer getCodProgramD() {

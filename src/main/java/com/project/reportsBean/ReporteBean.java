@@ -12,7 +12,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,15 +34,17 @@ public class ReporteBean implements Serializable {
 
 	private List<Modelo> modelo = new ArrayList<Modelo>();
 
-	public void exportPDF() throws JRException, IOException {
+	public void exportarPDF(ActionEvent actionEvent) throws JRException,
+			IOException {
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("txtUsuario", "HOLA MUNDO");
+		parametros.put("txtUsuario", "Ing. Stalin Ramírez");
+
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/rptJSF.jasper"));
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(
 				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
-						this.modelo));
+						this.getModelo()));
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
@@ -59,13 +60,18 @@ public class ReporteBean implements Serializable {
 	}
 
 	public void verPDF(ActionEvent actionEvent) throws Exception {
-		File jasper = new File(FacesContext.getCurrentInstance()
-				.getExternalContext().getRealPath("/rpJSF.jasper"));
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("txtUsuario", "Ing. Stalin Ramírez");
 
-		byte[] bytes = JasperRunManager.runReportToPdf(jasper.getPath(), null,
-				new JRBeanCollectionDataSource(this.getModelo()));
+		File jasper = new File(FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath("/rptJSF.jasper"));
+
+		byte[] bytes = JasperRunManager.runReportToPdf(jasper.getPath(),
+				parametros, new JRBeanCollectionDataSource(this.getModelo()));
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
+		// response.addHeader("Content-disposition",
+		// "attachment; filename=jsfReporte.pdf");
 		response.setContentType("application/pdf");
 		response.setContentLength(bytes.length);
 		ServletOutputStream outStream = response.getOutputStream();

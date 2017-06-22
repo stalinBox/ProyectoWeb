@@ -126,4 +126,24 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		return flag;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Usuario> findByProcesAndLP(Integer codPro, Integer codLP) {
+		List<Usuario> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Usuario us where us.proceso.proCodigo = " + codPro
+				+ " and us.lineasprod.lineaproCodigo = " + codLP;
+		System.out.println(sql);
+
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL USER: " + e.toString());
+		}
+		return listado;
+	}
+
 }

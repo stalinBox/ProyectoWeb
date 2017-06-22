@@ -11,14 +11,14 @@
 		<ui:define name="content">
 			<h:form>
 				<h1>REPORTE</h1>
-				<p:commandButton value="Reporte"
-					actionListener="#{reporteBean.exportPDF()}" />
-
-				<h:commandButton value="Ver PDF"
-					actionListener="#{persona2Bean.verPDF}" />
 
 				<h:commandButton value="Exportar PDF"
-					actionListener="#{personaBean.exportarPDF}" />
+					actionListener="#{reporteBean.exportarPDF}" />
+				<br />
+				<p:commandLink actionListener="#{reporteBean.verPDF}" ajax="false"
+					target="_blank">
+					<h:outputText value="VER" />
+				</p:commandLink>
 			</h:form>
 		</ui:define>
 	</ui:composition>

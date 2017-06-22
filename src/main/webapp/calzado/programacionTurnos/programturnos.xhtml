@@ -32,7 +32,7 @@
 							<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
 							<p:ajax
 								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
-								update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin, :msg" />
+								update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin, :msg, :ordenProceso:idResponsable" />
 						</p:selectOneMenu>
 
 						<p:outputLabel value="User:" />
@@ -41,8 +41,7 @@
 							style="width:150px">
 							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
 								itemValue="0" />
-							<f:selectItems
-								value="#{ordenProduccionBean.selectedItemsUsuarios}" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsUser}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 
