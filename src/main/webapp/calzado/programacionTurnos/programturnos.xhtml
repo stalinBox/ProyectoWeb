@@ -8,59 +8,108 @@
 <h:body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-			<p:messages id="msg" autoUpdate="true" />
-
+			<p:growl id="msg" showDetail="true" />
 			<h:form id="ordenProceso">
-				<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
-					<h:panelGrid id="ordenProd" columns="2" cellpadding="2">
+				<p:dialog header="Nuevo Proceso" widgetVar="dialogOPCreate"
+					modal="true" showEffect="fade" hideEffect="explode"
+					resizable="false" id="dlgOPCreate">
 
-						<p:outputLabel value="Sale Nº:" />
-						<p:selectOneMenu id="idCbxOrdenes"
-							value="#{procesosOPBean.nOrden}" style="width:150px">
-							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-								itemValue="0" />
-							<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
-							<p:ajax
-								update=":ordenProceso:idCbxProceso,:fmrItems:basicDT, :fmrItems:basicDTCapacidades" />
-						</p:selectOneMenu>
+					<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
+						<h:panelGrid id="ordenProd" columns="2" cellpadding="2">
 
-						<p:outputLabel value="Process:" />
-						<p:selectOneMenu id="idCbxProceso"
-							value="#{procesosOPBean.nProceso}" style="width:150px">
-							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-								itemValue="0" />
-							<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
-							<p:ajax
-								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
-								update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin, :msg, :ordenProceso:idResponsable" />
-						</p:selectOneMenu>
+							<p:outputLabel value="Sale Nº:" />
+							<p:selectOneMenu id="idCbxOrdenes"
+								value="#{procesosOPBean.nOrden}" style="width:150px">
+								<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+									itemValue="0" />
+								<f:selectItems value="#{procesosOPBean.selectedItemsOrdenes}" />
+								<p:ajax update=":ordenProceso:idCbxProceso" />
+							</p:selectOneMenu>
 
-						<p:outputLabel value="User:" />
-						<p:selectOneMenu id="idResponsable"
-							value="#{procesosOPBean.selectedProcesosOP.usuario.userId}"
-							style="width:150px">
-							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
-								itemValue="0" />
-							<f:selectItems value="#{procesosOPBean.selectedItemsUser}" />
-						</p:selectOneMenu>
+							<p:outputLabel value="Process:" />
+							<p:selectOneMenu id="idCbxProceso"
+								value="#{procesosOPBean.nProceso}" style="width:150px">
+								<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+									itemValue="0" />
+								<f:selectItems value="#{procesosOPBean.selectedItemsProceso}" />
+								<p:ajax
+									listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
+									update=":ordenProceso:lblFinicio, :ordenProceso:lblFfin, :msg, :ordenProceso:idResponsable" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="User:" />
+							<p:selectOneMenu id="idResponsable"
+								value="#{procesosOPBean.selectedProcesosOP.usuario.userId}"
+								style="width:150px">
+								<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+									itemValue="0" />
+								<f:selectItems value="#{procesosOPBean.selectedItemsUser}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
+							<p:outputLabel value="Start Date:" />
+							<p:outputLabel id="lblFinicio" value="#{procesosOPBean.fInicio}" />
+
+							<p:outputLabel value="Estimated Date:" />
+							<p:outputLabel id="lblFfin" value="#{procesosOPBean.fFin}" />
+						</h:panelGrid>
 					</h:panelGrid>
 
-					<h:panelGrid id="gridFechas" columns="2" cellpadding="2">
-						<p:outputLabel value="Start Date:" />
-						<p:outputLabel id="lblFinicio" value="#{procesosOPBean.fInicio}" />
+					<f:facet name="footer">
+						<p:separator />
+						<p:commandButton value="Submit"
+							update=":formDataTable, :msg, :fmrCabezera:idCbxPOP"
+							actionListener="#{procesosOPBean.btnCreateProcesosOP(actionEvent)}"
+							oncomplete="PF('dialogOPCreate').hide()" icon="fa fa-fw fa-save"
+							title="Guardar" />
 
-						<p:outputLabel value="Estimated Date:" />
-						<p:outputLabel id="lblFfin" value="#{procesosOPBean.fFin}" />
-					</h:panelGrid>
-				</h:panelGrid>
-				<p:commandButton value="Submit"
-					update=":fmrItems:idCbxModelo, :fmrItems:idCbxFechas, :fmrItems:idCbxlT, :formDataTable"
-					actionListener="#{procesosOPBean.btnCreateProcesosOP(actionEvent)}" />
+						<p:commandButton id="btnCreateCancelar"
+							oncomplete="PF('dialogOPCreate').hide()" icon="fa fa-fw fa-close"
+							title="Cancelar" value="Cancelar" />
 
-				<p:commandButton value="Delete"
-					actionListener="#{procesosOPBean.btnConsultar()}" />
+						<p:commandButton value="Delete"
+							actionListener="#{procesosOPBean.btnConsultar()}" />
+					</f:facet>
+
+
+				</p:dialog>
 			</h:form>
 
+			<p:separator />
+			<h:form id="fmrCabezera">
+				<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
+					<h:panelGrid id="gridCabezera" columns="2" cellpadding="2">
+						<p:outputLabel value="PROCESOS OP" />
+						<p:selectOneMenu id="idCbxPOP" value="#{procesosOPBean.codPOP}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{procesosOPBean.selectedItemsPO}" />
+							<p:ajax
+								listener="#{procesosOPBean.onChangeProcesos(actionEvent)}"
+								update=":formDataTable, :fmrItems:idCbxFechas, 
+								:fmrCabezera:lblFinicio2, 
+								:fmrCabezera:lblFfin2,
+								:fmrItems:idCbxModelo,
+								:fmrItems:basicDT, 
+								:fmrItems:basicDTCapacidades,
+								:fmrItems:idCbxlT" />
+						</p:selectOneMenu>
+						<p:commandButton id="btnOPModelo" update=":ordenProceso"
+							oncomplete="PF('dialogOPCreate').show()" title="Nuevo ProcesoOP"
+							icon="fa fa-plus" value="Nuevo" process="@this">
+						</p:commandButton>
+					</h:panelGrid>
+					<h:panelGrid id="gridFechas2" columns="2" cellpadding="2">
+						<p:outputLabel value="Start Date:" />
+						<p:outputLabel id="lblFinicio2" value="#{procesosOPBean.fInicio}" />
+
+						<p:outputLabel value="Estimated Date:" />
+						<p:outputLabel id="lblFfin2" value="#{procesosOPBean.fFin}" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
 			<p:separator />
 
 			<h:form id="fmrItems">
@@ -114,13 +163,15 @@
 							<f:selectItems value="#{procesosOPBean.selectedItemsLT}" />
 						</p:selectOneMenu>
 
-
-						<p:outputLabel value="Estimated Amount: " />
-						<p:inputText value="#{procesosOPBean.cantEstim}" size="2" />
+						<p:outputLabel value="Cant Estim" />
+						<p:inputText id="unNumero" required="true"
+							value="#{procesosOPBean.cantEstim}">
+						</p:inputText>
+						<h:message for="unNumero"></h:message>
 
 						<f:facet name="footer">
 							<p:commandButton id="btnAgregarDetalle" value="Add"
-								update=":formDataTable"
+								update=":formDataTable,msg"
 								actionListener="#{procesosOPBean.btnCreateProgramTurnos(actionEvent)}" />
 						</f:facet>
 					</h:panelGrid>
@@ -254,27 +305,6 @@
 				</p:confirmDialog>
 			</h:form>
 
-			<!-- <h:form id="formDataTable2">
-				<p:dataTable id="basicDT" var="detaO"
-					value="#{procesosOPBean.detalleOrden}"
-					emptyMessage="Ningun registro encontrado">
-
-					<f:facet name="header">Detalle Orden</f:facet>
-
-					<p:column headerText="Modelo">
-						<h:outputText value="#{detaO.modelo.modNombre}" />
-					</p:column>
-
-					<p:column headerText="Talla">
-						<h:outputText value="#{detaO.talla.talNumero}" />
-					</p:column>
-
-					<p:column headerText="Cantidad">
-						<h:outputText value="#{detaO.cantidad}" />
-					</p:column>
-
-				</p:dataTable>
-			</h:form> -->
 		</ui:define>
 	</ui:composition>
 </h:body>

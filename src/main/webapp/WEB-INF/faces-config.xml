@@ -4,14 +4,17 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
 
-	 <application>
-	  <resource-bundle>
-		<base-name>messages</base-name>
-		<var>msg</var>
-	   </resource-bundle>
-     </application>
+	<application>
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+	</application>
 	<lifecycle>
 		<phase-listener>com.project.utils.AuthorizationListener</phase-listener>
 	</lifecycle>
-
+	<validator>
+		<validator-id>MasMenos10</validator-id>
+		<validator-class>com.project.utils.MiValidador</validator-class>
+	</validator>
 </faces-config>

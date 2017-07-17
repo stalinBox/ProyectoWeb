@@ -108,6 +108,7 @@ public class ModelosDaoImpl implements ModelosDao {
 		return listado;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Modelo> findByModelByFindTipLinea(Integer codMod) {
 		List<Modelo> listado = null;

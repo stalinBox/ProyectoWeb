@@ -114,6 +114,12 @@
 								url="#{appBean.costosPath()}costosindirec.jsf"
 								icon="ui-icon-arrowreturnthick-1-e" />
 						</p:submenu>
+
+						<p:submenu label="Empresa" icon=" ui-icon-caret-1-n">
+							<p:menuitem value="Datos empresa"
+								url="#{appBean.baseUrl}/empresa/empresa.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+						</p:submenu>
 					</p:submenu>
 
 					<p:submenu label="Administración" icon="ui-icon-suitcase">
@@ -137,6 +143,8 @@
 						<p:submenu label="Reportes" icon="ui-icon-search">
 							<p:menuitem value="Reportes"
 								url="#{appBean.basePath}reportes/reporte1.jsf" />
+							<p:menuitem value="Reportes"
+								url="#{appBean.basePath}reportes/reporte2.jsf" />
 						</p:submenu>
 					</p:submenu>
 

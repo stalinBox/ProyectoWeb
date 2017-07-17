@@ -43,6 +43,11 @@ public class Procesosop implements Serializable {
 	@JoinColumn(name="ordenprod_codigo")
 	private Ordenprod ordenprod;
 
+	//bi-directional many-to-one association to Parametro
+	@ManyToOne
+	@JoinColumn(name="param_codigo")
+	private Parametro parametro;
+
 	//bi-directional many-to-one association to Proceso
 	@ManyToOne
 	@JoinColumn(name="pro_codigo")
@@ -106,6 +111,14 @@ public class Procesosop implements Serializable {
 
 	public void setOrdenprod(Ordenprod ordenprod) {
 		this.ordenprod = ordenprod;
+	}
+
+	public Parametro getParametro() {
+		return this.parametro;
+	}
+
+	public void setParametro(Parametro parametro) {
+		this.parametro = parametro;
 	}
 
 	public Proceso getProceso() {

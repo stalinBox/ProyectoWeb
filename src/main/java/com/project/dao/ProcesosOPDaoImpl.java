@@ -106,4 +106,41 @@ public class ProcesosOPDaoImpl implements ProcesosOPDao {
 		return entities;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Procesosop> findByOrden(Integer codOrden) {
+		List<Procesosop> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Procesosop op where op.ordenprod.ordenprodCodigo = "
+				+ codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPROCESOSOP: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Procesosop> findByCodPop(Integer codPop) {
+		List<Procesosop> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Procesosop op where op.processopCod = " + codPop;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPROCESOSOP: " + e.toString());
+		}
+		return listado;
+	}
+
 }

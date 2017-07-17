@@ -37,7 +37,7 @@ public class ReporteBean implements Serializable {
 	public void exportarPDF(ActionEvent actionEvent) throws JRException,
 			IOException {
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("txtUsuario", "Ing. Stalin Ramírez");
+		parametros.put("txtUsuario", "Stalin Ramírez");
 
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/rptJSF.jasper"));

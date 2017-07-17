@@ -2,9 +2,9 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.sql.Time;
 import java.util.Date;
-import java.sql.Timestamp;
 
 
 /**
@@ -21,6 +21,8 @@ public class Programturno implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="program_codigo")
 	private Integer programCodigo;
+
+	private Boolean activo;
 
 	@Column(name="cant_estim")
 	private Integer cantEstim;
@@ -87,6 +89,14 @@ public class Programturno implements Serializable {
 
 	public void setProgramCodigo(Integer programCodigo) {
 		this.programCodigo = programCodigo;
+	}
+
+	public Boolean getActivo() {
+		return this.activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
 	public Integer getCantEstim() {

@@ -155,4 +155,29 @@ public class ProgramacionDiasDaoImpl implements ProgramacionDiasDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Programdia> findByOrdenByParam(Integer codOrden,
+			Integer codProceso) {
+		List<Programdia> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Programdia pg "
+				+ " WHERE pg.parametro.paramCodigo = "
+				+ " ( SELECT pr.paramCodigo FROM Parametro pr "
+				+ " WHERE pr.ordenprod.ordenprodCodigo = " + codOrden
+				+ " AND pr.paramCodigo= " + codProceso + ") "
+				+ " ORDER BY pg ASC";
+
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR GETORDERDATES: " + e.toString());
+		}
+		return listado;
+	}
 }

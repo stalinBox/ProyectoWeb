@@ -12,6 +12,9 @@ public interface ProgramacionDiasDao {
 
 	public List<Programdia> getOrderDates(Integer codOrden, Integer codProceso);
 
+	public List<Programdia> findByOrdenByParam(Integer codOrden,
+			Integer codProceso);
+
 	public boolean create(Programdia programDia);
 
 	public boolean update(Programdia programDia);

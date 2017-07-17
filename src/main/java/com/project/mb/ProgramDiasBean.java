@@ -151,7 +151,8 @@ public class ProgramDiasBean implements Serializable {
 
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE
 		// DISTRIBUCION
-		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
+		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
 		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
@@ -163,7 +164,7 @@ public class ProgramDiasBean implements Serializable {
 
 		// LIMPIAR VARIABLES
 		this.orderList2.clear();
-		mAll.clear();
+		// mAll.clear();
 		mProcesos.clear();
 		mlineas.clear();
 
@@ -206,12 +207,13 @@ public class ProgramDiasBean implements Serializable {
 					public int compare(Proceso p1, Proceso p2) {
 						return p1.getProCodigo() - p2.getProCodigo();
 					}
-
 				});
+
 				// ORDENA LA VARIABLE "pro" DESCENDENTEMENTE
 				Collections.reverse(pro);
 				Items2 orderitem2 = new Items2();
 				Mlineas mmlineas = null;
+
 				// VARIABLE QUE RECOGE LOS TOTALES
 				// EMPEZAR A TRABAJAR CON LOS CODIGOS ORDENADOS
 				Integer contGeneral = 0;
@@ -271,16 +273,13 @@ public class ProgramDiasBean implements Serializable {
 										new FacesMessage(
 												"No hay lineas para generar la distribucion por dias",
 												" "));
-
 					} else {
 						// CONSULTA DE MODELOS
 						for (Modelo mo : modelo) {
 							DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
 							detalle = detalleDao.sumByMod(mo.getModCodigo(),
 									this.codOrden);
-							// System.out
-							// .println("**Cantidades por modelos en el DETALLE**: "
-							// + detalle.toString());
+
 							// OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA
 							// TABLA LINEASTURNOS
 							ParamDao parametroDao = new ParamDaoImpl();
@@ -348,8 +347,8 @@ public class ProgramDiasBean implements Serializable {
 												countLineas, this.nDias,
 												cantLineas);
 
-										mAll.put(j.getProceso().getProCodigo(),
-												mProcesos);
+										// mAll.put(j.getProceso().getProCodigo(),
+										// mProcesos);
 
 										// PRUEBAS
 										MallObject mal = new MallObject(

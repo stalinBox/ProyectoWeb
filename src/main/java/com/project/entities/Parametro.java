@@ -41,6 +41,10 @@ public class Parametro implements Serializable {
 	@JoinColumn(name="codigo_tiplinea")
 	private TipLinea tipLinea;
 
+	//bi-directional many-to-one association to Procesosop
+	@OneToMany(mappedBy="parametro")
+	private List<Procesosop> procesosops;
+
 	//bi-directional many-to-one association to Programdia
 	@OneToMany(mappedBy="parametro")
 	private List<Programdia> programdias;
@@ -108,6 +112,28 @@ public class Parametro implements Serializable {
 
 	public void setTipLinea(TipLinea tipLinea) {
 		this.tipLinea = tipLinea;
+	}
+
+	public List<Procesosop> getProcesosops() {
+		return this.procesosops;
+	}
+
+	public void setProcesosops(List<Procesosop> procesosops) {
+		this.procesosops = procesosops;
+	}
+
+	public Procesosop addProcesosop(Procesosop procesosop) {
+		getProcesosops().add(procesosop);
+		procesosop.setParametro(this);
+
+		return procesosop;
+	}
+
+	public Procesosop removeProcesosop(Procesosop procesosop) {
+		getProcesosops().remove(procesosop);
+		procesosop.setParametro(null);
+
+		return procesosop;
 	}
 
 	public List<Programdia> getProgramdias() {

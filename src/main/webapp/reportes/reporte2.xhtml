@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<h:form id="fmrReports">
+				<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
+					<h:panelGrid id="gridCabezera" columns="6" cellpadding="2">
+
+						<p:outputLabel value="Orden: " />
+						<p:selectOneMenu id="idCbxOrden" value="#{reporteBean2.codOrden}"
+							required="true" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{reporteBean2.selectedItemsOrdenes}" />
+							<p:ajax update=":fmrReports:idCbxProceso"></p:ajax>
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Proceso: " />
+						<p:selectOneMenu id="idCbxProceso"
+							value="#{reporteBean2.codParam}" style="width:150px">
+							<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
+								itemValue="0" />
+							<f:selectItems value="#{reporteBean2.selectedItemsProcesos}" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<p:commandButton value="Exportar Reporte"
+								actionListener="#{reporteBean2.exportarPDF}" />
+							<br />
+							<br />
+							<p:commandLink actionListener="#{reporteBean2.verPDF}"
+								ajax="false" target="_blank" value="VER PDFFF">
+							</p:commandLink>
+							<br />
+						</f:facet>
+					</h:panelGrid>
+
+				</h:panelGrid>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

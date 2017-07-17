@@ -51,6 +51,8 @@
 		<mapping class="com.project.entities.Distribdetalle" />
 		<mapping class="com.project.entities.EstadosAlt" />
 
+		<mapping class="com.project.entities.Empresa" />
+
 
 	</session-factory>
 </hibernate-configuration>

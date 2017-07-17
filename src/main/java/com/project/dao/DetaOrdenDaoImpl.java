@@ -277,4 +277,25 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Detalleorden> findByModByTal(Integer codMod, Integer codTal,
+			Integer codOrden) {
+		List<Detalleorden> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Detalleorden dt where dt.modelo.modCodigo = "
+				+ codMod + " and dt.talla.talCodigo = " + codTal
+				+ " and dt.ordenprod.ordenprodCodigo = " + codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALL DETAORDER: " + e.toString());
+		}
+		return listado;
+	}
 }

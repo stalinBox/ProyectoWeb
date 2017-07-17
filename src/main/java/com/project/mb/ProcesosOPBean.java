@@ -31,7 +31,6 @@ import com.project.dao.ProgramacionDiasDaoImpl;
 import com.project.dao.UsuarioDao;
 import com.project.dao.UsuarioDaoImpl;
 import com.project.entities.Detalleorden;
-import com.project.entities.Lineasprod;
 import com.project.entities.Lineasturno;
 import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
@@ -45,7 +44,7 @@ import com.project.entities.Turno;
 import com.project.entities.Usuario;
 
 /**
- * @author Stalin
+ * @author STALIN RAMÍREZ
  *
  */
 @ManagedBean
@@ -79,6 +78,7 @@ public class ProcesosOPBean implements Serializable {
 	private List<SelectItem> selectedItemsFechas;
 	private List<SelectItem> selectedItemsLT;
 	private List<SelectItem> selectedItemsUser;
+	private List<SelectItem> selectedItemsPO;
 
 	private List<Detalleorden> detalleOrden;
 	private List<Parametro> detallePrametro;
@@ -91,6 +91,7 @@ public class ProcesosOPBean implements Serializable {
 		this.selectedProcesosOP.setProceso(new Proceso());
 		this.selectedProcesosOP.setOrdenprod(new Ordenprod());
 		this.selectedProcesosOP.setUsuario(new Usuario());
+		this.selectedProcesosOP.setParametro(new Parametro());
 
 		this.selectedProgramTurno = new Programturno();
 		this.selectedProgramTurno.setProgramdia(new Programdia());
@@ -122,49 +123,82 @@ public class ProcesosOPBean implements Serializable {
 		String msg;
 		Integer dia = 1;
 		Date dia2 = null;
-		ProgramTurnosDao pgTurnosDao = new ProgramTurnosDaoImpl();
 
-		Procesosop pop = new Procesosop();
-		pop.setProcessopCod(this.codPOP);
+		Integer num1 = 0;
+		Integer num2 = 0;
+		ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+		List<Procesosop> procesosop = procesosOPDao.findByCodPop(this.codPOP);
 
-		Modelo modelo = new Modelo();
-		modelo.setModCodigo(this.codMod);
-
-		Programdia progrD = new Programdia();
-		progrD.setProgdiasCodigo(this.codProgramD);
-
-		ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
-		List<Programdia> pp = programDias.findByCodProgram(this.codProgramD);
-
-		for (Programdia p : pp) {
-			if (p.getFinicio() == dia2) {
-				dia++;
-				this.selectedProgramTurno.setFInicio(p.getFinicio());
-				this.selectedProgramTurno.setDia(dia);
-			} else {
-				this.selectedProgramTurno.setFInicio(p.getFinicio());
-				this.selectedProgramTurno.setDia(dia);
-			}
+		for (Procesosop op : procesosop) {
+			this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+			this.nProceso = op.getParametro().getParamCodigo();
+		}
+		DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
+		List<Detalleorden> detalle = detalleDao.findByModByTal(this.codMod,
+				this.selectedProgramTurno.getTalla().getTalCodigo(),
+				this.nOrden);
+		for (Detalleorden i : detalle) {
+			num1 = i.getCantidad();
 		}
 
-		this.selectedProgramTurno.setProgramdia(progrD);
-		this.selectedProgramTurno.setProcesosop(pop);
-		this.selectedProgramTurno.setModelo(modelo);
-		this.selectedProgramTurno.setCantEstim(this.cantEstim);
-		this.selectedProgramTurno.setCantReal(0);
-		this.selectedProgramTurno.setEstadoTur("PENDIENTE");
+		ParamDao paramDAO = new ParamDaoImpl();
+		List<Parametro> param = paramDAO.findByStand(this.nProceso);
+		for (Parametro p : param) {
+			num2 = p.getStandar();
+		}
 
-		if (pgTurnosDao.create(this.selectedProgramTurno)) {
-			msg = "Se creó un item";
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					msg, null);
-			FacesContext.getCurrentInstance().addMessage(null, message);
+		if (this.cantEstim <= num1 && this.cantEstim <= num2) {
+			ProgramTurnosDao pgTurnosDao = new ProgramTurnosDaoImpl();
+
+			Procesosop pop = new Procesosop();
+			pop.setProcessopCod(this.codPOP);
+
+			Modelo modelo = new Modelo();
+			modelo.setModCodigo(this.codMod);
+
+			Programdia progrD = new Programdia();
+			progrD.setProgdiasCodigo(this.codProgramD);
+
+			ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
+			List<Programdia> pp = programDias
+					.findByCodProgram(this.codProgramD);
+
+			for (Programdia p : pp) {
+				if (p.getFinicio() == dia2) {
+					dia++;
+					this.selectedProgramTurno.setFInicio(p.getFinicio());
+					this.selectedProgramTurno.setDia(dia);
+				} else {
+					this.selectedProgramTurno.setFInicio(p.getFinicio());
+					this.selectedProgramTurno.setDia(dia);
+				}
+			}
+
+			this.selectedProgramTurno.setProgramdia(progrD);
+			this.selectedProgramTurno.setProcesosop(pop);
+			this.selectedProgramTurno.setModelo(modelo);
+			this.selectedProgramTurno.setCantEstim(this.cantEstim);
+			this.selectedProgramTurno.setCantReal(0);
+			this.selectedProgramTurno.setEstadoTur("PENDIENTE");
+
+			if (pgTurnosDao.create(this.selectedProgramTurno)) {
+				msg = "Se creó un item";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_INFO, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			} else {
+				msg = "Error al crear un item para programTurnos";
+				FacesMessage message = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, msg, null);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 		} else {
-			msg = "Error al crear un item para programTurnos";
+			msg = "El numero debe ser menor a: " + num1 + " y " + num2;
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+
 	}
 
 	public void onChangeProcesos(ActionEvent actionEvent) {
@@ -189,9 +223,13 @@ public class ProcesosOPBean implements Serializable {
 		Proceso pro = new Proceso();
 		pro.setProCodigo(param);
 
+		Parametro para = new Parametro();
+		para.setParamCodigo(this.nProceso);
+
 		Ordenprod op = new Ordenprod();
 		op.setOrdenprodCodigo(this.nOrden);
 
+		this.selectedProcesosOP.setParametro(para);
 		this.selectedProcesosOP.setProceso(pro);
 		this.selectedProcesosOP.setOrdenprod(op);
 		this.selectedProcesosOP.setFActual(fInicio);
@@ -202,8 +240,8 @@ public class ProcesosOPBean implements Serializable {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					msg, null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
-			Procesosop pop = procesoOPDao.getLastResp();
-			this.codPOP = pop.getProcessopCod();
+			// Procesosop pop = procesoOPDao.getLastResp();
+			// this.codPOP = pop.getProcessopCod();
 		} else {
 			msg = "Error al crear un procesoOP";
 			FacesMessage message = new FacesMessage(
@@ -232,6 +270,18 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public void getFechas() {
+
+		if (this.codPOP != 0) {
+			ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+			List<Procesosop> procesosop = procesosOPDao
+					.findByCodPop(this.codPOP);
+
+			for (Procesosop op : procesosop) {
+				this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+				this.nProceso = op.getParametro().getParamCodigo();
+			}
+		}
+
 		if (this.nProceso != 0) {
 			ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
 			List<Programdia> pp = programDias.getOrderDates(this.nOrden,
@@ -312,6 +362,16 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectedItemsFechas() {
+		System.out.println("codPOP: " + this.codPOP);
+
+		ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+		List<Procesosop> procesosop = procesosOPDao.findByCodPop(this.codPOP);
+
+		for (Procesosop op : procesosop) {
+			this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+			this.nProceso = op.getParametro().getParamCodigo();
+		}
+
 		if (this.nOrden != null && !this.nOrden.equals("") && this.nOrden != 0) {
 			this.selectedItemsFechas = new ArrayList<SelectItem>();
 			ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
@@ -343,7 +403,6 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public Integer getCantEstim() {
-		// cantEstim = 165;
 		return cantEstim;
 	}
 
@@ -424,6 +483,7 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<Procesosop> getProcesosOP() {
+
 		return procesosOP;
 	}
 
@@ -527,8 +587,14 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<SelectItem> getSelectedItemsLT() {
-		if (this.nOrden != null) {
+		ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+		List<Procesosop> procesosop = procesosOPDao.findByCodPop(this.codPOP);
 
+		for (Procesosop op : procesosop) {
+			this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+			this.nProceso = op.getParametro().getParamCodigo();
+		}
+		if (this.nOrden != null) {
 			this.selectedItemsLT = new ArrayList<SelectItem>();
 			LineasTurnosDao lineasturnosDao = new LineasTurnosDaoImpl();
 			List<Lineasturno> lineast = lineasturnosDao
@@ -550,6 +616,14 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<Detalleorden> getDetalleOrden() {
+		ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+		List<Procesosop> procesosop = procesosOPDao.findByCodPop(this.codPOP);
+
+		for (Procesosop op : procesosop) {
+			this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+			this.nProceso = op.getParametro().getParamCodigo();
+		}
+
 		if (this.nOrden != null) {
 			DetaOrdenDao detaDAO = new DetaOrdenDaoImpl();
 			this.detalleOrden = detaDAO.findByOrden(this.nOrden);
@@ -583,6 +657,14 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public List<Parametro> getDetallePrametro() {
+		ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+		List<Procesosop> procesosop = procesosOPDao.findByCodPop(this.codPOP);
+
+		for (Procesosop op : procesosop) {
+			this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+			this.nProceso = op.getParametro().getParamCodigo();
+		}
+
 		if (this.nOrden != null) {
 			ParamDao paraDAO = new ParamDaoImpl();
 			this.detallePrametro = paraDAO.findByOrdenProd(this.nOrden);
@@ -595,6 +677,26 @@ public class ProcesosOPBean implements Serializable {
 
 	public void setDetallePrametro(List<Parametro> detallePrametro) {
 		this.detallePrametro = detallePrametro;
+	}
+
+	public List<SelectItem> getSelectedItemsPO() {
+		this.selectedItemsPO = new ArrayList<SelectItem>();
+		ProcesosOPDao procesosOPDAO = new ProcesosOPDaoImpl();
+		List<Procesosop> procesosOP = procesosOPDAO.findAll();
+		for (Procesosop pop : procesosOP) {
+			SelectItem selectItem = new SelectItem(pop.getProcessopCod(), pop
+					.getOrdenprod().getCliente().getNombrecli()
+					+ " / "
+					+ pop.getProceso().getTipoProceso().getTprNombre()
+					+ " - " + pop.getParametro().getTipLinea().getTipolinea());
+			this.selectedItemsPO.add(selectItem);
+		}
+
+		return selectedItemsPO;
+	}
+
+	public void setSelectedItemsPO(List<SelectItem> selectedItemsPO) {
+		this.selectedItemsPO = selectedItemsPO;
 	}
 
 }

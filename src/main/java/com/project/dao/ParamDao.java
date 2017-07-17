@@ -13,6 +13,8 @@ public interface ParamDao {
 
 	public Parametro findbyCodParam(Integer codParam);
 
+	public List<Parametro> findByStand(Integer codParam);
+
 	public List<Parametro> findByCodLinea(Integer codLinea);
 
 	public List<Parametro> findByParamInLT(Integer codOrden);
