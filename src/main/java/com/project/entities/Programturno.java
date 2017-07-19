@@ -22,8 +22,6 @@ public class Programturno implements Serializable {
 	@Column(name="program_codigo")
 	private Integer programCodigo;
 
-	private Boolean activo;
-
 	@Column(name="cant_estim")
 	private Integer cantEstim;
 
@@ -89,14 +87,6 @@ public class Programturno implements Serializable {
 
 	public void setProgramCodigo(Integer programCodigo) {
 		this.programCodigo = programCodigo;
-	}
-
-	public Boolean getActivo() {
-		return this.activo;
-	}
-
-	public void setActivo(Boolean activo) {
-		this.activo = activo;
 	}
 
 	public Integer getCantEstim() {

@@ -13,6 +13,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
@@ -42,9 +44,10 @@ import com.project.entities.Programturno;
 import com.project.entities.Talla;
 import com.project.entities.Turno;
 import com.project.entities.Usuario;
+import com.project.utils.MiValidador;
 
 /**
- * @author STALIN RAMÍREZ
+ * @author Stalin
  *
  */
 @ManagedBean

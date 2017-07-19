@@ -151,8 +151,7 @@ public class ProgramDiasBean implements Serializable {
 
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE
 		// DISTRIBUCION
-		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
-		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
 		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
@@ -164,7 +163,7 @@ public class ProgramDiasBean implements Serializable {
 
 		// LIMPIAR VARIABLES
 		this.orderList2.clear();
-		// mAll.clear();
+		mAll.clear();
 		mProcesos.clear();
 		mlineas.clear();
 
@@ -207,13 +206,12 @@ public class ProgramDiasBean implements Serializable {
 					public int compare(Proceso p1, Proceso p2) {
 						return p1.getProCodigo() - p2.getProCodigo();
 					}
-				});
 
+				});
 				// ORDENA LA VARIABLE "pro" DESCENDENTEMENTE
 				Collections.reverse(pro);
 				Items2 orderitem2 = new Items2();
 				Mlineas mmlineas = null;
-
 				// VARIABLE QUE RECOGE LOS TOTALES
 				// EMPEZAR A TRABAJAR CON LOS CODIGOS ORDENADOS
 				Integer contGeneral = 0;
@@ -273,13 +271,16 @@ public class ProgramDiasBean implements Serializable {
 										new FacesMessage(
 												"No hay lineas para generar la distribucion por dias",
 												" "));
+
 					} else {
 						// CONSULTA DE MODELOS
 						for (Modelo mo : modelo) {
 							DetaOrdenDao detalleDao = new DetaOrdenDaoImpl();
 							detalle = detalleDao.sumByMod(mo.getModCodigo(),
 									this.codOrden);
-
+							// System.out
+							// .println("**Cantidades por modelos en el DETALLE**: "
+							// + detalle.toString());
 							// OBTIENE LOS PARAMETROS UNICOS QUE ESTAN EN LA
 							// TABLA LINEASTURNOS
 							ParamDao parametroDao = new ParamDaoImpl();
@@ -347,8 +348,8 @@ public class ProgramDiasBean implements Serializable {
 												countLineas, this.nDias,
 												cantLineas);
 
-										// mAll.put(j.getProceso().getProCodigo(),
-										// mProcesos);
+										mAll.put(j.getProceso().getProCodigo(),
+												mProcesos);
 
 										// PRUEBAS
 										MallObject mal = new MallObject(
@@ -396,24 +397,24 @@ public class ProgramDiasBean implements Serializable {
 		}// 2. FIN VERIFICAR HORA EXTRAS Y CONTROLAR LOS FINES DE SEMANA
 
 		// PRUEBAS VISUALIZACION
-		for (MallObject j : objectMal) {
-			System.out.println("codModel: " + j.getCodMod() + " Proceso: "
-					+ j.getCodPro() + " CodTpl: " + j.getCodTpl()
-					+ " Sumatoria: " + j.getSumatoria() + " Standar: "
-					+ j.getStand() + " CountLineas: " + j.getCountLineas()
-					+ " CantLineas: " + j.getCantLineas());
-		}
+		// for (MallObject j : objectMal) {
+		// System.out.println("codModel: " + j.getCodMod() + " Proceso: "
+		// + j.getCodPro() + " CodTpl: " + j.getCodTpl()
+		// + " Sumatoria: " + j.getSumatoria() + " Standar: "
+		// + j.getStand() + " CountLineas: " + j.getCountLineas()
+		// + " CantLineas: " + j.getCantLineas());
+		// }
 		// FIN PRUEBAS VISUALIZACION
 
 		// PRUEBAS VISUALIZACION
-		int oo = 0;
-		for (Items2 i : this.orderList2) {
-			System.out.println("indice: " + oo + " CodParam: "
-					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
-					+ " codLinea: " + i.getCodLinea() + " codModelo: "
-					+ i.getCodMod() + " Stand: " + i.getStandar()
-					+ " Matriz proceso: " + i.getmProcesos());
-			oo++;
+		Integer ca1 = 0;
+		for (Items2 k : orderList2) {
+			System.out.println("*ITEMS 2.1*: indice: " + ca1 + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			ca1++;
 		}
 		// FIN PRUEBAS VISUALIZACION
 
@@ -424,27 +425,21 @@ public class ProgramDiasBean implements Serializable {
 		Tablas tablas = new Tablas();
 		result = dis.generateDistribDias(orderList2);
 
-		orderList2.clear();
-		int citems = 0;
-		for (MallObject j : objectMal) {
+		Integer ca13 = 0;
+		for (Items3 k : result) {
+			System.out.println("*ITEMS 3*: indice: " + ca13 + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			ca13++;
+		}
 
+		// orderList2.clear();
+		Integer citems = 0;
+		for (MallObject j : objectMal) {
 			for (Items3 k : result) {
 				if (j.getCodPro() == 2 && k.getCodMod() == j.getCodMod()) {
-					System.out
-							.println("*RESULTANTE DE TROQUELADO A APARADO*: indice: "
-									+ citems
-									+ " CodModelo: "
-									+ k.getCodMod()
-									+ " CodParam: "
-									+ k.getCodParam()
-									+ " CodProceso: "
-									+ k.getCodProceso()
-									+ " CodLinea: "
-									+ k.getCodLinea()
-									+ " Standar: "
-									+ k.getStandar()
-									+ " Matriz proceso: " + k.getmProcesos());
-
 					for (int h = 0; h < k.getmProcesos().get(0).size(); h++) {
 						System.out.println("pares troquelado: "
 								+ k.getmProcesos().get(0).get(h));
@@ -466,18 +461,17 @@ public class ProgramDiasBean implements Serializable {
 			}
 		}
 
-		int h1 = 0;
-		for (Items2 i : this.orderList2) {
-			System.out.println("indice: " + h1 + " CodParam: "
-					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
-					+ " codLinea: " + i.getCodLinea() + " codModelo: "
-					+ i.getCodMod() + " Stand: " + i.getStandar()
-					+ " Matriz proceso: " + i.getmProcesos());
-			h1++;
-		}
+		// result = dis.generateDistribDias(orderList2);
 
-		result = dis.generateDistribDias(orderList2);
-
+		// int h1 = 0;
+		// for (Items3 i : result) {
+		// System.out.println("FINAL indice: " + h1 + " CodParam: "
+		// + i.getCodParam() + " CodProceso: " + i.getCodProceso()
+		// + " codLinea: " + i.getCodLinea() + " codModelo: "
+		// + i.getCodMod() + " Stand: " + i.getStandar()
+		// + " Matriz proceso: " + i.getmProcesos());
+		// h1++;
+		// }
 		// result = dis.generateDistribDias(orderList2);
 		// for (Items3 k : result) {
 		// System.out.println("*RESULTANTE DE TROQUELADO A APARADO*: indice: "
@@ -519,24 +513,26 @@ public class ProgramDiasBean implements Serializable {
 			}
 
 		});
+
 		// ORDENA DESCENDENTEMENTE
 		Collections.reverse(orderList22);
 
+		DistribResult dis = new DistribResult();
+		System.out.println("ANTES DE IMPRIMIR");
+		orderListFinal = dis.generateDistribDias(orderList22);
+		// dis.generateDistribDias(orderList22);
+
 		// IMPRIME LA MATRIZ A DIBUJARSE
 		Integer ca1 = 0;
-		for (Items2 k : orderList22) {
-			System.out.println("*BASE*: indice: " + ca1 + " CodModelo: "
+		for (Items3 k : orderListFinal) {
+			System.out.println("*FINAL*: indice: " + ca1 + " CodModelo: "
 					+ k.getCodMod() + " CodParam: " + k.getCodParam()
 					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
 					+ k.getCodLinea() + " Standar: " + k.getStandar()
 					+ " Matriz proceso: " + k.getmProcesos());
 			ca1++;
 		}
-
-		DistribResult dis = new DistribResult();
-		// orderListFinal = dis.generateDistribDias(orderList22);
-		dis.generateDistribDias(orderList22);
-
+		System.out.println("DESPUES DE IMPRIMIR");
 		/***
 		 * DE AQUI PARA ABAJO ES SOLO PARA DIBUJAR EN SCHEDULE
 		 * */
