@@ -416,6 +416,14 @@ public class ProgramDiasBean implements Serializable {
 					+ " Matriz proceso: " + k.getmProcesos());
 			ca1++;
 		}
+
+		for (MallObject j : objectMal) {
+			System.out.println("Sumatoria: " + j.getSumatoria() + " standar: "
+					+ j.getStand() + " CountLineas: " + j.getCountLineas()
+					+ " CantLineas: " + j.getCantLineas() + " codPro: "
+					+ j.getCodPro() + " codTPL: " + j.getCodTpl() + " codMod: "
+					+ j.getCodMod() + " codParam: " + j.getCodParam());
+		}
 		// FIN PRUEBAS VISUALIZACION
 
 		// VARIABLES

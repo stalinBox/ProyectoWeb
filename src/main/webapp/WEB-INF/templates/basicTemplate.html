@@ -114,6 +114,16 @@
 								url="#{appBean.costosPath()}costosindirec.jsf"
 								icon="ui-icon-arrowreturnthick-1-e" />
 						</p:submenu>
+
+						<p:submenu label="EMPRESA" icon=" ui-icon-caret-1-n">
+							<p:menuitem value="Logo"
+								url="#{appBean.basePath}faps/logoMantenimiento.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+
+							<p:menuitem value="Empresa"
+								url="#{appBean.basePath}empresa/empresa.jsf"
+								icon="ui-icon-arrowreturnthick-1-e" />
+						</p:submenu>
 					</p:submenu>
 
 					<p:submenu label="Administración" icon="ui-icon-suitcase">
@@ -133,13 +143,17 @@
 
 
 					<p:submenu label="Reportes" icon="ui-icon-note">
-
 						<p:submenu label="Reportes" icon="ui-icon-search">
 							<p:menuitem value="Reportes"
 								url="#{appBean.basePath}reportes/reporte1.jsf" />
 							<p:menuitem value="Reportes"
 								url="#{appBean.basePath}reportes/reporte2.jsf" />
 						</p:submenu>
+					</p:submenu>
+
+					<p:submenu label="Ayudas" icon="ui-icon-note">
+						<p:menuitem value="ANDON" url="" icon="ui-icon-caret-1-n" />
+						<p:menuitem value="FAPS" url="" icon="ui-icon-caret-1-n" />
 					</p:submenu>
 
 					<p:menuitem value="Exit" actionListener="#{loginBean.logout()}"

@@ -28,9 +28,6 @@ public class ModelosBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		selectedModelo = new Modelo();
-	}
-
-	public ModelosBean() {
 		this.modelos = new ArrayList<Modelo>();
 	}
 
