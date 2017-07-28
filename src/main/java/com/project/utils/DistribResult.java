@@ -16,18 +16,6 @@ public class DistribResult {
 			}
 
 		});
-		// ORDENA DESCENDENTEMENTE
-		// Collections.reverse(orderList22);
-
-		// Integer ca1 = 0;
-		// for (Items2 k : orderList22) {
-		// System.out.println("*ITEMS 2.2*: indice: " + ca1 + " CodModelo: "
-		// + k.getCodMod() + " CodParam: " + k.getCodParam()
-		// + " CodProceso: " + k.getCodProceso() + " CodLinea: "
-		// + k.getCodLinea() + " Standar: " + k.getStandar()
-		// + " Matriz proceso: " + k.getmProcesos());
-		// ca1++;
-		// }
 
 		// VARIABLES
 		ArrayList<Items3> orderListFinal = new ArrayList<Items3>();

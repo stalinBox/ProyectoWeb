@@ -436,7 +436,7 @@ public class ProgramDiasBean implements Serializable {
 
 		/**
 		 * 
-		 * ALMACENAR AQUI PARA LA GRAFICA
+		 * ALMACENAR AQUI EN ITEMS3 PARA LA GRAFICA
 		 * */
 		Integer ca13 = 0;
 		for (Items3 k : result) {
@@ -448,33 +448,36 @@ public class ProgramDiasBean implements Serializable {
 			ca13++;
 		}
 
-		// orderList2.clear();
-		Integer citems = 0;
-		for (MallObject j : objectMal) {
-			for (Items3 k : result) {
-				if (j.getCodPro() == 2 && k.getCodMod() == j.getCodMod()) {
-					for (int h = 0; h < k.getmProcesos().get(0).size(); h++) {
-						// System.out.println("pares troquelado: "
-						// + k.getmProcesos().get(0).get(h));
-						mProcesos = tablas.receivParamsPares(
-								Integer.parseInt(k.getmProcesos().get(0).get(h)
-										.toString()), j.getStand(),
-								j.getCountLineas(), this.nDias,
-								j.getCantLineas());
-
-						Items4 orderitem2 = new Items4(j.getCodPro(),
-								j.getCodTpl(), j.getCodParam(), j.getCodMod(),
-								j.getStand(), mProcesos);
-						result4.add(orderitem2);
-					}
-					citems++;
-					break;
-				}
-			}
-		}
-
 		DistribAparado distribAparado = new DistribAparado();
-		distribAparado.generateDistribDiasAparado(result4);
+		distribAparado.generateDistribDiasAparado(result);
+
+		// orderList2.clear();
+		// Integer citems = 0;
+		// for (MallObject j : objectMal) {
+		// for (Items3 k : result) {
+		// if (j.getCodPro() == 2 && k.getCodMod() == j.getCodMod()) {
+		// for (int h = 0; h < k.getmProcesos().get(0).size(); h++) {
+		// // System.out.println("pares troquelado: "
+		// // + k.getmProcesos().get(0).get(h));
+		// mProcesos = tablas.receivParamsPares(
+		// Integer.parseInt(k.getmProcesos().get(0).get(h)
+		// .toString()), j.getStand(),
+		// j.getCountLineas(), this.nDias,
+		// j.getCantLineas());
+		//
+		// Items4 orderitem2 = new Items4(j.getCodPro(),
+		// j.getCodTpl(), j.getCodParam(), j.getCodMod(),
+		// j.getStand(), mProcesos);
+		// result4.add(orderitem2);
+		// }
+		// citems++;
+		// break;
+		// }
+		// }
+		// }
+		//
+		// DistribAparado distribAparado = new DistribAparado();
+		// distribAparado.generateDistribDiasAparado(result4);
 
 		// result = dis.generateDistribDias(orderList2);
 

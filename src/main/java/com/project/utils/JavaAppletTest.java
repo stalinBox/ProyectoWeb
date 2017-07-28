@@ -2,42 +2,30 @@ package com.project.utils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class JavaAppletTest {
 
 	public static void main(String[] args) {
-		// VARIABLES
-		ArrayList<Integer> array1 = new ArrayList<Integer>();
-		ArrayList<Double> array2 = new ArrayList<Double>();
-		// TODO Auto-generated method stub
-		DecimalFormat formateador = new DecimalFormat("####.###");
+		Scanner in = new Scanner(System.in);
+		int num, max = 0, min = 0;
 
-		System.out.println("Clase FragmentarNumero: ");
-		double num = 1.127;
-		Integer cp = 846;
-
-		System.out.println("Numero a trabajar: " + formateador.format(num));
-
-		double a = num % 1;
-		double b = Math.round(num);
-
-		System.out.println("Parte entera: " + b);
-		System.out.println("Parte decimal: " + formateador.format(a));
-
-		for (int i = 0; i < b; i++) {
-			int j = cp / 5;
-			array1.add(j);
+		for (int i = 1; i < 11; i++) {
+			System.out.print(i + " Ingrese un numero: ");
+			num = in.nextInt();
+			if (min != 0 && max != 0) {
+				if (num > max) {
+					max = num;
+				}
+				if (num < min) {
+					min = num;
+				}
+			} else {
+				min = num;
+				max = num;
+			}
 		}
-		// calculo independiente para la capacidad por dia
-		double k = cp * a / 5;
-		array1.add((int) Math.round(k));
-		System.out.println("Array" + array1);
-
-		double horas = 0;
-		for (Integer i : array1) {
-			horas = ((i / cp.doubleValue()) * 5 * 8);
-			array2.add(horas);
-		}
-		System.out.println("Horas: " + array2);
+		System.out.println("Numero Maximo: " + max);
+		System.out.println("Numero Minimo: " + min);
 	}
 }
