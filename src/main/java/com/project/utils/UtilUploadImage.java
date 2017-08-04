@@ -9,15 +9,22 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 public class UtilUploadImage {
-
+	/**
+	 * 
+	 * TAMAÑO OPTIMO PARA LAS IMAGENES ES 150 PX
+	 * 
+	 * @param bytes
+	 * @param nomFile
+	 * @return
+	 */
 	public static String saveFileToTemp(byte[] bytes, String nomFile) {
 		String pathFile = null;
 		ServletContext servletContext = (ServletContext) FacesContext
 				.getCurrentInstance().getExternalContext().getContext();
 
-		String path = servletContext.getRealPath("") + File.separator
-				+ "resources" + File.separatorChar + "img" + File.separatorChar
-				+ "tmp" + File.separatorChar + nomFile;
+		String path = servletContext.getRealPath("") + File.separatorChar
+				+ "images" + File.separatorChar + "tmp" + File.separatorChar
+				+ nomFile;
 
 		File f = null;
 		InputStream in = null;
@@ -32,11 +39,11 @@ public class UtilUploadImage {
 			}
 			out.flush();
 			out.close();
-			pathFile = "../resources/img/tmp" + nomFile;
+			pathFile = "/images/tmp/" + nomFile;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("No se pudo cargar la imagen");
 		}
-		return nomFile;
+		return pathFile;
 	}
 }

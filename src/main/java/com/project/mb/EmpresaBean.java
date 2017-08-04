@@ -34,6 +34,11 @@ public class EmpresaBean implements Serializable {
 	}
 
 	// METODOS
+	/**
+	 * METODO PARA SUBIR LA IMAGEN AL SERVIDOR
+	 * 
+	 * @param event
+	 */
 	public void UploadImage(FileUploadEvent event) {
 		FacesMessage mensaje = new FacesMessage();
 		try {

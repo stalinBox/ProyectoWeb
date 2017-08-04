@@ -403,6 +403,7 @@ public class ProgramDiasBean implements Serializable {
 		/**
 		 * VISUALIZACION MATRIZ INICIAL
 		 * */
+		System.out.println("------ ITEMS 2 ------");
 		Integer ca1 = 0;
 		for (Items2 k : orderList2) {
 			System.out.println("*ITEMS 2.1*: indice: " + ca1 + " CodModelo: "
@@ -438,6 +439,8 @@ public class ProgramDiasBean implements Serializable {
 		 * 
 		 * ALMACENAR AQUI EN ITEMS3 PARA LA GRAFICA
 		 * */
+
+		System.out.println("----- ITEMS 3 -----");
 		Integer ca13 = 0;
 		for (Items3 k : result) {
 			System.out.println("*ITEMS 3*: indice: " + ca13 + " CodModelo: "

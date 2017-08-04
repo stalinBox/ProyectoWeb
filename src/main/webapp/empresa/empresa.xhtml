@@ -81,9 +81,10 @@
 						<h:panelGroup>
 							<p:fileUpload id="idFileUpload"
 								fileUploadListener="#{empresaBean.UploadImage}" mode="advanced"
-								dragDropSupport="false" update="msgs,idGraImag"
-								sizeLimit="512000" fileLimit="1"
-								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+								dragDropSupport="false" update="msgs,:formCreate:idGraImag"
+								sizeLimit="512000" fileLimit="1" width="100" height="100"
+								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" cancelLabel="CANCELAR"
+								uploadLabel="CARGAR" label="ELEGIR" />
 
 							<p:graphicImage id="idGraImag"
 								value="#{empresaBean.imagenEmpresa}" width="auto" height="auto" />

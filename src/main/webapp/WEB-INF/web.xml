@@ -72,7 +72,7 @@
 		</init-param>
 		<init-param>
 			<param-name>uploadDirectory</param-name>
-			<param-value>C:\UTA_CALTU\uploadImages</param-value>
+			<param-value>C:/UTA_CALTU/uploadImages</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
