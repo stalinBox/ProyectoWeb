@@ -417,13 +417,13 @@ public class ProgramDiasBean implements Serializable {
 		/**
 		 * VISUALIZAR LUEGO CUANDO YA HAYA TERMINADO LA DISTRIBUCION
 		 * */
-		// for (MallObject j : objectMal) {
-		// System.out.println("Sumatoria: " + j.getSumatoria() + " standar: "
-		// + j.getStand() + " CountLineas: " + j.getCountLineas()
-		// + " CantLineas: " + j.getCantLineas() + " codPro: "
-		// + j.getCodPro() + " codTPL: " + j.getCodTpl() + " codMod: "
-		// + j.getCodMod() + " codParam: " + j.getCodParam());
-		// }
+		for (MallObject j : objectMal) {
+			System.out.println("Sumatoria: " + j.getSumatoria() + " standar: "
+					+ j.getStand() + " CountLineas: " + j.getCountLineas()
+					+ " CantLineas: " + j.getCantLineas() + " codPro: "
+					+ j.getCodPro() + " codTPL: " + j.getCodTpl() + " codMod: "
+					+ j.getCodMod() + " codParam: " + j.getCodParam());
+		}
 
 		// FIN PRUEBAS VISUALIZACION
 
@@ -452,7 +452,7 @@ public class ProgramDiasBean implements Serializable {
 		}
 
 		DistribAparado distribAparado = new DistribAparado();
-		distribAparado.generateDistribDiasAparado(result);
+		distribAparado.generateDistribDiasAparado(result, objectMal);
 
 		// orderList2.clear();
 		// Integer citems = 0;
@@ -478,9 +478,9 @@ public class ProgramDiasBean implements Serializable {
 		// }
 		// }
 		// }
-		//
+
 		// DistribAparado distribAparado = new DistribAparado();
-		// distribAparado.generateDistribDiasAparado(result4);
+		// distribAparado.generateDistribDiasAparado(result);
 
 		// result = dis.generateDistribDias(orderList2);
 

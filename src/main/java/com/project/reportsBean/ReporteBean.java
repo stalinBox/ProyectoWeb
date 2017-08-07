@@ -70,8 +70,6 @@ public class ReporteBean implements Serializable {
 				parametros, new JRBeanCollectionDataSource(this.getModelo()));
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
-		// response.addHeader("Content-disposition",
-		// "attachment; filename=jsfReporte.pdf");
 		response.setContentType("application/pdf");
 		response.setContentLength(bytes.length);
 		ServletOutputStream outStream = response.getOutputStream();

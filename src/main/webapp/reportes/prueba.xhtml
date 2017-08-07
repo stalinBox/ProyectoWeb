@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<h2>Page No.1</h2>
+
+			<p:dataTable var="file" value="#{formView.files}"
+				selectionMode="single" rowKey="#{file.id}" style="width:50%">
+
+				<p:ajax event="rowSelect" listener="#{formView.onRowSelect}"
+					oncomplete="PF('dlg1').show()" update=":form" />
+
+				<p:column headerText="Name">
+					<h:outputText value="#{file.name}" />
+				</p:column>
+
+			</p:dataTable>
+
+
+			<p:dialog header="Dialog" widgetVar="dlg1" modal="false">
+				<h:form id="form">
+
+					<p:messages id="msgs" />
+
+					<h:panelGrid columns="1" cellpadding="5">
+
+						<p:media value="#{formView.streamedContent}" player="pdf"
+							width="600px" height="300px">
+							<f:param name="id"
+								value="#{formView.generateRandomIdForNotCaching()}" />
+						</p:media>
+
+						<p:commandButton value="download" ajax="false"
+							onclick="PrimeFaces.monitorDownload(startOffer, stopOffer);">
+							<p:fileDownload value="#{formView.streamedContent}" />
+						</p:commandButton>
+
+					</h:panelGrid>
+
+				</h:form>
+			</p:dialog>
+
+			<h:form>
+				<p:remoteCommand name="refreshStreamOffer"
+					actionListener="#{formView.refreshStream()}" />
+			</h:form>
+
+			<script type="text/javascript">
+		function startOffer() {
+			refreshStreamOffer();
+		}
+		function stopOffer() {
+			refreshStreamOffer();
+		}
+	</script>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

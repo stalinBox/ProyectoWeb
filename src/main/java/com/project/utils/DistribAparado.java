@@ -1,19 +1,15 @@
 package com.project.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
+/**
+ * DISTRIBUIR MATRIZ APARADO
+ * */
 public class DistribAparado {
 	public ArrayList<Items3> generateDistribDiasAparado(
-			ArrayList<Items3> result3) {
-		/**
-		 * DISTRIBUIR MATRIZ APARADO
-		 * */
+			ArrayList<Items3> result3, ArrayList<MallObject> objectMal) {
 
 		// VARIABLES
-		Integer codMod = 0;
-
 		ArrayList<ArrayList<Items3>> nuevaMatriz = new ArrayList<ArrayList<Items3>>();
 
 		// CUERPO DE LA CLASE
@@ -27,67 +23,68 @@ public class DistribAparado {
 					+ " codLinea: " + i.getCodLinea() + " codModelo: "
 					+ i.getCodMod() + " Stand: " + i.getStandar()
 					+ " Matriz proceso: " + i.getmProcesos());
-
 			h1++;
 		}
-
 		// FIN PRUEBAS DE VISUALIZACION
+		/**
+		 * CONVERTIR EL OBJETO RECIBIDO DE TROQUELADO A APARADO LOS VALORES DE
+		 * (CODPRO, CODTPL)
+		 */
+		ObjectFromTrqToAparado fromToApa = new ObjectFromTrqToAparado();
+		result3 = fromToApa.fromToTrqToApa(objectMal, result3);
 
-		// ARMAR LA NUEVA MATRIZ 2D DE OBJETO RESULT3
+		/**
+		 * GUARDAR EL OBJECTO RESULT 3 POR LINEAS EN UN NUEVO OBJETO DE OBJETO
+		 * */
+		DistribObjectXLineas distribXLineas = new DistribObjectXLineas();
+		nuevaMatriz = distribXLineas.distribXLineas(result3);
 
-		nuevaMatriz.add(new ArrayList<Items3>());
-		nuevaMatriz.get(0).add(result3.get(0));
-		nuevaMatriz.get(0).add(result3.get(1));
-		nuevaMatriz.get(0).add(result3.get(2));
-		nuevaMatriz.add(new ArrayList<Items3>());
-		nuevaMatriz.get(1).add(result3.get(3));
+		// IMPRESION PRUEBAS
+		// System.out.println("---OTRA IMPRESION RESULT 3---");
+		// for (int i = 0; i < nuevaMatriz.size(); i++) {
+		// System.out.println("Columna 2.0: " + i);
+		// for (int j = 0; j < nuevaMatriz.get(i).size(); j++) {
+		// System.out.println("Fila 2.0: "
+		// + nuevaMatriz.get(i).get(j).getmProcesos());
+		// }
+		// }
 
-		for (Items3 i : result3) {
+		// FIN IMPRESION PRUEBAS
+		TamMaxObjectMatriz tamMax = new TamMaxObjectMatriz();
+		ObjectRowToColumns rowToCol = new ObjectRowToColumns(); // sin ocupar
 
-		}
+		Integer itamMaxRow = 0;
+		Integer mayorColumn = result3.size();
+		for (ArrayList<Items3> i : nuevaMatriz) {
+			System.out.println("/****** Sig. Object ********/");
 
-		for (int i = 0; i < nuevaMatriz.size(); i++) {
-			System.out.println("Columna: " + i);
-			for (int j = 0; j < nuevaMatriz.get(i).size(); j++) {
-				System.out.println("Fila: "
-						+ nuevaMatriz.get(i).get(j).getmProcesos());
+			// OBTENER EL TAMAÑO MAYOR PARA EL CICLO CONSECUENTE.
+			itamMaxRow = tamMax.tamMaximo(i);
+
+			// RECORRER EL OBJETO RESULT3 POR COLUMNAS
+			for (int ii = 0; ii < itamMaxRow; ii++) {
+				for (int j = 0; j < mayorColumn; j++) {
+					try {
+						System.out.println("Elemento: "
+								+ i.get(j).getmProcesos().get(0).get(ii));
+					} catch (IndexOutOfBoundsException e) {
+						continue;
+					}
+				}
+				System.out.println("//");
 			}
 		}
-
-		// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
-		// for(i=0;i<array.size();i++){ //para cada alumno (para cada fila)
-		// System.out.print("Alumno " + i + ": ");
-		// for(j=0;j<array.get(i).size();j++){ //se recorre todas la columnas de
-		// la
-		// fila
-		// System.out.print(array.get(i).get(j) + " "); //se obtiene el elemento
-		// i,j
-		// }
-		// }
-
-		// OBTENER EL TAMAÑO MAYOR PARA EL CICLO CONSECUENTE.
-		// Integer mayorFila = 0;
-		// Integer mayorColumn = result3.size();
-		// for (Items3 i : result3) {
-		// if (i.getmProcesos().get(0).size() > mayorFila) {
-		// mayorFila = i.getmProcesos().get(0).size();
-		// }
-		// }
-
-		// RECORRER EL OBJETO RESULT3 POR COLUMNAS
-		// for (int i = 0; i < mayorFila; i++) {
-		// for (int j = 0; j < mayorColumn; j++) {
-		// try {
-		// System.out.println("Elemento: "
-		// + result3.get(j).getmProcesos().get(0).get(i));
-		//
-		// } catch (IndexOutOfBoundsException e) {
-		// continue;
-		// }
-		// }
-		// System.out.println("//");
-		// }
 
 		return null;
 	}
 }
+// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
+// for(i=0;i<array.size();i++){ //para cada alumno (para cada fila)
+// System.out.print("Alumno " + i + ": ");
+// for(j=0;j<array.get(i).size();j++){ //se recorre todas la columnas de
+// la
+// fila
+// System.out.print(array.get(i).get(j) + " "); //se obtiene el elemento
+// i,j
+// }
+// }

@@ -19,6 +19,10 @@
 					target="_blank">
 					<h:outputText value="VER" />
 				</p:commandLink>
+
+				<h3>PDF</h3>
+				<p:media value="#{reportBean.streamedContent}" player="pdf"
+					width="500" height="500" />
 			</h:form>
 		</ui:define>
 	</ui:composition>
