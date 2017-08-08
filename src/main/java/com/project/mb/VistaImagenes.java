@@ -14,6 +14,7 @@ public class VistaImagenes {
 	@PostConstruct
 	public void init() {
 		images = new ArrayList<String>();
+
 		for (int i = 1; i <= 6; i++) {
 			images.add("imag" + i + ".jpg");
 		}

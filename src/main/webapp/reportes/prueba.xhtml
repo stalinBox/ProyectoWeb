@@ -9,58 +9,16 @@
 <h:body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-
-			<h2>Page No.1</h2>
-
-			<p:dataTable var="file" value="#{formView.files}"
-				selectionMode="single" rowKey="#{file.id}" style="width:50%">
-
-				<p:ajax event="rowSelect" listener="#{formView.onRowSelect}"
-					oncomplete="PF('dlg1').show()" update=":form" />
-
-				<p:column headerText="Name">
-					<h:outputText value="#{file.name}" />
-				</p:column>
-
-			</p:dataTable>
-
-
-			<p:dialog header="Dialog" widgetVar="dlg1" modal="false">
-				<h:form id="form">
-
-					<p:messages id="msgs" />
-
-					<h:panelGrid columns="1" cellpadding="5">
-
-						<p:media value="#{formView.streamedContent}" player="pdf"
-							width="600px" height="300px">
-							<f:param name="id"
-								value="#{formView.generateRandomIdForNotCaching()}" />
-						</p:media>
-
-						<p:commandButton value="download" ajax="false"
-							onclick="PrimeFaces.monitorDownload(startOffer, stopOffer);">
-							<p:fileDownload value="#{formView.streamedContent}" />
-						</p:commandButton>
-
-					</h:panelGrid>
-
-				</h:form>
-			</p:dialog>
-
 			<h:form>
-				<p:remoteCommand name="refreshStreamOffer"
-					actionListener="#{formView.refreshStream()}" />
+				<center>
+					<p:outputLabel value="pdf GENERADO" />
+				</center>
+				<br />
+				<center>
+					<iframe src="http://localhost:8080/ProyectoWeb/pdf/1.pdf"
+						width="600" height="400" scrolling="no" />
+				</center>
 			</h:form>
-
-			<script type="text/javascript">
-		function startOffer() {
-			refreshStreamOffer();
-		}
-		function stopOffer() {
-			refreshStreamOffer();
-		}
-	</script>
 		</ui:define>
 	</ui:composition>
 </h:body>
