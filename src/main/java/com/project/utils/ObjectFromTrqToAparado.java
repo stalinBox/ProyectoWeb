@@ -7,16 +7,17 @@ import java.util.ArrayList;
  * CODTPL)
  */
 public class ObjectFromTrqToAparado {
-	public ArrayList<Items3> fromToTrqToApa(ArrayList<MallObject> objectMal,
-			ArrayList<Items3> result3) {
+	public ArrayList<Items4> fromToTrqToApa(ArrayList<MallObject> objectMal,
+			ArrayList<Items4> result3) {
 
-		// PROCESO
+		// RECORRER EL OBJETO MALLOBJECT PARA CONVERTIR LOS VALORES A APARADO
 		for (MallObject j : objectMal) {
-			for (Items3 k : result3) {
+			for (Items4 k : result3) {
 				if (j.getCodPro().equals(2)
 						&& k.getCodMod().equals(j.getCodMod())) {
 					k.setCodProceso(2);
 					k.setCodLinea(j.getCodTpl());
+					k.setStandar(j.getStand());
 				}
 			}
 		}

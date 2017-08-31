@@ -44,13 +44,12 @@ import com.project.entities.Parametro;
 import com.project.entities.Proceso;
 import com.project.entities.Programdia;
 import com.project.utils.DistribAparado;
-import com.project.utils.DistribResult;
-import com.project.utils.FragmentNumber;
-import com.project.utils.FragmentNumber2;
+import com.project.utils.DistribResultAparado;
+import com.project.utils.DistribResultTroquelado;
 import com.project.utils.ItemCodOrden;
 import com.project.utils.Items2;
 import com.project.utils.Items3;
-import com.project.utils.Items4;
+import com.project.utils.Items5;
 import com.project.utils.MallObject;
 import com.project.utils.MyUtil;
 import com.project.utils.NdiasLab;
@@ -153,7 +152,8 @@ public class ProgramDiasBean implements Serializable {
 
 		// VARIABLE RECOGE CODIGO DEL PROCESO Y LA MATRIZ DE
 		// DISTRIBUCION
-		Map<Integer, ArrayList<ArrayList<Object>>> mAll = new TreeMap<Integer, ArrayList<ArrayList<Object>>>();
+		// Map<Integer, ArrayList<ArrayList<Object>>> mAll = new
+		// TreeMap<Integer, ArrayList<ArrayList<Object>>>();
 
 		// VARIABLE RECOGE DISTRIBUCION PARES Y DIAS
 		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
@@ -165,7 +165,7 @@ public class ProgramDiasBean implements Serializable {
 
 		// LIMPIAR VARIABLES
 		this.orderList2.clear();
-		mAll.clear();
+		// mAll.clear();
 		mProcesos.clear();
 		mlineas.clear();
 
@@ -343,6 +343,10 @@ public class ProgramDiasBean implements Serializable {
 										// System.out
 										// .println("***SUMATORIA POR MODELOS EN LAS LINEAS Y PROCESOS: "
 										// + sumatoria.toString());
+
+										// GENERA LA MATRIZ(DISTRIBUCION DE
+										// DIAS) PARA AGREGAR AL
+										// OBJETO
 										mProcesos = tablas.receivParamsPares(
 												Integer.parseInt(sumatoria
 														.toString()), j
@@ -350,8 +354,8 @@ public class ProgramDiasBean implements Serializable {
 												countLineas, this.nDias,
 												cantLineas);
 
-										mAll.put(j.getProceso().getProCodigo(),
-												mProcesos);
+										// mAll.put(j.getProceso().getProCodigo(),
+										// mProcesos);
 
 										// PRUEBAS
 										MallObject mal = new MallObject(
@@ -370,8 +374,6 @@ public class ProgramDiasBean implements Serializable {
 										// ARMA EL OBJETO PARA SER
 										// INTRODUCIDO EN EL
 										// SCHEDULE
-										// COMENTARIO TEMPORAL
-
 										if (j.getProceso().getProCodigo() == 3) {
 											orderitem2 = new Items2(j
 													.getProceso()
@@ -403,19 +405,19 @@ public class ProgramDiasBean implements Serializable {
 		/**
 		 * VISUALIZACION MATRIZ INICIAL
 		 * */
-		System.out.println("------ ITEMS 2 ------");
-		Integer ca1 = 0;
-		for (Items2 k : orderList2) {
-			System.out.println("*ITEMS 2.1*: indice: " + ca1 + " CodModelo: "
-					+ k.getCodMod() + " CodParam: " + k.getCodParam()
-					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
-					+ k.getCodLinea() + " Standar: " + k.getStandar()
-					+ " Matriz proceso: " + k.getmProcesos());
-			ca1++;
-		}
+		// System.out.println("------ ITEMS 2 ------");
+		// Integer ca1 = 0;
+		// for (Items2 k : orderList2) {
+		// System.out.println("*ITEMS 2.1*: indice: " + ca1 + " CodModelo: "
+		// + k.getCodMod() + " CodParam: " + k.getCodParam()
+		// + " CodProceso: " + k.getCodProceso() + " CodLinea: "
+		// + k.getCodLinea() + " Standar: " + k.getStandar()
+		// + " Matriz proceso: " + k.getmProcesos());
+		// ca1++;
+		// }
 
 		/**
-		 * VISUALIZAR LUEGO CUANDO YA HAYA TERMINADO LA DISTRIBUCION
+		 * VISUALIZAR LUEGO DE HABER TERMINADO LA DISTRIBUCION
 		 * */
 		for (MallObject j : objectMal) {
 			System.out.println("Sumatoria: " + j.getSumatoria() + " standar: "
@@ -429,30 +431,42 @@ public class ProgramDiasBean implements Serializable {
 
 		// VARIABLES
 		ArrayList<Items3> result = new ArrayList<Items3>();
-		ArrayList<Items4> result4 = new ArrayList<Items4>();
-		DistribResult dis = new DistribResult();
+		ArrayList<Items5> resultR5 = new ArrayList<Items5>();
+		ArrayList<Items3> resultRApa = new ArrayList<Items3>();
+		// GENERA LA DISTRIBUCION DE DIAS PARA TROQUELADO DESDE LA MATRIZ
+		// INICIAL
+		DistribResultTroquelado dis = new DistribResultTroquelado();
+		result = dis.generateDistribDiasTrq(orderList2);
 
-		Tablas tablas = new Tablas();
-		result = dis.generateDistribDias(orderList2);
+		// ENVIAR PARA ARMAR LA MATRIZ BASE DEL PROCESO DE APARADO
+		DistribAparado distribAparado = new DistribAparado();
+		resultR5 = distribAparado.generateDistribDiasAparado(result, objectMal);
 
-		/**
-		 * 
-		 * ALMACENAR AQUI EN ITEMS3 PARA LA GRAFICA
-		 * */
+		// GENERA LA DISTRIBUCION DE DIAS PARA APARADO DESDE LA MATRIZ BASE
+		DistribResultAparado dis2 = new DistribResultAparado();
+		resultRApa = dis2.generateDistribDiasApa(resultR5);
 
-		System.out.println("----- ITEMS 3 -----");
-		Integer ca13 = 0;
-		for (Items3 k : result) {
-			System.out.println("*ITEMS 3*: indice: " + ca13 + " CodModelo: "
+		System.out.println("----- DISTRIBUCION FINAL: -----");
+		Integer ca14 = 0;
+		for (Items3 k : resultRApa) {
+			System.out.println("*result*: indice: " + ca14 + " CodModelo: "
 					+ k.getCodMod() + " CodParam: " + k.getCodParam()
 					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
 					+ k.getCodLinea() + " Standar: " + k.getStandar()
 					+ " Matriz proceso: " + k.getmProcesos());
-			ca13++;
+			ca14++;
 		}
 
-		DistribAparado distribAparado = new DistribAparado();
-		distribAparado.generateDistribDiasAparado(result, objectMal);
+		// System.out.println("----- Resultado resultR -----");
+		// Integer ca13 = 0;
+		// for (Items3 k : resultR) {
+		// System.out.println("*RESULT R*: indice: " + ca13 + " CodModelo: "
+		// + k.getCodMod() + " CodParam: " + k.getCodParam()
+		// + " CodProceso: " + k.getCodProceso() + " CodLinea: "
+		// + k.getCodLinea() + " Standar: " + k.getStandar()
+		// + " Matriz proceso: " + k.getmProcesos());
+		// ca13++;
+		// }
 
 		// orderList2.clear();
 		// Integer citems = 0;
@@ -467,7 +481,7 @@ public class ProgramDiasBean implements Serializable {
 		// .toString()), j.getStand(),
 		// j.getCountLineas(), this.nDias,
 		// j.getCantLineas());
-		//
+
 		// Items4 orderitem2 = new Items4(j.getCodPro(),
 		// j.getCodTpl(), j.getCodParam(), j.getCodMod(),
 		// j.getStand(), mProcesos);

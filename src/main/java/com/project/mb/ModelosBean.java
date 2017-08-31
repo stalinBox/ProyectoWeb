@@ -20,6 +20,7 @@ import com.project.entities.Modelo;
 @RequestScoped
 public class ModelosBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	// VARIABLES
 	private List<Modelo> modelos;
 	private Modelo selectedModelo;

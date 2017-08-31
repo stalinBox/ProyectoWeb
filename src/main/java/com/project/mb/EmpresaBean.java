@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -18,7 +18,7 @@ import com.project.entities.Empresa;
 import com.project.utils.UtilUploadImage;
 
 @ManagedBean
-@ViewScoped
+@RequestScoped
 public class EmpresaBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -76,7 +76,20 @@ public class EmpresaBean implements Serializable {
 	}
 
 	public void btnUpdateEmpresa(ActionEvent actionEvent) {
-
+		String msg;
+		System.out.println("Ha entrado");
+		EmpresaDao empresaDao = new EmpresaDaoImpl();
+		if (empresaDao.update(this.selectedEmpresa)) {
+			msg = "Se ha modificado";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al modificar";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	public void btnDeleteEmpresa(ActionEvent actionEvent) {

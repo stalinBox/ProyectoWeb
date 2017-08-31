@@ -6,85 +6,114 @@ import java.util.ArrayList;
  * DISTRIBUIR MATRIZ APARADO
  * */
 public class DistribAparado {
-	public ArrayList<Items3> generateDistribDiasAparado(
+	public ArrayList<Items5> generateDistribDiasAparado(
 			ArrayList<Items3> result3, ArrayList<MallObject> objectMal) {
 
 		// VARIABLES
-		ArrayList<ArrayList<Items3>> nuevaMatriz = new ArrayList<ArrayList<Items3>>();
+		ArrayList<ArrayList<Items4>> ObjectOfObject = new ArrayList<ArrayList<Items4>>();
+		ArrayList<ArrayList<Object>> mProcesos = new ArrayList<ArrayList<Object>>();
+		ArrayList<Items4> result4 = new ArrayList<Items4>();
+		ArrayList<Items5> result5 = new ArrayList<Items5>();
+		Tablas tablas = new Tablas();
 
 		// CUERPO DE LA CLASE
 		System.out.println("CLASE DISTRIB-APARADO");
 
-		// PRUEBAS DE VISUALIZACION
-		int h1 = 0;
+		// COPIAR EL OBJETO RECIBIDO A OTRO DEL MISMO VALOR
 		for (Items3 i : result3) {
-			System.out.println("ITEMS 3.1 indice: " + h1 + " CodParam: "
-					+ i.getCodParam() + " CodProceso: " + i.getCodProceso()
-					+ " codLinea: " + i.getCodLinea() + " codModelo: "
-					+ i.getCodMod() + " Stand: " + i.getStandar()
-					+ " Matriz proceso: " + i.getmProcesos());
-			h1++;
+			Items4 soloItems = new Items4(i.getCodProceso(), i.getCodLinea(),
+					i.getCodParam(), i.getCodMod(), i.getStandar(),
+					i.getmProcesos());
+			result4.add(soloItems);
 		}
-		// FIN PRUEBAS DE VISUALIZACION
+
 		/**
-		 * CONVERTIR EL OBJETO RECIBIDO DE TROQUELADO A APARADO LOS VALORES DE
+		 * CONVERTIR EL OBJETO RECIBIDO DE (TROQUELADO A APARADO) LOS VALORES DE
 		 * (CODPRO, CODTPL)
 		 */
 		ObjectFromTrqToAparado fromToApa = new ObjectFromTrqToAparado();
-		result3 = fromToApa.fromToTrqToApa(objectMal, result3);
+		result4 = fromToApa.fromToTrqToApa(objectMal, result4);
 
 		/**
 		 * GUARDAR EL OBJECTO RESULT 3 POR LINEAS EN UN NUEVO OBJETO DE OBJETO
+		 * FORMAR UN OBJECTO 3D
 		 * */
 		DistribObjectXLineas distribXLineas = new DistribObjectXLineas();
-		nuevaMatriz = distribXLineas.distribXLineas(result3);
+		ObjectOfObject = distribXLineas.distribXLineas(result4);
 
-		// IMPRESION PRUEBAS
-		// System.out.println("---OTRA IMPRESION RESULT 3---");
-		// for (int i = 0; i < nuevaMatriz.size(); i++) {
-		// System.out.println("Columna 2.0: " + i);
-		// for (int j = 0; j < nuevaMatriz.get(i).size(); j++) {
-		// System.out.println("Fila 2.0: "
-		// + nuevaMatriz.get(i).get(j).getmProcesos());
-		// }
-		// }
+		// PRUEBAS VISUALIZACION ITEMS4
+		System.out.println("----ANTES DE:----");
+		Integer ca14 = 0;
+		for (Items4 k : result4) {
+			System.out.println("*ITEMS4*: indice: " + ca14 + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			ca14++;
+		}
+		// FIN PRUEBAS VISUALIZACION ITEMS4
 
-		// FIN IMPRESION PRUEBAS
+		// INSTACIACION CLASE TAMMAXOBJECTMATRIZ
 		TamMaxObjectMatriz tamMax = new TamMaxObjectMatriz();
-		ObjectRowToColumns rowToCol = new ObjectRowToColumns(); // sin ocupar
 
 		Integer itamMaxRow = 0;
-		Integer mayorColumn = result3.size();
-		for (ArrayList<Items3> i : nuevaMatriz) {
-			System.out.println("/****** Sig. Object ********/");
+		Integer mayorColumn = result4.size();
 
+		for (ArrayList<Items4> i : ObjectOfObject) {
 			// OBTENER EL TAMAÑO MAYOR PARA EL CICLO CONSECUENTE.
 			itamMaxRow = tamMax.tamMaximo(i);
 
-			// RECORRER EL OBJETO RESULT3 POR COLUMNAS
+			// RECORRER EL OBJETO RESULT4 POR COLUMNAS
 			for (int ii = 0; ii < itamMaxRow; ii++) {
+				// System.out.println("//");
 				for (int j = 0; j < mayorColumn; j++) {
+
 					try {
-						System.out.println("Elemento: "
-								+ i.get(j).getmProcesos().get(0).get(ii));
+						for (MallObject oj : objectMal) {
+							if (i.get(j).getCodLinea() == oj.getCodTpl()
+									&& i.get(j).getCodProceso() == oj
+											.getCodPro()
+									&& i.get(j).getCodMod()
+											.equals(oj.getCodMod())) {
+								// System.out.println("Elemento: "
+								// + i.get(j).getmProcesos().get(0)
+								// .get(ii));
+								mProcesos = tablas.receivParamsPares(
+										(Integer) i.get(j).getmProcesos()
+												.get(0).get(ii), i.get(j)
+												.getStandar(), oj
+												.getCantLineas(), 0.0, oj
+												.getCountLineas());
+								Items5 soloItems = new Items5(i.get(j)
+										.getCodProceso(), i.get(j)
+										.getCodLinea(), oj.getCodParam(),
+										oj.getCodMod(), oj.getStand(),
+										mProcesos);
+								result5.add(soloItems);
+							} else {
+								continue;
+							}
+						}
 					} catch (IndexOutOfBoundsException e) {
 						continue;
 					}
 				}
-				System.out.println("//");
 			}
 		}
 
-		return null;
+		System.out.println("----RESULTADO DE:----");
+		// PRUEBAS VISUALIZACION ITEMS4
+		Integer ca11 = 0;
+		for (Items5 k : result5) {
+			System.out.println("*ITEMS5*: indice: " + ca11 + " CodModelo: "
+					+ k.getCodMod() + " CodParam: " + k.getCodParam()
+					+ " CodProceso: " + k.getCodProceso() + " CodLinea: "
+					+ k.getCodLinea() + " Standar: " + k.getStandar()
+					+ " Matriz proceso: " + k.getmProcesos());
+			ca11++;
+		}
+		// FIN PRUEBAS VISUALIZACION ITEMS4
+		return result5;
 	}
 }
-// RECORRIDO DE UN ARRAY BIDIMIMENCIONAL
-// for(i=0;i<array.size();i++){ //para cada alumno (para cada fila)
-// System.out.print("Alumno " + i + ": ");
-// for(j=0;j<array.get(i).size();j++){ //se recorre todas la columnas de
-// la
-// fila
-// System.out.print(array.get(i).get(j) + " "); //se obtiene el elemento
-// i,j
-// }
-// }

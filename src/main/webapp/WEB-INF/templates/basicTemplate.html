@@ -154,8 +154,11 @@
 					</p:submenu>
 
 					<p:submenu label="Ayudas" icon="ui-icon-note">
-						<p:menuitem value="ANDON" url="" icon="ui-icon-caret-1-n" />
-						<p:menuitem value="FAPS" url="" icon="ui-icon-caret-1-n" />
+						<p:menuitem value="ANDON"
+							url="#{appBean.basePath}Ayudas/Andon.jsf"
+							icon="ui-icon-caret-1-n" />
+						<p:menuitem value="FAPS" url="#{appBean.basePath}Ayudas/Faps.jsf"
+							icon="ui-icon-caret-1-n" />
 					</p:submenu>
 
 					<p:menuitem value="Exit" actionListener="#{loginBean.logout()}"

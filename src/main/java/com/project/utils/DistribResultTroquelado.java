@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class DistribResult {
+public class DistribResultTroquelado {
 
-	public ArrayList<Items3> generateDistribDias(ArrayList<Items2> orderList22) {
+	public ArrayList<Items3> generateDistribDiasTrq(
+			ArrayList<Items2> orderList22) {
 
 		Collections.sort(orderList22, new Comparator<Items2>() {
 			@Override
 			public int compare(Items2 p1, Items2 p2) {
 				return p1.getCodProceso() + p2.getCodLinea();
-
 			}
-
 		});
 
 		// VARIABLES
@@ -23,15 +22,11 @@ public class DistribResult {
 
 		Integer codProceso = 0;
 		Integer codTpLinea = 0;
-		Object lastElem = 0;
 		Object lastElem2 = 0;
 		Object lastElem3 = 0;
-
 		orderListFinal.clear();
-		Integer items3 = 0;
 
 		int j = 0;
-
 		for (Items2 i : orderList22) {
 			Object newMatriz = null;
 			Object newMatriz2 = null;
@@ -74,6 +69,7 @@ public class DistribResult {
 						dias.add(i.getmProcesos().get(0).get(ij));
 					}
 				}
+				
 				newMatriz2 = Integer.parseInt(i.getmProcesos().get(0)
 						.get(i.getmProcesos().get(1).size() - 1).toString())
 						- Integer.parseInt(newMatriz.toString());
@@ -115,15 +111,6 @@ public class DistribResult {
 			}
 			j++;
 		}
-		// Integer ca12 = 0;
-		// for (Items3 k : orderListFinal) {
-		// System.out.println("*ITEMS 3*: indice: " + ca12 + " CodModelo: "
-		// + k.getCodMod() + " CodParam: " + k.getCodParam()
-		// + " CodProceso: " + k.getCodProceso() + " CodLinea: "
-		// + k.getCodLinea() + " Standar: " + k.getStandar()
-		// + " Matriz proceso: " + k.getmProcesos());
-		// ca12++;
-		// }
 
 		return orderListFinal;
 	}

@@ -19,12 +19,8 @@
 			</h:form>
 
 			<h:form id="formDataTable">
-				<p:dataTable id="basicDT" var="empresa" paginatorPosition="bottom"
-					value="#{empresaBean.empresa}" rows="10" paginator="true">
-
-					<p:column headerText="Codigo">
-						<h:outputText value="#{empresa.empCodigo}" />
-					</p:column>
+				<p:dataTable id="basicDT" var="empresa"
+					value="#{empresaBean.empresa}">
 
 					<p:column headerText="Nombre">
 						<h:outputText value="#{empresa.empNombre}" />
@@ -112,11 +108,12 @@
 					modal="true" showEffect="fade" hideEffect="explode"
 					resizable="false" id="dlgEmpresaUpdate">
 					<h:inputHidden value="#{empresaBean.selectedEmpresa.empCodigo}" />
+
 					<p:panelGrid id="display" columns="2" cellpadding="4"
 						style="margin:0 auto;">
 
 						<h:outputText value="Nombre: " />
-						<p:inputText value="#{empresaBean.selectedEmpresa.empCodigo}" />
+						<p:inputText value="#{empresaBean.selectedEmpresa.empNombre}" />
 
 						<h:outputText value="Dirección: " />
 						<p:inputText id="entrada"
@@ -133,7 +130,7 @@
 							<p:commandButton id="btnUpdateAceptar"
 								update="formDataTable, msgs"
 								oncomplete="PF('dialogEmpresaUpdate').hide()"
-								icon="fa fa-fw fa-save" title="Guardar" value="Guardar"
+								icon="fa fa-fw fa-save" title="Guardar" value="Actualizar"
 								actionListener="#{empresaBean.btnUpdateEmpresa(actionEvent)}" />
 
 							<p:commandButton id="btnUpdateCancelar"
