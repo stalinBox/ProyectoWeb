@@ -5,7 +5,13 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class DistribResultTroquelado {
-
+	/**
+	 * TODO CLASE QUE DEVUELVE UNA MATRIZ CON LA DISTRIBUCION DE DIAS PARA
+	 * TROQUELADO PERO AUN FALTANDO LA DISTRIBUCION FINAL
+	 * 
+	 * @author Stalin
+	 * 
+	 * */
 	public ArrayList<Items3> generateDistribDiasTrq(
 			ArrayList<Items2> orderList22) {
 
@@ -35,8 +41,8 @@ public class DistribResultTroquelado {
 			ArrayList<Object> horas = new ArrayList<Object>();
 
 			if (j == 0) {
-				// PRIMER PROCESO
 
+				// PRIMER PROCESO
 				Items3 orderitemFinal = new Items3(i.getCodProceso(),
 						i.getCodLinea(), i.getCodParam(), i.getCodMod(),
 						i.getStandar(), i.getmProcesos());
@@ -59,9 +65,7 @@ public class DistribResultTroquelado {
 				} else {
 					newMatriz = Integer.parseInt(i.getStandar().toString());
 				}
-
 				dias.add(Math.abs(Integer.parseInt(newMatriz.toString())));
-
 				for (int ij = 0; ij < i.getmProcesos().get(0).size(); ij++) {
 					if (ij == i.getmProcesos().get(0).size() - 1) {
 						break;
@@ -69,12 +73,10 @@ public class DistribResultTroquelado {
 						dias.add(i.getmProcesos().get(0).get(ij));
 					}
 				}
-				
 				newMatriz2 = Integer.parseInt(i.getmProcesos().get(0)
 						.get(i.getmProcesos().get(1).size() - 1).toString())
 						- Integer.parseInt(newMatriz.toString());
 				dias.add(Math.abs(Integer.parseInt(newMatriz2.toString())));
-
 				FragmentNumber2 mDias = new FragmentNumber2();
 				horas = mDias.Number(i.getStandar(), dias);
 				mProcesosFinal.add(dias);
@@ -85,29 +87,22 @@ public class DistribResultTroquelado {
 						i.getStandar(), new ArrayList<ArrayList<Object>>(
 								mProcesosFinal));
 				orderListFinal.add(orderitemFinal);
-
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
-
 				lastElem2 = lastElem3;
-				// FIN PROCESOS IGUALES
 
 			} else {
+
 				// PROCESOS DIFERENTES
 				lastElem3 = i.getmProcesos().get(0)
 						.get(i.getmProcesos().get(0).size() - 1);
-
 				Items3 orderitemFinal = new Items3(i.getCodProceso(),
 						i.getCodLinea(), i.getCodParam(), i.getCodMod(),
 						i.getStandar(), i.getmProcesos());
-
 				orderListFinal.add(orderitemFinal);
-
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
-
 				lastElem2 = lastElem3;
-				// FIN PROCESOS DIFERENTES
 			}
 			j++;
 		}

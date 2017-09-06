@@ -150,7 +150,8 @@ CANT_REAL INTEGER DEFAULT 0,
 F_FINAL DATE,
 HORA TIMESTAMP WITHOUT TIME ZONE,
 ESTADO_TUR CHARACTER VARYING(10) DEFAULT 'PENDIENTE'::CHARACTER VARYING,
-NO_PLAN CHARACTER(1)
+NO_PLAN CHARACTER(1),
+PROGRAM_FINALIZADA BOOLEAN
 );
 
 CREATE TABLE PROGRAMDIAS(
@@ -407,6 +408,14 @@ DELETE  FROM TIPO_PROCESOS;
 DELETE  FROM TROQUELES;
 DELETE  FROM PROCESOS;
 
+/*ELIMINAR DATOS DEL PROCESO*/
+delete from programturnos;
+delete from programdias;
+delete from lineasturnos;
+delete from parametros;
+delete from distribdetalle;
+delete from detalleorden;
+delete from ordenprod;
 /*____________________________________*/
 CREATE TABLE USUARIO
 (

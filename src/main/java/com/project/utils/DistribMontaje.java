@@ -2,12 +2,11 @@ package com.project.utils;
 
 import java.util.ArrayList;
 
-public class DistribAparado {
-	/**
-	 * TODO CLASE QUE DEVUELVE LA RESULTANTE DE LA DISTRIBUCION DE DIAS PARA
-	 * TROQUELADO LISTA PARA DIBUJAR EN EL SCHEDULE
-	 * */
-	public ArrayList<Items5> generateDistribDiasAparado(
+/**
+ * DISTRIBUIR MATRIZ APARADO
+ * */
+public class DistribMontaje {
+	public ArrayList<Items5> generateDistribDiasMontaje(
 			ArrayList<Items3> result3, ArrayList<MallObject> objectMal) {
 
 		// VARIABLES
@@ -18,7 +17,7 @@ public class DistribAparado {
 		Tablas tablas = new Tablas();
 
 		// CUERPO DE LA CLASE
-		System.out.println("CLASE DISTRIB-APARADO");
+		System.out.println("CLASE DISTRIB-MONTAJE");
 
 		// COPIAR EL OBJETO RECIBIDO A OTRO DEL MISMO VALOR
 		for (Items3 i : result3) {
@@ -29,11 +28,11 @@ public class DistribAparado {
 		}
 
 		/**
-		 * CONVERTIR EL OBJETO RECIBIDO DE (TROQUELADO A APARADO) LOS VALORES DE
+		 * CONVERTIR EL OBJETO RECIBIDO DE (APARADO A MONTAJE) LOS VALORES DE
 		 * (CODPRO, CODTPL)
 		 */
-		ObjectFromTrqToAparado fromToApa = new ObjectFromTrqToAparado();
-		result4 = fromToApa.fromToTrqToApa(objectMal, result4);
+		ObjectFromApaToMontaje fromToMnt = new ObjectFromApaToMontaje();
+		result4 = fromToMnt.fromToApaToMnt(objectMal, result4);
 
 		/**
 		 * GUARDAR EL OBJECTO RESULT 3 POR LINEAS EN UN NUEVO OBJETO DE OBJETO
@@ -43,7 +42,7 @@ public class DistribAparado {
 		ObjectOfObject = distribXLineas.distribXLineas(result4);
 
 		// PRUEBAS VISUALIZACION ITEMS4
-		System.out.println("----ANTES DE (DistribAparado):----");
+		System.out.println("----ANTES DE (DistribMontaje):----");
 		Integer ca14 = 0;
 		for (Items4 k : result4) {
 			System.out.println("*ITEMS4*: indice: " + ca14 + " CodModelo: "
@@ -100,7 +99,7 @@ public class DistribAparado {
 			}
 		}
 
-		System.out.println("----RESULTADO DE (DistribAparado):----");
+		System.out.println("----RESULTADO DE (DistribMontaje):----");
 		// PRUEBAS VISUALIZACION ITEMS4
 		Integer ca11 = 0;
 		for (Items5 k : result5) {

@@ -7,7 +7,8 @@ public class MyUtil {
 	public static String ip = "localhost";
 
 	public static String andonMonitor() {
-		return "http://172.21.123.197/PantallaAndon/Prueba.aspx";
+		// return "http://172.21.123.197/PantallaAndon/Prueba.aspx";
+		return "http://" + ip + "/PantallaAndon/Prueba.aspx";
 	}
 
 	public static String baseurl() {

@@ -9,6 +9,7 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 			<p:growl id="msg" showDetail="true" />
+
 			<h:form id="ordenProceso">
 				<p:dialog header="Nuevo Proceso" widgetVar="dialogOPCreate"
 					modal="true" showEffect="fade" hideEffect="explode"
@@ -17,7 +18,7 @@
 					<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
 						<h:panelGrid id="ordenProd" columns="2" cellpadding="2">
 
-							<p:outputLabel value="Sale Nº:" />
+							<p:outputLabel value="Orden Nº:" />
 							<p:selectOneMenu id="idCbxOrdenes"
 								value="#{procesosOPBean.nOrden}" style="width:150px">
 								<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
@@ -26,7 +27,7 @@
 								<p:ajax update=":ordenProceso:idCbxProceso" />
 							</p:selectOneMenu>
 
-							<p:outputLabel value="Process:" />
+							<p:outputLabel value="Proceso:" />
 							<p:selectOneMenu id="idCbxProceso"
 								value="#{procesosOPBean.nProceso}" style="width:150px">
 								<f:selectItem itemLabel="- Selection -" noSelectionOption="true"
@@ -101,6 +102,7 @@
 							icon="fa fa-plus" value="Nuevo" process="@this">
 						</p:commandButton>
 					</h:panelGrid>
+
 					<h:panelGrid id="gridFechas2" columns="2" cellpadding="2">
 						<p:outputLabel value="Start Date:" />
 						<p:outputLabel id="lblFinicio2" value="#{procesosOPBean.fInicio}" />

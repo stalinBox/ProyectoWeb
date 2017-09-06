@@ -273,42 +273,58 @@ public class ProcesosOPBean implements Serializable {
 	}
 
 	public void getFechas() {
+		ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
+		List<Programdia> pp = programDias.getOrderDates(this.nOrden,
+				this.nProceso);
 
-		if (this.codPOP != 0) {
-			ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
-			List<Procesosop> procesosop = procesosOPDao
-					.findByCodPop(this.codPOP);
-
-			for (Procesosop op : procesosop) {
-				this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
-				this.nProceso = op.getParametro().getParamCodigo();
-			}
-		}
-
-		if (this.nProceso != 0) {
-			ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
-			List<Programdia> pp = programDias.getOrderDates(this.nOrden,
-					this.nProceso);
-			if (pp.isEmpty()) {
-				FacesContext.getCurrentInstance()
-						.addMessage(
-								null,
-								new FacesMessage(
-										"No se ha programado esta linea", " "));
-			} else {
-				this.fInicio = pp.get(0).getFinicio();
-				this.fFin = pp.get(pp.size() - 1).getFfin();
-
-				for (Programdia p : pp) {
-					System.out.println("cantidad pares: " + p.getCantpares());
-				}
-
-			}
-		} else {
+		if (pp.isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("No se ha programado esta linea", " "));
 			this.fInicio = null;
 			this.fFin = null;
+		} else {
+			this.fInicio = pp.get(0).getFinicio();
+			this.fFin = pp.get(pp.size() - 1).getFfin();
+
+			for (Programdia p : pp) {
+				System.out.println("cantidad pares: " + p.getCantpares());
+			}
 		}
 
+		// if (this.codPOP != 0) {
+		// ProcesosOPDao procesosOPDao = new ProcesosOPDaoImpl();
+		// List<Procesosop> procesosop = procesosOPDao
+		// .findByCodPop(this.codPOP);
+		//
+		// for (Procesosop op : procesosop) {
+		// this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
+		// this.nProceso = op.getParametro().getParamCodigo();
+		// }
+		// }
+		//
+		// if (this.nProceso != 0) {
+		// ProgramacionDiasDao programDias = new ProgramacionDiasDaoImpl();
+		// List<Programdia> pp = programDias.getOrderDates(this.nOrden,
+		// this.nProceso);
+		// if (pp.isEmpty()) {
+		// FacesContext.getCurrentInstance()
+		// .addMessage(
+		// null,
+		// new FacesMessage(
+		// "No se ha programado esta linea", " "));
+		// } else {
+		// this.fInicio = pp.get(0).getFinicio();
+		// this.fFin = pp.get(pp.size() - 1).getFfin();
+		//
+		// for (Programdia p : pp) {
+		// System.out.println("cantidad pares: " + p.getCantpares());
+		// }
+		//
+		// }
+		// } else {
+		// this.fInicio = null;
+		// this.fFin = null;
+		// }
 	}
 
 	// SETTERS AND GETTERS

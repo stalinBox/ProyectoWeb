@@ -2,13 +2,9 @@ package com.project.utils;
 
 import java.util.ArrayList;
 
-public class DistribResultAparado {
+public class DistribResultMontaje {
 
-	/**
-	 * TODO DEVUELVE LA MATRIZ DE LA DISTRIBUCION POR DIAS DE APARADO DESDE LA
-	 * MATRIZ RESULTANTE DE TROQUELADO
-	 * */
-	public ArrayList<Items3> generateDistribDiasApa(
+	public ArrayList<Items3> generateDistribDiasMnt(
 			ArrayList<Items5> orderList22) {
 
 		// VARIABLES
@@ -53,10 +49,10 @@ public class DistribResultAparado {
 					&& i.getCodLinea().equals(codTpLinea)) {
 
 				// *************PROCESOS IGUALES*****************
-				// System.out.println("******PROCESOS IGUALES******");
+				System.out.println("******PROCESOS IGUALES******");
 
 				if (lastElemDif != 0) {
-					// System.out.println("lastElemDif NO ES CERO: ");
+					System.out.println("lastElemDif NO ES CERO: ");
 					Items3 orderitemFinal = new Items3(i.getCodProceso(),
 							i.getCodLinea(), i.getCodParam(), i.getCodMod(),
 							i.getStandar(), i.getmProcesos());
@@ -71,23 +67,23 @@ public class DistribResultAparado {
 							.get(i.getmProcesos().get(0).size() - 1);
 
 					lastElemDif = 0;
-					// System.out.println("SIN HACER NADA");
-					// System.out.println("algo" + i.getmProcesos().get(0));
+					System.out.println("SIN HACER NADA");
+					System.out.println("algo" + i.getmProcesos().get(0));
 					sumFirstLast = 0;
 				} else {
-					// System.out.println("lastElemDif ES CERO: ");
+					System.out.println("lastElemDif ES CERO: ");
 					firstElem = (Integer) i.getmProcesos().get(0).get(0);
 					if (i.getmProcesos().get(0).size() > 1) {
-						// System.out.println("Matriz ORIGINAL: "
-						// + i.getmProcesos().get(0));
+						System.out.println("Matriz ORIGINAL: "
+								+ i.getmProcesos().get(0));
 
 						if (sumFirstLast != 0) {
-							// System.out.println("firstElem: " + firstElem);
-							// System.out.println("lastElem: " + lastElem);
-							// System.out.println("1 VAR sumFirstLast:"
-							// + sumFirstLast);
-							// System.out.println("standar: "
-							// + i.getStandar().toString());
+							System.out.println("firstElem: " + firstElem);
+							System.out.println("lastElem: " + lastElem);
+							System.out.println("1 VAR sumFirstLast:"
+									+ sumFirstLast);
+							System.out.println("standar: "
+									+ i.getStandar().toString());
 
 							if (Integer.parseInt(lastElem.toString()) < Integer
 									.parseInt(i.getStandar().toString())) {
@@ -97,11 +93,10 @@ public class DistribResultAparado {
 								newMatriz = Integer.parseInt(i.getStandar()
 										.toString());
 							}
-							// System.out.println("var newMatriz: " +
-							// newMatriz);
+							System.out.println("var newMatriz: " + newMatriz);
 							dias.add(Math.abs(Integer.parseInt(newMatriz
 									.toString())));
-							// System.out.println("var dias1: " + dias);
+							System.out.println("var dias1: " + dias);
 							for (int ij = 0; ij < i.getmProcesos().get(0)
 									.size(); ij++) {
 								if (ij == i.getmProcesos().get(0).size() - 1) {
@@ -130,17 +125,17 @@ public class DistribResultAparado {
 									new ArrayList<ArrayList<Object>>(
 											mProcesosFinal));
 							orderListFinal.add(orderitemFinal);
-							// System.out.println("Matriz RESULTANTE: " + dias);
+							System.out.println("Matriz RESULTANTE: " + dias);
 							lastElem = (Integer) (dias.get(dias.size() - 1));
-							// System.out.println("new LastElem: " + lastElem);
+							System.out.println("new LastElem: " + lastElem);
 							sumFirstLast = 0;
 						} else {
-							// System.out.println("firstElem: " + firstElem);
-							// System.out.println("lastElem: " + lastElem);
-							// System.out.println("2 VAR sumFirstLast:"
-							// + sumFirstLast);
-							// System.out.println("standar: "
-							// + i.getStandar().toString());
+							System.out.println("firstElem: " + firstElem);
+							System.out.println("lastElem: " + lastElem);
+							System.out.println("2 VAR sumFirstLast:"
+									+ sumFirstLast);
+							System.out.println("standar: "
+									+ i.getStandar().toString());
 
 							if (Integer.parseInt(lastElem.toString()) < Integer
 									.parseInt(i.getStandar().toString())) {
@@ -150,11 +145,10 @@ public class DistribResultAparado {
 								newMatriz = Integer.parseInt(i.getStandar()
 										.toString());
 							}
-							// System.out.println("var newMatriz: " +
-							// newMatriz);
+							System.out.println("var newMatriz: " + newMatriz);
 							dias.add(Math.abs(Integer.parseInt(newMatriz
 									.toString())));
-							// System.out.println("var dias1: " + dias);
+							System.out.println("var dias1: " + dias);
 
 							for (int ij = 1; ij < i.getmProcesos().get(0)
 									.size() - 1; ij++) {
@@ -164,6 +158,7 @@ public class DistribResultAparado {
 									dias.add(i.getmProcesos().get(0).get(ij));
 								}
 							}
+
 							newMatriz2 = Math
 									.abs(((Integer) i.getStandar() - (Integer) dias
 											.get(0)))
@@ -171,10 +166,14 @@ public class DistribResultAparado {
 											.getmProcesos()
 											.get(0)
 											.get(i.getmProcesos().get(0).size() - 1);
-							// System.out.println("new Matriz2: " + newMatriz2);
+
+							System.out.println("new Matriz2: " + newMatriz2);
+
 							// AGREGAR A LA MATRIZ FINAL
 							dias.add(Math.abs(Integer.parseInt(newMatriz2
 									.toString())));
+
+							// ********** PARTE CRITICA
 							IEsp = 0;
 							IEsp2 = 0;
 							for (int d = 0; d < dias.size(); d++) {
@@ -185,15 +184,15 @@ public class DistribResultAparado {
 										.get(d);
 							}
 
-							// System.out.println("Dias: " + dias);
-							// System.out.println("Matriz Ori:"
-							// + i.getmProcesos().get(0));
-							// System.out.println("IEsp: " + IEsp);
-							// System.out.println("IEsp2: " + IEsp2);
+							System.out.println("Dias: " + dias);
+							System.out.println("Matriz Ori:"
+									+ i.getmProcesos().get(0));
+							System.out.println("IEsp: " + IEsp);
+							System.out.println("IEsp2: " + IEsp2);
 							if (IEsp != IEsp2) {
 								dias.clear();
-								// System.out.println("var newMatriz: "
-								// + newMatriz);
+								System.out.println("var newMatriz: "
+										+ newMatriz);
 								dias.add(Math.abs(Integer.parseInt(newMatriz
 										.toString())));
 
@@ -213,14 +212,17 @@ public class DistribResultAparado {
 												.get(0)
 												.get(i.getmProcesos().get(0)
 														.size() - 1));
-								// System.out
-								// .println("new Matriz2: " + newMatriz2);
+
+								System.out
+										.println("new Matriz2: " + newMatriz2);
 
 								// AGREGAR A LA MATRIZ FINAL
 								dias.add(Math.abs(Integer.parseInt(newMatriz2
 										.toString())));
 							}
-							// System.out.println("Matriz RESULTANTE: " + dias);
+							// ********** FIN PARTE CRITICA
+
+							System.out.println("Matriz RESULTANTE: " + dias);
 							FragmentNumber2 mDias = new FragmentNumber2();
 							horas = mDias.Number(i.getStandar(), dias);
 							mProcesosFinal.add(dias);
@@ -233,16 +235,16 @@ public class DistribResultAparado {
 											mProcesosFinal));
 							orderListFinal.add(orderitemFinal);
 							lastElem = (Integer) (dias.get(dias.size() - 1));
-							// System.out.println("new LastElem: " + lastElem);
+							System.out.println("new LastElem: " + lastElem);
 						}
 
 					} else {
-						// System.out.println("Matriz UNICA: "
-						// + i.getmProcesos().get(0));
+						System.out.println("Matriz UNICA: "
+								+ i.getmProcesos().get(0));
 						sumFirstLast = lastElem + firstElem;
 						if (acumElem >= i.getStandar()) {
 							// ALGO
-							// System.out.println("PASA ALGO...!!??");
+							System.out.println("PASA ALGO...!!??");
 						} else {
 							// AGREGAR LA MISMA TUPLA
 							dias.add(Math.abs(firstElem));
@@ -267,29 +269,29 @@ public class DistribResultAparado {
 					codTpLinea = i.getCodLinea();
 					// FIN PROCESOS IGUALES
 				}
-				// System.out
-				// .println("-------------------------------------------");
+				System.out
+						.println("-------------------------------------------");
 			} else {
 				// *************PROCESOS DIFERENTES*****************
-				// System.out.println("******PROCESOS DIFERENTES*****");
+				System.out.println("******PROCESOS DIFERENTES*****");
 				firstElem = (Integer) i.getmProcesos().get(0).get(0);
 				lastElem = 0;
 				if (i.getmProcesos().get(0).size() > 1) {
-					// System.out.println("Matriz ORIGINAL: "
-					// + i.getmProcesos().get(0));
+					System.out.println("Matriz ORIGINAL: "
+							+ i.getmProcesos().get(0));
 				} else {
-					// System.out.println("Matriz UNICA: "
-					// + i.getmProcesos().get(0));
-					// System.out.println("**LastElem: " + lastElem);
-					// System.out.println("**FirsElem: " + firstElem);
+					System.out.println("Matriz UNICA: "
+							+ i.getmProcesos().get(0));
+					System.out.println("**LastElem: " + lastElem);
+					System.out.println("**FirsElem: " + firstElem);
 					sumFirstLast = lastElem + firstElem;
 					if (acumElem >= i.getStandar()) {
 						// ALGO
-						// System.out.println("PASA ALGO...!!??");
+						System.out.println("PASA ALGO...!!??");
 					} else {
 						// AGREGAR LA MISMA TUPLA
 						dias.add(Math.abs(firstElem));
-						// System.out.println("** Dias: " + dias);
+						System.out.println("** Dias: " + dias);
 						FragmentNumber2 mDias = new FragmentNumber2();
 						horas = mDias.Number(i.getStandar(), dias);
 						mProcesosFinal.add(dias);
@@ -312,7 +314,7 @@ public class DistribResultAparado {
 				// GUARDAR PARA LA SIGUIENTE VUELTA
 				codProceso = i.getCodProceso();
 				codTpLinea = i.getCodLinea();
-				// System.out.println("---------------------------------------");
+				System.out.println("---------------------------------------");
 				// FIN PROCESOS DIFERENTES
 			}
 			j++;

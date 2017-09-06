@@ -105,24 +105,24 @@
 				<p:panel id="idPanel">
 					<h:panelGrid id="idPngConLineas" columns="2">
 
-						<h:outputLabel value="Overtime:" />
+						<h:outputLabel value="Extra:" />
 						<p:selectBooleanButton value="#{programDiasBean.hExtras}"
 							onLabel="Si" offLabel="No" style="width:60px" />
 
-						<h:outputLabel value="Start:" />
+						<h:outputLabel value="Empezar:" />
 						<p:calendar id="btnFechaMtn" value="#{programDiasBean.fInicio}"
 							showOn="button" size="8" locale="es" required="true" />
 
 						<f:facet name="footer">
-							<p:commandButton id="btnGenerarPedido" value="Buil"
+							<p:commandButton id="btnGenerarPedido" value="Visualizar"
 								actionListener="#{programDiasBean.btnProcesar()}"
 								update=":idTblFechas, msgs" />
 
-							<p:commandButton id="btnReProcesarPedido" value="Rebuild"
+							<p:commandButton id="btnReProcesarPedido" value="Re-Configurar"
 								actionListener="#{programDiasBean.btnReProcesar()}"
 								process="@this" />
 
-							<p:commandButton id="btnContinuar" value="Submit"
+							<p:commandButton id="btnContinuar" value="Guardar"
 								oncomplete="PF('dialogLTFin').show()" process="@this" />
 						</f:facet>
 					</h:panelGrid>
