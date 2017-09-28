@@ -48,6 +48,9 @@ public class Programturno implements Serializable {
 	@Column(name="no_plan")
 	private Integer noPlan;
 
+	@Column(name="program_finalizada")
+	private Boolean programFinalizada;
+
 	//bi-directional many-to-one association to Lineasturno
 	@ManyToOne
 	@JoinColumn(name="ltcodigo")
@@ -159,6 +162,14 @@ public class Programturno implements Serializable {
 
 	public void setNoPlan(Integer noPlan) {
 		this.noPlan = noPlan;
+	}
+
+	public Boolean getProgramFinalizada() {
+		return this.programFinalizada;
+	}
+
+	public void setProgramFinalizada(Boolean programFinalizada) {
+		this.programFinalizada = programFinalizada;
 	}
 
 	public Lineasturno getLineasturno() {

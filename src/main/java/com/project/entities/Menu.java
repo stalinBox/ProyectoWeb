@@ -5,50 +5,49 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 /**
  * The persistent class for the menu database table.
  * 
  */
 @Entity
-@NamedQuery(name="Menu.findAll", query="SELECT m FROM Menu m")
+@NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")
 public class Menu implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="menu_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "menu_id")
 	private Integer menuId;
 
-	@Column(name="m_id")
+	@Column(name = "m_id")
 	private Integer mId;
 
-	@Column(name="menu_estado")
+	@Column(name = "menu_estado")
 	private BigDecimal menuEstado;
 
-	@Column(name="menu_icono")
+	@Column(name = "menu_icono")
 	private String menuIcono;
 
-	@Column(name="menu_nombre")
+	@Column(name = "menu_nombre")
 	private String menuNombre;
 
-	@Column(name="menu_orden")
+	@Column(name = "menu_orden")
 	private Integer menuOrden;
 
-	@Column(name="menu_url")
+	@Column(name = "menu_url")
 	private String menuUrl;
 
-	//bi-directional many-to-one association to Menu
+	// bi-directional many-to-one association to Menu
 	@ManyToOne
-	@JoinColumn(name="menu_nivel")
+	@JoinColumn(name = "menu_nivel")
 	private Menu menu;
 
-	//bi-directional many-to-one association to Menu
-	@OneToMany(mappedBy="menu")
+	// bi-directional many-to-one association to Menu
+	@OneToMany(mappedBy = "menu")
 	private List<Menu> menus;
 
-	//bi-directional many-to-one association to Rolmenu
-	@OneToMany(mappedBy="menu")
+	// bi-directional many-to-one association to Rolmenu
+	@OneToMany(mappedBy = "menu")
 	private List<Rolmenu> rolmenus;
 
 	public Menu() {

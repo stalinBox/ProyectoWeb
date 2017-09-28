@@ -323,6 +323,19 @@ where pa.ordenprod_codigo = 28
 and pa.pro_codigo = 1
 group by lt.lineapro_codigo
 
-/* cambiar las consultas */
-interfaz lineasTurnos cambiar en el cbo proceso, este debe ir seleccionando todos los procesos 
-que se configuraron en la tabla parametros.
+
+/* FUNCION PARA INSERTAR IMAGENES */
+CREATE OR REPLACE FUNCTION bytea_import(p_path text, p_result OUT bytea) LANGUAGE plpgsql AS $$ DECLARE l_oid oid; r record; BEGIN p_result := '';
+SELECT lo_import(p_path) INTO l_oid;
+FOR r IN
+  (SELECT DATA
+   FROM pg_largeobject
+   WHERE loid = l_oid
+   ORDER BY pageno) LOOP p_result = p_result || r.DATA; END LOOP; perform lo_unlink(l_oid); END;$$;
+   
+/* INSERTAR IMAGENES EN LA TALBA LOGOSFAPS*/
+select * from logosfaps
+delete from logosfaps
+
+insert into logosfaps
+values (default,'faps1', bytea_import('C:\\UTA_CALTU\\ProWebCALTU\\ProyectoWeb\\src\\main\\webapp\\images\\contentFlowFaps\\8.png'));

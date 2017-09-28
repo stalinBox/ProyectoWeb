@@ -47,8 +47,25 @@ public class ProcesosOPDaoImpl implements ProcesosOPDao {
 
 	@Override
 	public boolean update(Procesosop processOP) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		try {
+			sesion.beginTransaction();
+			Procesosop procesosOPdb = (Procesosop) sesion.load(
+					Procesosop.class, processOP.getProcessopCod());
+			// Parametros a cambiar
+			procesosOPdb.setPfinalizado(processOP.getPfinalizado());
+			// fin de parametros
+			sesion.update(procesosOPdb);
+			sesion.getTransaction().commit();
+			flag = true;
+		} catch (Exception e) {
+			flag = false;
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR UPDATE PROCESOSOP: "
+					+ e.getMessage().toString());
+		}
+		return flag;
 	}
 
 	@Override
@@ -131,6 +148,24 @@ public class ProcesosOPDaoImpl implements ProcesosOPDao {
 		List<Procesosop> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "from Procesosop op where op.processopCod = " + codPop;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLPROCESOSOP: " + e.toString());
+		}
+		return listado;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Procesosop> findByNotNull() {
+		List<Procesosop> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Procesosop pop where pop.pfinalizado = false";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

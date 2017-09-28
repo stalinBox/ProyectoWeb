@@ -28,6 +28,8 @@ public class Procesosop implements Serializable {
 	@Column(name="f_estim")
 	private Date fEstim;
 
+	private Boolean pfinalizado;
+
 	//bi-directional many-to-one association to Lugare
 	@ManyToOne
 	@JoinColumn(name="lugar_codigo_dest")
@@ -87,6 +89,14 @@ public class Procesosop implements Serializable {
 
 	public void setFEstim(Date fEstim) {
 		this.fEstim = fEstim;
+	}
+
+	public Boolean getPfinalizado() {
+		return this.pfinalizado;
+	}
+
+	public void setPfinalizado(Boolean pfinalizado) {
+		this.pfinalizado = pfinalizado;
 	}
 
 	public Lugare getLugare1() {

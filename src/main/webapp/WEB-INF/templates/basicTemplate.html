@@ -28,12 +28,19 @@
 
 <h:body>
 	<div id="conteiner">
-		<div id="top" class="ui-widget-header ui-corner-all">
+		<div id="top" style="height: 200px;">
 			<ui:insert name="top">
-				<center>
-					FAPS System: A LEAN MANUFACTURING SCHEDULING FOOTWEAR PROTOTYPE<br />
-					UTA-INVESTIGATION PROJECT
-				</center>
+				<p:graphicImage id="idLogoFAPS"
+					value="/images/contentFlowFaps/7.png" width="200" height="200"
+					style="float:left;" />
+				<br />
+				<br />
+				<br />
+				<p:outputLabel value="FAPS SYSTEM"
+					style="float:center;font-weight: bold;font-size: 70px" />
+				<br />
+				<p:outputLabel value="Footwear Advanced Planning Schedule System"
+					style="float:center;font-weight: bold;font-size: 10px" />
 			</ui:insert>
 		</div>
 		<div id="menu">
@@ -142,13 +149,24 @@
 
 
 					<p:submenu label="Reportes" icon="ui-icon-note">
-						<p:submenu label="Reportes" icon="ui-icon-search">
+						<p:submenu label="Reportes FAPS" icon="ui-icon-search">
 							<p:menuitem value="Reportes"
 								url="#{appBean.basePath}reportes/reporte1.jsf" />
+							<p:menuitem value="Capacidad por orden"
+								url="#{appBean.basePath}reportes/Reporteria.jsf" />
 							<p:menuitem value="Reportes"
 								url="#{appBean.basePath}reportes/reporte2.jsf" />
 							<p:menuitem value="Pag. Prueba"
 								url="#{appBean.basePath}reportes/prueba.jsf" />
+						</p:submenu>
+
+						<p:submenu label="Reportes ANDON" icon="ui-icon-search">
+							<p:menuitem value="REPORTES ANDON" url="#{appBean.andonReports}"
+								icon="fa fa-bell-o" target="_blank">
+								<h:outputLink
+									value="http://172.21.123.55/PantallaAndon/Reportes.aspx"
+									target="_blank">URL</h:outputLink>
+							</p:menuitem>
 						</p:submenu>
 					</p:submenu>
 
@@ -158,6 +176,9 @@
 							icon="ui-icon-caret-1-n" />
 						<p:menuitem value="FAPS" url="#{appBean.basePath}Ayudas/Faps.jsf"
 							icon="ui-icon-caret-1-n" />
+
+						<p:menuitem value="ACERCA DE:" icon="ui-icon-caret-1-n"
+							oncomplete="PF('dlgAbout').show()" />
 					</p:submenu>
 
 					<p:menuitem value="Exit" actionListener="#{loginBean.logout()}"
@@ -167,18 +188,53 @@
 			</h:form>
 		</div>
 
-		<div id="content"
-			class="center_content ui-widget-content ui-corner-all">
+		<div id="content" class="center_content ui-widget-content">
 			<ui:insert name="content">
 
 			</ui:insert>
 		</div>
 
-		<div id="bottom" class="ui-widget-header ui-corner-all"
-			style="height: 15px;">
+		<div id="bottom" style="height: 15px;">
 			<ui:insert name="bottom">&copy; Universidad Técnica de Ambato - 2017</ui:insert>
 		</div>
 	</div>
+
+	<h:form id="formAbout">
+		<p:dialog widgetVar="dlgAbout" showEffect="explode"
+			hideEffect="bounce" height="250" width="800" resizable="false">
+			<f:facet name="header">
+			Acerca de FAPS System:
+			</f:facet>
+			<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+				<h:panelGrid columns="1" style="margin:0 auto;">
+					<h:graphicImage value="/images/contentFlowFaps/8.png" width="200"
+						height="200" style="float:left;" />
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+					<p:outputLabel value="FAPS SYSTEM"
+						style="float:left;font-weight: bold;font-size: 50px" />
+					<h:outputLabel value="" />
+					<p:outputLabel value="Prototipo v. 1.0"
+						style="float:left;font-weight: bold;font-size: 10px" />
+					<p:outputLabel value="" />
+					<p style="text-align: justify;">Este es un producto
+						desarrollado en el proyecto OPTIMIZACIÓN OPERACIONAL BASADA EN UN
+						SISTEMA DINÁMICO ESBELTO DE ALERTA DE FALLAS EN LOS PROCESOS DE
+						PRODUCCIÓN PARA LAS INDUSTRIAS DE CALZADO por la Facultad de
+						Ingeniería en Sistemas, Electrónica e Industrial de la Universidad
+						Técnica de Ambato</p>
+					<p:outputLabel value="" />
+					<p:outputLabel value="Programado por: Ing. Stalin Ramírez" />
+					<p:outputLabel value="" />
+					<p:outputLabel value="Contactos: dramriez8774@uta.edu.ec" />
+				</h:panelGrid>
+			</h:panelGrid>
+			<f:facet name="footer">
+				<p:commandButton value="Ok" oncomplete="PF('dlgAbout').hide()" />
+			</f:facet>
+		</p:dialog>
+	</h:form>
+
 	<script type="text/javascript">
     function handleLoginRequest(xhr, status, args) {
         if(args.loggetOut) {

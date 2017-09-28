@@ -15,6 +15,8 @@ public interface OrdenesProdDao {
 
 	public List<Ordenprod> getAllOrderN();
 
+	public List<Ordenprod> getAllOrderByCod(Integer codOrden);
+
 	public Ordenprod LastRespOrden();
 
 	public Ordenprod findByLast(Integer id);

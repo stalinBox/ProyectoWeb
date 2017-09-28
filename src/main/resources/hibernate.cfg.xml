@@ -12,7 +12,6 @@
 		<property name="hibernate.show_sql">true</property>
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 		<property name="hibernate.current_session_context_class">thread</property>
-		<property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
 
 		<mapping class="com.project.entities.Menu" />
 		<mapping class="com.project.entities.Rol" />

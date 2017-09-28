@@ -23,6 +23,9 @@ public class Rol implements Serializable {
 	@Column(name="rol_descripcion")
 	private String rolDescripcion;
 
+	@Column(name="rol_interfaz")
+	private Boolean rolInterfaz;
+
 	@Column(name="rol_nombre")
 	private String rolNombre;
 
@@ -54,6 +57,14 @@ public class Rol implements Serializable {
 
 	public void setRolDescripcion(String rolDescripcion) {
 		this.rolDescripcion = rolDescripcion;
+	}
+
+	public Boolean getRolInterfaz() {
+		return this.rolInterfaz;
+	}
+
+	public void setRolInterfaz(Boolean rolInterfaz) {
+		this.rolInterfaz = rolInterfaz;
 	}
 
 	public String getRolNombre() {

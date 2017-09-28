@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
+		<ui:define name="content">
+
+			<h:form>
+				<p:accordionPanel>
+					<p:tab title="Reporte de Capacidades">
+						<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
+							<p:outputLabel value="Orden Nº:" style="font-weight: bold;" />
+							<p:selectOneMenu id="idCbxOrdenes"
+								value="#{capxOrdenBean.nOrden}" style="width:150px">
+								<f:selectItem itemLabel="- Seleccione -"
+									noSelectionOption="true" itemValue="0" />
+								<f:selectItems value="#{capxOrdenBean.selectedItemsOrdenes}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+						<p:commandButton value="GENERAR REPORTE - Exportar PDF"
+							actionListener="#{capxOrdenBean.exportarPDF}" />
+					</p:tab>
+
+					<p:tab title="Pares por producción (rango fechas)">
+					</p:tab>
+
+					<p:tab title="Pares por produccion (rango ordenes)">
+					</p:tab>
+				</p:accordionPanel>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

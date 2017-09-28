@@ -194,11 +194,15 @@ public class DetaOrdenDaoImpl implements DetaOrdenDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Modelo> findByOrden2(Integer idOrden) {
+	public List<Modelo> findByOrden2(Integer idOrden, Integer codParam) {
 		List<Modelo> listado = null;
 		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
 		String sql = "SELECT DISTINCT(d.modelo) FROM Detalleorden d WHERE d.ordenprod.ordenprodCodigo = "
-				+ idOrden;
+				+ idOrden
+				+ " and d.detaordenCodigo in "
+				+ "( select dtb.detalleorden from Distribdetalle dtb where dtb.tipLinea in( "
+				+ "select p.tipLinea from Parametro p where p.paramCodigo = "
+				+ codParam + "))";
 		System.out.println(sql);
 		try {
 			sesion.beginTransaction();

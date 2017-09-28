@@ -60,44 +60,70 @@ public class DistribMontaje {
 		Integer itamMaxRow = 0;
 		Integer mayorColumn = result4.size();
 
+		// recorrer normalmente el items4
 		for (ArrayList<Items4> i : ObjectOfObject) {
-			// OBTENER EL TAMAÑO MAYOR PARA EL CICLO CONSECUENTE.
-			itamMaxRow = tamMax.tamMaximo(i);
-
-			// RECORRER EL OBJETO RESULT4 POR COLUMNAS
-			for (int ii = 0; ii < itamMaxRow; ii++) {
-				// System.out.println("//");
-				for (int j = 0; j < mayorColumn; j++) {
-
-					try {
-						for (MallObject oj : objectMal) {
-							if (i.get(j).getCodLinea() == oj.getCodTpl()
-									&& i.get(j).getCodProceso() == oj
-											.getCodPro()
-									&& i.get(j).getCodMod()
-											.equals(oj.getCodMod())) {
-								mProcesos = tablas.receivParamsPares(
-										(Integer) i.get(j).getmProcesos()
-												.get(0).get(ii), i.get(j)
-												.getStandar(), oj
-												.getCantLineas(), 0.0, oj
-												.getCountLineas());
-								Items5 soloItems = new Items5(i.get(j)
-										.getCodProceso(), i.get(j)
-										.getCodLinea(), oj.getCodParam(),
-										oj.getCodMod(), oj.getStand(),
-										mProcesos);
-								result5.add(soloItems);
-							} else {
-								continue;
-							}
+			for (int ii = 0; ii < i.size(); ii++) {
+				for (int j = 0; j < i.get(ii).getmProcesos().get(0).size(); j++) {
+					System.out.println("ESTOO: "
+							+ i.get(ii).getmProcesos().get(0).get(j));
+					for (MallObject oj : objectMal) {
+						if (i.get(j).getCodLinea() == oj.getCodTpl()
+								&& i.get(j).getCodProceso() == oj.getCodPro()
+								&& i.get(j).getCodMod().equals(oj.getCodMod())) {
+							mProcesos = tablas.receivParamsPares((Integer) i
+									.get(ii).getmProcesos().get(0).get(j), i
+									.get(j).getStandar(), oj.getCantLineas(),
+									0.0, oj.getCountLineas());
+							Items5 soloItems = new Items5(i.get(j)
+									.getCodProceso(), i.get(j).getCodLinea(),
+									oj.getCodParam(), oj.getCodMod(),
+									oj.getStand(), mProcesos);
+							result5.add(soloItems);
+						} else {
+							continue;
 						}
-					} catch (IndexOutOfBoundsException e) {
-						continue;
 					}
 				}
 			}
 		}
+
+		// for (ArrayList<Items4> i : ObjectOfObject) {
+		// // OBTENER EL TAMAÑO MAYOR PARA EL CICLO CONSECUENTE.
+		// itamMaxRow = tamMax.tamMaximo(i);
+		//
+		// // RECORRER EL OBJETO RESULT4 POR COLUMNAS
+		// for (int ii = 0; ii < itamMaxRow; ii++) {
+		// for (int j = 0; j < mayorColumn; j++) {
+		//
+		// try {
+		// for (MallObject oj : objectMal) {
+		// if (i.get(j).getCodLinea() == oj.getCodTpl()
+		// && i.get(j).getCodProceso() == oj
+		// .getCodPro()
+		// && i.get(j).getCodMod()
+		// .equals(oj.getCodMod())) {
+		// mProcesos = tablas.receivParamsPares(
+		// (Integer) i.get(j).getmProcesos()
+		// .get(0).get(ii), i.get(j)
+		// .getStandar(), oj
+		// .getCantLineas(), 0.0, oj
+		// .getCountLineas());
+		// Items5 soloItems = new Items5(i.get(j)
+		// .getCodProceso(), i.get(j)
+		// .getCodLinea(), oj.getCodParam(),
+		// oj.getCodMod(), oj.getStand(),
+		// mProcesos);
+		// result5.add(soloItems);
+		// } else {
+		// continue;
+		// }
+		// }
+		// } catch (IndexOutOfBoundsException e) {
+		// continue;
+		// }
+		// }
+		// }
+		// }
 
 		System.out.println("----RESULTADO DE (DistribMontaje):----");
 		// PRUEBAS VISUALIZACION ITEMS4

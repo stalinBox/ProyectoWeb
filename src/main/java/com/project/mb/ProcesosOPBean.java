@@ -20,6 +20,8 @@ import com.project.dao.DetaOrdenDao;
 import com.project.dao.DetaOrdenDaoImpl;
 import com.project.dao.LineasTurnosDao;
 import com.project.dao.LineasTurnosDaoImpl;
+import com.project.dao.ModelosDao;
+import com.project.dao.ModelosDaoImpl;
 import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
 import com.project.dao.ParamDao;
@@ -206,8 +208,26 @@ public class ProcesosOPBean implements Serializable {
 
 	public void onChangeProcesos(ActionEvent actionEvent) {
 		System.out.println("variable codOrden: " + this.nOrden);
-		System.err.println("Variable codProceso: " + this.nProceso);
+		System.err.println("Variable nProceso/CodParam: " + this.nProceso);
 		getFechas();
+	}
+
+	public void btnUpdateProcesosOP(ActionEvent actionEvent) {
+		String msg;
+		ProcesosOPDao procesoOPDao = new ProcesosOPDaoImpl();
+		this.selectedProcesosOP.setPfinalizado(true);
+		this.selectedProcesosOP.setProcessopCod(this.codPOP);
+		if (procesoOPDao.update(this.selectedProcesosOP)) {
+			msg = "Proceso OP FINALIZADO";
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "Error al Finalizar el Proceso OP";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}
 
 	public void btnConsultar() {
@@ -237,6 +257,7 @@ public class ProcesosOPBean implements Serializable {
 		this.selectedProcesosOP.setOrdenprod(op);
 		this.selectedProcesosOP.setFActual(fInicio);
 		this.selectedProcesosOP.setFEstim(fFin);
+		this.selectedProcesosOP.setPfinalizado(false);
 
 		if (procesoOPDao.create(this.selectedProcesosOP)) {
 			msg = "Se creó un proceso operario";
@@ -482,7 +503,7 @@ public class ProcesosOPBean implements Serializable {
 	public List<SelectItem> getSelectedItemsModelo() {
 		this.selectedItemsModelo = new ArrayList<SelectItem>();
 		DetaOrdenDao dtDao = new DetaOrdenDaoImpl();
-		List<Modelo> deta = dtDao.findByOrden2(this.nOrden);
+		List<Modelo> deta = dtDao.findByOrden2(this.nOrden, this.nProceso);
 
 		for (Modelo dt : deta) {
 			SelectItem selectItem = new SelectItem(dt.getModCodigo(),
@@ -612,6 +633,7 @@ public class ProcesosOPBean implements Serializable {
 		for (Procesosop op : procesosop) {
 			this.nOrden = op.getOrdenprod().getOrdenprodCodigo();
 			this.nProceso = op.getParametro().getParamCodigo();
+
 		}
 		if (this.nOrden != null) {
 			this.selectedItemsLT = new ArrayList<SelectItem>();
@@ -701,7 +723,7 @@ public class ProcesosOPBean implements Serializable {
 	public List<SelectItem> getSelectedItemsPO() {
 		this.selectedItemsPO = new ArrayList<SelectItem>();
 		ProcesosOPDao procesosOPDAO = new ProcesosOPDaoImpl();
-		List<Procesosop> procesosOP = procesosOPDAO.findAll();
+		List<Procesosop> procesosOP = procesosOPDAO.findByNotNull();
 		for (Procesosop pop : procesosOP) {
 			SelectItem selectItem = new SelectItem(pop.getProcessopCod(), pop
 					.getOrdenprod().getCliente().getNombrecli()

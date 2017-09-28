@@ -11,6 +11,11 @@ public class MyUtil {
 		return "http://" + ip + "/PantallaAndon/Prueba.aspx";
 	}
 
+	public static String andonReportes() {
+		// return "http://172.21.123.197/PantallaAndon/Reportes.aspx";
+		return "http://" + ip + "/PantallaAndon/Reportes.aspx";
+	}
+
 	public static String baseurl() {
 		return "http://" + ip + ":8080/ProyectoWeb/";
 	}

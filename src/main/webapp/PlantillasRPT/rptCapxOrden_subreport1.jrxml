@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCapxOrden_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="028b6b72-feac-463a-80d5-bb2717309d4a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codOrden" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select tpp.tpr_nombre, tpl.tipolinea, param.standar
+from parametros param inner join
+procesos po on po.pro_codigo = param.pro_codigo inner join
+tipo_procesos tpp on po.tpr_codigo = tpp.tpr_codigo inner join
+tip_linea tpl on param.codigo_tiplinea = tpl.codigo_tiplinea
+where param.ordenprod_codigo = $P{codOrden}]]>
+	</queryString>
+	<field name="tpr_nombre" class="java.lang.String"/>
+	<field name="tipolinea" class="java.lang.String"/>
+	<field name="standar" class="java.lang.Integer"/>
+	<group name="tpr_nombre">
+		<groupExpression><![CDATA[$F{tpr_nombre}]]></groupExpression>
+	</group>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="43" y="0" width="42" height="20" uuid="879607e4-6106-4cd8-bf15-073578ea34cb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proceso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="145" y="0" width="71" height="20" uuid="967b2645-f90c-4820-bcec-a28bd70ec2a4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de linea:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="0" width="61" height="20" uuid="04b49c55-0e36-4842-bb68-3d9985117805"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Capacidad:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="44" y="0" width="100" height="20" uuid="153e8b21-32db-497b-b445-4710e90f804b"/>
+				<textFieldExpression><![CDATA[$F{tpr_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="145" y="0" width="100" height="20" uuid="aee2abdf-a8b1-457b-9ec3-9bbe291ccb71"/>
+				<textFieldExpression><![CDATA[$F{tipolinea}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="0" width="100" height="20" uuid="6b634d89-ff8b-478d-8e41-d557d1c35dd6"/>
+				<textFieldExpression><![CDATA[$F{standar}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

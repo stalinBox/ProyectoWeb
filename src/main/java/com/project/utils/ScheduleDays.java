@@ -28,19 +28,8 @@ public class ScheduleDays implements Serializable {
 	}
 
 	public Calendar prevDay(Calendar a) {
-		// if (b == 7) {
-		// a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-		// prevDay(a);
-
-		// } else if (b == 1) {
-		// a.set(Calendar.DATE, a.get(Calendar.DATE) + 1);
-		// prevDay(a);
-
-		// }
-		// else {
 		a.set(Calendar.AM_PM, Calendar.PM);
 		a.set(Calendar.DATE, a.get(Calendar.DATE) - 1);
-		// }
 		return a;
 	}
 

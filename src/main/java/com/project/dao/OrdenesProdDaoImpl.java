@@ -172,4 +172,23 @@ public class OrdenesProdDaoImpl implements OrdenesProdDao {
 		}
 		return listado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Ordenprod> getAllOrderByCod(Integer codOrden) {
+		List<Ordenprod> listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "from Ordenprod op where op.ordenprodCodigo = " + codOrden;
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (List<Ordenprod>) sesion.createQuery(sql).list();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FIND ALL ORDEN DE PRODUCCION: "
+					+ e.toString());
+		}
+		return listado;
+	}
 }

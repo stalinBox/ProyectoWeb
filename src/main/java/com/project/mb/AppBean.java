@@ -13,6 +13,10 @@ public class AppBean {
 
 	}
 
+	public String getAndonReports() {
+		return MyUtil.andonReportes();
+	}
+
 	public String getAndonMonitor() {
 		return MyUtil.andonMonitor();
 	}

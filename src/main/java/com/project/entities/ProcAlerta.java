@@ -2,7 +2,7 @@ package com.project.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 
 /**
@@ -20,8 +20,10 @@ public class ProcAlerta implements Serializable {
 	@Column(name="proc_ale_codigo")
 	private Integer procAleCodigo;
 
-	@Temporal(TemporalType.DATE)
-	private Date fecha;
+	private Timestamp fecha;
+
+	@Column(name="lineapro_codigo")
+	private Integer lineaproCodigo;
 
 	private String observacion;
 
@@ -65,12 +67,20 @@ public class ProcAlerta implements Serializable {
 		this.procAleCodigo = procAleCodigo;
 	}
 
-	public Date getFecha() {
+	public Timestamp getFecha() {
 		return this.fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Timestamp fecha) {
 		this.fecha = fecha;
+	}
+
+	public Integer getLineaproCodigo() {
+		return this.lineaproCodigo;
+	}
+
+	public void setLineaproCodigo(Integer lineaproCodigo) {
+		this.lineaproCodigo = lineaproCodigo;
 	}
 
 	public String getObservacion() {

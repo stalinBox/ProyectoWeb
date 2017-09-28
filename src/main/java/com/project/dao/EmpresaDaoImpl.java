@@ -92,4 +92,21 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return flag;
 	}
 
+	@Override
+	public Empresa findUnique() {
+		Empresa listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Empresa";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (Empresa) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDALLEMPRESA: " + e.toString());
+		}
+		return listado;
+	}
+
 }

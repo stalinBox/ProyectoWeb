@@ -7,6 +7,8 @@ import com.project.entities.Procesosop;
 public interface ProcesosOPDao {
 	public List<Procesosop> findAll();
 
+	public List<Procesosop> findByNotNull();
+
 	public List<Procesosop> findByOrden(Integer codOrden);
 
 	public List<Procesosop> findByCodPop(Integer codPop);

@@ -23,7 +23,7 @@ public interface DetaOrdenDao {
 
 	public List<String> getByOrden(Integer codOrden);
 
-	public List<Modelo> findByOrden2(Integer idOrden);
+	public List<Modelo> findByOrden2(Integer idOrden, Integer codParam);
 
 	public List<Integer> getSumByModelo(Integer codOrden, String modelo);
 

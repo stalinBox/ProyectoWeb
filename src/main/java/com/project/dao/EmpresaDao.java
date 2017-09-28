@@ -8,6 +8,8 @@ public interface EmpresaDao {
 
 	public List<Empresa> findAll();
 
+	public Empresa findUnique();
+
 	public boolean create(Empresa empresa);
 
 	public boolean update(Empresa empresa);
