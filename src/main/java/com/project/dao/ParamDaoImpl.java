@@ -261,7 +261,6 @@ public class ParamDaoImpl implements ParamDao {
 		return listado;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<?> findParamAndLineaProd(Integer codParam) {
 		List<?> listado = null;

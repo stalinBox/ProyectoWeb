@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCapxOrdenPrueba" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e4d9d5da-6639-4f48-b5a9-2b71abdf567d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codOrder" class="java.lang.Integer"/>
+	<queryString language="hql">
+		<![CDATA[from Modelo ]]>
+	</queryString>
+	<field name="codOrden" class="java.lang.Integer"/>
+	<field name="nomCli" class="java.lang.String"/>
+	<field name="userResp" class="java.lang.String"/>
+	<field name="cant" class="java.lang.Integer"/>
+	<field name="modNom" class="java.lang.String"/>
+	<field name="talNum" class="java.lang.Integer"/>
+	<pageHeader>
+		<band height="53" splitType="Stretch">
+			<textField>
+				<reportElement x="47" y="9" width="100" height="20" uuid="6bb9f89d-8299-4fc0-b51b-6296a19b69de"/>
+				<textFieldExpression><![CDATA[$F{codOrden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="9" width="100" height="20" uuid="b42c8018-f329-4df8-8b5c-71ec0d5f8d1f"/>
+				<textFieldExpression><![CDATA[$F{nomCli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="47" y="29" width="100" height="20" uuid="58fa71ba-c336-4de2-abef-fccc3f51f15d"/>
+				<textFieldExpression><![CDATA[$F{userResp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="94" y="2" width="100" height="20" uuid="39f9e4ec-7d8d-4364-864f-062e282fb60b"/>
+				<text><![CDATA[modNom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="2" width="100" height="20" uuid="f9a174c5-ebb3-443f-925a-960a180b14fd"/>
+				<text><![CDATA[talNum]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="2" width="100" height="20" uuid="0b34b850-6bf1-491b-925e-58dba93fa80c"/>
+				<text><![CDATA[cant]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="94" y="0" width="100" height="20" uuid="f82a9113-faaa-448e-aa38-64433bc6cabd"/>
+				<textFieldExpression><![CDATA[$F{modNom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="241" y="0" width="100" height="20" uuid="475e98d3-ecc8-415f-be00-b317b542bb62"/>
+				<textFieldExpression><![CDATA[$F{talNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="385" y="0" width="100" height="20" uuid="fd3fa603-5427-432b-88d5-f506a5d1cf67"/>
+				<textFieldExpression><![CDATA[$F{cant}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

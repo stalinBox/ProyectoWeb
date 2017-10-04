@@ -17,11 +17,13 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import com.project.dao.EmpresaDao;
-import com.project.dao.EmpresaDaoImpl;
+import com.project.dao.ModelosDao;
+import com.project.dao.ModelosDaoImpl;
 import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
-import com.project.entities.Empresa;
+import com.project.dao.ReportesDao;
+import com.project.dao.ReportesDaoImpl;
+import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
 
 import net.sf.jasperreports.engine.JRException;
@@ -40,36 +42,93 @@ public class CapxOrdenBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// VARIABLES
-	private Empresa empresa;
 	private List<SelectItem> selectedItemsOrdenes;
-	private List<Ordenprod> ordenRepor;
 	private Integer nOrden;
+	private List<Object[]> reporte = new ArrayList<Object[]>();
+	private List<Modelo> RPTmodelos = new ArrayList<Modelo>();
+	private List<Ordenprod> listaReporte = new ArrayList<Ordenprod>();
 
 	// CONSTRUCTOR
 	@PostConstruct
 	public void init() {
-		EmpresaDao empresaDao = new EmpresaDaoImpl();
-		this.empresa = empresaDao.findUnique();
+
 	}
 
-	public void exportarPDF(ActionEvent actionEvent) throws JRException,
-			IOException {
+	public void onChange() {
+		System.out.println("VARIALBE nOrden: " + this.nOrden);
+	}
+
+	public void exportarPDFCapxOrden(ActionEvent actionEvent)
+			throws JRException, IOException {
+
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("txtNomEmp", this.empresa.getEmpNombre());
-		parametros.put("txtDirEmp", this.empresa.getEmpDirecc());
-		parametros.put("txtTelf", this.empresa.getEmpTelf());
+		parametros.put("codOrden", this.nOrden);
 
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext()
 				.getRealPath("/PlantillasRPT/rptCapxOrden.jasper"));
+
 		JasperPrint jasperPrint = JasperFillManager.fillReport(
 				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
-						this.getOrdenRepor()));
+						this.getReporte()));
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		response.addHeader("Content-disposition",
-				"attachment; filename=rptCapxOrden.pdf");
+				"attachment; filename=CapacidadPorOrden.pdf");
+		ServletOutputStream stream = response.getOutputStream();
+
+		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+
+		stream.flush();
+		stream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+
+	}
+
+	public void exportarPDFCapxOrden2(ActionEvent actionEvent)
+			throws JRException, IOException {
+
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("codOrder", this.nOrden);
+
+		File jasper = new File(FacesContext.getCurrentInstance()
+				.getExternalContext()
+				.getRealPath("/PlantillasRPT/rptCapxOrdenPrueba.jasper"));
+		JasperPrint jasperPrint = JasperFillManager.fillReport(
+				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
+						this.getReporte()));
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.addHeader("Content-disposition",
+				"attachment; filename=CapacidadPorOrden.pdf");
+		ServletOutputStream stream = response.getOutputStream();
+
+		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+
+		stream.flush();
+		stream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+
+	}
+
+	public void exportarPDFCapxOrden3(ActionEvent actionEvent)
+			throws JRException, IOException {
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		parametros.put("codAlgo", this.nOrden);
+		File jasper = new File(FacesContext.getCurrentInstance()
+				.getExternalContext()
+				.getRealPath("/PlantillasRPT/rptCapxOrdenPrueba2.jasper"));
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(
+				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
+						this.getListaReporte()));
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.addHeader("Content-disposition",
+				"attachment; filename=CapacidadPorOrden.pdf");
 		ServletOutputStream stream = response.getOutputStream();
 
 		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
@@ -79,7 +138,36 @@ public class CapxOrdenBean implements Serializable {
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
+	public void exportarPDFModelos(ActionEvent actionEvent) throws JRException,
+			IOException {
+		System.out.println("MODELOS 1");
+		// Map<String, Object> parametros = new HashMap<String, Object>();
+		// parametros.put("txtUsuario", "Stalin Ramírez");
+
+		File jasper = new File(FacesContext.getCurrentInstance()
+				.getExternalContext()
+				.getRealPath("/PlantillasRPT/rptModelos.jasper"));
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(
+				jasper.getPath(), null,
+				new JRBeanCollectionDataSource(this.getRPTmodelos()));
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.addHeader("Content-disposition",
+				"attachment; filename=ListaModelos.pdf");
+		ServletOutputStream stream = response.getOutputStream();
+
+		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+
+		stream.flush();
+		stream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+
+	}
+
 	// SETTERS AND GETTERS
+
 	public List<SelectItem> getSelectedItemsOrdenes() {
 		this.selectedItemsOrdenes = new ArrayList<SelectItem>();
 		OrdenesProdDao ordenesDao = new OrdenesProdDaoImpl();
@@ -93,12 +181,23 @@ public class CapxOrdenBean implements Serializable {
 		return selectedItemsOrdenes;
 	}
 
+	public List<Modelo> getRPTmodelos() {
+		ModelosDao modelosDao = new ModelosDaoImpl();
+		this.RPTmodelos = modelosDao.findAll();
+		return RPTmodelos;
+	}
+
+	public List<Object[]> getReporte() {
+		ReportesDao reportesDao = new ReportesDaoImpl();
+		reporte = reportesDao.findByCapxOrdenPrueba(nOrden);
+		return reporte;
+	}
+
 	public void setSelectedItemsOrdenes(List<SelectItem> selectedItemsOrdenes) {
 		this.selectedItemsOrdenes = selectedItemsOrdenes;
 	}
 
 	public Integer getnOrden() {
-		nOrden = 134;
 		return nOrden;
 	}
 
@@ -106,9 +205,14 @@ public class CapxOrdenBean implements Serializable {
 		this.nOrden = nOrden;
 	}
 
-	public List<Ordenprod> getOrdenRepor() {
-		OrdenesProdDao ordenProdDao = new OrdenesProdDaoImpl();
-		ordenRepor = ordenProdDao.getAllOrderByCod(nOrden);
-		return ordenRepor;
+	public List<Ordenprod> getListaReporte() {
+		ReportesDao dao = new ReportesDaoImpl();
+		listaReporte = dao.ObtenerTodos(nOrden);
+		return listaReporte;
 	}
+
+	public void setListaReporte(List<Ordenprod> listaReporte) {
+		this.listaReporte = listaReporte;
+	}
+
 }

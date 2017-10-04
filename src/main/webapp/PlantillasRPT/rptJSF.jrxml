@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptJSF" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f7e6b56-719f-4db1-9ee1-0b9fd377be1c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="txtUsuario" class="java.lang.String"/>
+	<field name="modCodigo" class="java.lang.Integer"/>
+	<field name="modNombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="342" height="35" uuid="7978f895-9e96-4661-8891-84f59a7be7c5"/>
+				<textElement>
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[JSF REPORTE MODELOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement x="17" y="5" width="100" height="20" uuid="9344692f-11a4-4902-b02b-1794cec270fc"/>
+				<text><![CDATA[Impreso por:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="5" width="100" height="20" uuid="5bf6edea-4cd3-47af-b66e-96db71857c20"/>
+				<textFieldExpression><![CDATA[$P{txtUsuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="15" y="2" width="100" height="20" uuid="4ed44aa7-11d6-4729-ae3c-f42bf9459df0"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="0" width="100" height="20" uuid="3e426644-2a10-4831-ac7e-54f0008760ea"/>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="16" y="4" width="100" height="20" uuid="9785575c-77b4-444a-8ed2-685adf3b787a"/>
+				<textFieldExpression><![CDATA[$F{modCodigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="4" width="100" height="20" uuid="5f376284-8aab-4108-b064-9eb5582a6260"/>
+				<textFieldExpression><![CDATA[$F{modNombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

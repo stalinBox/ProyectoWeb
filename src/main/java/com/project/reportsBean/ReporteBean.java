@@ -76,7 +76,6 @@ public class ReporteBean implements Serializable {
 		outStream.write(bytes, 0, bytes.length);
 		outStream.flush();
 		outStream.close();
-
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 

@@ -10,7 +10,7 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 
-			<h:form>
+			<h:form id="fmrReportes">
 				<p:accordionPanel>
 					<p:tab title="Reporte de Capacidades">
 						<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
@@ -20,17 +20,35 @@
 								<f:selectItem itemLabel="- Seleccione -"
 									noSelectionOption="true" itemValue="0" />
 								<f:selectItems value="#{capxOrdenBean.selectedItemsOrdenes}" />
+								<p:ajax listener="#{capxOrdenBean.onChange()}" />
 							</p:selectOneMenu>
-						</h:panelGrid>
+							<h:commandButton value="Exportar PDF"
+								actionListener="#{capxOrdenBean.exportarPDFCapxOrden}"
+								process="@this" />
 
-						<p:commandButton value="GENERAR REPORTE - Exportar PDF"
-							actionListener="#{capxOrdenBean.exportarPDF}" />
+							<h:commandButton value="Exportar PDF PRUEBA"
+								actionListener="#{capxOrdenBean.exportarPDFCapxOrden2}"
+								process="@this" />
+
+							<h:commandButton value="Exportar PDF PRUEBA 3"
+								actionListener="#{capxOrdenBean.exportarPDFCapxOrden3}"
+								process="@this" />
+						</h:panelGrid>
 					</p:tab>
 
 					<p:tab title="Pares por producción (rango fechas)">
 					</p:tab>
 
 					<p:tab title="Pares por produccion (rango ordenes)">
+					</p:tab>
+
+					<p:tab title="Modelos Disponibles">
+						<h:panelGrid id="gridModelos" columns="2" cellpadding="2">
+							<p:outputLabel value="Modelos:" style="font-weight: bold;" />
+							<h:commandButton value="Exportar PDF"
+								actionListener="#{capxOrdenBean.exportarPDFModelos}"
+								process="@this" />
+						</h:panelGrid>
 					</p:tab>
 				</p:accordionPanel>
 			</h:form>
