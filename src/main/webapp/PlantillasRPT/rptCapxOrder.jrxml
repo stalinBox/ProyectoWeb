@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCapxOrder" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d32faad4-3303-42b2-8a05-3c82631f8d1c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\UTA_CALTU\\ProWebCALTU\\ProyectoWeb\\src\\main\\webapp\\PlantillasRPT\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subReportCaps" class="java.util.List"/>
+	<field name="codOrden" class="java.lang.Integer"/>
+	<field name="nomCli" class="java.lang.String"/>
+	<field name="respOrden" class="java.lang.String"/>
+	<field name="modNombre" class="java.lang.String"/>
+	<field name="talNumero" class="java.lang.Integer"/>
+	<field name="nomEmpresa" class="java.lang.String"/>
+	<field name="dirEmpresa" class="java.lang.String"/>
+	<field name="telEmpresa" class="java.lang.String"/>
+	<field name="fOrden" class="java.util.Date"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="logEmpresa" class="java.lang.String"/>
+	<field name="logFAPS" class="java.lang.String"/>
+	<title>
+		<band height="53" splitType="Stretch">
+			<image>
+				<reportElement x="41" y="-1" width="91" height="53" uuid="1d50a3c1-d5ee-40f1-b6bb-0a90fcabd5d8"/>
+				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(javax.xml.bind.DatatypeConverter.parseBase64Binary($F{logFAPS}))]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="455" y="0" width="100" height="53" uuid="cb3c39ed-e9b0-4347-a27c-95c142f67877"/>
+				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(javax.xml.bind.DatatypeConverter.parseBase64Binary($F{logEmpresa}))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="100" y="40" width="355" height="12" uuid="e04d60d0-a1e4-4943-92c0-67212b23ce47"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Teléfono: "+$F{telEmpresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="27" width="355" height="13" uuid="3bd908a5-df0e-43fc-86b6-53ebdd287304"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dirección: "+$F{dirEmpresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="355" height="27" uuid="c16a1bf9-0857-4622-aa28-9fe9370a5047"/>
+				<textElement textAlignment="Center">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomEmpresa}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="100" y="51" width="355" height="1" uuid="ef43b708-2d19-438b-833d-99f93e0a3415"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement x="56" y="13" width="76" height="20" uuid="3615c76b-c71d-4031-828e-e2f80803c22b"/>
+				<text><![CDATA[Orden:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="33" width="76" height="20" uuid="e48b9a4e-cad2-4b16-b48b-e3344b54e896"/>
+				<text><![CDATA[Responsable:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="53" width="76" height="20" uuid="0d36bae1-eb75-47d1-9e0e-c26f919cf9e2"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="132" y="13" width="166" height="20" uuid="0b7dab4b-6002-4373-a021-bdf0f173e877"/>
+				<textFieldExpression><![CDATA[$F{codOrden} + " - " +$F{nomCli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="132" y="33" width="100" height="20" uuid="f9187f84-713a-4755-be8d-b40ec0059aa3"/>
+				<textFieldExpression><![CDATA[$F{respOrden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="132" y="53" width="100" height="20" uuid="895da7e1-dd62-4b1f-b940-3945fb64ead3"/>
+				<textFieldExpression><![CDATA[$F{fOrden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="73" width="355" height="20" uuid="ee12e829-7794-4d75-a3c8-1aa417791c00"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Detalle de la orden]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="93" width="100" height="20" uuid="85ef6662-bd14-41db-9403-a999a821f96f"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="232" y="93" width="100" height="20" uuid="3bad1177-485e-4870-8e9b-6ef908cd1941"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Talla]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="332" y="93" width="100" height="20" uuid="f283c4de-1a64-45d5-ac2e-e8c211fa318f"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="132" y="0" width="100" height="20" uuid="09565df9-4ec4-497f-aeba-76a422e57b9c"/>
+				<textFieldExpression><![CDATA[$F{modNombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="0" width="100" height="20" uuid="896b7172-1288-4d0a-949d-8ff4353f0f69"/>
+				<textFieldExpression><![CDATA[$F{talNumero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="332" y="0" width="100" height="20" uuid="301fd1f7-5300-42de-a54d-d15e0d312bfd"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="133" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="1" width="355" height="20" uuid="8f8fa126-97fb-490d-9db3-ae9fbd33fbc5"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CAPACIDADES UTILIZADAS]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="56" y="21" width="399" height="100" uuid="20771739-5cd1-4a13-8e0a-c99a76266f1f"/>
+				<dataSourceExpression><![CDATA[ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{subReportCaps})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rptCapxOrder_subreportCaps.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

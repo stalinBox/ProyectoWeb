@@ -29,9 +29,6 @@ WHERE op.ordenprod_codigo = $P{codOrden}]]>
 	<field name="cantidad" class="java.lang.Integer"/>
 	<field name="emp_logo" class="java.lang.String"/>
 	<field name="logos" class="java.lang.String"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
 		<band height="59" splitType="Stretch">
 			<textField>

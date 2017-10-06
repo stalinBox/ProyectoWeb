@@ -410,6 +410,7 @@ DELETE  FROM PROCESOS;
 
 /*ELIMINAR DATOS DEL PROCESO*/
 delete from programturnos;
+delete from procesosop;
 delete from programdias;
 delete from lineasturnos;
 delete from parametros;

@@ -17,23 +17,31 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
+
 import com.project.dao.ModelosDao;
 import com.project.dao.ModelosDaoImpl;
 import com.project.dao.OrdenesProdDao;
 import com.project.dao.OrdenesProdDaoImpl;
 import com.project.dao.ReportesDao;
 import com.project.dao.ReportesDaoImpl;
+import com.project.entities.Detalleorden;
+import com.project.entities.Empresa;
+import com.project.entities.Logosfap;
 import com.project.entities.Modelo;
 import com.project.entities.Ordenprod;
+import com.project.entities.Parametro;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
- * @author Stalin
+ * @author Stalin Ramirez
  *
  */
 @ManagedBean
@@ -44,9 +52,12 @@ public class CapxOrdenBean implements Serializable {
 	// VARIABLES
 	private List<SelectItem> selectedItemsOrdenes;
 	private Integer nOrden;
-	private List<Object[]> reporte = new ArrayList<Object[]>();
 	private List<Modelo> RPTmodelos = new ArrayList<Modelo>();
-	private List<Ordenprod> listaReporte = new ArrayList<Ordenprod>();
+	private List<Object[]> listaReporte = new ArrayList<Object[]>();
+	private List<Parametro> listaStandares = new ArrayList<Parametro>();
+
+	private ArrayList<CapxOrdenEntity> orderListCxO = new ArrayList<CapxOrdenEntity>();
+	private ArrayList<CapacidadesEntity> orderListStand = new ArrayList<CapacidadesEntity>();
 
 	// CONSTRUCTOR
 	@PostConstruct
@@ -56,21 +67,35 @@ public class CapxOrdenBean implements Serializable {
 
 	public void onChange() {
 		System.out.println("VARIALBE nOrden: " + this.nOrden);
+		getListaReporte();
+		getListaStandares();
 	}
 
 	public void exportarPDFCapxOrden(ActionEvent actionEvent)
 			throws JRException, IOException {
 
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("codOrden", this.nOrden);
 
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext()
-				.getRealPath("/PlantillasRPT/rptCapxOrden.jasper"));
+				.getRealPath("/PlantillasRPT/rptCapxOrder.jasper"));
+
+		File SubJasper = new File(
+				FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.getRealPath(
+								"/PlantillasRPT/rptCapxOrder_subreportCaps.jasper"));
+
+		JasperReport subreport = (JasperReport) JRLoader
+				.loadObjectFromFile(SubJasper.getPath());
+
+		parametros.put("subReportCaps", new JRBeanCollectionDataSource(
+				orderListStand));
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(
 				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
-						this.getReporte()));
+						this.orderListCxO));
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
@@ -84,70 +109,13 @@ public class CapxOrdenBean implements Serializable {
 		stream.close();
 		FacesContext.getCurrentInstance().responseComplete();
 
-	}
-
-	public void exportarPDFCapxOrden2(ActionEvent actionEvent)
-			throws JRException, IOException {
-
-		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("codOrder", this.nOrden);
-
-		File jasper = new File(FacesContext.getCurrentInstance()
-				.getExternalContext()
-				.getRealPath("/PlantillasRPT/rptCapxOrdenPrueba.jasper"));
-		JasperPrint jasperPrint = JasperFillManager.fillReport(
-				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
-						this.getReporte()));
-
-		HttpServletResponse response = (HttpServletResponse) FacesContext
-				.getCurrentInstance().getExternalContext().getResponse();
-		response.addHeader("Content-disposition",
-				"attachment; filename=CapacidadPorOrden.pdf");
-		ServletOutputStream stream = response.getOutputStream();
-
-		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-
-		stream.flush();
-		stream.close();
-		FacesContext.getCurrentInstance().responseComplete();
-
-	}
-
-	public void exportarPDFCapxOrden3(ActionEvent actionEvent)
-			throws JRException, IOException {
-		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("codAlgo", this.nOrden);
-		File jasper = new File(FacesContext.getCurrentInstance()
-				.getExternalContext()
-				.getRealPath("/PlantillasRPT/rptCapxOrdenPrueba2.jasper"));
-
-		JasperPrint jasperPrint = JasperFillManager.fillReport(
-				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
-						this.getListaReporte()));
-
-		HttpServletResponse response = (HttpServletResponse) FacesContext
-				.getCurrentInstance().getExternalContext().getResponse();
-		response.addHeader("Content-disposition",
-				"attachment; filename=CapacidadPorOrden.pdf");
-		ServletOutputStream stream = response.getOutputStream();
-
-		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-
-		stream.flush();
-		stream.close();
-		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 	public void exportarPDFModelos(ActionEvent actionEvent) throws JRException,
 			IOException {
-		System.out.println("MODELOS 1");
-		// Map<String, Object> parametros = new HashMap<String, Object>();
-		// parametros.put("txtUsuario", "Stalin Ramírez");
-
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext()
 				.getRealPath("/PlantillasRPT/rptModelos.jasper"));
-
 		JasperPrint jasperPrint = JasperFillManager.fillReport(
 				jasper.getPath(), null,
 				new JRBeanCollectionDataSource(this.getRPTmodelos()));
@@ -157,9 +125,7 @@ public class CapxOrdenBean implements Serializable {
 		response.addHeader("Content-disposition",
 				"attachment; filename=ListaModelos.pdf");
 		ServletOutputStream stream = response.getOutputStream();
-
 		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-
 		stream.flush();
 		stream.close();
 		FacesContext.getCurrentInstance().responseComplete();
@@ -167,7 +133,6 @@ public class CapxOrdenBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
-
 	public List<SelectItem> getSelectedItemsOrdenes() {
 		this.selectedItemsOrdenes = new ArrayList<SelectItem>();
 		OrdenesProdDao ordenesDao = new OrdenesProdDaoImpl();
@@ -187,12 +152,6 @@ public class CapxOrdenBean implements Serializable {
 		return RPTmodelos;
 	}
 
-	public List<Object[]> getReporte() {
-		ReportesDao reportesDao = new ReportesDaoImpl();
-		reporte = reportesDao.findByCapxOrdenPrueba(nOrden);
-		return reporte;
-	}
-
 	public void setSelectedItemsOrdenes(List<SelectItem> selectedItemsOrdenes) {
 		this.selectedItemsOrdenes = selectedItemsOrdenes;
 	}
@@ -205,14 +164,41 @@ public class CapxOrdenBean implements Serializable {
 		this.nOrden = nOrden;
 	}
 
-	public List<Ordenprod> getListaReporte() {
+	public List<Object[]> getListaReporte() {
 		ReportesDao dao = new ReportesDaoImpl();
-		listaReporte = dao.ObtenerTodos(nOrden);
+		listaReporte = dao.findByCapxOrdenRPT(nOrden);
+
+		for (Object[] result : listaReporte) {
+			Ordenprod op = (Ordenprod) result[0];
+			Detalleorden dto = (Detalleorden) result[1];
+			Empresa emp = (Empresa) result[2];
+			Logosfap lgs = (Logosfap) result[3];
+			byte[] bytesEncodedEmp = Base64.encodeBase64(emp.getEmpLogo());
+			byte[] bytesEncodedLgs = Base64.encodeBase64(lgs.getLogos());
+			System.out.println("encodedBytes1: " + new String(bytesEncodedEmp));
+			CapxOrdenEntity cxp = new CapxOrdenEntity(op.getOrdenprodCodigo(),
+					op.getCliente().getNombrecli(), op.getUsuario()
+							.getUserName(), dto.getModelo().getModNombre(), dto
+							.getTalla().getTalNumero(), emp.getEmpNombre(),
+					emp.getEmpDirecc(), emp.getEmpTelf(), op.getFActual(),
+					dto.getCantidad(), new String(bytesEncodedEmp), new String(
+							bytesEncodedLgs));
+			this.orderListCxO.add(cxp);
+		}
 		return listaReporte;
 	}
 
-	public void setListaReporte(List<Ordenprod> listaReporte) {
-		this.listaReporte = listaReporte;
+	public List<Parametro> getListaStandares() {
+		ReportesDao dao = new ReportesDaoImpl();
+		listaStandares = dao.findParaByCod(nOrden);
+
+		for (Parametro i : listaStandares) {
+			CapacidadesEntity cStandar = new CapacidadesEntity(i.getProceso()
+					.getTipoProceso().getTprNombre(), i.getTipLinea()
+					.getTipolinea(), i.getStandar());
+			this.orderListStand.add(cStandar);
+		}
+		return listaStandares;
 	}
 
 }
