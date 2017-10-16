@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -36,12 +37,10 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
- * @author Stalin Ramirez
+ * @author STALIN RAMIREZ
  *
  */
 @ManagedBean
@@ -73,41 +72,42 @@ public class CapxOrdenBean implements Serializable {
 
 	public void exportarPDFCapxOrden(ActionEvent actionEvent)
 			throws JRException, IOException {
+		String msg = "";
+		if (this.nOrden != null) {
+			Map<String, Object> parametros = new HashMap<String, Object>();
 
-		Map<String, Object> parametros = new HashMap<String, Object>();
+			File jasper = new File(FacesContext.getCurrentInstance()
+					.getExternalContext()
+					.getRealPath("/PlantillasRPT/rptCapxOrder.jasper"));
 
-		File jasper = new File(FacesContext.getCurrentInstance()
-				.getExternalContext()
-				.getRealPath("/PlantillasRPT/rptCapxOrder.jasper"));
+			parametros.put("subReportCaps", this.orderListStand);
 
-		File SubJasper = new File(
-				FacesContext
-						.getCurrentInstance()
-						.getExternalContext()
-						.getRealPath(
-								"/PlantillasRPT/rptCapxOrder_subreportCaps.jasper"));
+			JasperPrint jasperPrint = JasperFillManager.fillReport(
+					jasper.getPath(), parametros,
+					new JRBeanCollectionDataSource(this.orderListCxO));
 
-		JasperReport subreport = (JasperReport) JRLoader
-				.loadObjectFromFile(SubJasper.getPath());
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.addHeader("Content-disposition",
+					"attachment; filename=CapacidadPorOrden.pdf");
+			ServletOutputStream stream = response.getOutputStream();
 
-		parametros.put("subReportCaps", new JRBeanCollectionDataSource(
-				orderListStand));
+			JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
 
-		JasperPrint jasperPrint = JasperFillManager.fillReport(
-				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
-						this.orderListCxO));
+			stream.flush();
+			stream.close();
+			FacesContext.getCurrentInstance().responseComplete();
 
-		HttpServletResponse response = (HttpServletResponse) FacesContext
-				.getCurrentInstance().getExternalContext().getResponse();
-		response.addHeader("Content-disposition",
-				"attachment; filename=CapacidadPorOrden.pdf");
-		ServletOutputStream stream = response.getOutputStream();
-
-		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-
-		stream.flush();
-		stream.close();
-		FacesContext.getCurrentInstance().responseComplete();
+			msg = "Reporte generado exitosamente";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			msg = "No se ha seleccionado una orden";
+			FacesMessage message = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 
 	}
 
@@ -175,7 +175,6 @@ public class CapxOrdenBean implements Serializable {
 			Logosfap lgs = (Logosfap) result[3];
 			byte[] bytesEncodedEmp = Base64.encodeBase64(emp.getEmpLogo());
 			byte[] bytesEncodedLgs = Base64.encodeBase64(lgs.getLogos());
-			System.out.println("encodedBytes1: " + new String(bytesEncodedEmp));
 			CapxOrdenEntity cxp = new CapxOrdenEntity(op.getOrdenprodCodigo(),
 					op.getCliente().getNombrecli(), op.getUsuario()
 							.getUserName(), dto.getModelo().getModNombre(), dto

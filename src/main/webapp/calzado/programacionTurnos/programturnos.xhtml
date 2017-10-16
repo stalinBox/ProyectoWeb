@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -76,8 +77,8 @@
 			<h:form id="fmrCabezera">
 				<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
 					<h:panelGrid id="gridCabezera" columns="2" cellpadding="2">
-						<p:outputLabel value="Programación Turno"
-							style="font-weight: bold;" />
+						<p:outputLabel value="Procesos Turno" style="font-weight: bold;" />
+						
 						<p:selectOneMenu id="idCbxPOP" value="#{procesosOPBean.codPOP}"
 							required="true" style="width:150px">
 							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
@@ -93,6 +94,7 @@
 								:fmrItems:basicDTCapacidades,
 								:fmrItems:idCbxlT" />
 						</p:selectOneMenu>
+						
 						<p:commandButton id="btnOPModelo" update=":ordenProceso"
 							oncomplete="PF('dialogOPCreate').show()" title="Nuevo ProcesoOP"
 							icon="fa fa-plus" value="Nuevo" process="@this">

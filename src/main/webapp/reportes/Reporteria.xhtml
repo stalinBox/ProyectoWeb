@@ -9,22 +9,32 @@
 <h:body>
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
-
+			<p:growl id="msgs" showDetail="true" />
 			<h:form id="fmrReportes">
 				<p:accordionPanel>
 					<p:tab title="Reporte de Capacidades">
-						<h:panelGrid id="gridGeneral" columns="2" cellpadding="2">
+						<h:panelGrid id="gridGeneral" columns="4" cellpadding="2">
 							<p:outputLabel value="Orden Nº:" style="font-weight: bold;" />
 							<p:selectOneMenu id="idCbxOrdenes"
-								value="#{capxOrdenBean.nOrden}" style="width:150px">
+								value="#{capxOrdenBean.nOrden}" style="width:150px"
+								required="true">
 								<f:selectItem itemLabel="- Seleccione -"
 									noSelectionOption="true" itemValue="0" />
 								<f:selectItems value="#{capxOrdenBean.selectedItemsOrdenes}" />
 								<p:ajax listener="#{capxOrdenBean.onChange()}" />
 							</p:selectOneMenu>
-							<h:commandButton value="Exportar PDF"
+
+							<h:commandLink
 								actionListener="#{capxOrdenBean.exportarPDFCapxOrden}"
-								process="@this" />
+								process="@this" update=":msgs">
+								<p:graphicImage value="/images/iconosExport/pdf.png" width="25"
+									height="25" />
+							</h:commandLink>
+
+							<h:commandLink update=":msgs">
+								<p:graphicImage value="/images/iconosExport/excel.png"
+									width="25" height="25" />
+							</h:commandLink>
 						</h:panelGrid>
 					</p:tab>
 
@@ -37,9 +47,12 @@
 					<p:tab title="Modelos Disponibles">
 						<h:panelGrid id="gridModelos" columns="2" cellpadding="2">
 							<p:outputLabel value="Modelos:" style="font-weight: bold;" />
-							<h:commandButton value="Exportar PDF"
+							<h:commandLink
 								actionListener="#{capxOrdenBean.exportarPDFModelos}"
-								process="@this" />
+								process="@this" update=":msgs">
+								<p:graphicImage value="/images/iconosExport/pdf.png" width="25"
+									height="25" />
+							</h:commandLink>
 						</h:panelGrid>
 					</p:tab>
 				</p:accordionPanel>

@@ -3,10 +3,15 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="25da4138-830b-4f8b-9c5a-74d1fcaee3e6">
+		<field name="codProceso" class="java.lang.String"/>
+		<field name="tpLinea" class="java.lang.String"/>
+		<field name="standar" class="java.lang.Integer"/>
+	</subDataset>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\UTA_CALTU\\ProWebCALTU\\ProyectoWeb\\src\\main\\webapp\\PlantillasRPT\\"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="subReportCaps" class="java.util.List"/>
+	<parameter name="subReportCaps" class="java.util.Collection"/>
 	<field name="codOrden" class="java.lang.Integer"/>
 	<field name="nomCli" class="java.lang.String"/>
 	<field name="respOrden" class="java.lang.String"/>
@@ -128,7 +133,7 @@
 		</band>
 	</detail>
 	<summary>
-		<band height="133" splitType="Stretch">
+		<band height="65" splitType="Stretch">
 			<staticText>
 				<reportElement x="100" y="1" width="355" height="20" uuid="8f8fa126-97fb-490d-9db3-ae9fbd33fbc5"/>
 				<textElement textAlignment="Center">
@@ -136,11 +141,49 @@
 				</textElement>
 				<text><![CDATA[CAPACIDADES UTILIZADAS]]></text>
 			</staticText>
-			<subreport>
-				<reportElement x="56" y="21" width="399" height="100" uuid="20771739-5cd1-4a13-8e0a-c99a76266f1f"/>
-				<dataSourceExpression><![CDATA[ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{subReportCaps})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rptCapxOrder_subreportCaps.jasper"]]></subreportExpression>
-			</subreport>
+			<componentElement>
+				<reportElement x="71" y="39" width="399" height="25" uuid="9c95f3ce-b4e1-412c-b64f-0c326aa29952"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataset1" uuid="c587e603-fb19-4c24-9767-67f1c9973778">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{subReportCaps})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="25" width="399">
+						<textField>
+							<reportElement x="15" y="1" width="100" height="20" uuid="0319a065-451c-485f-8557-9d123c70c720"/>
+							<textFieldExpression><![CDATA[$F{codProceso}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="151" y="3" width="100" height="20" uuid="7a21f522-642a-49a4-9d80-a37b024fa28b"/>
+							<textFieldExpression><![CDATA[$F{tpLinea}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="273" y="3" width="100" height="20" uuid="b557e928-2552-4324-b1c0-9ff5d6de2c1d"/>
+							<textFieldExpression><![CDATA[$F{standar}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement x="86" y="19" width="100" height="20" uuid="998f90de-3e48-4b9b-8819-2bce779413a8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROCESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="21" width="100" height="20" uuid="eb52d09d-3e6e-4564-b2d4-3ac129e09758"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO DE LINEA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="21" width="100" height="20" uuid="6c2f9de1-39e7-44b6-a927-233feb332711"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTANDAR]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>

@@ -9,21 +9,83 @@
 	<ui:composition template="/WEB-INF/templates/basicTemplate.html">
 		<ui:define name="content">
 			<p:growl id="msgs" showDetail="true" />
+			<h:form id="formGeneral">
+				<h:panelGrid id="idPGridGeneral" columns="2">
+					<f:facet name="header">Selección Icono FAPS </f:facet>
+					<h:panelGrid id="idPGridOrder" columns="3">
+						<p:outputLabel for="advanced" value="Seleccione: " />
+						<p:selectOneMenu id="advanced" value="#{logoBean.nombreLog}"
+							panelStyle="width:180px" effect="fade" var="t"
+							style="width:200px">
+							<f:selectItem itemLabel="- Seleccione -" noSelectionOption="true"
+								itemValue="0" />
 
-			<h:form id="idFrmLogoAdd" enctype="miltipart/form-data">
-				<p:panelGrid id="display" columns="2" cellpadding="4"
-					style="margin:0 auto;">
+							<f:selectItems value="#{logoBean.listLogos}" var="log"
+								itemLabel="#{log.displayName}" itemValue="#{log}" />
 
-					<h:outputText value="Nombre: " />
-					<p:inputText value="" />
+							<p:column style="width:10%">
+								<p:graphicImage value="#{t.name}" width="100" height="100"
+									styleClass="content" readonly="true" disabled="true" />
+							</p:column>
 
-					<p:fileUpload fileUploadListener="#{logoBean.handleFileUpload}"
-						mode="advanced" dragDropSupport="false" update="messages"
-						sizeLimit="4000000" fileLimit="1"
-						allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+							<p:column>
+								<h:outputText value="#{t.displayName}" />
+							</p:column>
 
-					<p:growl id="messages" showDetail="true" />
-				</p:panelGrid>
+							<p:ajax listener="#{logoBean.onChange}"
+								update="formGeneral:grafico" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+
+					<h:panelGrid id="idPGridGrafico" columns="1">
+						<p:graphicImage id="grafico" value="#{logoBean.nombreLog}"
+							width="200" height="200" styleClass="content" readonly="true"
+							disabled="true" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:commandButton id="btnGuardarLogo" icon="fa fa-plus"
+					value="Guardar"
+					actionListener="#{logoBean.btnCreateEmpresa(actionEvent)}"
+					update="formDataTable">
+				</p:commandButton>
+			</h:form>
+
+			<p:separator />
+
+			<h:form id="formDataTable">
+				<p:dataTable id="basicDT" var="logoFaps"
+					value="#{logoBean.logosfap}">
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{logoFaps.nomlogo}" />
+					</p:column>
+
+					<p:column headerText="Eliminar" style="width:10%">
+						<p:commandButton id="btnDelete" update="formDelete"
+							oncomplete="PF('dialogLogoDelete').show()" icon="ui-icon-close"
+							title="Eliminar">
+							<f:setPropertyActionListener value="#{logoFaps}"
+								target="#{logoBean.selectedLogosFaps}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="formDelete">
+				<p:confirmDialog id="confirmDialog" message="Esta seguro?"
+					showEffect="fade" hideEffect="fade" header="Eliminar Empresa"
+					severity="alert" widgetVar="dialogLogoDelete">
+
+					<h:inputHidden value="#{logoBean.selectedLogosFaps.idlogos}" />
+					<p:commandButton id="confirm" value="Si"
+						update="formDataTable, msgs" icon="ui-icon-check"
+						oncomplete="PF('dialogLogoDelete').hide()"
+						actionListener="#{logoBean.btnDeleteEmpresa(actionEvent)}" />
+
+					<p:commandButton id="decline" value="No" icon="ui-icon-close"
+						oncomplete="PF('dialogLogoDelete').hide()" />
+				</p:confirmDialog>
 			</h:form>
 		</ui:define>
 	</ui:composition>
