@@ -1,6 +1,10 @@
 package com.project.mb;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +14,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.ServletContext;
+
+import org.primefaces.event.FileUploadEvent;
 
 import com.project.dao.LogoFapsDao;
 import com.project.dao.LogoFapsDaoImpl;
 import com.project.entities.Logosfap;
 import com.project.utils.Logos;
+import com.project.utils.UtilUploadImage;
 
 @ManagedBean
 public class LogoBean {
@@ -22,7 +30,7 @@ public class LogoBean {
 	private List<Logos> listLogos;
 	private Logos logos;
 	private String nombreLog;
-
+	private String FinalLogo;
 	private Logosfap SelectedLogosFaps;
 	private List<Logosfap> logosfap;
 
@@ -39,18 +47,50 @@ public class LogoBean {
 
 	// METODOS
 	public void onChange() {
-		System.out.println("nombre: " + nombreLog);
-		System.out.println("Imagen: ");
+		System.out.println("shortPath: " + nombreLog);
+		String a[] = nombreLog.split("[//]");
+		Integer tam = a.length;
+		this.FinalLogo = a[tam - 1];
+		System.out.println("NombreFinal: " + FinalLogo);
 
-		String fileName = "imagen 2";
+		ServletContext servletContext = (ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext();
 
-		ClassLoader classLoader = this.getClass().getClassLoader();
-		File configFile = new File(classLoader.getResource(fileName).getFile());
+		String path = servletContext.getRealPath("") + File.separatorChar
+				+ "images" + File.separatorChar + "contentFlowFaps"
+				+ File.separatorChar + this.FinalLogo;
 
-		System.out.println("path complete: " + configFile.getPath());
+		Path path2 = Paths.get(path);
+		byte[] data = null;
+		try {
+			data = Files.readAllBytes(path2);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void btnCreateEmpresa(ActionEvent actionEvent) {
+		String a[] = nombreLog.split("[//]");
+		Integer tam = a.length;
+		this.FinalLogo = a[tam - 1];
+		ServletContext servletContext = (ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext();
+
+		String path = servletContext.getRealPath("") + File.separatorChar
+				+ "images" + File.separatorChar + "contentFlowFaps"
+				+ File.separatorChar + this.FinalLogo;
+
+		Path path2 = Paths.get(path);
+		byte[] data = null;
+		try {
+			data = Files.readAllBytes(path2);
+			this.SelectedLogosFaps.setLogos(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.SelectedLogosFaps.setNomlogo(FinalLogo);
+		this.SelectedLogosFaps.setUrllogo(nombreLog);
 		String msg = "";
 		LogoFapsDao logoDao = new LogoFapsDaoImpl();
 		if (logoDao.create(this.SelectedLogosFaps)) {
@@ -86,6 +126,14 @@ public class LogoBean {
 
 	public List<Logos> getListLogos() {
 		return listLogos;
+	}
+
+	public String getFinalLogo() {
+		return FinalLogo;
+	}
+
+	public void setFinalLogo(String finalLogo) {
+		FinalLogo = finalLogo;
 	}
 
 	public List<Logosfap> getLogosfap() {

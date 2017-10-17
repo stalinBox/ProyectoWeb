@@ -143,7 +143,7 @@
 			</staticText>
 			<componentElement>
 				<reportElement x="71" y="39" width="399" height="25" uuid="9c95f3ce-b4e1-412c-b64f-0c326aa29952"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="dataset1" uuid="c587e603-fb19-4c24-9767-67f1c9973778">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{subReportCaps})]]></dataSourceExpression>
 					</datasetRun>

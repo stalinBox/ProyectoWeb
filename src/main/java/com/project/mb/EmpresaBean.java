@@ -42,7 +42,7 @@ public class EmpresaBean implements Serializable {
 	public void UploadImage(FileUploadEvent event) {
 		FacesMessage mensaje = new FacesMessage();
 		try {
-			selectedEmpresa.setEmpLogo(event.getFile().getContents());
+			this.selectedEmpresa.setEmpLogo(event.getFile().getContents());
 			imagenEmpresa = UtilUploadImage
 					.saveFileToTemp(selectedEmpresa.getEmpLogo(), event
 							.getFile().getFileName());

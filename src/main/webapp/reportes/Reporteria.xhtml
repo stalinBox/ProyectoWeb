@@ -39,9 +39,37 @@
 					</p:tab>
 
 					<p:tab title="Pares por producción (rango fechas)">
+						<h:panelGrid id="gridFechas" columns="5">
+							<p:outputLabel for="button1" value="De:" />
+							<p:calendar id="button1" value="#{capxOrdenBean.fInicial}"
+								showOn="button" />
+							<p:outputLabel for="button2" value="Hasta:" />
+							<p:calendar id="button2" value="#{capxOrdenBean.fFinal}"
+								showOn="button" />
+							<h:commandLink
+								actionListener="#{capxOrdenBean.exportarPDFParesxFecha}"
+								process="@this" update=":msgs">
+								<p:graphicImage value="/images/iconosExport/pdf.png" width="25"
+									height="25" />
+							</h:commandLink>
+						</h:panelGrid>
 					</p:tab>
 
-					<p:tab title="Pares por produccion (rango ordenes)">
+					<p:tab title="Pares por producción (rango ordenes)">
+						<h:panelGrid id="gridOrdenes" columns="5">
+							<p:outputLabel for="button1" value="Desde:" />
+							<p:selectOneMenu id="idCbxOrdenesInicio"
+								value="#{capxOrdenBean.nOrden}" style="width:150px"></p:selectOneMenu>
+							<p:outputLabel for="button2" value="Hasta:" />
+							<p:selectOneMenu id="idCbxOrdenesFin"
+								value="#{capxOrdenBean.nOrden}" style="width:150px"></p:selectOneMenu>
+							<h:commandLink
+								actionListener="#{capxOrdenBean.exportarPDFParesxOrdenes}"
+								process="@this" update=":msgs">
+								<p:graphicImage value="/images/iconosExport/pdf.png" width="25"
+									height="25" />
+							</h:commandLink>
+						</h:panelGrid>
 					</p:tab>
 
 					<p:tab title="Modelos Disponibles">

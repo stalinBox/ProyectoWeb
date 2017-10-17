@@ -86,4 +86,20 @@ public class LogoFapsDaoImpl implements LogoFapsDao {
 		return flag;
 	}
 
+	@Override
+	public Logosfap findUniqueLogo() {
+		Logosfap listado = null;
+		Session sesion = HibernateUtil.getSessionFactory().getCurrentSession();
+		String sql = "FROM Logosfap";
+		System.out.println(sql);
+		try {
+			sesion.beginTransaction();
+			listado = (Logosfap) sesion.createQuery(sql).uniqueResult();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			sesion.getTransaction().rollback();
+			System.out.println("ERRORRRRR FINDUNIQUELOGO: " + e.toString());
+		}
+		return listado;
+	}
 }

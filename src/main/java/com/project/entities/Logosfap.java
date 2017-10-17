@@ -22,6 +22,8 @@ public class Logosfap implements Serializable {
 
 	private String nomlogo;
 
+	private String urllogo;
+
 	public Logosfap() {
 	}
 
@@ -47,6 +49,14 @@ public class Logosfap implements Serializable {
 
 	public void setNomlogo(String nomlogo) {
 		this.nomlogo = nomlogo;
+	}
+
+	public String getUrllogo() {
+		return this.urllogo;
+	}
+
+	public void setUrllogo(String urllogo) {
+		this.urllogo = urllogo;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.project.dao.EmpresaDao;
+import com.project.dao.EmpresaDaoImpl;
+import com.project.dao.LogoFapsDao;
+import com.project.dao.LogoFapsDaoImpl;
 import com.project.dao.ModelosDao;
 import com.project.dao.ModelosDaoImpl;
 import com.project.dao.OrdenesProdDao;
@@ -58,16 +63,32 @@ public class CapxOrdenBean implements Serializable {
 	private ArrayList<CapxOrdenEntity> orderListCxO = new ArrayList<CapxOrdenEntity>();
 	private ArrayList<CapacidadesEntity> orderListStand = new ArrayList<CapacidadesEntity>();
 
+	private Date fInicial;
+	private Date fFinal;
+
+	private Empresa empresa;
+	private Logosfap logoFaps;
+
 	// CONSTRUCTOR
 	@PostConstruct
 	public void init() {
-
+		getEmpresa();
+		getLogoFaps();
 	}
 
 	public void onChange() {
 		System.out.println("VARIALBE nOrden: " + this.nOrden);
 		getListaReporte();
 		getListaStandares();
+
+	}
+
+	public void exportarPDFParesxFecha(ActionEvent actionEvent)
+			throws JRException, IOException {
+	}
+
+	public void exportarPDFParesxOrdenes(ActionEvent actionEvent)
+			throws JRException, IOException {
 	}
 
 	public void exportarPDFCapxOrden(ActionEvent actionEvent)
@@ -113,12 +134,22 @@ public class CapxOrdenBean implements Serializable {
 
 	public void exportarPDFModelos(ActionEvent actionEvent) throws JRException,
 			IOException {
+		Map<String, Object> parametros = new HashMap<String, Object>();
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext()
 				.getRealPath("/PlantillasRPT/rptModelos.jasper"));
+		// System.out.println("Empresa: " + this.empresa.getEmpNombre());
+		// System.out.println("Logo: " + this.logoFaps.getLogos().toString());
+
+		parametros.put("empNombre", this.empresa.getEmpNombre());
+		parametros.put("empDir", this.empresa.getEmpDirecc());
+		parametros.put("empTelf", this.empresa.getEmpTelf());
+		parametros.put("empLogo", this.empresa.getEmpLogo());
+		parametros.put("logoFaps", this.logoFaps.getLogos());
+
 		JasperPrint jasperPrint = JasperFillManager.fillReport(
-				jasper.getPath(), null,
-				new JRBeanCollectionDataSource(this.getRPTmodelos()));
+				jasper.getPath(), parametros, new JRBeanCollectionDataSource(
+						this.getRPTmodelos()));
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
@@ -133,6 +164,7 @@ public class CapxOrdenBean implements Serializable {
 	}
 
 	// SETTERS AND GETTERS
+
 	public List<SelectItem> getSelectedItemsOrdenes() {
 		this.selectedItemsOrdenes = new ArrayList<SelectItem>();
 		OrdenesProdDao ordenesDao = new OrdenesProdDaoImpl();
@@ -144,6 +176,44 @@ public class CapxOrdenBean implements Serializable {
 			this.selectedItemsOrdenes.add(selectItem);
 		}
 		return selectedItemsOrdenes;
+	}
+
+	public Logosfap getLogoFaps() {
+		LogoFapsDao logofapsDao = new LogoFapsDaoImpl();
+		this.logoFaps = logofapsDao.findUniqueLogo();
+		System.out.println("Logo Nombre: " + logoFaps.getNomlogo());
+		return logoFaps;
+	}
+
+	public void setLogoFaps(Logosfap logoFaps) {
+		this.logoFaps = logoFaps;
+	}
+
+	public Empresa getEmpresa() {
+		EmpresaDao empresaDao = new EmpresaDaoImpl();
+		this.empresa = empresaDao.findUnique();
+		System.out.println("Empresa Nombre: " + empresa.getEmpNombre());
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public Date getfInicial() {
+		return fInicial;
+	}
+
+	public void setfInicial(Date fInicial) {
+		this.fInicial = fInicial;
+	}
+
+	public Date getfFinal() {
+		return fFinal;
+	}
+
+	public void setfFinal(Date fFinal) {
+		this.fFinal = fFinal;
 	}
 
 	public List<Modelo> getRPTmodelos() {
