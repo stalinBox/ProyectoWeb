@@ -138,13 +138,11 @@ public class CapxOrdenBean implements Serializable {
 		File jasper = new File(FacesContext.getCurrentInstance()
 				.getExternalContext()
 				.getRealPath("/PlantillasRPT/rptModelos.jasper"));
-		// System.out.println("Empresa: " + this.empresa.getEmpNombre());
-		// System.out.println("Logo: " + this.logoFaps.getLogos().toString());
 
 		parametros.put("empNombre", this.empresa.getEmpNombre());
 		parametros.put("empDir", this.empresa.getEmpDirecc());
 		parametros.put("empTelf", this.empresa.getEmpTelf());
-		parametros.put("empLogo", this.empresa.getEmpLogo());
+		parametros.put("empLogo", this.empresa.getEmpNombre());
 		parametros.put("logoFaps", this.logoFaps.getLogos());
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(

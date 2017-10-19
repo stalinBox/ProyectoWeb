@@ -6,8 +6,8 @@
 	<parameter name="empNombre" class="java.lang.String"/>
 	<parameter name="empDir" class="java.lang.String"/>
 	<parameter name="empTelf" class="java.lang.String"/>
-	<parameter name="empLogo" class="java.io.InputStream"/>
-	<parameter name="logoFaps" class="java.io.InputStream"/>
+	<parameter name="empLogo" class="java.lang.String"/>
+	<parameter name="logoFaps" class="java.lang.String"/>
 	<field name="modNombre" class="java.lang.String"/>
 	<field name="modPiezas" class="java.lang.Integer"/>
 	<field name="modCodigo" class="java.lang.Integer"/>
@@ -16,14 +16,6 @@
 	</background>
 	<title>
 		<band height="71">
-			<image>
-				<reportElement x="438" y="6" width="100" height="62" uuid="46cf2ca8-2fe8-4929-8c82-df9d25be8a9d"/>
-				<imageExpression><![CDATA[$P{empLogo}]]></imageExpression>
-			</image>
-			<image>
-				<reportElement x="29" y="7" width="99" height="62" uuid="b92da1c7-ec0f-4d55-9b78-d7773bca936f"/>
-				<imageExpression><![CDATA[$P{logoFaps}]]></imageExpression>
-			</image>
 			<textField>
 				<reportElement x="117" y="9" width="312" height="30" uuid="d027f4f9-db09-4445-b90a-0244a63f8279"/>
 				<textElement textAlignment="Center">

@@ -5,15 +5,16 @@ package com.project.utils;
  */
 public class MyUtil {
 	public static String ip = "localhost";
+	public static String ip2 = "172.21.123.24";
 
 	public static String andonMonitor() {
 		// return "http://172.21.123.197/PantallaAndon/Prueba.aspx";
-		return "http://" + ip + "/PantallaAndon/Prueba.aspx";
+		return "http://" + ip2 + "/PantallaAndon/Prueba.aspx";
 	}
 
 	public static String andonReportes() {
 		// return "http://172.21.123.197/PantallaAndon/Reportes.aspx";
-		return "http://" + ip + "/PantallaAndon/Reportes.aspx";
+		return "http://" + ip2 + "/PantallaAndon/Reportes.aspx";
 	}
 
 	public static String baseurl() {
